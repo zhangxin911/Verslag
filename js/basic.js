@@ -30,7 +30,20 @@
             set_text_value_position(tdInput, -1); 
             
    
-             
+            $(document).on("click",function(){
+            	var content=$('.tdInput').val(); 
+		    	$('.tdInput').remove();		    	
+		    	if(tdText==content){	    	
+		    	$('#tttt').html(content);		    			    	
+		    	$("#tttt").removeAttr('id');		    	
+		    	}else{
+		    	$('#tttt').html(content);		   
+		    	$("#tttt").removeAttr('id');
+		    	}
+		    	 
+		    	event.stopPropagation();
+            	
+});
 		    $('.tdInput').blur(function(){ 
 		    	var content=$('.tdInput').val(); 
 		    	$('.tdInput').remove();		    	
@@ -57,11 +70,11 @@
 		 	
 		 	
 		 	 $('.dataTable').find('td').removeClass('tdOn');
-	 	$(this).addClass('tdOn');
+	 	     $(this).addClass('tdOn');
 //		 	
-		    $("#dataTable tr td").removeAttr('id');
+		    $("#dataTable1 tr td").removeAttr('id');
    	        $(this).attr('id','qqq');
-   	       
+   	       console.log($('.tdOn'));
          });
 		
 		
@@ -118,7 +131,7 @@ y:ev.clientY + document.body.scrollTop - document.body.clientTop
 			ul_ff.style.display='block';
 			ul_fcolor.style.display = "none";
 			ul_fs.style.display = "none";
-			
+			ul_ffill.style.display = "none";
 			if(document.all){
 				window.event.cancelBubble = true;
 			}else{
@@ -146,20 +159,8 @@ y:ev.clientY + document.body.scrollTop - document.body.clientTop
 
 				cClass=cClass.replace(reg,cName);
 				var arr = cClass.split(' ');
-                removeDuplicatedItem(arr);
-               function removeDuplicatedItem(ar) {
-                 var ret = [];
-
-              for (var i = 0, j = ar.length; i < j; i++) {
-        if (ret.indexOf(ar[i]) === -1) {
-            ret.push(ar[i]);
-        }
-    }
-    ret=ret.join(' ');
-    
-    cClass=ret;
-    return cClass
-}		 
+                cClass=removeDuplicatedItem(arr);
+  		 
 				$('#qqq').removeAttr('class');
 			     $('#qqq').addClass(cClass);
 				
@@ -189,7 +190,7 @@ y:ev.clientY + document.body.scrollTop - document.body.clientTop
 			}
 
 		}
-		return cName; 
+		 
 		}
      	
      	//字体大小
@@ -204,7 +205,7 @@ y:ev.clientY + document.body.scrollTop - document.body.clientTop
 			ul_fcolor.style.display = "none";
 			 
 			ul_ff.style.display = "none";
-			
+			ul_ffill.style.display = "none";
 			
 			if(document.all){
 				window.event.cancelBubble = true;
@@ -236,21 +237,8 @@ y:ev.clientY + document.body.scrollTop - document.body.clientTop
 		
 	
 	var arr = cClass.split(' ');
- removeDuplicatedItem(arr);
-     function removeDuplicatedItem(ar) {
-    var ret = [];
-
-    for (var i = 0, j = ar.length; i < j; i++) {
-        if (ret.indexOf(ar[i]) === -1) {
-            ret.push(ar[i]);
-        }
-    }
-    ret=ret.join(' ');
- 
-    return ret;
+ cClass=removeDuplicatedItem(arr);
     
-    cClass=ret;
-}
      
 				$('#qqq').removeAttr('class');
 			     $('#qqq').addClass(cClass);
@@ -291,6 +279,8 @@ y:ev.clientY + document.body.scrollTop - document.body.clientTop
 			
 			ul_fs.style.display = "none";
 			ul_ff.style.display = "none";
+			ul_ffill.style.display = "none";
+			
 			if(document.all){
 				window.event.cancelBubble = true;
 			}else{
@@ -303,30 +293,18 @@ y:ev.clientY + document.body.scrollTop - document.body.clientTop
 				//console.log($(this).attr('class'));
 				ul_fcolor.style.display = "none";
 				var cName=$(this).attr('class');
-					$('#qqq').addClass(cName);	
+				$('#qqq').addClass(cName);	
 				var  reg= new RegExp("(((fc_)[A-Za-z0-9_]+\s*)+)","g");
 				
 				cClass=$('#qqq').attr('class');
 				 
 				cClass=cClass.replace(reg,cName);
-				 console.log(cClass);
+				
 				
 				
   	var arr = cClass.split(' ');
- removeDuplicatedItem(arr);
-     function removeDuplicatedItem(ar) {
-    var ret = [];
-    for (var i = 0, j = ar.length; i < j; i++) {
-        if (ret.indexOf(ar[i]) === -1) {
-            ret.push(ar[i]);
-        }
-    }
-    ret=ret.join(' ');
- 
-    return ret;
-    
-    cClass=ret;
-}
+ cClass=removeDuplicatedItem(arr);
+      console.log(cClass);
  
 			$('#qqq').removeAttr('class');
 			     $('#qqq').addClass(cClass);
@@ -339,6 +317,61 @@ y:ev.clientY + document.body.scrollTop - document.body.clientTop
 		});
 		 
 		}
+    
+   
+    //td背景
+    function tdbgFill(){	
+			 var ipt_ffill=document.getElementById('ipt_ffill');
+	         var ul_ffill =document.getElementById('ul_ffill');
+	                 
+		   ipt_ffill.onclick=function(){
+			 console.log(this);
+			ul_ffill.style.display='table-cell';
+			ul_fcolor.style.display = "none";
+			
+			ul_fs.style.display = "none";
+			ul_ff.style.display = "none";
+			if(document.all){
+				window.event.cancelBubble = true;
+			}else{
+				event.stopPropagation();
+			}
+
+		}
+		$('#ul_ffill').find('td').each(function(){
+			$(this).click(function(){
+				//console.log($(this).attr('class'));
+				ul_fcolor.style.display = "none";
+				var cName=$(this).attr('class');
+				$('#qqq').addClass(cName);	
+				var  reg= new RegExp("(((ffill_)[A-Za-z0-9_]+\s*)+)","g");
+				
+				cClass=$('#qqq').attr('class');
+				 
+				cClass=cClass.replace(reg,cName);
+				
+				
+				
+  	var arr = cClass.split(' ');
+ cClass=removeDuplicatedItem(arr);
+      console.log(cClass);
+ 
+			$('#qqq').removeAttr('class');
+			     $('#qqq').addClass(cClass);
+			if(document.all){
+					window.event.cancelBubble = true;
+				}else{
+					event.stopPropagation();
+				}
+			});
+		});
+		 
+		}
+    
+    
+    
+    
+    
     
         (function fontbold(){
         	$('.fbold').click(function(){
@@ -371,14 +404,28 @@ y:ev.clientY + document.body.scrollTop - document.body.clientTop
 			ul_fcolor.style.display = "none";
 			ul_fs.style.display = "none";
 			ul_ff.style.display = "none";
+			ul_ffill.style.display = "none";
 		};
 	 fontfamilySelect();
      fontsizeSelect();
      fontcolorSelect();	
-     
+     tdbgFill();
      })();
       
       
+      //去重
+       function removeDuplicatedItem(ar) {
+                 var ret = [];
+
+              for (var i = 0, j = ar.length; i < j; i++) {
+        if (ret.indexOf(ar[i]) === -1) {
+            ret.push(ar[i]);
+        }
+    }
+    ret=ret.join(' ');
+    return ret 
+   
+}		 
       //ctable
      function CreateTable(rowCount,cellCount,tIndex){ 
      var num=tIndex;
@@ -394,7 +441,7 @@ y:ev.clientY + document.body.scrollTop - document.body.clientTop
         {
         	
         	
-           var td=CreateTd('fileDiv','');
+           var td=CreateTd('','');
            td.attr('r_col',j+1);
            td.attr('r_row',i+1);
            //td.attr('sheetnum',i);
