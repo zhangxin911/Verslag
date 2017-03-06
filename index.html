@@ -7,14 +7,15 @@
 	<link rel="stylesheet" type="text/css" href="css/normal.css" />
 	<link rel="stylesheet" href="css/basic.css" />
 	<script type="text/javascript" src="js/jquery-1.8.2.min.js" ></script>
-	<!--<script src="http://lib.sinaapp.com/js/jquery/1.9.1/jquery-1.9.1.min.js"></script>-->
-	<script src="http://lib.sinaapp.com/js/jquery-ui/1.9.2/jquery-ui.min.js"></script>
+	
+	<!--<script src="http://lib.sinaapp.com/js/jquery-ui/1.9.2/jquery-ui.min.js"></script>-->
+	<script type="text/javascript" src="js/jquery-ui.min.js" ></script>
 	<script type="text/javascript" src="js/nicescroll.js" ></script>
 <style>
         /* <![CDATA[ */
         
-        #dataTable1 td.ui-selecting { background: #99CCFF; }
-        #dataTable1 td.ui-selected  { background: #6699CC; color: white; }
+        td.ui-selecting { background: #99CCFF; }
+        td.ui-selected  { background: #6699CC; color: white; }
          
         #feedback { font-size: 1.4em; }
         /* ]]> */
@@ -128,9 +129,8 @@
 				
 					
 					<dd><div><i class="fborder"></i></div></dd>
-					<dd> <button id="btnMerge">合并选中单元格</button>
- </dd>
-					<dd> <button id="btnSplit">拆分选中单元格</button> </dd>
+					<dd> <div><i class="btnMerge" id="btnMerge"></i></div></dd>
+					<dd> <div><i class="btnSplit" id="btnSplit"></i></div></dd>
 				</dl>
 			</div>
 			
