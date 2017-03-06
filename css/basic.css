@@ -732,3 +732,6 @@
     	line-height: 28px;
     	background:url(../img/splitTd.png) no-repeat center;
 }
+
+ td.ui-selecting { background: #99CCFF; }
+ td.ui-selected  { background: #6699CC; color: white; }

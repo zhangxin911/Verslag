@@ -29,21 +29,7 @@
 
 				set_text_value_position(tdInput, -1);
 
-
-				$(document).on("click", function() {
-					var content = $('.tdInput').val();
-					$('.tdInput').remove();
-					if (tdText == content) {
-						$('#tttt').html(content);
-						$("#tttt").removeAttr('id');
-					} else {
-						$('#tttt').html(content);
-						$("#tttt").removeAttr('id');
-					}
-
-					event.stopPropagation();
-
-				});
+ 
 				$('.tdInput').blur(function() {
 					var content = $('.tdInput').val();
 					$('.tdInput').remove();
@@ -63,6 +49,12 @@
 						$('.tdInput').blur();
 					}
 				});
+				
+				
+				$('#dataTable'+id+' tr td').click(function(){
+					$('.tdInput').blur();
+				});
+				
 			});
 
 
@@ -310,7 +302,7 @@
 
 					var arr = cClass.split(' ');
 					cClass = removeDuplicatedItem(arr);
-					console.log(cClass);
+					 
 
 					$("[chosed=qqq]").removeAttr('class');
 					$("[chosed=qqq]").addClass(cClass);
@@ -332,7 +324,7 @@
 			var ul_ffill = document.getElementById('ul_ffill');
 
 			ipt_ffill.onclick = function() {
-				console.log(this);
+				 
 				ul_ffill.style.display = 'table-cell';
 				ul_fcolor.style.display = "none";
 
@@ -348,10 +340,10 @@
 			$('#ul_ffill').find('td').each(function() {
 				$(this).click(function() {
 					
-					ul_fcolor.style.display = "none";
+					ul_ffill.style.display = "none";
 					var cName = $(this).attr('class');
 					$("[chosed=qqq]").addClass(cName);
-					console.log($("[chosed=qqq]"));
+					 
 					var reg = new RegExp("(((ffill_)[A-Za-z0-9_]+\s*)+)", "g");
 
 					cClass = $("[chosed=qqq]").attr('class');
@@ -362,7 +354,7 @@
 
 					var arr = cClass.split(' ');
 					cClass = removeDuplicatedItem(arr);
-					console.log(cClass);
+					 
 
 					$("[chosed=qqq]").removeAttr('class');
 					$("[chosed=qqq]").addClass(cClass);
