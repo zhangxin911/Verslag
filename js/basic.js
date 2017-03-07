@@ -1,3 +1,7 @@
+	
+	
+	var dtC=$(".dataTable_container");
+	
 	CreateTable(40, 26, 1);
 	CreateLeft(40, 1);
 	CreateTitle(1, 26);
@@ -13,7 +17,6 @@
 
 				var that = $(this);
 				var ev = ev || window.event;
-
 				that.attr('id', 'tttt')
 
 				var tdWidth = that.width() - 2;
@@ -112,11 +115,11 @@
 
 
 	//select
-	(function() {
+	
 
 		//字体类型
 
-		function fontfamilySelect() {
+		(function fontfamilySelect() {
 			var cName;
 			var ipt_ff = document.getElementById('ipt_ff');
 			var ul_ff = document.getElementById('ul_ff');
@@ -151,8 +154,6 @@
 					cClass = $("[chosed=qqq]").attr('class');
 
 
-
-
 					cClass = cClass.replace(reg, cName);
 					var arr = cClass.split(' ');
 					cClass = removeDuplicatedItem(arr);
@@ -175,23 +176,19 @@
 				lis[i].onmouseover = function() {
 					var Oindex = Number(this.getAttribute('Oindex')) + 1;
 					this.children[0].style.background = '#ECECEC';
-
-
 				}
 				lis[i].onmouseout = function() {
 					var Oindex = Number(this.getAttribute('Oindex')) + 1;
 					this.children[0].style.background = '#FFFFFF';
-
-
 				}
 
 			}
 
-		}
+		})();
 
 		//字体大小
 
-		function fontsizeSelect() {
+		(function fontsizeSelect() {
 			var cName;
 			var ipt_fs = document.getElementById('ipt_fs');
 			var ul_fs = document.getElementById('ul_fs');
@@ -263,11 +260,11 @@
 			}
 
 
-		}
+		})();
 
 		//字体颜色
 
-		function fontcolorSelect() {
+		(function fontcolorSelect() {
 			var ipt_fcolor = document.getElementById('ipt_fcolor');
 			var ul_fcolor = document.getElementById('ul_fcolor');
 
@@ -314,12 +311,12 @@
 				});
 			});
 
-		}
+		})();
 
 
 		//td背景
 
-		function tdbgFill() {
+		(function tdbgFill() {
 			var ipt_ffill = document.getElementById('ipt_ffill');
 			var ul_ffill = document.getElementById('ul_ffill');
 
@@ -366,9 +363,75 @@
 				});
 			});
 
-		}
+		})();
 
 
+        //align
+        (function fAlign() {
+			var ipt_falign = document.getElementById('ipt_falign');
+			var ul_falign = document.getElementById('ul_falign');
+
+			ipt_falign.onclick = function() {
+				 
+				ul_falign.style.display = 'table-cell';
+				ul_fcolor.style.display = "none";
+
+				ul_fs.style.display = "none";
+				ul_ff.style.display = "none";
+				if (document.all) {
+					window.event.cancelBubble = true;
+				} else {
+					event.stopPropagation();
+				}
+
+			}
+			$('#ul_falign').find('td').each(function() {
+				$(this).click(function() {
+					
+					ul_falign.style.display = "none";
+					var cName = $(this).attr('class');
+					$("[chosed=qqq]").addClass(cName);
+					 
+					var reg = new RegExp("(((falign_)[A-Za-z0-9_]+\s*)+)", "g");
+
+					cClass = $("[chosed=qqq]").attr('class');
+
+					cClass = cClass.replace(reg, cName);
+					var arr = cClass.split(' ');
+					cClass = removeDuplicatedItem(arr);
+					 
+
+					$("[chosed=qqq]").removeAttr('class');
+					$("[chosed=qqq]").addClass(cClass);
+					if (document.all) {
+						window.event.cancelBubble = true;
+					} else {
+						event.stopPropagation();
+					}
+				});
+			});
+
+		})();
+
+        (function fx() {
+			var ipt_fx = document.getElementById('ipt_fx');
+			var ul_fx = document.getElementById('ul_fx');
+
+			ipt_fx.onclick = function() {
+				 
+				ul_fx.style.display = 'block';
+				ul_fcolor.style.display = "none";
+
+				ul_fs.style.display = "none";
+				ul_ff.style.display = "none";
+				if (document.all) {
+					window.event.cancelBubble = true;
+				} else {
+					event.stopPropagation();
+				}
+
+			}
+		})();
 
 
 
@@ -405,12 +468,18 @@
 			ul_fs.style.display = "none";
 			ul_ff.style.display = "none";
 			ul_ffill.style.display = "none";
+			ul_falign.style.display="none";
+			ul_fx.style.display="none";
 		};
-		fontfamilySelect();
-		fontsizeSelect();
-		fontcolorSelect();
-		tdbgFill();
-	})();
+	
+
+
+   function classFilter(){
+   	   
+   }
+     
+
+
 
 
 	//去重
@@ -431,28 +500,26 @@
 
 	function CreateTable(rowCount, cellCount, tIndex) {
 		var num = tIndex;
+		dtC=$(".dataTable_container");	
 		var tb = $("<table class='dataTable' id='dataTable" + tIndex + "'></table>");
-		$(".dataTable_container").append(tb);
-
+		dtC.append(tb);
 		for (var i = 0; i < rowCount; i++) {
 			var tr = CreateTr();
 			$("#dataTable" + tIndex).append(tr);
-
 			for (var j = 0; j < cellCount; j++) {
-
-
 				var td = CreateTd('', '');
 				td.attr('r_col', j + 1);
 				td.attr('r_row', i + 1);
 				//td.attr('sheetnum',i);
 				tr.append(td);
-
 			}
 
 
 		}
 		
 	}
+	
+	
 
 	function CreateTr(className) {
 		var tr = $("<tr class='" + className + "'></tr>");
@@ -460,13 +527,13 @@
 	}
 
 
-	function CreateTd(className, tdValue) {
+	function CreateTd(className,tdValue){
 
 		var td = $("<td class='" + className + "'>" + tdValue + "</td>")
 		return td;
 	}
 
-	function CreateTitle(rowCount, cellCount) {
+	function CreateTitle(rowCount, cellCount){
 
 
 		for (var i = 0; i < rowCount; i++) {
@@ -485,9 +552,9 @@
 		}
 
 	}
+   
 
-
-	function CreateLeft(rowCount, cellCount) {
+	function CreateLeft(rowCount, cellCount){
 
 
 		for (var i = 0; i < rowCount; i++) {
@@ -505,19 +572,19 @@
 
 	(function addSheet() {
 		var i = 2;
-
+        dtC=(".dataTable_container");
 		$('#sheet1').on('click', function() {
 
 			$(this).addClass('sheetdefault').siblings().removeClass('sheetdefault');
 
-			$('.dataTable_container').children().hide();
+			dtC.children().hide();
 			$('#dataTable1').show();
 
 			return false;
 		});
 		$('.addSheet').click(function() {
 			CreateTable(40, 26, i);
-			$('.dataTable_container').children().hide();
+			dtC.children().hide();
 
 
 			var dd = $("<dd class='sheet sheetdefault' id=sheet" + i + ">sheet" + i + "</dd>");
@@ -543,17 +610,9 @@
 				var dId = $(this).attr('id');
 				dId = dId.substr(-1);
 				dId = parseInt(dId);
-
-
 				$("#dataTable" + dId).selectable();
-
-
-
-
 				$(this).addClass('sheetdefault').siblings().removeClass('sheetdefault');
-				$('.dataTable_container').children().hide();
-
-
+				dtC.children().hide();
 				$("#dataTable" + dId).show();
 
 
@@ -578,10 +637,12 @@
 
 
 	$(document).ready(function() {
-		$(".dataTable_container").height($(window).height() - 170);
+		var dtC=$(".dataTable_container");
+		
+		dtC.height($(window).height() - 170);
 
 		$(window).resize(function() {
-			$(".dataTable_container").height($(window).height() - 170);
+			dtC.height($(window).height() - 170);
 
 		});
 
@@ -624,6 +685,8 @@
 
 			var ridx = $("tr", $t).index($(this).parent("tr"));
 			var cidx = $(this).parent().children("th,td").index(this);
+			
+			
 			var rowspan = Number($(this).attr("rowspan")) || 1;
 			var colspan = Number($(this).attr("colspan")) || 1;
 			var isSel = $(this).hasClass(sigSel);
