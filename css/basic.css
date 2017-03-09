@@ -427,9 +427,13 @@
     }
     
 .sheetqueue{
-	width:90%;
+	width:100%;
 	margin-left:120px;
 }
+.sheetqueuedl{
+	position:absolute;
+}
+
 .sheetqueue dl dd{
 	float: left;
 }
@@ -880,9 +884,52 @@
 	}	
 
 
-
-
-
-
+    .sheetfloat{
+    	float:right;
+    	width:100px;
+    	height:40px;
+    	line-height: 40px;
+    	position: fixed;
+    	right: 0;
+    	border-left:1px solid #aaaaaa;
+    	background:#ececec;
+    }
+    .sheetfloat span{
+    	float:left;
+    	width:32px;
+    	height:32px;
+    	
+    }
+    .lsheet{
+    	background:url(../img/larrow.png) center no-repeat;
+    	position: absolute;
+    	top:50%;
+    	margin-top:-16px;
+    	margin-left:16px;
+    }
+    
+    
+    .rsheet{
+    	background:url(../img/rarrow.png) center no-repeat;
+    	position: absolute;
+    	top:50%;
+    	margin-top:-16px;
+    	margin-left:48px;
+    }
+    .sheetfloat span:hover{
+    	border: 1px solid #AAAAAA;
+    	
+    
+    }
+    
+    .footer_tool_box{
+    	width:100px;
+    	height:40px;
+    	float:left;
+    	background:#ececec;
+    	border-right:1px solid #aaaaaa;
+    	position:fixed;
+    	z-index:2
+    }
  td.ui-selecting { background: #99CCFF; }
  td.ui-selected  { background: #6699CC; color: white; }

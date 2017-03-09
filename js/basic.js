@@ -389,7 +389,7 @@ stopPropagation();
 	//ctable
 
 	function CreateTable(rowCount, cellCount, tIndex) {
-		var num = tIndex;
+		var num = parseInt(tIndex);
 		dtC=$(".dataTable_container");	
 		var tb = $("<table class='dataTable' id='dataTable" + tIndex + "'></table>");
 		dtC.append(tb);
@@ -552,14 +552,16 @@ stopPropagation();
 
 			var dd = $("<dd class='sheet sheetdefault' id=sheet" + i + ">sheet" + i + "</dd>");
 			var curId = $(".sheetdefault").attr('id');
-			curId = parseInt(curId.substr(-1));
-
-
+			//curId = parseInt(curId);
+			curId=curId.replace('sheet','');
+			//curId = parseInt(curId.substr(-1));
+            curId=parseInt(curId);
+            
 			$("#sheet" + curId).removeClass('sheetdefault');
 
 			var neId = parseInt(curId) + 1;
-
-			$("#dataTable" + neId).show();
+           //console.log(neId);
+			$("#dataTable"+neId).show();
 			fillTd(neId);
 			$('.sheetqueuedl').append(dd);
 
@@ -571,7 +573,7 @@ stopPropagation();
 
 
 				var dId = $(this).attr('id');
-				dId = dId.substr(-1);
+				dId = dId.replace('sheet','');
 				dId = parseInt(dId);
 				$("#dataTable" + dId).selectable();
 				$(this).addClass('sheetdefault').siblings().removeClass('sheetdefault');
@@ -583,7 +585,7 @@ stopPropagation();
 				return false;
 			});
 			i++;
-
+            //console.log(i);
 			//$("#sheet"+(curId+1)).addClass('sheetdefault');
 
 
@@ -592,7 +594,30 @@ stopPropagation();
 
 
 	})();
-
+    
+    (function sheetMove(){
+    	var lsheet=$('.lsheet');
+    	var rsheet=$('.rsheet');
+    	var sDl=$(".sheetqueuedl");
+	    var num=0;
+	    
+	    
+    	rsheet.click(function(){
+        num==sDl.find('dd').length-1?num=sDl.find('dd').length-1:num++;
+ 		toNavPos();
+    	});
+    	
+    	lsheet.click(function(){   		   		  				
+    		num==0?num=0:num--;
+     		toNavPos();
+    	});
+    	
+    	function toNavPos(){
+		sDl.stop().animate({'margin-left':-num*80},100);
+	}
+    	
+    })();
+    
 
 
 
