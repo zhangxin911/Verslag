@@ -426,16 +426,16 @@
 		$("th,td", $t).each(function() {
 			var ridx = $("tr", $t).index($(this).parent("tr"));
 			var cidx = $(this).parent().children("th,td").index(this);
-           //console.log(ridx,cidx);
-            
-            
+           
+             var tWidth;
+            cnum>3?tWidth=103:tWidth=102;
 			if (rmin <= ridx && ridx <= rmax && cmin <= cidx && cidx <= cmax) $(this).addClass(sigDel);
 
 			if (ridx == rmin && cidx == cmin) $(this).removeClass(sigDel).attr({
 				rowspan: rnum,
 				colspan: cnum
-			}).width(cnum*103);
-
+			}).width(cnum*tWidth);
+           
 			if ($(this).attr("rowspan") == 1) $(this).removeAttr("rowspan");
 			if ($(this).attr("colspan") == 1) $(this).removeAttr("colspan");
 		}).remove("." + sigDel);
@@ -488,7 +488,7 @@
 					arr = $(); // 准备待插单元格
 					for (var i = 0; i < colspan - 1; i++)
 					arr = arr.add($td.clone());
-                    $td.width('102');
+                    //$td.width('102');
 					$("th,td", this).eq(cidx).after(arr);
 					
                    
@@ -498,7 +498,7 @@
 					arr = $(); // 准备待插单元格
 					for (var i = 0; i < colspan; i++)
 					arr = arr.add($td.clone());
-                    console.log($td.width());
+                    
 					if (cidx > 0 && $("th,td", this).eq(cidx - 1).length > 0) $("th,td", this).eq(cidx - 1).after(arr);
 					else if ($("th,td", this).eq(cidx).length > 0) $("th,td", this).eq(cidx).before(arr);
 					else $(this).prepend(arr);
@@ -607,7 +607,7 @@
 			f.tableTrLength = f.tableTr.length;
 
 			f.tableTdLength = f.tableTd.length;
-         console.log(f.tableTdLength);
+         
 		};
 
 		f.refreshTable();
@@ -648,7 +648,7 @@
 				td[n].tableXY = [i,n];
 
 				f.tableTdArr.push(td[n]);
-                
+               
 			}
 
 		};
