@@ -364,10 +364,10 @@ stopPropagation();
     //阻止冒泡
     function stopPropagation() {  
     var e = e || window.event;  
-    if(e.stopPropagation) { //W3C阻止冒泡方法  
+    if(e.stopPropagation) {
         e.stopPropagation();  
     } else {  
-        e.cancelBubble = true; //IE阻止冒泡方法  
+        e.cancelBubble = true; 
     }  
     } 
 
@@ -477,7 +477,7 @@ stopPropagation();
 				var tdHeight = that.height() - 4;
 				var tdText = that.text();
 
-				var tdInput = $("<input type='text'  id='tdInput' class='tdInput' style='border:1px solid red;' value='" + tdText + "'></input>");
+				var tdInput = $("<input type='text'  id='tdInput' class='tdInput'  value='" + tdText + "'></input>");
 
 				tdInput.width(tdWidth);
 				tdInput.height(tdHeight);
@@ -552,15 +552,12 @@ stopPropagation();
 
 			var dd = $("<dd class='sheet sheetdefault' id=sheet" + i + ">sheet" + i + "</dd>");
 			var curId = $(".sheetdefault").attr('id');
-			//curId = parseInt(curId);
 			curId=curId.replace('sheet','');
-			//curId = parseInt(curId.substr(-1));
             curId=parseInt(curId);
             
 			$("#sheet" + curId).removeClass('sheetdefault');
 
 			var neId = parseInt(curId) + 1;
-           //console.log(neId);
 			$("#dataTable"+neId).show();
 			fillTd(neId);
 			$('.sheetqueuedl').append(dd);
@@ -658,7 +655,7 @@ stopPropagation();
 
 
 		var cId = $('.sheetdefault').attr('id');
-		cId = cId.substr(-1);
+		cId =  cId.replace('sheet','');
 
 		var $t = $("#dataTable" + cId);
 
@@ -680,14 +677,15 @@ stopPropagation();
 			var rowspan = Number($(this).attr("rowspan")) || 1;
 			var colspan = Number($(this).attr("colspan")) || 1;
 			var isSel = $(this).hasClass(sigSel);
-
+            //console.log(rowspan,colspan);
 
 			if (rowspan <= 1 && colspan <= 1) return;
 
 			$("tr", $t).each(function() {
 				var idx = $("tr", $t).index(this);
 				var arr, $td = $("<td>").addClass(isSel ? sigSel : sigDel);
-
+                console.log(idx);
+                
 				if (idx == ridx) {
 					// 本行在 [cidx] 后插入 colspan-1 个
 
@@ -696,6 +694,7 @@ stopPropagation();
 					arr = arr.add($td.clone());
 					// 插入
 					$("th,td", this).eq(cidx).after(arr);
+					
                    
 				} else if (ridx < idx && idx < ridx + rowspan) {
 					// 以下行在 [cidx] 前插入 colspan 个
@@ -719,20 +718,24 @@ stopPropagation();
 		// 计算起始和跨距
 		$("th,td", $t).filter("." + sigSel).each(function() {
 			var ridx = $("tr", $t).index($(this).parent("tr"));
+			
 			rmin = ridx < rmin ? ridx : rmin;
 			rmax = ridx > rmax ? ridx : rmax;
+			
 			var cidx = $(this).parent().children("th,td").index(this);
+			
 			cmin = cidx < cmin ? cidx : cmin;
 			cmax = cidx > cmax ? cidx : cmax;
+			
 		});
 		rnum = rmax - rmin + 1;
 		cnum = cmax - cmin + 1;
-
+       
 		// 合并单元格
 		$("th,td", $t).each(function() {
 			var ridx = $("tr", $t).index($(this).parent("tr"));
 			var cidx = $(this).parent().children("th,td").index(this);
-            
+           //console.log(ridx,cidx);
             
             
 			if (rmin <= ridx && ridx <= rmax && cmin <= cidx && cidx <= cmax) $(this).addClass(sigDel);
@@ -740,7 +743,7 @@ stopPropagation();
 			if (ridx == rmin && cidx == cmin) $(this).removeClass(sigDel).attr({
 				rowspan: rnum,
 				colspan: cnum
-			});
+			}).width(cnum*102);
 
 			if ($(this).attr("rowspan") == 1) $(this).removeAttr("rowspan");
 			if ($(this).attr("colspan") == 1) $(this).removeAttr("colspan");
@@ -755,7 +758,7 @@ stopPropagation();
 	function splitTd() {
 
 		var cId = $('.sheetdefault').attr('id');
-		cId = cId.substr(-1);
+		cId = cId.replace('sheet','');
 
 		var $t = $("#dataTable" + cId);
 
