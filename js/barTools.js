@@ -36,7 +36,11 @@
 					cClass = $("[chosed=qqq]").attr('class');
 
 
-					cClass = cClass.replace(reg, cName);
+					if(!!cClass){
+                    cClass = cClass.replace(reg, cName);
+					}else{
+						return;
+					}
 					var arr = cClass.split(' ');
 					cClass = removeDuplicatedItem(arr);
 
@@ -96,9 +100,14 @@
 					var reg = new RegExp("(((fsize_)[A-Za-z0-9_]+\s*)+)", "g");
 
 					cClass = $("[chosed=qqq]").attr('class');
-
-
-					cClass = cClass.replace(reg, cName);
+                    
+                    if(!!cClass){
+                    cClass = cClass.replace(reg, cName);
+					}else{
+						return;
+					}
+					
+					//cClass = cClass.replace(reg, cName);
 
 
 					var arr = cClass.split(' ');
@@ -108,7 +117,7 @@
 					$("[chosed=qqq]").removeAttr('class');
 					$("[chosed=qqq]").addClass(cClass);
 
-stopPropagation();
+                    stopPropagation();
 				}
 				lis[i].onmouseover = function() {
 					var Oindex = Number(this.getAttribute('Oindex')) + 1;
@@ -141,7 +150,7 @@ stopPropagation();
 				ul_fs.style.display = "none";
 				ul_ff.style.display = "none";
 				ul_ffill.style.display = "none";
-stopPropagation();
+                stopPropagation();
 
 			}
 			$('#ul_fcolor').find('td').each(function() {
@@ -154,8 +163,11 @@ stopPropagation();
 
 					cClass = $("[chosed=qqq]").attr('class');
 
-					cClass = cClass.replace(reg, cName);
-
+					  if(!!cClass){
+                    cClass = cClass.replace(reg, cName);
+					}else{
+						return;
+					}
 
 
 					var arr = cClass.split(' ');
@@ -198,8 +210,11 @@ stopPropagation();
 
 					cClass = $("[chosed=qqq]").attr('class');
 
-					cClass = cClass.replace(reg, cName);
-
+					  if(!!cClass){
+                    cClass = cClass.replace(reg, cName);
+					}else{
+						return;
+					}
 
 
 					var arr = cClass.split(' ');
@@ -241,7 +256,11 @@ stopPropagation();
 
 					cClass = $("[chosed=qqq]").attr('class');
 
-					cClass = cClass.replace(reg, cName);
+					  if(!!cClass){
+                    cClass = cClass.replace(reg, cName);
+					}else{
+						return;
+					}
 					var arr = cClass.split(' ');
 					cClass = removeDuplicatedItem(arr);
 					 
