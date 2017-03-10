@@ -398,8 +398,8 @@ stopPropagation();
 			$("#dataTable" + tIndex).append(tr);
 			for (var j = 0; j < cellCount; j++) {
 				var td = CreateTd('', '');
-				td.attr('r_col', j + 1);
-				td.attr('r_row', i + 1);
+//				td.attr('r_col', j + 1);
+//				td.attr('r_row', i + 1);
 				//td.attr('sheetnum',i);
 				tr.append(td);
 			}
@@ -435,8 +435,8 @@ stopPropagation();
 
 			for (var j = 0; j < cellCount; j++) {
 				var th = $("<th>" + String.fromCharCode((65 + j)) + "</th>");
-				th.attr('reportcol', j + 1);
-				th.attr('reportrow', i + 1);
+//				th.attr('reportcol', j + 1);
+//				th.attr('reportrow', i + 1);
 				// td.attr('sheetnum',i);
 				th.appendTo(tr);
 			}
@@ -508,7 +508,7 @@ stopPropagation();
 				});
 				
 				
-				$('#dataTable'+id+' tr td').not($('.tdInput').parent()).click(function(){
+				$('#dataTable'+id+' tr td').click(function(){
 					$('.tdInput').blur();
 				});
 				
@@ -677,14 +677,14 @@ stopPropagation();
 			var rowspan = Number($(this).attr("rowspan")) || 1;
 			var colspan = Number($(this).attr("colspan")) || 1;
 			var isSel = $(this).hasClass(sigSel);
-            //console.log(rowspan,colspan);
+            
 
 			if (rowspan <= 1 && colspan <= 1) return;
 
 			$("tr", $t).each(function() {
 				var idx = $("tr", $t).index(this);
 				var arr, $td = $("<td>").addClass(isSel ? sigSel : sigDel);
-                console.log(idx);
+               
                 
 				if (idx == ridx) {
 					// 本行在 [cidx] 后插入 colspan-1 个
@@ -788,7 +788,7 @@ stopPropagation();
 			$("tr", $t).each(function() {
 				var idx = $("tr", $t).index(this);
 				var arr, $td = $("<td>");
-
+                
 				if (!isSel) $td.addClass(sigDel);
 
 				if (idx == ridx) {
@@ -797,25 +797,27 @@ stopPropagation();
 					arr = $(); // 准备待插单元格
 					for (var i = 0; i < colspan - 1; i++)
 					arr = arr.add($td.clone());
-
+                    $td.width('102');
 					$("th,td", this).eq(cidx).after(arr);
-
+					
+                   
 				} else if (ridx < idx && idx < ridx + rowspan) {
 					// 以下行在 [cidx] 前插入 colspan 个
-
+                    $td.width('102');
 					arr = $(); // 准备待插单元格
 					for (var i = 0; i < colspan; i++)
 					arr = arr.add($td.clone());
-
+                    console.log($td.width());
 					if (cidx > 0 && $("th,td", this).eq(cidx - 1).length > 0) $("th,td", this).eq(cidx - 1).after(arr);
 					else if ($("th,td", this).eq(cidx).length > 0) $("th,td", this).eq(cidx).before(arr);
 					else $(this).prepend(arr);
+					
 				}
 			});
 		});
 
 		// 重新获取以取到删者并删之
-		$("th,td", $t).remove("." + sigDel);
+		$("th,td", $t).remove("." + sigDel).width('100');
 
 
 	}

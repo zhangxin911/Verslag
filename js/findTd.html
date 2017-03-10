@@ -427,8 +427,12 @@
    console.log(f('.findtable',true)[1].getTableXY(2,'tr'));
    console.log(f('.findtable',true)[1].getTableXY(4,2));
 
+var getRandomColor = function(){
+	return '#'+('00000'+(Math.random()*0x1000000<<0).toString(16)).slice(-6);
 
-	</script>
+}
+console.log(getRandomColor());
+</script>
 	
 </body>
 </html>
