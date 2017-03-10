@@ -263,8 +263,6 @@
 					}
 					var arr = cClass.split(' ');
 					cClass = removeDuplicatedItem(arr);
-					 
-
 					$("[chosed=qqq]").removeAttr('class');
 					$("[chosed=qqq]").addClass(cClass);
 					stopPropagation();

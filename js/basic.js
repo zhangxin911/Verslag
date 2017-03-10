@@ -2,8 +2,8 @@
 	
 	var dtC=$(".dataTable_container");
 	
-	CreateTable(40, 26, 1);
-	CreateLeft(40, 1);
+	CreateTable(100, 26, 1);
+	CreateLeft(100, 1);
 	CreateTitle(1, 26);
     fillTd(1);
 
@@ -44,14 +44,6 @@
 
 
 
-	
-	
-
-
-   function classFilter(){
-   	   
-   }
-     
     //阻止冒泡
     function stopPropagation() {  
     var e = e || window.event;  
@@ -492,7 +484,7 @@
 					$("th,td", this).eq(cidx).after(arr);
 					
                    
-				} else if (ridx < idx && idx < ridx + rowspan) {
+				}else if (ridx < idx && idx < ridx + rowspan) {
 					// 以下行在 [cidx] 前插入 colspan 个
                     //$td.width('102');
 					arr = $(); // 准备待插单元格
