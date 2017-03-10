@@ -743,7 +743,7 @@ stopPropagation();
 			if (ridx == rmin && cidx == cmin) $(this).removeClass(sigDel).attr({
 				rowspan: rnum,
 				colspan: cnum
-			}).width(cnum*102);
+			}).width(cnum*103);
 
 			if ($(this).attr("rowspan") == 1) $(this).removeAttr("rowspan");
 			if ($(this).attr("colspan") == 1) $(this).removeAttr("colspan");
