@@ -201,8 +201,8 @@
 			$(this).click(function() {
 
 
-				$('.dataTable').find('td').removeClass('tdOn');
-				$(this).addClass('tdOn');
+				$('.dataTable').find('td').removeClass('ui-selected');
+				$(this).addClass('ui-selected');
 				//		 	
 				$(".dataTable tr td").removeAttr('chosed');
 				$(this).attr('chosed', 'qqq');
@@ -480,13 +480,13 @@
 					arr = $(); // 准备待插单元格
 					for (var i = 0; i < colspan - 1; i++)
 					arr = arr.add($td.clone());
-                    //$td.width('102');
+                  
 					$("th,td", this).eq(cidx).after(arr);
 					
                    
 				}else if (ridx < idx && idx < ridx + rowspan) {
 					// 以下行在 [cidx] 前插入 colspan 个
-                    //$td.width('102');
+                   
 					arr = $(); // 准备待插单元格
 					for (var i = 0; i < colspan; i++)
 					arr = arr.add($td.clone());
