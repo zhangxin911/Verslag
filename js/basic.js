@@ -793,6 +793,12 @@
 //}
 //}
 	
+	
+	function getRandomColor(){
+	return '#'+('00000'+(Math.random()*0x1000000<<0).toString(16)).slice(-6);
+
+}
+	
 (function hLight(){
 
 	var ifx=$('#ip_fx');
@@ -800,17 +806,22 @@
 	var r;
 	var arr=[];
 	var posX,posY;
-	
+	var lTd;
 	ifx.keydown(function(){
 		
 		ivalue=ifx.val();
 		
 		//var reg=/^[a-zA-Z]{1}(\+?[1-9][0-9]*)$/g;
 		
+		if(!ivalue){
+			return;
+		}else{
 		var opr_reg=  /\+|\-|\*|\\/;
 		
 		arr=ivalue.split(opr_reg);
-	 for(var i=0;i<arr.length;i++){
+		console.log(arr);
+		
+	    for(var i=0;i<arr.length;i++){
           // console.log(arr[i].match(reg));	
           posX=arr[i];
           posY=arr[i];
@@ -819,13 +830,17 @@
 	      
 	      
 	      posX=posX.toString();
-	      posX=posX.toLocaleLowerCase().charCodeAt(0) - 96;
-	      
-	      posY=posY.toString();
-        console.log(f('#dataTable1',true).getTableXY(posX,posY));
-
-	    
-	 }
+	      posX=posX.toLocaleLowerCase().charCodeAt(0)-96;
+	      posX--;
+	      posY=posY.toString()-1;
+          //console.log(f('#dataTable1',true).getTableXY(posX,posY));   
+          lTd=f('#dataTable1',true).getTableXY(posY,posX);
+          lTd.style.background=getRandomColor();
+	    }
+	}
+		
+	
+	 
 	});
         
      
@@ -839,4 +854,4 @@
 
 
 
-//console.log(f('#dataTable1',true).getTableXY(2,2));
+console.log(f('#dataTable1',true).getTableXY(0,0));
