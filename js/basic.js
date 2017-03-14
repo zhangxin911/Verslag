@@ -1,13 +1,38 @@
 	
 	
-	var dtC=$(".dataTable_container");
 	
-	CreateTable(100, 26, 1);
+	
+
+   	$(document).ready(function() {
+		var dtC=$(".dataTable_container");
+		CreateTable(100, 26, 1);
 	CreateLeft(100, 1);
 	CreateTitle(1, 26);
     fillTd(1);
+		dtC.height($(window).height() - 170);
+
+		$(window).resize(function() {
+			dtC.height($(window).height() - 170);
+
+		});
 
 
+		$(".dataTable_container").scroll(function() {
+			var scrollY = $(".dataTable_container").scrollTop();
+			var scrollX = $(".dataTable_container").scrollLeft();
+
+			$(".yOrder").css('top', -scrollY + 30);
+			$(".xOrder").css('left', -scrollX);
+
+		});
+
+		　$("#dataTable1").selectable();
+		  $("#btnMerge").on('click', mergeTd);
+		  $("#btnSplit").on('click', splitTd);
+
+
+
+	});
 	
     //input光标
 	function set_text_value_position(obj, spos) {
@@ -229,7 +254,7 @@
 			return false;
 		});
 		$('.addSheet').click(function() {
-			CreateTable(40, 26, i);
+			CreateTable(100, 26, i);
 			dtC.children().hide();
 
 
@@ -304,33 +329,7 @@
 
 
 
-	$(document).ready(function() {
-		var dtC=$(".dataTable_container");
-		
-		dtC.height($(window).height() - 170);
 
-		$(window).resize(function() {
-			dtC.height($(window).height() - 170);
-
-		});
-
-
-		$(".dataTable_container").scroll(function() {
-			var scrollY = $(".dataTable_container").scrollTop();
-			var scrollX = $(".dataTable_container").scrollLeft();
-
-			$(".yOrder").css('top', -scrollY + 30);
-			$(".xOrder").css('left', -scrollX);
-
-		});
-
-		　$("#dataTable1").selectable();
-		$("#btnMerge").on('click', mergeTd);
-		$("#btnSplit").on('click', splitTd);
-
-
-
-	});
 
 
    //合并单元格
@@ -784,5 +783,60 @@
 	return f.table;
 
 };
+
+//Array.prototype.removeByValue = function(val) {
+//for(var i=0; i<this.length; i++) {
+//  if(this[i] == val) {
+//    this.splice(i, 1);
+//    break;
+//  }
+//}
+//}
 	
-console.log(f('#dataTable1',true).getTableXY(2,2));
+(function hLight(){
+
+	var ifx=$('#ip_fx');
+	var ivalue;
+	var r;
+	var arr=[];
+	var posX,posY;
+	
+	ifx.keydown(function(){
+		
+		ivalue=ifx.val();
+		
+		//var reg=/^[a-zA-Z]{1}(\+?[1-9][0-9]*)$/g;
+		
+		var opr_reg=  /\+|\-|\*|\\/;
+		
+		arr=ivalue.split(opr_reg);
+	 for(var i=0;i<arr.length;i++){
+          // console.log(arr[i].match(reg));	
+          posX=arr[i];
+          posY=arr[i];
+          posX=posX.match(/^[a-zA-Z]{1}/gi);
+          posY=posY.match(/\+?[1-9][0-9]*$/g);
+	      
+	      
+	      posX=posX.toString();
+	      posX=posX.toLocaleLowerCase().charCodeAt(0) - 96;
+	      
+	      posY=posY.toString();
+        console.log(f('#dataTable1',true).getTableXY(posX,posY));
+
+	    
+	 }
+	});
+        
+     
+	ifx.keyup(function(){
+	
+		
+	});
+	
+})();
+
+
+
+
+//console.log(f('#dataTable1',true).getTableXY(2,2));
