@@ -172,9 +172,9 @@
     //编辑表格
 	function fillTd(id) {
 		var id = parseInt(id);
-
+         
 		$('#dataTable' + id).find('td').each(function() {
-
+            
 			$(this).dblclick(function() {
 
 				var that = $(this);
@@ -209,8 +209,8 @@
 					event.stopPropagation();
 				});
 
-				$(".tdInput").keyup(function() {
-					if (event.keyCode == 13) {
+				$(".tdInput").keyup(function(ev) {
+					if (ev.keyCode == 13) {
 						$('.tdInput').blur();
 					}
 				});
@@ -793,8 +793,8 @@
 //}
 //}
 	
-	
-	function getRandomColor(){
+//颜色随机	
+function getRandomColor(){
 	return '#'+('00000'+(Math.random()*0x1000000<<0).toString(16)).slice(-6);
 
 }
@@ -807,47 +807,63 @@
 	var arr=[];
 	var posX,posY;
 	var lTd;
+    var tmp=[];
+    var lastValue;
 	ifx.keydown(function(){
-		
-		ivalue=ifx.val();
-		
-		//var reg=/^[a-zA-Z]{1}(\+?[1-9][0-9]*)$/g;
-		
+	
+	});
+        
+     
+	 ifx.keyup(function(ev){
+	 	var ev=ev||event;
+	 	ivalue=ifx.val();
 		if(!ivalue){
 			return;
 		}else{
-		var opr_reg=  /\+|\-|\*|\\/;
-		
-		arr=ivalue.split(opr_reg);
-		console.log(arr);
-		
-	    for(var i=0;i<arr.length;i++){
-          // console.log(arr[i].match(reg));	
-          posX=arr[i];
-          posY=arr[i];
-          posX=posX.match(/^[a-zA-Z]{1}/gi);
-          posY=posY.match(/\+?[1-9][0-9]*$/g);
-	      
-	      
-	      posX=posX.toString();
+		 
+        if(ev.keyCode==187||ev.keyCode==189||(ev.keyCode==16&&ev.keyCode==56)||ev.keyCode==191){
+        	var opr_reg=/\+|\-|\*|\\/;		
+	   
+		    lastValue=ivalue;
+            console.log(lastValue);        	
+        }
+         tmp=ivalue.replace(lastValue,'');
+         
+        posX=tmp.match(/^[a-zA-Z]{1}/gi);
+        posY=tmp.match(/\+?[1-9][0-9]*$/g); 
+        posX=posX.toString();
 	      posX=posX.toLocaleLowerCase().charCodeAt(0)-96;
 	      posX--;
 	      posY=posY.toString()-1;
           //console.log(f('#dataTable1',true).getTableXY(posX,posY));   
           lTd=f('#dataTable1',true).getTableXY(posY,posX);
           lTd.style.background=getRandomColor();
-	    }
-	}
-		
-	
-	 
-	});
         
-     
-	ifx.keyup(function(){
-	
-		
-	});
+        
+        
+//	 	var opr_reg=/\+|\-|\*|\\/;		
+//		arr=ivalue.split(opr_reg);
+//		//console.log(arr);
+//	    for(var i=0;i<arr.length;i++){
+//        // console.log(arr[i].match(reg));	
+//        posX=arr[i];
+//        posY=arr[i];
+//        posX=posX.match(/^[a-zA-Z]{1}/gi);
+//        posY=posY.match(/\+?[1-9][0-9]*$/g);
+//	      
+//	      
+//	      posX=posX.toString();
+//	      posX=posX.toLocaleLowerCase().charCodeAt(0)-96;
+//	      posX--;
+//	      posY=posY.toString()-1;
+//        //console.log(f('#dataTable1',true).getTableXY(posX,posY));   
+//        lTd=f('#dataTable1',true).getTableXY(posY,posX);
+//        lTd.style.background=getRandomColor();
+//	    }
+//	    
+	    	}
+	  });
+	    
 	
 })();
 
