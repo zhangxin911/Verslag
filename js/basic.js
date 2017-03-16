@@ -800,7 +800,7 @@ function getRandomColor(){
 }
 	
 (function hLight(){
-
+    var ev=ev||event;
 	var ifx=$('#ip_fx');
 	var ivalue;
 	var r;
@@ -809,16 +809,13 @@ function getRandomColor(){
 	var lTd;
     var tmp=[];
     var lastValue;
-	ifx.keydown(function(){
-	      if((ev.keyCode==8)){
-//      	 lastValue=ivalue;
-        	 console.log(ivalue);
-        }
+	ifx.keydown(function(ev){
+	     
 	});
         
      
 	 ifx.keyup(function(ev){
-	 	var ev=ev||event;
+	 	
 	 	ivalue=ifx.val();
 		if(!ivalue){
 			return;
@@ -830,24 +827,59 @@ function getRandomColor(){
 		    
         }
         
-
-        
+         if((ev.keyCode==8)){
+//      	 lastValue=ivalue;
+        	 console.log(ivalue);
+        }
+         
+         
+         
+          
         
           tmp=ivalue.replace(lastValue,'');
-          console.log(tmp);
-          lightTd(tmp);
-          cancelLightTd(tmp.substr(0,tmp.length-1));
-        	
-   
-	    	}
+          
+          
+          if(String(lastValue).indexOf(tmp)<=-1){
+          	lightTd(tmp);
+          	if(String(lastValue).indexOf(tmp.substr(0,tmp.length-1))<=-1){
+          		cLightTd(tmp.substr(0,tmp.length-1));
+          	}
+          	
+          }
+          
+          var coordinate = ivalue.split(/\+|\-|\*|\//);
+    		for(i = 0;i<coordinate.length;i++){
+    			if(isWhite(coordinate[i])){
+    				lightTd(coordinate[i]);
+    			}
+    			
+    		}
+	    }
 	  });
 	    
 	
 })();
 
+function isWhite(tmp){
+	      posX=tmp.match(/^[a-zA-Z]{1}/gi);
+          posY=tmp.match(/\+?[1-9][0-9]*$/g); 
+          posX=posX.toString();
+	      posX=posX.toLocaleLowerCase().charCodeAt(0)-96;
+	      posX--;
+	      posY=posY.toString()-1;
+          //console.log(f('#dataTable1',true).getTableXY(posX,posY));   
+          lTd=f('#dataTable1',true).getTableXY(posY,posX);
+          if(lTd.style.background == 'white'){
+          	return true;
+          }
+          else{
+          	return false;
+          }
+}
+
 function lightTd(tmp){
 	
-	  posX=tmp.match(/^[a-zA-Z]{1}/gi);
+	      posX=tmp.match(/^[a-zA-Z]{1}/gi);
           posY=tmp.match(/\+?[1-9][0-9]*$/g); 
           posX=posX.toString();
 	      posX=posX.toLocaleLowerCase().charCodeAt(0)-96;
@@ -857,9 +889,9 @@ function lightTd(tmp){
           lTd=f('#dataTable1',true).getTableXY(posY,posX);
           lTd.style.background=getRandomColor();
 }
-function cancelLightTd(tmp){
+function cLightTd(tmp){
 	
-	  posX=tmp.match(/^[a-zA-Z]{1}/gi);
+	      posX=tmp.match(/^[a-zA-Z]{1}/gi);
           posY=tmp.match(/\+?[1-9][0-9]*$/g); 
           posX=posX.toString();
 	      posX=posX.toLocaleLowerCase().charCodeAt(0)-96;
