@@ -6,9 +6,9 @@
    	$(document).ready(function() {
 		var dtC=$(".dataTable_container");
 		CreateTable(100, 26, 1);
-	CreateLeft(100, 1);
-	CreateTitle(1, 26);
-    fillTd(1);
+	    CreateLeft(100, 1);
+	    CreateTitle(1, 26);
+        fillTd(1);
 		dtC.height($(window).height() - 170);
 
 		$(window).resize(function() {
@@ -810,7 +810,10 @@ function getRandomColor(){
     var tmp=[];
     var lastValue;
 	ifx.keydown(function(){
-	
+	      if((ev.keyCode==8)){
+//      	 lastValue=ivalue;
+        	 console.log(ivalue);
+        }
 	});
         
      
@@ -821,53 +824,50 @@ function getRandomColor(){
 			return;
 		}else{
 		 
-        if(ev.keyCode==187||ev.keyCode==189||(ev.keyCode==16&&ev.keyCode==56)||ev.keyCode==191){
-        	var opr_reg=/\+|\-|\*|\\/;		
-	   
+        if((ev.keyCode==187)||ev.keyCode==189||(ev.keyCode==16&&ev.keyCode==56)||ev.keyCode==191){
+        	
 		    lastValue=ivalue;
-            console.log(lastValue);        	
+		    
         }
-         tmp=ivalue.replace(lastValue,'');
-         
-        posX=tmp.match(/^[a-zA-Z]{1}/gi);
-        posY=tmp.match(/\+?[1-9][0-9]*$/g); 
-        posX=posX.toString();
-	      posX=posX.toLocaleLowerCase().charCodeAt(0)-96;
-	      posX--;
-	      posY=posY.toString()-1;
-          //console.log(f('#dataTable1',true).getTableXY(posX,posY));   
-          lTd=f('#dataTable1',true).getTableXY(posY,posX);
-          lTd.style.background=getRandomColor();
+        
+
         
         
-        
-//	 	var opr_reg=/\+|\-|\*|\\/;		
-//		arr=ivalue.split(opr_reg);
-//		//console.log(arr);
-//	    for(var i=0;i<arr.length;i++){
-//        // console.log(arr[i].match(reg));	
-//        posX=arr[i];
-//        posY=arr[i];
-//        posX=posX.match(/^[a-zA-Z]{1}/gi);
-//        posY=posY.match(/\+?[1-9][0-9]*$/g);
-//	      
-//	      
-//	      posX=posX.toString();
-//	      posX=posX.toLocaleLowerCase().charCodeAt(0)-96;
-//	      posX--;
-//	      posY=posY.toString()-1;
-//        //console.log(f('#dataTable1',true).getTableXY(posX,posY));   
-//        lTd=f('#dataTable1',true).getTableXY(posY,posX);
-//        lTd.style.background=getRandomColor();
-//	    }
-//	    
+          tmp=ivalue.replace(lastValue,'');
+          console.log(tmp);
+          lightTd(tmp);
+          cancelLightTd(tmp.substr(0,tmp.length-1));
+        	
+   
 	    	}
 	  });
 	    
 	
 })();
 
-
-
+function lightTd(tmp){
+	
+	  posX=tmp.match(/^[a-zA-Z]{1}/gi);
+          posY=tmp.match(/\+?[1-9][0-9]*$/g); 
+          posX=posX.toString();
+	      posX=posX.toLocaleLowerCase().charCodeAt(0)-96;
+	      posX--;
+	      posY=posY.toString()-1;
+          //console.log(f('#dataTable1',true).getTableXY(posX,posY));   
+          lTd=f('#dataTable1',true).getTableXY(posY,posX);
+          lTd.style.background=getRandomColor();
+}
+function cancelLightTd(tmp){
+	
+	  posX=tmp.match(/^[a-zA-Z]{1}/gi);
+          posY=tmp.match(/\+?[1-9][0-9]*$/g); 
+          posX=posX.toString();
+	      posX=posX.toLocaleLowerCase().charCodeAt(0)-96;
+	      posX--;
+	      posY=posY.toString()-1;
+          //console.log(f('#dataTable1',true).getTableXY(posX,posY));   
+          lTd=f('#dataTable1',true).getTableXY(posY,posX);
+          lTd.style.background='white';
+}
 
 console.log(f('#dataTable1',true).getTableXY(0,0));
