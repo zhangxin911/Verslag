@@ -798,7 +798,27 @@ function getRandomColor(){
 	return '#'+('00000'+(Math.random()*0x1000000<<0).toString(16)).slice(-6);
 
 }
-	
+//字符串取异
+function getUniqueSet( setA, setB ){
+    var temp = {};
+    for( var i = 0, len = setA.length; i < len ; i++ ){
+        temp[ setA[i] ] = 0;
+    }
+    for( var j = 0, len = setB.length; j < len ; j++ ){
+        if( typeof temp[ setB[j] ] === 'undefined' ){
+            temp[ setB[j] ] = 0;
+        }else{
+            temp[ setB[j] ]++;
+        }
+    }
+    //output
+    var ret = [];
+    for( var item in temp ){
+        !temp[item] && ret.push( item );
+    }
+    return ret;
+}
+
 (function hLight(){
     var ev=ev||event;
 	var ifx=$('#ip_fx');
@@ -808,9 +828,11 @@ function getRandomColor(){
 	var posX,posY;
 	var lTd;
     var tmp=[];
+    var delTmp;
     var lastValue;
+    var pastValue;
 	ifx.keydown(function(ev){
-	     
+	     pastValue=ivalue;
 	});
         
      
@@ -827,11 +849,31 @@ function getRandomColor(){
 		    
         }
         
+      //var reg=/^[a-zA-Z]{1}(\+?[1-9][0-9]*)$/g;
+      
+      
          if((ev.keyCode==8)){
-//      	 lastValue=ivalue;
-        	 console.log(ivalue);
-        }
-         
+ 
+          
+             arr=ivalue.split(/\+|\-|\*|\//);
+             console.log(pastValue);
+             pastValue=pastValue.split(/\+|\-|\*|\//);
+             
+            
+             delTmp=getUniqueSet(arr, pastValue);    
+ 
+             console.log(delTmp);
+             for(var i=0;i<delTmp.length;i++){
+             	console.log(delTmp[i].match(/[a-zA-Z]{1}[1-9]*/g));
+             	
+             	  rs=(delTmp[i].match(/[a-zA-Z]{1}[1-9]*/g)).toString();
+              
+              console.log(rs);
+             }
+            
+             cLightTd(rs);
+             
+         }
          
          
           
@@ -841,13 +883,16 @@ function getRandomColor(){
           
           if(String(lastValue).indexOf(tmp)<=-1){
           	lightTd(tmp);
-          	if(String(lastValue).indexOf(tmp.substr(0,tmp.length-1))<=-1){
-          		cLightTd(tmp.substr(0,tmp.length-1));
-          	}
+          	(String(lastValue).indexOf(tmp.substr(0,tmp.length-1))<=-1)&&cLightTd(tmp.substr(0,tmp.length-1));
+          		
           	
+    
           }
           
-          var coordinate = ivalue.split(/\+|\-|\*|\//);
+          
+          
+          
+          
     		for(i = 0;i<coordinate.length;i++){
     			if(isWhite(coordinate[i])){
     				lightTd(coordinate[i]);
@@ -867,7 +912,7 @@ function isWhite(tmp){
 	      posX=posX.toLocaleLowerCase().charCodeAt(0)-96;
 	      posX--;
 	      posY=posY.toString()-1;
-          //console.log(f('#dataTable1',true).getTableXY(posX,posY));   
+      
           lTd=f('#dataTable1',true).getTableXY(posY,posX);
           if(lTd.style.background == 'white'){
           	return true;
@@ -885,7 +930,7 @@ function lightTd(tmp){
 	      posX=posX.toLocaleLowerCase().charCodeAt(0)-96;
 	      posX--;
 	      posY=posY.toString()-1;
-          //console.log(f('#dataTable1',true).getTableXY(posX,posY));   
+       
           lTd=f('#dataTable1',true).getTableXY(posY,posX);
           lTd.style.background=getRandomColor();
 }
@@ -897,9 +942,8 @@ function cLightTd(tmp){
 	      posX=posX.toLocaleLowerCase().charCodeAt(0)-96;
 	      posX--;
 	      posY=posY.toString()-1;
-          //console.log(f('#dataTable1',true).getTableXY(posX,posY));   
+     
           lTd=f('#dataTable1',true).getTableXY(posY,posX);
           lTd.style.background='white';
 }
 
-console.log(f('#dataTable1',true).getTableXY(0,0));
