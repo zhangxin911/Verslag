@@ -224,14 +224,20 @@
 
 
 			$(this).click(function() {
-
-
+                
+                var tr=$(this).parent();
 				$('.dataTable').find('td').removeClass('ui-selected');
 				$(this).addClass('ui-selected');
 				//		 	
 				$(".dataTable tr td").removeAttr('chosed');
 				$(this).attr('chosed', 'qqq');
-
+				var rIndex=tr[0].rowIndex;
+                var cIndex=$(this)[0].cellIndex;
+                 console.log(rIndex);
+                 console.log(cIndex);
+                ($('.titleTable').find('tr th').eq(cIndex)).css('background','#DDDDDD').siblings().css('background','#F5F5F5');
+                ($('.leftTable').find('tr td').eq(rIndex)).css('background','#DDDDDD').parent().siblings().children().css('background','#F5F5F5'); 
+                 console.log(($('.leftTable').find('tr td').eq(rIndex)).css('background','#DDDDDD').parent().siblings().children());
 			});
 
 
@@ -812,6 +818,11 @@ function getUniqueSet( setA, setB ){
     return ret;
 }
 
+function addTr(){
+	
+}
+
+
 (function hLight(){
     var ev=ev||event;
 	var ifx=$('#ip_fx');
@@ -824,6 +835,7 @@ function getUniqueSet( setA, setB ){
     var delTmp;
     var lastValue,pastValue,changeValue;
 	ifx.keydown(function(ev){
+		ivalue=ifx.val();
 	     pastValue=ivalue;
 	});
         
@@ -840,10 +852,10 @@ function getUniqueSet( setA, setB ){
 		    lastValue=ivalue;
 		    
         }
-        lastValue=lastValue.split(/\+|\-|\*|\//);
+        lastValue=ivalue.split(/\+|\-|\*|\//);
         pastValue=pastValue.split(/\+|\-|\*|\//);
         changeValue=getUniqueSet(lastValue,pastValue);
-        console.log(changeValue);
+        //console.log(changeValue);
         console.log(lastValue);
         console.log(pastValue);
 
