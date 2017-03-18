@@ -784,14 +784,7 @@
 
 };
 
-//Array.prototype.removeByValue = function(val) {
-//for(var i=0; i<this.length; i++) {
-//  if(this[i] == val) {
-//    this.splice(i, 1);
-//    break;
-//  }
-//}
-//}
+
 	
 //颜色随机	
 function getRandomColor(){
@@ -829,8 +822,7 @@ function getUniqueSet( setA, setB ){
 	var lTd;
     var tmp=[];
     var delTmp;
-    var lastValue;
-    var pastValue;
+    var lastValue,pastValue,changeValue;
 	ifx.keydown(function(ev){
 	     pastValue=ivalue;
 	});
@@ -848,36 +840,37 @@ function getUniqueSet( setA, setB ){
 		    lastValue=ivalue;
 		    
         }
+        lastValue=lastValue.split(/\+|\-|\*|\//);
+        pastValue=pastValue.split(/\+|\-|\*|\//);
+        changeValue=getUniqueSet(lastValue,pastValue);
+        console.log(changeValue);
+        console.log(lastValue);
+        console.log(pastValue);
+
         
-      //var reg=/^[a-zA-Z]{1}(\+?[1-9][0-9]*)$/g;
-      
-      
          if((ev.keyCode==8)){
  
           
              arr=ivalue.split(/\+|\-|\*|\//);
-             console.log(pastValue);
+             
              pastValue=pastValue.split(/\+|\-|\*|\//);
              
             
              delTmp=getUniqueSet(arr, pastValue);    
  
-             console.log(delTmp);
+             
              for(var i=0;i<delTmp.length;i++){
-             	console.log(delTmp[i].match(/[a-zA-Z]{1}[1-9]*/g));
+             	 
              	
              	  rs=(delTmp[i].match(/[a-zA-Z]{1}[1-9]*/g)).toString();
               
-              console.log(rs);
+              
              }
             
              cLightTd(rs);
              
          }
-         
-         
-          
-        
+      
           tmp=ivalue.replace(lastValue,'');
           
           
