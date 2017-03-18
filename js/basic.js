@@ -233,11 +233,9 @@
 				$(this).attr('chosed', 'qqq');
 				var rIndex=tr[0].rowIndex;
                 var cIndex=$(this)[0].cellIndex;
-                 console.log(rIndex);
-                 console.log(cIndex);
-                ($('.titleTable').find('tr th').eq(cIndex)).css('background','#DDDDDD').siblings().css('background','#F5F5F5');
-                ($('.leftTable').find('tr td').eq(rIndex)).css('background','#DDDDDD').parent().siblings().children().css('background','#F5F5F5'); 
-                 console.log(($('.leftTable').find('tr td').eq(rIndex)).css('background','#DDDDDD').parent().siblings().children());
+                ($('.titleTable').find('tr th').eq(cIndex)).css({'background':'#DDDDDD','color':'#6699CC'}).siblings().css({'background':'#F5F5F5','color':'#000000'});
+                ($('.leftTable').find('tr td').eq(rIndex)).css({'background':'#DDDDDD','color':'#6699CC'}).parent().siblings().children().css({'background':'#F5F5F5','color':'#000000'}); 
+                
 			});
 
 
