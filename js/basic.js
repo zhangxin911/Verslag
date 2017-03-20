@@ -17,7 +17,7 @@
 		});
 
 
-		$(".dataTable_container").scroll(function() {
+		$(".dataTable_container").scroll(function(){
 			var scrollY = $(".dataTable_container").scrollTop();
 			var scrollX = $(".dataTable_container").scrollLeft();
 
@@ -27,12 +27,16 @@
 		});
 
 		　$("#dataTable1").selectable();
+		
+		
 		  $("#btnMerge").on('click', mergeTd);
 		  $("#btnSplit").on('click', splitTd);
 
 
 
 	});
+	
+	
 	
     //input光标
 	function set_text_value_position(obj, spos) {
@@ -231,11 +235,11 @@
 				//		 	
 				$(".dataTable tr td").removeAttr('chosed');
 				$(this).attr('chosed', 'qqq');
-				var rIndex=tr[0].rowIndex;
-                var cIndex=$(this)[0].cellIndex;
-                ($('.titleTable').find('tr th').eq(cIndex)).css({'background':'#DDDDDD','color':'#6699CC'}).siblings().css({'background':'#F5F5F5','color':'#000000'});
-                ($('.leftTable').find('tr td').eq(rIndex)).css({'background':'#DDDDDD','color':'#6699CC'}).parent().siblings().children().css({'background':'#F5F5F5','color':'#000000'}); 
-                
+//				var rIndex=tr[0].rowIndex;
+//              var cIndex=$(this)[0].cellIndex;
+//              ($('.titleTable').find('tr th').eq(cIndex)).css({'background':'#DDDDDD','color':'#6699CC'}).siblings().css({'background':'#F5F5F5','color':'#000000'});
+//              ($('.leftTable').find('tr td').eq(rIndex)).css({'background':'#DDDDDD','color':'#6699CC'}).parent().siblings().children().css({'background':'#F5F5F5','color':'#000000'}); 
+//              
 			});
 
 
@@ -825,15 +829,18 @@ function addTr(){
     var ev=ev||event;
 	var ifx=$('#ip_fx');
 	var ivalue;
-	var r;
+	var rs;
 	var arr=[];
 	var posX,posY;
 	var lTd;
     var tmp=[];
     var delTmp;
     var lastValue,pastValue,changeValue;
+    
+    var lightBox;
+    
 	ifx.keydown(function(ev){
-		ivalue=ifx.val();
+		 //ivalue=ifx.val();
 	     pastValue=ivalue;
 	});
         
@@ -850,12 +857,12 @@ function addTr(){
 		    lastValue=ivalue;
 		    
         }
-        lastValue=ivalue.split(/\+|\-|\*|\//);
-        pastValue=pastValue.split(/\+|\-|\*|\//);
-        changeValue=getUniqueSet(lastValue,pastValue);
-        //console.log(changeValue);
-        console.log(lastValue);
-        console.log(pastValue);
+//      lastValue=ivalue.split(/\+|\-|\*|\//);
+//      pastValue=pastValue.split(/\+|\-|\*|\//);
+//      changeValue=getUniqueSet(lastValue,pastValue);
+//      //console.log(changeValue);
+//      console.log(lastValue);
+//      console.log(pastValue);
 
         
          if((ev.keyCode==8)){
@@ -872,7 +879,7 @@ function addTr(){
              for(var i=0;i<delTmp.length;i++){
              	 
              	
-             	  rs=(delTmp[i].match(/[a-zA-Z]{1}[1-9]*/g)).toString();
+             	  rs=(delTmp[i].match(/[a-zA-Z]{1}[0-9]*/g)).toString();
               
               
              }
@@ -933,8 +940,10 @@ function lightTd(tmp){
 	      posX=posX.toLocaleLowerCase().charCodeAt(0)-96;
 	      posX--;
 	      posY=posY.toString()-1;
-       
+          
           lTd=f('#dataTable1',true).getTableXY(posY,posX);
+          //console.log(lTd.style.marginLeft);
+         
           lTd.style.background=getRandomColor();
 }
 function cLightTd(tmp){
@@ -945,8 +954,10 @@ function cLightTd(tmp){
 	      posX=posX.toLocaleLowerCase().charCodeAt(0)-96;
 	      posX--;
 	      posY=posY.toString()-1;
-     
+          
           lTd=f('#dataTable1',true).getTableXY(posY,posX);
-          lTd.style.background='white';
+          var forBg=lTd.style.background;
+          console.log(forBg);
+          lTd.style.background='';
 }
 
