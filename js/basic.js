@@ -924,7 +924,7 @@ function isWhite(tmp){
 	      posY=posY.toString()-1;
       
           lTd=f('#dataTable1',true).getTableXY(posY,posX);
-          if(lTd.style.background == 'white'){
+          if(lTd.style.background == ''){
           	return true;
           }
           else{
@@ -956,8 +956,8 @@ function cLightTd(tmp){
 	      posY=posY.toString()-1;
           
           lTd=f('#dataTable1',true).getTableXY(posY,posX);
-          var forBg=lTd.style.background;
-          console.log(forBg);
+//        var forBg=lTd.style.background;
+//        console.log(forBg);
           lTd.style.background='';
 }
 
