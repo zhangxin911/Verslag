@@ -836,6 +836,8 @@ function getUniqueSet( setA, setB ){
     var lastValue,pastValue,changeValue;
     var preColor;
     var lightBox;
+    var pVal,lVal,cVal;
+    
     
 	ifx.keydown(function(ev){
 		 //ivalue=ifx.val();
@@ -847,6 +849,7 @@ function getUniqueSet( setA, setB ){
 	 ifx.keyup(function(ev){
 	 	
 	 	ivalue=ifx.val();
+	 	//ivalue.style.color=getRandomColor();
 		if(!ivalue){
 			return;
 		}else{
@@ -860,10 +863,13 @@ function getUniqueSet( setA, setB ){
 //      pastValue=pastValue.split(/\+|\-|\*|\//);
 //      changeValue=getUniqueSet(lastValue,pastValue);
 //      //console.log(changeValue);
-//      console.log(lastValue);
-//      console.log(pastValue);
-
-        
+   
+       pVal=pastValue.split(/\+|\-|\*|\//);
+       lVal=lastValue.split(/\+|\-|\*|\//);
+      //console.log(lVal);
+      //console.log(pVal);
+       cVal=getUniqueSet(lVal,pVal);
+         console.log(cVal);
          if((ev.keyCode==8)){
  
           
@@ -932,7 +938,7 @@ function isWhite(tmp){
 }
 
 function lightTd(tmp){
-	      var color=getRandomColor();
+	      
 	      posX=tmp.match(/^[a-zA-Z]{1}/gi);
           posY=tmp.match(/\+?[1-9][0-9]*$/g); 
           posX=posX.toString();
@@ -943,7 +949,7 @@ function lightTd(tmp){
           lTd=f('#dataTable1',true).getTableXY(posY,posX);
          
         lTd.style.background=getRandomColor();
-        console.log(getRandomColor());
+     
         
        // lTd.style.opacity='0.2';
         
@@ -973,12 +979,4 @@ function walkontable(){
 }
 
 
-//function table(){
-//	
-//}
-//
-//
-//table.prototype.draw=function(){
-//	
-//	
-//}
+ 
