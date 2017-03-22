@@ -4,11 +4,7 @@
 		font-size: 14px;
 	}
 		
-		table
-  {
-  /*border-collapse:separate;
-  border-spacing: 1px;*/
-  }
+ 
 		.content{
 			width:100%;
 			position:fixed;
@@ -46,7 +42,7 @@
 			table-layout: fixed;
 			
 			margin-top:2px;
-			 
+			 border-collapse: collapse;
 		}
 		.titleTable{
 			width:100%;
@@ -935,5 +931,5 @@
     	position:fixed;
     	z-index:2
     }
- td.ui-selecting { background: #99CCFF; }
- td.ui-selected  { background: #5292F7; color: white; }
+ td.ui-selecting { border:1px double #99CCFF; }
+ td.ui-selected  { border:1px double #4887C7 !important; background:rgba(51, 122, 183, 0.2) !important ;color: white; }

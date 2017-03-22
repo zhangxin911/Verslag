@@ -439,7 +439,7 @@
 			if ($(this).attr("colspan") == 1) $(this).removeAttr("colspan");
 		}).remove("." + sigDel);
 
-
+       
 	}
 
 
@@ -820,9 +820,7 @@ function getUniqueSet( setA, setB ){
     return ret;
 }
 
-function addTr(){
-	
-}
+
 
 
 (function hLight(){
@@ -836,12 +834,13 @@ function addTr(){
     var tmp=[];
     var delTmp;
     var lastValue,pastValue,changeValue;
-    
+    var preColor;
     var lightBox;
     
 	ifx.keydown(function(ev){
 		 //ivalue=ifx.val();
 	     pastValue=ivalue;
+	     
 	});
         
      
@@ -933,7 +932,7 @@ function isWhite(tmp){
 }
 
 function lightTd(tmp){
-	
+	      
 	      posX=tmp.match(/^[a-zA-Z]{1}/gi);
           posY=tmp.match(/\+?[1-9][0-9]*$/g); 
           posX=posX.toString();
@@ -945,6 +944,8 @@ function lightTd(tmp){
           //console.log(lTd.style.marginLeft);
          
           lTd.style.background=getRandomColor();
+          return true;
+          
 }
 function cLightTd(tmp){
 	
@@ -959,5 +960,20 @@ function cLightTd(tmp){
 //        var forBg=lTd.style.background;
 //        console.log(forBg);
           lTd.style.background='';
+          return true;
 }
 
+function walkontable(){
+	  
+}
+
+
+//function table(){
+//	
+//}
+//
+//
+//table.prototype.draw=function(){
+//	
+//	
+//}

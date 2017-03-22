@@ -2152,7 +2152,7 @@ ul.context-menu-list li {
              
             // 合并单元格按钮
             $("#btnMerge").click(function(){
-                var $t = $("#t");
+                var $t = $(".htCore");
                  
                 if ($("table", $t).length > 0) {
                     alert("不支持嵌套表格！");
@@ -2160,7 +2160,7 @@ ul.context-menu-list li {
                 }
                  
                 var sigDel = "sign4delete";  // 删除标记，用作类名
-                var sigSel = "ui-selected";  // 选中标记，用作类名
+                var sigSel = "area";  // 选中标记，用作类名
                  
                 // 补充单元格以便后继正确计算坐标
                 $("th,td", $t).each(function(){
@@ -2336,7 +2336,7 @@ ul.context-menu-list li {
              
             // 拆分单元格按钮
             $("#btnSplit").click(function(){
-                var $t = $("#t");
+                var $t = $("#dataTable");
                  
                 if ($("table", $t).length > 0) {
                     alert("不支持嵌套表格！");
@@ -2454,6 +2454,7 @@ ul.context-menu-list li {
     minSpareCols: 1,
     contextMenu: true,
     manualColumnResize: true,
+    mergeCells:true,
     useFormula: true,			// This is the line you are looking for
 /*
     cells: function (row, col, prop) {

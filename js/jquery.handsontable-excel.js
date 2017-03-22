@@ -1285,6 +1285,6 @@ Handsontable.ExcelCell = {
 // Add mapping of our type
 Handsontable.cellTypes['excel'] = Handsontable.ExcelCell;
 
-Handsontable.PluginHooks.add('beforeInit', initExcelCell);
+//Handsontable.PluginHooks.add('beforeInit', initExcelCell);
 
 })(jQuery);
