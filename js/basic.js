@@ -932,7 +932,7 @@ function isWhite(tmp){
 }
 
 function lightTd(tmp){
-	      
+	      var color=getRandomColor();
 	      posX=tmp.match(/^[a-zA-Z]{1}/gi);
           posY=tmp.match(/\+?[1-9][0-9]*$/g); 
           posX=posX.toString();
@@ -941,10 +941,15 @@ function lightTd(tmp){
 	      posY=posY.toString()-1;
           
           lTd=f('#dataTable1',true).getTableXY(posY,posX);
-          //console.log(lTd.style.marginLeft);
          
-          lTd.style.background=getRandomColor();
-          return true;
+        lTd.style.background=getRandomColor();
+        console.log(getRandomColor());
+        
+       // lTd.style.opacity='0.2';
+        
+  //      lTd.style.border="1px inset"+color;
+
+        
           
 }
 function cLightTd(tmp){

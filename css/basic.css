@@ -931,5 +931,5 @@
     	position:fixed;
     	z-index:2
     }
- td.ui-selecting { border:1px double #99CCFF; }
- td.ui-selected  { border:1px double #4887C7 !important; background:rgba(51, 122, 183, 0.2) !important ;color: white; }
+ td.ui-selecting { border:1px double #4887C7 !important; background:rgba(51, 122, 183, 0.2) !important ;}
+ td.ui-selected  { border:1px double #4887C7 !important; background:rgba(51, 122, 183, 0.2) !important ;}
