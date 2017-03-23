@@ -941,7 +941,7 @@ ifx.keyup(function(ev){
 	
 	//a1-a2        /([a-zA-Z]([1-9]\d*))(((\-|\+|\*|\\){1}([a-zA-Z]{1})(([1-9]\d*){1})))*/
 	
-	//console.log(pValue);
+	console.log(pValue);
 	
     //获得符合输入格式的值	
 	res=pValue.match( /([a-zA-Z]([1-9]\d*))(((\-|\+|\*|\\){1}([a-zA-Z]{1})(([1-9]\d*){1})))*/);
@@ -972,8 +972,8 @@ ifx.keyup(function(ev){
    
            console.log(nValue);
             
-            delRes=nValue.match( /([a-zA-Z]([1-9]\d*))(((\-|\+|\*|\\){1}([a-zA-Z]{1})(([1-9]\d*){1})))*/);
-           console.log(delRes[0]);
+          delRes=nValue.match( /([a-zA-Z]([1-9]\d*))(((\-|\+|\*|\\){1}([a-zA-Z]{1})(([1-9]\d*){1})))*/);
+           //console.log(delRes[0]);
             
              if(delRes[0]){
              	delText=delRes[0].toString();
@@ -983,19 +983,18 @@ ifx.keyup(function(ev){
               cArr=pValue.split(/\+|\-|\*|\\/);
 
               delTmp=getUniqueSet(cArr, dArr); 
-              delTmp=delTmp[1];
             console.log(delTmp);
                 
                 
-            //    cLightTd(delTmp[1]);
+                cLightTd(delTmp[1]);
                 
-                for(var i=0;i<delTmp.length;i++){
-             	 
-             	
-             	cLightTd(delTmp[i]);
-              
-              
-             }
+//              for(var i=0;i<delTmp.length;i++){
+//           	 
+//           	
+//           	cLightTd(delTmp[i]);
+//            
+//            
+//           }
                 
              }
             
@@ -1070,8 +1069,7 @@ function cLightTd(tmp){
           posX=posX.toString();
 	      posX=posX.toLocaleLowerCase().charCodeAt(0)-96;
 	      posX--;
-	      posY=posY.toString()-1;
-          
+	      posY=posY.toString()-1;          
           lTd=f('#dataTable1',true).getTableXY(posY,posX);
 //        var forBg=lTd.style.background;
 //        console.log(forBg);
