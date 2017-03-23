@@ -438,7 +438,7 @@
 			if ($(this).attr("rowspan") == 1) $(this).removeAttr("rowspan");
 			if ($(this).attr("colspan") == 1) $(this).removeAttr("colspan");
 		}).remove("." + sigDel);
-
+        getUi();
        
 	}
 
@@ -801,6 +801,7 @@ function getRandomColor(){
 }
 //字符串取异
 function getUniqueSet( setA, setB ){
+	 
     var temp = {};
     for( var i = 0, len = setA.length; i < len ; i++ ){
         temp[ setA[i] ] = 0;
@@ -823,102 +824,206 @@ function getUniqueSet( setA, setB ){
 
 
 
-(function hLight(){
-    var ev=ev||event;
-	var ifx=$('#ip_fx');
-	var ivalue;
-	var rs;
-	var arr=[];
-	var posX,posY;
-	var lTd;
-    var tmp=[];
-    var delTmp;
-    var lastValue,pastValue,changeValue;
-    var preColor;
-    var lightBox;
-    var pVal,lVal,cVal;
-    
-    
-	ifx.keydown(function(ev){
-		 //ivalue=ifx.val();
-	     pastValue=ivalue;
-	     
-	});
-        
-     
-	 ifx.keyup(function(ev){
-	 	
-	 	ivalue=ifx.val();
-	 	//ivalue.style.color=getRandomColor();
-		if(!ivalue){
-			return;
-		}else{
-		 
-        if((ev.keyCode==187)||ev.keyCode==189||(ev.keyCode==16&&ev.keyCode==56)||ev.keyCode==191){
-        	
-		    lastValue=ivalue;
-		    
-        }
-//      lastValue=ivalue.split(/\+|\-|\*|\//);
-//      pastValue=pastValue.split(/\+|\-|\*|\//);
-//      changeValue=getUniqueSet(lastValue,pastValue);
-//      //console.log(changeValue);
+//(function hLight(){
+//  var ev=ev||event;
+//	var ifx=$('#ip_fx');
+//	var ivalue;
+//	var rs;
+//	var arr=[];
+//	var posX,posY;
+//	var lTd;
+//  var tmp=[];
+//  var delTmp;
+//  var lastValue,pastValue,changeValue;
+//  var preColor;
+//  var lightBox;
+//  var pVal,lVal,cVal;
+//  
+//  
+//	ifx.keydown(function(ev){
+//		 //ivalue=ifx.val();
+//	     pastValue=ivalue;
+//	     
+//	});
+//      
+//   
+//	 ifx.keyup(function(ev){
+//	 	
+//	 	ivalue=ifx.val();
+//	 	//ivalue.style.color=getRandomColor();
+//		if(!ivalue){
+//			return;
+//		}else{
+//		 
+//      if((ev.keyCode==187)||ev.keyCode==189||(ev.keyCode==16&&ev.keyCode==56)||ev.keyCode==191){
+//      	
+//		    lastValue=ivalue;
+//		    
+//      }
+//
+// 
+////     pVal=pastValue.split(/\+|\-|\*|\//);
+////     lVal=lastValue.split(/\+|\-|\*|\//);
+////     cVal=getUniqueSet(lVal,pVal);
+////     console.log(cVal);
+//
+//
+////删除
+//       if((ev.keyCode==8)){
+// 
+//        
+//           arr=ivalue.split(/\+|\-|\*|\//);
+//           
+//           pastValue=pastValue.split(/\+|\-|\*|\//);
+//           
+//          
+//           delTmp=getUniqueSet(arr, pastValue);    
+// 
+//           
+//           for(var i=0;i<delTmp.length;i++){
+//           	 
+//           	
+//           	  rs=(delTmp[i].match(/[a-zA-Z]{1}[0-9]*/g)).toString();
+//            
+//            
+//           }
+//          
+//           cLightTd(rs);
+//           
+//       }
+//    
+//        tmp=ivalue.replace(lastValue,'');
+//        console.log(tmp);
+//        
+//        if(String(lastValue).indexOf(tmp)<=-1){
+//        	lightTd(tmp);
+//        	(String(lastValue).indexOf(tmp.substr(0,tmp.length-1))<=-1)&&cLightTd(tmp.substr(0,tmp.length-1));
+//        		
+//        	
+//  
+//        }
+//        
+//        
+//        
+//        
+//        
+//  		for(i = 0;i<coordinate.length;i++){
+//  			if(isWhite(coordinate[i])){
+//  				lightTd(coordinate[i]);
+//  			}
+//  			
+//  		}
+//	    }
+//	  });
+//	    
+//	
+//})();
+
+
+
+
+
+(function(){
+ var ev=ev||event;
+ var ifx=$('#ip_fx');
+ var pValue,nValue;
+ var pArr,nArr,cArr;
+ var endText;
+ var res,delRes;
+ var delText;
+ 
+ifx.keyup(function(ev){
+	pValue=ifx.val();
+	
+	
+	//a1          /[a-zA-Z]([1-9]\d*)/i
+	//-a1         /((\-|\+|\*|\\){1}([a-zA-Z]{1})(([1-9]\d*){1}))/i
+	
+	//a1-a2        /([a-zA-Z]([1-9]\d*))(((\-|\+|\*|\\){1}([a-zA-Z]{1})(([1-9]\d*){1})))*/
+	
+	//console.log(pValue);
+	
+    //获得符合输入格式的值	
+	res=pValue.match( /([a-zA-Z]([1-9]\d*))(((\-|\+|\*|\\){1}([a-zA-Z]{1})(([1-9]\d*){1})))*/);
+	 
+	 
+	
+	if(res[0]){
+		
+		endText=res[0].toString();
+	  
+	    
+	    //实际应点亮的所有td坐标
+	    pArr=endText.split(/\+|\-|\*|\\/);
+	   
+	    
+	    for(var i=0;i<pArr.length;i++){
+	    	isWhite(pArr[i])&&lightTd(pArr[i]);
+	    }
+	    
+	    
+	}
+	
+	
+	
+	
+	//delete
+	if((ev.keyCode==8)){
    
-       pVal=pastValue.split(/\+|\-|\*|\//);
-       lVal=lastValue.split(/\+|\-|\*|\//);
-      //console.log(lVal);
-      //console.log(pVal);
-       cVal=getUniqueSet(lVal,pVal);
-         console.log(cVal);
-         if((ev.keyCode==8)){
- 
-          
-             arr=ivalue.split(/\+|\-|\*|\//);
-             
-             pastValue=pastValue.split(/\+|\-|\*|\//);
-             
+           console.log(nValue);
             
-             delTmp=getUniqueSet(arr, pastValue);    
- 
-             
-             for(var i=0;i<delTmp.length;i++){
+            delRes=nValue.match( /([a-zA-Z]([1-9]\d*))(((\-|\+|\*|\\){1}([a-zA-Z]{1})(([1-9]\d*){1})))*/);
+           console.log(delRes[0]);
+            
+             if(delRes[0]){
+             	delText=delRes[0].toString();
+         
+                dArr=delText.split(/\+|\-|\*|\\/);
+
+              cArr=pValue.split(/\+|\-|\*|\\/);
+
+              delTmp=getUniqueSet(cArr, dArr); 
+              delTmp=delTmp[1];
+            console.log(delTmp);
+                
+                
+            //    cLightTd(delTmp[1]);
+                
+                for(var i=0;i<delTmp.length;i++){
              	 
              	
-             	  rs=(delTmp[i].match(/[a-zA-Z]{1}[0-9]*/g)).toString();
+             	cLightTd(delTmp[i]);
               
               
              }
+                
+             }
             
-             cLightTd(rs);
+
              
          }
-      
-          tmp=ivalue.replace(lastValue,'');
-          
-          
-          if(String(lastValue).indexOf(tmp)<=-1){
-          	lightTd(tmp);
-          	(String(lastValue).indexOf(tmp.substr(0,tmp.length-1))<=-1)&&cLightTd(tmp.substr(0,tmp.length-1));
-          		
-          	
-    
-          }
-          
-          
-          
-          
-          
-    		for(i = 0;i<coordinate.length;i++){
-    			if(isWhite(coordinate[i])){
-    				lightTd(coordinate[i]);
-    			}
-    			
-    		}
-	    }
-	  });
-	    
 	
+	
+	
+	
+});
+
+ifx.keydown(function(ev){
+	
+	nValue=ifx.val();
+//	nArr=nValue.split(/\+|\-\*\\/);
+// //console.log(nArr);
+	
+	
+	
+});
+
+
 })();
+
+
+
+
 
 function isWhite(tmp){
 	      posX=tmp.match(/^[a-zA-Z]{1}/gi);
@@ -949,7 +1054,7 @@ function lightTd(tmp){
           lTd=f('#dataTable1',true).getTableXY(posY,posX);
          
         lTd.style.background=getRandomColor();
-     
+         //console.log(lTd);
         
        // lTd.style.opacity='0.2';
         
@@ -974,9 +1079,19 @@ function cLightTd(tmp){
           return true;
 }
 
-function walkontable(){
-	  
-}
+//function walkontable(){
+//	  
+//}
 
+
+function getUi(){
+//	document.onmousemove=function(){
+//		console.log($('.ui-selected'));
+//	}
+	
+
+	
+   
+}
 
  
