@@ -931,34 +931,42 @@ function getUniqueSet( setA, setB ){
  var endText;
  var res,delRes;
  var delText;
+ var reg;
  
 ifx.keyup(function(ev){
 	pValue=ifx.val();
 	
 	
-	//a1          /[a-zA-Z]([1-9]\d*)/i
+	//a1          /([a-zA-Z]([1-9]\d*))/i
 	//-a1         /((\-|\+|\*|\\){1}([a-zA-Z]{1})(([1-9]\d*){1}))/i
-	
 	//a1-a2        /([a-zA-Z]([1-9]\d*))(((\-|\+|\*|\\){1}([a-zA-Z]{1})(([1-9]\d*){1})))*/
+	//(a1-a2)    /(\(([a-zA-Z]([1-9]\d*))(((\-|\+|\*|\\){1}([a-zA-Z]{1})(([1-9]\d*){1})))*\))|(([a-zA-Z]([1-9]\d*))(((\-|\+|\*|\\){1}([a-zA-Z]{1})(([1-9]\d*){1})))*)/
+	//数学公式       (\(*\d+(.\d+)*\)*(\+|-|/|\*))+\d+(.\d+)*\)*	
+	//  a1+a2*(b4+c9)   /((\(*([a-zA-Z]([1-9]\d*))\)*(\+|-|\/|\*))*([a-zA-Z]([1-9]\d*))*\)*)|([a-zA-Z]([1-9]\d*))/
 	
-	console.log(pValue);
 	
-    //获得符合输入格式的值	
-	res=pValue.match( /([a-zA-Z]([1-9]\d*))(((\-|\+|\*|\\){1}([a-zA-Z]{1})(([1-9]\d*){1})))*/);
+	
+
+   	
+    reg=/((\(*([a-zA-Z]([1-9]\d*))\)*(\+|-|\/|\*))*([a-zA-Z]([1-9]\d*))*\)*)|([a-zA-Z]([1-9]\d*))/;
+	res=pValue.match(reg);
 	 
-	 
 	
-	if(res[0]){
+	
+	if(!!res[0]){
 		
 		endText=res[0].toString();
 	  
 	    
 	    //实际应点亮的所有td坐标
-	    pArr=endText.split(/\+|\-|\*|\\/);
+	    pArr=endText.split(/\+|\-|\*|\/|\(|\)/);
 	   
+	 
 	    
 	    for(var i=0;i<pArr.length;i++){
+	    	if(!!pArr[i]){
 	    	isWhite(pArr[i])&&lightTd(pArr[i]);
+	    	}
 	    }
 	    
 	    
@@ -967,7 +975,7 @@ ifx.keyup(function(ev){
 	
 	
 	
-	//delete
+	//删除
 	if((ev.keyCode==8)){
    
            console.log(nValue);
@@ -975,26 +983,23 @@ ifx.keyup(function(ev){
           delRes=nValue.match( /([a-zA-Z]([1-9]\d*))(((\-|\+|\*|\\){1}([a-zA-Z]{1})(([1-9]\d*){1})))*/);
            //console.log(delRes[0]);
             
-             if(delRes[0]){
-             	delText=delRes[0].toString();
+             if(!!nValue){
+             	
+             	//delText=delRes[0].toString();
          
-                dArr=delText.split(/\+|\-|\*|\\/);
+                dArr=nValue.split(/\+|\-|\*|\/|\(|\)/);
 
-              cArr=pValue.split(/\+|\-|\*|\\/);
+              cArr=pValue.split(/\+|\-|\*|\/|\(|\)/);
+
+       console.log(cArr,dArr);
 
               delTmp=getUniqueSet(cArr, dArr); 
             console.log(delTmp);
                 
-                
+                if(!!delTmp[1]){
                 cLightTd(delTmp[1]);
-                
-//              for(var i=0;i<delTmp.length;i++){
-//           	 
-//           	
-//           	cLightTd(delTmp[i]);
-//            
-//            
-//           }
+                }
+
                 
              }
             
@@ -1008,13 +1013,7 @@ ifx.keyup(function(ev){
 });
 
 ifx.keydown(function(ev){
-	
-	nValue=ifx.val();
-//	nArr=nValue.split(/\+|\-\*\\/);
-// //console.log(nArr);
-	
-	
-	
+	nValue=ifx.val();	
 });
 
 
