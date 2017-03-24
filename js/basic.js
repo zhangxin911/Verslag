@@ -931,7 +931,7 @@ function getUniqueSet( setA, setB ){
  var endText;
  var res,delRes;
  var delText;
- var reg;
+ var reg,flReg;
  
 ifx.keyup(function(ev){
 	pValue=ifx.val();
@@ -947,7 +947,7 @@ ifx.keyup(function(ev){
 	
 	
 
-   	
+   	flReg=/\+|\-|\*|\/|\(|\)/;
     reg=/((\(*([a-zA-Z]([1-9]\d*))\)*(\+|-|\/|\*))*([a-zA-Z]([1-9]\d*))*\)*)|([a-zA-Z]([1-9]\d*))/;
 	res=pValue.match(reg);
 	 
@@ -959,15 +959,26 @@ ifx.keyup(function(ev){
 	  
 	    
 	    //实际应点亮的所有td坐标
-	    pArr=endText.split(/\+|\-|\*|\/|\(|\)/);
+	    pArr=endText.split(flReg);
 	   
 	 
-	    
+	   
 	    for(var i=0;i<pArr.length;i++){
 	    	if(!!pArr[i]){
 	    	isWhite(pArr[i])&&lightTd(pArr[i]);
+ 
+	    	if(String(nValue).indexOf(pArr[i])<=-1){
+        	lightTd(pArr[i]);
+ 
+            cLightTd(pArr[i].substr(0,pArr[i].length-1));
+	    	
+	    	}
+	    	
+	    	
 	    	}
 	    }
+	    
+
 	    
 	    
 	}
@@ -978,24 +989,19 @@ ifx.keyup(function(ev){
 	//删除
 	if((ev.keyCode==8)){
    
-           console.log(nValue);
-            
           delRes=nValue.match( /([a-zA-Z]([1-9]\d*))(((\-|\+|\*|\\){1}([a-zA-Z]{1})(([1-9]\d*){1})))*/);
-           //console.log(delRes[0]);
+   
             
              if(!!nValue){
              	
-             	//delText=delRes[0].toString();
+     
          
-                dArr=nValue.split(/\+|\-|\*|\/|\(|\)/);
+                dArr=nValue.split(flReg);
 
-              cArr=pValue.split(/\+|\-|\*|\/|\(|\)/);
+               cArr=pValue.split(flReg);
 
-       console.log(cArr,dArr);
-
-              delTmp=getUniqueSet(cArr, dArr); 
-            console.log(delTmp);
-                
+               delTmp=getUniqueSet(cArr, dArr); 
+    
                 if(!!delTmp[1]){
                 cLightTd(delTmp[1]);
                 }
@@ -1052,11 +1058,8 @@ function lightTd(tmp){
           lTd=f('#dataTable1',true).getTableXY(posY,posX);
          
         lTd.style.background=getRandomColor();
-         //console.log(lTd);
-        
-       // lTd.style.opacity='0.2';
-        
-  //      lTd.style.border="1px inset"+color;
+ 
+ 
 
         
           
@@ -1067,28 +1070,20 @@ function cLightTd(tmp){
           posY=tmp.match(/\+?[1-9][0-9]*$/g); 
           posX=posX.toString();
 	      posX=posX.toLocaleLowerCase().charCodeAt(0)-96;
+
+	      if(posX == null||posY==null||posX.length ==0||String(posY).length==0){
+	      	return;
+	      }
 	      posX--;
 	      posY=posY.toString()-1;          
           lTd=f('#dataTable1',true).getTableXY(posY,posX);
-//        var forBg=lTd.style.background;
-//        console.log(forBg);
+
           lTd.style.background='';
           return true;
 }
 
-//function walkontable(){
-//	  
-//}
+ 
 
 
-function getUi(){
-//	document.onmousemove=function(){
-//		console.log($('.ui-selected'));
-//	}
-	
-
-	
-   
-}
 
  
