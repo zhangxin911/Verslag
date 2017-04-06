@@ -25,7 +25,7 @@
 			position:fixed;
 			bottom:0;
 			border-top:1px solid #aaaaaa;
-			background:#ececec ;
+			background-color:#ececec ;
 		}
 		.header{
 			width:100%;
@@ -33,7 +33,7 @@
 			top:0;
 			border-top:1px solid #d9d9d9
 			border-bottom:1px solid #aaaaaa;
-			background:#f5f5f5;
+			background-color:#f5f5f5;
 			position:fixed;
 			z-index:999
 		}
@@ -50,7 +50,7 @@
 			
 		}
 		.titleTable tr{
-			background:#f5f5f5;
+			background-color:#f5f5f5;
 		}
 		
 		.titleTable th,.dataTable th{
@@ -101,7 +101,7 @@
 			height:30px;
 			position:relative;
 			top:0;
-			background:#f5f5f5;
+			background-color:#f5f5f5;
 			line-height: 30px;
 			margin-left: 62px;
 			
@@ -110,7 +110,7 @@
 			position:absolute;
 			
 			width:61px;
-			background:#F5F5F5;
+			background-color:#F5F5F5;
 			border:1px solid #AAAAAA;
 			border-bottom:none;
 			margin-top:1px
@@ -141,7 +141,7 @@
 			width:61px;
 			height:32px;
 			position:fixed;
-			background:#DDDDDD;
+			background-color:#DDDDDD;
 			border:1px solid #AAAAAA;;
 		    border-top:none;
 		
@@ -441,7 +441,7 @@
 
 .sheetdefault{
 	width:80px;
-	background:#FFFFFF;
+	background-color:#FFFFFF;
 	text-align: center;
 	
 }
@@ -458,7 +458,7 @@
 	
 	 
 	list-style-type:none;
-	background:#FFFFFF;	
+	background-color:#FFFFFF;	
 		border-top:1px solid #DDDDDD;
 		border-left:1px solid #DDDDDD;
 		border-right:1px solid #DDDDDD;
@@ -616,7 +616,7 @@
 	cursor: pointer;
 }
 .ffill_black{
-	background:#000000;
+	background-color:#000000;
 }
 .ffill_black i{
 	width:16px;
@@ -629,7 +629,7 @@
 
 
 .ffill_gray{
-	background:#888888;
+	background-color:#888888;
 }
 .ffill_gray i{
 	width:16px;
@@ -639,7 +639,7 @@
 }
 
 .ffill_white{
-	background:#FFFFFF;
+	background-color:#FFFFFF;
 }
 .ffill_white i{
 	width:16px;
@@ -649,7 +649,7 @@
 }
 
 .ffill_red{
-	background:red;
+	background-color:red;
 }
 .ffill_red i{
 	width:16px;
@@ -659,7 +659,7 @@
 }
 
 .ffill_yellow{
-	background:yellow;
+	background-color:yellow;
 }
 .ffill_yellow i{
 	width:16px;
@@ -668,7 +668,7 @@
 	display: block;
 }
 .ffill_orange{
-	background:orange;
+	background-color:orange;
 }
 .ffill_orange i{
 	width:16px;
@@ -678,7 +678,7 @@
 }
 
 .ffill_green{
-	background:#7fff00;
+	background-color:#7fff00;
 }
 .ffill_green i{
 	width:16px;
@@ -687,7 +687,7 @@
 	display: block;
 }
 .ffill_aqua{
-	background:#00ffff;
+	background-color:#00ffff;
 }
 
 .ffill_aqua i{
@@ -699,7 +699,7 @@
 }
 
 .ffill_blue{
-	background:blue;
+	background-color:blue;
 }
 .ffill_blue i{
 	width:16px;
@@ -708,7 +708,7 @@
 	display: block;
 }
 .ffill_purple{
-	background:#9400d3
+	background-color:#9400d3
 }
 .ffill_purple i{
 	width:16px;
@@ -757,7 +757,7 @@
 		cursor: pointer;
 	}
     #ul_falign td:hover{
-		background:#DDDDDD;
+		background-color:#DDDDDD;
 		
 		cursor: pointer;
 	}
@@ -892,7 +892,7 @@
     	position: fixed;
     	right: 0;
     	border-left:1px solid #aaaaaa;
-    	background:#ececec;
+    	background-color:#ececec;
     }
     .sheetfloat span{
     	float:left;
@@ -926,10 +926,22 @@
     	width:100px;
     	height:40px;
     	float:left;
-    	background:#ececec;
+    	background-color:#ececec;
     	border-right:1px solid #aaaaaa;
     	position:fixed;
     	z-index:2
     }
- td.ui-selecting { border:1px double #4887C7 !important; background:rgba(51, 122, 183, 0.2) !important ;}
- td.ui-selected  { border:1px double #4887C7 !important; background:rgba(51, 122, 183, 0.2) !important ;}
+ td.ui-selecting { 
+ 	border:1px double #4887C7 !important;
+ 	
+    background-color:rgba(51, 122, 183, 0.2) !important ;
+    background-color:rgb(214,228,241) \9 !important ;
+    
+    }
+ td.ui-selected  { 
+ 	border:1px double #4887C7 !important;
+ 	
+    background-color:rgba(51, 122, 183, 0.2) !important ;
+    background-color:rgb(214,228,241) \9 !important ;
+   
+    }

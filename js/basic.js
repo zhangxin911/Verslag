@@ -110,9 +110,7 @@
 			$("#dataTable" + tIndex).append(tr);
 			for (var j = 0; j < cellCount; j++) {
 				var td = CreateTd('', '');
-//				td.attr('r_col', j + 1);
-//				td.attr('r_row', i + 1);
-				//td.attr('sheetnum',i);
+
 				tr.append(td);
 			}
 
@@ -147,9 +145,7 @@
 
 			for (var j = 0; j < cellCount; j++) {
 				var th = $("<th>" + String.fromCharCode((65 + j)) + "</th>");
-//				th.attr('reportcol', j + 1);
-//				th.attr('reportrow', i + 1);
-				// td.attr('sheetnum',i);
+
 				th.appendTo(tr);
 			}
 
@@ -235,11 +231,7 @@
 				//		 	
 				$(".dataTable tr td").removeAttr('chosed');
 				$(this).attr('chosed', 'qqq');
-//				var rIndex=tr[0].rowIndex;
-//              var cIndex=$(this)[0].cellIndex;
-//              ($('.titleTable').find('tr th').eq(cIndex)).css({'background':'#DDDDDD','color':'#6699CC'}).siblings().css({'background':'#F5F5F5','color':'#000000'});
-//              ($('.leftTable').find('tr td').eq(rIndex)).css({'background':'#DDDDDD','color':'#6699CC'}).parent().siblings().children().css({'background':'#F5F5F5','color':'#000000'}); 
-//              
+             
 			});
 
 
@@ -630,7 +622,7 @@
 
 		};
 
-		//为每一个td绑定独立ID
+		
 		f.tableTdArr= [];
 
 		f.bindXY = function(tr,i){
@@ -822,107 +814,6 @@ function getUniqueSet( setA, setB ){
 }
 
 
-
-
-//(function hLight(){
-//  var ev=ev||event;
-//	var ifx=$('#ip_fx');
-//	var ivalue;
-//	var rs;
-//	var arr=[];
-//	var posX,posY;
-//	var lTd;
-//  var tmp=[];
-//  var delTmp;
-//  var lastValue,pastValue,changeValue;
-//  var preColor;
-//  var lightBox;
-//  var pVal,lVal,cVal;
-//  
-//  
-//	ifx.keydown(function(ev){
-//		 //ivalue=ifx.val();
-//	     pastValue=ivalue;
-//	     
-//	});
-//      
-//   
-//	 ifx.keyup(function(ev){
-//	 	
-//	 	ivalue=ifx.val();
-//	 	//ivalue.style.color=getRandomColor();
-//		if(!ivalue){
-//			return;
-//		}else{
-//		 
-//      if((ev.keyCode==187)||ev.keyCode==189||(ev.keyCode==16&&ev.keyCode==56)||ev.keyCode==191){
-//      	
-//		    lastValue=ivalue;
-//		    
-//      }
-//
-// 
-////     pVal=pastValue.split(/\+|\-|\*|\//);
-////     lVal=lastValue.split(/\+|\-|\*|\//);
-////     cVal=getUniqueSet(lVal,pVal);
-////     console.log(cVal);
-//
-//
-////删除
-//       if((ev.keyCode==8)){
-// 
-//        
-//           arr=ivalue.split(/\+|\-|\*|\//);
-//           
-//           pastValue=pastValue.split(/\+|\-|\*|\//);
-//           
-//          
-//           delTmp=getUniqueSet(arr, pastValue);    
-// 
-//           
-//           for(var i=0;i<delTmp.length;i++){
-//           	 
-//           	
-//           	  rs=(delTmp[i].match(/[a-zA-Z]{1}[0-9]*/g)).toString();
-//            
-//            
-//           }
-//          
-//           cLightTd(rs);
-//           
-//       }
-//    
-//        tmp=ivalue.replace(lastValue,'');
-//        console.log(tmp);
-//        
-//        if(String(lastValue).indexOf(tmp)<=-1){
-//        	lightTd(tmp);
-//        	(String(lastValue).indexOf(tmp.substr(0,tmp.length-1))<=-1)&&cLightTd(tmp.substr(0,tmp.length-1));
-//        		
-//        	
-//  
-//        }
-//        
-//        
-//        
-//        
-//        
-//  		for(i = 0;i<coordinate.length;i++){
-//  			if(isWhite(coordinate[i])){
-//  				lightTd(coordinate[i]);
-//  			}
-//  			
-//  		}
-//	    }
-//	  });
-//	    
-//	
-//})();
-
-
-
-
-
 (function(){
  var ev=ev||event;
  var ifx=$('#ip_fx');
@@ -1038,7 +929,7 @@ function isWhite(tmp){
 	      posY=posY.toString()-1;
       
           lTd=f('#dataTable1',true).getTableXY(posY,posX);
-          if(lTd.style.background == ''){
+          if(lTd.style.backgroundColor == ''){
           	return true;
           }
           else{
@@ -1057,7 +948,7 @@ function lightTd(tmp){
           
           lTd=f('#dataTable1',true).getTableXY(posY,posX);
          
-        lTd.style.background=getRandomColor();
+        lTd.style.backgroundColor=getRandomColor();
  
  
 
@@ -1078,7 +969,7 @@ function cLightTd(tmp){
 	      posY=posY.toString()-1;          
           lTd=f('#dataTable1',true).getTableXY(posY,posX);
 
-          lTd.style.background='';
+          lTd.style.backgroundColor='';
           return true;
 }
 
