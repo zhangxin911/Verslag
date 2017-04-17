@@ -290,9 +290,7 @@
 				return false;
 			});
 			i++;
-            //console.log(i);
-			//$("#sheet"+(curId+1)).addClass('sheetdefault');
-
+           
 
 		});
 
@@ -970,7 +968,7 @@ function cLightTd(tmp){
           lTd=f('#dataTable1',true).getTableXY(posY,posX);
 
           lTd.style.backgroundColor='';
-          return true;
+        
 }
 
  
