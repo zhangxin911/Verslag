@@ -4,7 +4,9 @@ function iTable(tContainer,tSettings){
 	this.rowCount=tSettings.rowCount;
 	this.cellCount=tSettings.cellCount;
 	this.tIndex=tSettings.tIndex;
-	this.container=tContainer;		
+	this.container=tContainer;
+	this.settings=tSettings;
+	var header,footer;
 }
 
 
@@ -110,7 +112,7 @@ iTable.prototype.createTip=function(){
 		'height':bTop,
 		'border-right':'1px solid #AAAAAA',
 		'border-bottom':'1px solid #AAAAAA',
-		
+		'margin-top':'70px'
 	});
 	content.insertBefore(this.container);
 }
@@ -146,17 +148,18 @@ iTable.prototype.setCss=function(){
 		'position':'fixed',
 		'z-index':'100',
 		'background':'#f5f5f5',
-		'width':viewWidth-bLeft-18,
+		'width':viewWidth-bLeft,
 		'overflow':'hidden',
 		'margin-left':bLeft,
+		'margin-top':'70px',
 		'top':'0'
 	});
 	
 	tBody.css({
 		'margin-left':bLeft,
-		'margin-top':bTop,
-		'width':viewWidth-bLeft-18,
-		'height':viewHeight-bTop,
+		'margin-top':bTop+70,
+		'width':viewWidth-bLeft,
+		'height':viewHeight-bTop-110,
 		'overflow':'scroll'
 	});
 	
@@ -166,7 +169,7 @@ iTable.prototype.setCss=function(){
         var viewHeight=$(window).height();
 
 		
-		that.width(viewWidth-bLeft-18);
+		that.width(viewWidth-bLeft);
 	    that.height(viewHeight-bTop);
 	});
 	 
@@ -260,6 +263,58 @@ iTable.prototype.fillTd=function(){
 	
 }
 
+iTable.prototype.createFooter=function(){
+	this.footer=$('<div class="footer"></div>');
+	this.footer.css({
+		'z-index':102
+	})
+	this.container.after(this.footer);
+	
+	var addBox=$('<div class="addBox"><div class="addSheet"></div></div>');
+	this.footer.append(addBox);
+	
+	var sheetQueue=$('<div class="sheetqueue"><div><dl class="sheet"><dd class="sheet" id="sheet1">1</dd></dl></div></div>');
+	this.footer.append(sheetQueue);
+}
+
+
+iTable.prototype.createHeader=function(){
+	this.header=$('<div class="header"></div>');
+	this.header.css({
+		'z-index':103
+	})
+	this.header.insertBefore(this.container);
+	 
+}
+
+iTable.prototype.fontFamily=function(){
+	var select=this.createSelection(1,this.settings.fontFamily);
+    	
+}
+iTable.prototype.createSelection=function(id,menus){
+	 var selection;
+	 var selectHead=$('<div id="'+id+'"></div>');
+	 var selectUl=$('<ul id=""></ul>');
+	 var selectLi;
+	 console.log($.parseJSON(menus));
+	 selectHead.text(JSON.stringify(menus));
+	 for(var index in menus){
+	 	
+	 	selectLi=$('<li>'+index+'</li>');
+	 	selectUl.append(selectLi);
+	 }	  	 
+	 selectHead.append(selectUl);
+	 selection=selectHead	 
+	 this.header.append(selection);
+	 selectUl.hide();
+	 selectHead.on('click',function(){
+	 	
+	 	$(this).children().toggle();
+	 });
+	 return selection;
+}
+
+
 
 
 function set_text_value_position(obj, spos) {
@@ -289,7 +344,13 @@ function stopPropagation() {
 var settings={
 	rowCount:100,
 	cellCount:26,
-	tIndex:1
+	tIndex:1,
+	fontFamily:{
+		'黑体':'font_Black',
+		'微软雅黑':'font_Mirco',
+		'宋体':'font_Song',
+		'楷体':'font_Kai'
+	}
 }
  
 var box=$('.box'); 
@@ -301,5 +362,9 @@ t.setCss();
 t.fillTd();
 t.tableScroll();
 t.createTip();
+t.createFooter();
+t.createHeader();
 //
+
+t.fontFamily();
 $("#iTable1").selectable();
