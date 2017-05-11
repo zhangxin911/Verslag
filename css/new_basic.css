@@ -1,0 +1,918 @@
+	ul,li{
+		margin:0;
+		padding:0;
+		font-size: 14px;
+	}
+	body{
+		height:100%;
+		overflow: hidden;
+	}	
+ 
+		 
+		
+		table th,td{
+			text-align: center;
+			 border-collapse: collapse;
+		}
+		
+		.footer{
+			width:100%;
+			height:40px;
+			line-height: 40px;
+			
+			position:fixed;
+			bottom:0;
+			border-top:1px solid #aaaaaa;
+			background-color:#ececec ;
+		}
+		.header{
+			width:100%;
+			height:100px;
+			top:0;
+			border-top:1px solid #d9d9d9
+			border-bottom:1px solid #aaaaaa;
+			background-color:#f5f5f5;
+			position:fixed;
+			z-index:999
+		}
+		 
+		 
+		.titleTable tr{
+			background-color:#f5f5f5;
+		}
+		
+		 
+		 
+		
+		
+		.dataTable tr td{
+			height:30px;
+			width:100px;
+			border-bottom:1px solid #AAAAAA;
+			border-right:1px solid #AAAAAA;
+			min-width:100px;
+		}
+		.leftTable td{
+			height:30px;
+			width:63px;
+			border-bottom:1px solid #AAAAAA;
+			border-right:1px solid #AAAAAA
+			
+		}
+		.titleTable td{
+			height:30px;
+			width:100px;
+			min-width:100px;
+			border-bottom:1px solid #AAAAAA;
+			border-right:1px solid #AAAAAA
+			
+		}
+		.fx{
+			width:100%;
+			position:relative;
+			bottom:0;
+			background-color: #ffffff;
+			border-bottom:1px solid #aaaaaa ;
+			border-top:1px solid #aaaaaa;
+			height:32px;
+			line-height:32px;
+			margin-top:68px;
+		}
+		
+		
+		 
+	 
+		.fx span{
+			width:62px;
+			height:30px;
+			display:inline-block;
+			text-align: center;
+			overflow: hidden;
+			background:url(../img/fx.png) no-repeat center;
+			line-height: 30px;
+		}
+		.fx input{
+			width:60%;
+			border:none;
+			outline: none;
+			position:absolute;
+			height:24px;
+			line-height: 24px;
+			top:50%;
+			margin-top:-12px;
+			border-left:1px solid #DDDDDD;
+			padding-left:10px
+		}
+		.tipOrder{
+			width:61px;
+			height:32px;
+			position:fixed;
+			background-color:#DDDDDD;
+			border:1px solid #AAAAAA;;
+		    border-top:none;
+		
+		
+			z-index:3
+		}
+		
+		.tdInput{
+			height:28px;
+			width:100px;
+			outline: none;
+			border:none;
+			box-shadow:1px 2px 5px rgba(0, 0, 0, 0.4);
+		}
+		.tdInputBox{
+			margin-top: -25px;
+		}
+		.styleTool{
+			margin-left:20px;
+			
+		}
+		.styleTool dl dd{
+			float: left;
+		}
+		.toolBox{
+			width:100%;
+		    position:absolute;
+		}
+		
+	/*  下拉按钮 */	
+	/** 字体 **/
+	
+	
+		#ul_ff{
+		list-style-type:none;
+		width:98px;
+		border-top:1px solid #DDDDDD;
+		border-left:1px solid #DDDDDD;
+		border-right:1px solid #DDDDDD;
+		border-bottom:1px solid #DDDDDD;
+		display:none;
+		position: absolute;
+		z-index: 111;
+		
+	}
+
+
+	#ipt_ff{
+		display: inline-block;
+        line-height:28px;
+        height:28px;
+		vertical-align: middle;
+		width:84px;
+		border-radius:0 ;
+		text-align: center; 
+		font-size: 14px;
+		position:relative;
+		background:url(../img/arrow-down.png) no-repeat;
+		background-position-x: right;
+		background-position-y: center;
+		
+	}
+    #ul_ff>li{
+		background-color:#ffffff;
+		 
+		position:relative;
+	}
+
+
+	#ul_ff>li a:hover{
+        cursor: pointer;
+	}
+
+
+	#ul_ff>li a{
+	display:inline-block;
+	width:98px;
+	height: 24px;
+	line-height: 24px;
+	text-decoration:none;
+	color:#646464;
+	 text-align: center;
+	background-color:#ffffff;
+
+	}	
+
+ /** 字号 **/
+ 	#ul_fs{
+		list-style-type:none;
+		width:98px;
+		border-top:1px solid #DDDDDD;
+		border-left:1px solid #DDDDDD;
+		border-right:1px solid #DDDDDD;
+		border-bottom:1px solid #DDDDDD;
+		display:none;
+		position: absolute;
+		z-index: 111;
+		
+	}
+
+
+	#ipt_fs{
+		display: inline-block;
+        line-height:28px;
+		vertical-align: middle;
+		width:84px;
+		border-radius:0 ;
+		text-align: center; 
+		font-size: 14px;
+		position:relative;
+		background:url(../img/arrow-down.png) no-repeat;
+		background-position-x: right;
+		background-position-y: center;
+		
+	}
+    #ul_fs>li{
+		background-color:#ffffff;
+		 
+		position:relative;
+	}
+
+
+	#ul_fs>li a:hover{
+        cursor: pointer;
+	}
+
+
+	#ul_fs>li a{
+	display:inline-block;
+	width:98px;
+	text-decoration:none;
+	color:#646464;
+	 text-align: center;
+	background-color:#ffffff;
+	height: 24px;
+	line-height: 24px;
+
+	}	
+	
+	/** 字体颜色 **/
+	
+	
+
+
+	#ipt_fcolor{
+		display: inline-block;
+        /*line-height:28px;*/
+		vertical-align: middle;
+		width:44px;
+		border-radius:0 ;
+		text-align: center; 
+		font-size: 14px;
+		position:relative;
+		background:url(../img/arrow-down.png) no-repeat;
+		background-position-x: right;
+		background-position-y: center;
+		
+	}
+    
+	
+	
+	
+    .fbold{
+    	width:28px;
+    	height:28px;
+    	display: inline-block;
+    	text-align: center;
+    	line-height: 28px;
+    	background:url(../img/fbold.png) no-repeat center;
+    }
+    .fitalic{
+    	width:28px;
+    	height:28px;
+    	display: inline-block;
+    	text-align: center;
+    	line-height: 28px;
+    	background:url(../img/fitalic.png) no-repeat center;
+    }
+    .foverline{
+    	width:28px;
+    	height:28px;
+    	display: inline-block;
+    	text-align: center;
+    	line-height: 28px;
+    	background:url(../img/overline.png) no-repeat center;
+    }
+    .fcolor{
+    	width:28px;
+    	height:28px;
+    	display: inline-block;
+    	text-align: center;
+    	line-height: 28px;
+    	background:url(../img/fcolor.png) no-repeat center;
+    }
+    
+    .fborder{
+    	width:28px;
+    	height:28px;
+    	display: inline-block;
+    	text-align: center;
+    	line-height: 28px;
+    	background:url(../img/fborder.png) no-repeat center;
+    }
+    
+    .ffill{
+    	width:28px;
+    	height:28px;
+    	display: inline-block;
+    	text-align: center;
+    	line-height: 28px;
+    	background:url(../img/ffillcolor.png) no-repeat center;
+    }
+    /*  字体类型   font_ */
+    .font_Black{
+    	font-family: 黑体;
+    }
+    .font_Mirco{
+    	font-family: 微软雅黑;
+    }
+    .font_Song{
+    	font-family: 宋体;
+    }
+    .font_Kai{
+    	font-family: "楷体";
+    }
+    .font_Arial{
+    	font-family: arial;
+    }
+    .font_Verdana{
+    	font-family: verdana;
+    }
+    .font_Impact{
+    	font-family: impact;
+    }
+    
+    /*  字体大小   fsize_ */
+     .fsize_10{
+     	font-size:10px;
+     }
+   .fsize_12{
+     	font-size:12px;
+     }
+   .fsize_14{
+     	font-size:14px;
+     }
+   .fsize_16{
+     	font-size:16px;
+     }
+   .fsize_18{
+     	font-size:18px;
+     }
+   .fsize_20{
+     	font-size:20px;
+     }
+   
+   .ffbold{
+   	font-weight: bold;
+   }
+   .ffitalic{
+   	font-style:italic;
+   }
+   .ffoverline{
+   	text-decoration:line-through;
+   }
+   
+   
+   
+   
+   
+   
+    .addSheet{
+    	width:32px;
+    	height:32px;
+    	background: url(../img/add.png);
+    	cursor: pointer;
+    	position:absolute;
+    	top:50%;
+    	margin-top:-16px;
+    	left:54px;
+    }
+    .addSheet:hover{
+    	border: 1px solid #AAAAAA;
+    	
+    }
+    
+.sheetqueue{
+	width:100%;
+	margin-left:100px;
+}
+.sheetqueuedl{
+	position:absolute;
+}
+
+.sheetqueue dl dd{
+	float: left;
+}
+
+.sheetdefault{
+	width:80px;
+	background-color:#FFFFFF;
+	text-align: center;
+	
+}
+.sheet{
+	width:80px;
+	text-align: center;
+	cursor: pointer;
+}
+.contentdl dd{
+	float:left;
+}
+#ul_fcolor{
+
+	
+	 
+	list-style-type:none;
+	background-color:#FFFFFF;	
+		border-top:1px solid #DDDDDD;
+		border-left:1px solid #DDDDDD;
+		border-right:1px solid #DDDDDD;
+		border-bottom:1px solid #DDDDDD;
+		display:none;
+		position: absolute;
+		z-index: 111;
+}
+#ul_fcolor td{
+	cursor: pointer;
+}
+.fc_black{
+	color:#000000;
+}
+.fc_black i{
+	width:16px;
+	height:16px;
+	background-color:#000000;
+	display: block;
+	
+}
+
+
+
+.fc_gray{
+	color:#888888;
+}
+.fc_gray i{
+	width:16px;
+	height:16px;
+	background-color:#888888;
+	display: block;
+}
+
+.fc_white{
+	color:#FFFFFF;
+}
+.fc_white i{
+	width:16px;
+	height:16px;
+	background-color:#FFFFFF;
+	display: block;
+}
+
+.fc_red{
+	color:red;
+}
+.fc_red i{
+	width:16px;
+	height:16px;
+	background-color:red;
+	display: block;
+}
+
+.fc_yellow{
+	color:yellow;
+}
+.fc_yellow i{
+	width:16px;
+	height:16px;
+	background-color:yellow;
+	display: block;
+}
+.fc_orange{
+	color:orange;
+}
+.fc_orange i{
+	width:16px;
+	height:16px;
+	background-color:orange;
+	display: block;
+}
+
+.fc_green{
+	color:#7fff00;
+}
+.fc_green i{
+	width:16px;
+	height:16px;
+	background-color:#7fff00;
+	display: block;
+}
+.fc_aqua{
+	color:#00ffff;
+}
+
+.fc_aqua i{
+	width:16px;
+	height:16px;
+	background-color:#00ffff;
+	display: block;
+	
+}
+
+.fc_blue{
+	color:blue;
+}
+.fc_blue i{
+	width:16px;
+	height:16px;
+	background-color:blue;
+	display: block;
+}
+.fc_purple{
+	color:#9400d3
+}
+.fc_purple i{
+	width:16px;
+	height:16px;
+	background-color:#9400d3;
+	display: block;
+}
+/*bg*/
+
+#ipt_ffill{
+		display: inline-block;
+       /* line-height:28px;*/
+		vertical-align: middle;
+		width:44px;
+		border-radius:0 ;
+		text-align: center; 
+		font-size: 14px;
+		position:relative;
+		background:url(../img/arrow-down.png) no-repeat;
+		background-position-x: right;
+		background-position-y: center;
+		
+	}
+
+
+ .ffill{
+    	width:28px;
+    	height:28px;
+    	display: inline-block;
+    	text-align: center;
+    	line-height: 28px;
+    	background:url(../img/ffillcolor.png) no-repeat center;
+    }
+
+#ul_ffill{
+
+	
+	 
+	list-style-type:none;
+	background:#FFFFFF;	
+		border-top:1px solid #DDDDDD;
+		border-left:1px solid #DDDDDD;
+		border-right:1px solid #DDDDDD;
+		border-bottom:1px solid #DDDDDD;
+		display:none;
+		position: absolute;
+		z-index: 111;
+}
+#ul_ffill td{
+	cursor: pointer;
+}
+.ffill_black{
+	background-color:#000000;
+}
+.ffill_black i{
+	width:16px;
+	height:16px;
+	background-color:#000000;
+	display: block;
+	
+}
+
+
+
+.ffill_gray{
+	background-color:#888888;
+}
+.ffill_gray i{
+	width:16px;
+	height:16px;
+	background-color:#888888;
+	display: block;
+}
+
+.ffill_white{
+	background-color:#FFFFFF;
+}
+.ffill_white i{
+	width:16px;
+	height:16px;
+	background-color:#FFFFFF;
+	display: block;
+}
+
+.ffill_red{
+	background-color:red;
+}
+.ffill_red i{
+	width:16px;
+	height:16px;
+	background-color:red;
+	display: block;
+}
+
+.ffill_yellow{
+	background-color:yellow;
+}
+.ffill_yellow i{
+	width:16px;
+	height:16px;
+	background-color:yellow;
+	display: block;
+}
+.ffill_orange{
+	background-color:orange;
+}
+.ffill_orange i{
+	width:16px;
+	height:16px;
+	background-color:orange;
+	display: block;
+}
+
+.ffill_green{
+	background-color:#7fff00;
+}
+.ffill_green i{
+	width:16px;
+	height:16px;
+	background-color:#7fff00;
+	display: block;
+}
+.ffill_aqua{
+	background-color:#00ffff;
+}
+
+.ffill_aqua i{
+	width:16px;
+	height:16px;
+	background-color:#00ffff;
+	display: block;
+	
+}
+
+.ffill_blue{
+	background-color:blue;
+}
+.ffill_blue i{
+	width:16px;
+	height:16px;
+	background-color:blue;
+	display: block;
+}
+.ffill_purple{
+	background-color:#9400d3
+}
+.ffill_purple i{
+	width:16px;
+	height:16px;
+	background-color:#9400d3;
+	display: block;
+}
+
+
+ 
+.btnMerge{
+	width:28px;
+    	height:28px;
+    	display: inline-block;
+    	text-align: center;
+    	line-height: 28px;
+    	background:url(../img/mergeTd.png) no-repeat center;
+}
+
+
+.btnSplit{
+	width:28px;
+    	height:28px;
+    	display: inline-block;
+    	text-align: center;
+    	line-height: 28px;
+    	background:url(../img/splitTd.png) no-repeat center;
+}
+
+
+/* 对齐  */
+	#ul_falign{
+		list-style-type:none;
+		
+		
+		border-top:1px solid #DDDDDD;
+		border-left:1px solid #DDDDDD;
+		border-right:1px solid #DDDDDD;
+		border-bottom:1px solid #DDDDDD;
+		display:none;
+		position: absolute;
+		z-index: 111;
+		padding:4px;
+		text-align: center;
+		background:#FFFFFF;
+		cursor: pointer;
+	}
+    #ul_falign td:hover{
+		background-color:#DDDDDD;
+		
+		cursor: pointer;
+	}
+
+
+
+ .falign{
+    	width:28px;
+    	height:28px;
+    	display: inline-block;
+    	text-align: center;
+    	line-height: 28px;
+    	background:url(../img/calign.png) no-repeat center;
+    }
+    
+	#ipt_falign{
+		display: inline-block;    
+		vertical-align: middle;
+		width:44px;
+		border-radius:0 ;
+		text-align: center; 
+		font-size: 14px;
+		position:relative;
+		background:url(../img/arrow-down.png) no-repeat;
+		background-position-x: right;
+		background-position-y: center;
+		
+	}
+
+.falign_left{
+	text-align: left;
+}
+.falign_left i{
+	width:16px;
+	height:16px;
+	background:url(../img/lalign.png) no-repeat;
+	display: block;
+}
+.falign_right i{
+	width:16px;
+	height:16px;
+	background:url(../img/ralign.png) no-repeat;
+	display: block;
+}
+.falign_center i{
+	width:16px;
+	height:16px;
+	background:url(../img/calign.png) no-repeat;
+	display: block;
+}
+
+
+
+.falign_center{
+	text-align:center;
+}
+.falign_right{
+	text-align:right;
+}
+
+	#ul_fx{
+		list-style-type:none;
+		width:98px;
+		border-top:1px solid #DDDDDD;
+		border-left:1px solid #DDDDDD;
+		border-right:1px solid #DDDDDD;
+		border-bottom:1px solid #DDDDDD;
+		display:none;
+		position: absolute;
+		z-index: 111;
+		
+	}
+
+
+	#ipt_fx{
+		display: inline-block;
+        line-height:28px;
+        height:28px;
+		vertical-align: middle;
+		width:36px;
+		border-radius:0;
+		font-size: 14px;
+		position:relative;
+		background:url(../img/arrow-down.png) no-repeat;
+		background-position-x: right;
+		background-position-y: center;
+		
+	}
+    #ipt_fx i{
+    	width:16px;
+    	height:16px;
+    	display: block;
+    	background:url(../img/f_x.png) no-repeat;
+    	position: absolute;
+    	top:50%;
+    	left:50%;
+    	margin-top:-8px;
+    	margin-left:-10px;
+    }
+
+
+  #ul_fx>li{
+		background-color:#ffffff;
+		 
+		position:relative;
+	}
+
+
+	#ul_fx>li a:hover{
+        cursor: pointer;
+	}
+
+
+	#ul_fx>li a{
+	display:inline-block;
+	width:98px;
+	text-decoration:none;
+	color:#646464;
+	 text-align: center;
+	background-color:#ffffff;
+	height: 24px;
+	line-height: 24px;
+
+	}	
+
+
+    .sheetfloat{
+    	float:right;
+    	width:100px;
+    	height:40px;
+    	line-height: 40px;
+    	position: fixed;
+    	right: 0;
+    	border-left:1px solid #aaaaaa;
+    	background-color:#ececec;
+    }
+    .sheetfloat span{
+    	float:left;
+    	width:32px;
+    	height:32px;
+    	cursor: pointer;
+    }
+    .lsheet{
+    	background:url(../img/larrow.png) center no-repeat;
+    	position: absolute;
+    	top:50%;
+    	margin-top:-16px;
+    	margin-left:16px;
+    }
+    
+    
+    .rsheet{
+    	background:url(../img/rarrow.png) center no-repeat;
+    	position: absolute;
+    	top:50%;
+    	margin-top:-16px;
+    	margin-left:48px;
+    }
+    .sheetfloat span:hover{
+    	border: 1px solid #AAAAAA;
+    	cursor: pointer;
+    
+    }
+    
+    .footer_tool_box{
+    	width:100px;
+    	height:40px;
+    	float:left;
+    	background-color:#ececec;
+    	border-right:1px solid #aaaaaa;
+    	position:fixed;
+    	z-index:2
+    }
+ td.ui-selecting { 
+ 	border:1px double #4887C7 !important;
+ 	
+    background-color:rgba(51, 122, 183, 0.2) !important ;
+    background-color:rgb(214,228,241) \9 !important ;
+    
+    }
+ td.ui-selected  { 
+ 	border:1px double #4887C7 !important;
+ 	
+    background-color:rgba(51, 122, 183, 0.2) !important ;
+    background-color:rgb(214,228,241) \9 !important ;
+   
+    }
+    
+    
+   .box{
+   	
+   } 
