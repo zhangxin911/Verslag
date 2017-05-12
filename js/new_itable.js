@@ -288,35 +288,64 @@ iTable.prototype.createHeader=function(){
 }
 
 iTable.prototype.fontFamily=function(){
-	var select=this.createSelection(1,this.settings.fontFamily);
-    	
+	var select=this.createSelection('fontFamily',this.settings.fontFamily);
+	var sel_a=$(select[1]).find('li a');
+
+    var className,curClass;
+	sel_a.on('click',function(){
+
+        className=$(this).attr('class');
+        $('.ui-selected').addClass(className);
+        
+		var reg = new RegExp("(((font_)[A-Za-z0-9_]+\s*)+)", "g");
+
+		curClass = $('.ui-selected').attr('class');
+		if(!!curClass) {
+				curClass = curClass.replace(reg,className);
+			} else {
+				return;
+		}
+		var arr = curClass.split(' ');
+		curClass = removeDuplicatedItem(arr);
+                   
+//		$('.ui-selected').removeAttr('class');
+		$('.ui-selected').addClass(curClass);
+	});  	
 }
+
+
 iTable.prototype.createSelection=function(id,menus){
 	 var selection;
 	 var selectHead=$('<div id="'+id+'"></div>');
 	 var selectUl=$('<ul id=""></ul>');
-	 var selectLi;
-	 console.log($.parseJSON(menus));
-	 selectHead.text(JSON.stringify(menus));
+	 var selectLi,arr=[];	 
+	 
 	 for(var index in menus){
-	 	
-	 	selectLi=$('<li>'+index+'</li>');
-	 	selectUl.append(selectLi);
+	 	 arr.push(index);
+	 	 selectHead.text(arr[0]);	 	  	 	   
+	 	 selectLi=$('<li><a class="'+menus[index]+'">'+index+'</a></li>');	 	  	 	
+	 	 selectUl.append(selectLi);
 	 }	  	 
-	 selectHead.append(selectUl);
+	 selectHead.after(selectUl);
+	
+	 
 	 selection=selectHead	 
 	 this.header.append(selection);
 	 selectUl.hide();
-	 selectHead.on('click',function(){
-	 	
-	 	$(this).children().toggle();
+	 selectHead.on('click',function(){ 	
+	 selectUl.toggle();	 
 	 });
+	 
+	 selectUl.find('li a').on('click',function(){
+       
+	 	$(selectHead[0]).text($(this).text());
+	 })
 	 return selection;
 }
 
 
 
-
+//input光标
 function set_text_value_position(obj, spos) {
 		var tobj = document.getElementById('tdInput');
 		if (spos < 0) spos = tobj.value.length;
@@ -332,6 +361,7 @@ function set_text_value_position(obj, spos) {
 		}
 	}
 
+//取消冒泡
 function stopPropagation() {  
     var e = e || window.event;  
     if(e.stopPropagation) {
@@ -340,6 +370,20 @@ function stopPropagation() {
         e.cancelBubble = true; 
     }  
     } 
+//数组去重
+function removeDuplicatedItem(ar) {
+		var ret = [];
+
+		for (var i = 0, j = ar.length; i < j; i++) {
+			if (ret.indexOf(ar[i]) === -1) {
+				ret.push(ar[i]);
+			}
+		}
+		ret = ret.join(' ');
+		return ret
+
+	}
+
 
 var settings={
 	rowCount:100,
@@ -347,9 +391,10 @@ var settings={
 	tIndex:1,
 	fontFamily:{
 		'黑体':'font_Black',
-		'微软雅黑':'font_Mirco',
 		'宋体':'font_Song',
-		'楷体':'font_Kai'
+		'楷体':'font_Kai',
+		'微软雅黑':'font_Mirco'
+
 	}
 }
  

@@ -141,24 +141,13 @@
 	/** 字体 **/
 	
 	
-		#ul_ff{
-		list-style-type:none;
-		width:98px;
-		border-top:1px solid #DDDDDD;
-		border-left:1px solid #DDDDDD;
-		border-right:1px solid #DDDDDD;
-		border-bottom:1px solid #DDDDDD;
-		display:none;
-		position: absolute;
-		z-index: 111;
-		
-	}
+	 
 
 
-	#ipt_ff{
+	#fontFamily{
 		display: inline-block;
-        line-height:28px;
-        height:28px;
+        height:24px;
+        line-height: 24px;
 		vertical-align: middle;
 		width:84px;
 		border-radius:0 ;
@@ -170,21 +159,20 @@
 		background-position-y: center;
 		
 	}
-    #ul_ff>li{
-		background-color:#ffffff;
-		 
+    #fontFamily+ul+li{
+		background-color:#ffffff;		 
 		position:relative;
 	}
 
 
-	#ul_ff>li a:hover{
+	#fontFamily+ul li a:hover{
         cursor: pointer;
 	}
 
 
-	#ul_ff>li a{
+	#fontFamily+ul li a{
 	display:inline-block;
-	width:98px;
+	width:84px;
 	height: 24px;
 	line-height: 24px;
 	text-decoration:none;
