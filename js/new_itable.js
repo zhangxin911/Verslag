@@ -187,7 +187,7 @@ iTable.prototype.tableScroll=function(){
 }
  
 
-
+//填写表格
 iTable.prototype.fillTd=function(){
  
         var id=1;
@@ -262,7 +262,7 @@ iTable.prototype.fillTd=function(){
 
 	
 }
-
+//创建底部容器
 iTable.prototype.createFooter=function(){
 	this.footer=$('<div class="footer"></div>');
 	this.footer.css({
@@ -277,7 +277,7 @@ iTable.prototype.createFooter=function(){
 	this.footer.append(sheetQueue);
 }
 
-
+//创建头部容器
 iTable.prototype.createHeader=function(){
 	this.header=$('<div class="header"></div>');
 	this.header.css({
@@ -286,14 +286,17 @@ iTable.prototype.createHeader=function(){
 	this.header.insertBefore(this.container);
 	 
 }
-
+//字体类型
 iTable.prototype.fontFamily=function(){
 	var select=this.createSelection('fontFamily',this.settings.fontFamily);
-	var sel_a=$(select[1]).find('li a');
-
+	var sel_a=$(select[0]).find('ul li a');
     var className,curClass;
+    var selThem;
+     
 	sel_a.on('click',function(){
-
+       
+        removeUied(); 
+        
         className=$(this).attr('class');
         $('.ui-selected').addClass(className);
         
@@ -307,15 +310,101 @@ iTable.prototype.fontFamily=function(){
 		}
 		var arr = curClass.split(' ');
 		curClass = removeDuplicatedItem(arr);
-                   
-//		$('.ui-selected').removeAttr('class');
-		$('.ui-selected').addClass(curClass);
-	});  	
+        selThem=$('.ui-selected');
+		$('.ui-selected').removeAttr('class');
+		 
+		selThem.addClass(curClass);
+	});  
+	
+	 
+	
+	sel_a.mouseover(function(){
+		  $(this).css({'background':'#ECECEC'});
+		  
+	});
+	sel_a.mouseout(function(){
+		 $(this).css({'background':'#FFFFFF'});
+	});	
+
+	
+}
+//字体大小
+iTable.prototype.fontSize=function(){
+	var select=this.createSelection('fontSize',this.settings.fontSize);
+	var sel_a=$(select[0]).find('ul li a');
+    var className,curClass;
+    var selThem;
+     
+	sel_a.on('click',function(){
+		
+        removeUied(); 
+        
+        className=$(this).attr('class');
+        $('.ui-selected').addClass(className);
+        
+		var reg = new RegExp("(((fsize_)[A-Za-z0-9_]+\s*)+)", "g");
+
+		curClass = $('.ui-selected').attr('class');
+		if(!!curClass) {
+				curClass = curClass.replace(reg,className);
+			} else {
+				return;
+		}
+		var arr = curClass.split(' ');
+		curClass = removeDuplicatedItem(arr);
+        selThem=$('.ui-selected');
+		$('.ui-selected').removeAttr('class');
+		 
+		selThem.addClass(curClass);
+	});  
+	
+	 
+	
+	sel_a.mouseover(function(){
+		  $(this).css({'background':'#ECECEC'});
+		  
+	});
+	sel_a.mouseout(function(){
+		 $(this).css({'background':'#FFFFFF'});
+	});	
+}
+//字体粗细
+iTable.prototype.fontBold=function(){
+	var simMenu=this.createSimpleMenu('fbold');
+	var sel_a=$(simMenu[0]).children(0);     
+	sel_a.on('click',function(){
+        removeUied();       
+       	$('.ui-selected').hasClass('ffbold') ? $('.ui-selected').removeClass('ffbold') : $('.ui-selected').addClass('ffbold');
+
+	});  
+	
+}
+//字体倾斜
+iTable.prototype.fontItalic=function(){
+	var simMenu=this.createSimpleMenu('fitalic');
+	var sel_a=$(simMenu[0]).children(0);     
+	sel_a.on('click',function(){
+        removeUied();       
+       	$('.ui-selected').hasClass('ffitalic') ? $('.ui-selected').removeClass('ffitalic') : $('.ui-selected').addClass('ffitalic');
+
+	});  
+	
+}
+//字体下划线
+iTable.prototype.fontOverline=function(){
+	var simMenu=this.createSimpleMenu('foverline');
+	var sel_a=$(simMenu[0]).children(0);     
+	sel_a.on('click',function(){
+        removeUied();       
+       	$('.ui-selected').hasClass('ffoverline') ? $('.ui-selected').removeClass('ffoverline') : $('.ui-selected').addClass('ffoverline');
+
+	});  
+	
 }
 
-
+//创建工具栏下拉菜单
 iTable.prototype.createSelection=function(id,menus){
-	 var selection;
+	 var selection=$('<div class="toolBox"></div>');
 	 var selectHead=$('<div id="'+id+'"></div>');
 	 var selectUl=$('<ul id=""></ul>');
 	 var selectLi,arr=[];	 
@@ -329,7 +418,7 @@ iTable.prototype.createSelection=function(id,menus){
 	 selectHead.after(selectUl);
 	
 	 
-	 selection=selectHead	 
+	 selection.append(selectHead);	 
 	 this.header.append(selection);
 	 selectUl.hide();
 	 selectHead.on('click',function(){ 	
@@ -343,47 +432,69 @@ iTable.prototype.createSelection=function(id,menus){
 	 return selection;
 }
 
+//创建工具栏单个菜单
+iTable.prototype.createSimpleMenu=function(className){
+	var menus=$('<div class="toolBox"></div>');
+	var simTool=$('<span class="'+className+'"></span>');
+	menus.append(simTool);
+	this.header.append(menus);
+	return menus;
+}
+//创建工具栏格子菜单
+iTable.prototype.createCellMenu=function(menus){
+	var selection=$('<div class="toolBox"></div>');
+	var selectHead=$('<div id="'+id+'"></div>');
+	var selectTb=$('<table id=""></table>');
+	var selectTd;
+	 for(var index in menus){
+	 	 selectTd=$('<td><a class="'+menus[index]+'"></a></td>');	 	  	 	
+	 	 selectTb.append(selectTd);
+	 }	  	 
+	 selectHead.after(selectTb);
+}
 
 
 //input光标
 function set_text_value_position(obj, spos) {
-		var tobj = document.getElementById('tdInput');
-		if (spos < 0) spos = tobj.value.length;
-		if (tobj.setSelectionRange) { //兼容火狐,谷歌
-			setTimeout(function() {
-				tobj.setSelectionRange(spos, spos);
-				tobj.focus();
-			}, 0);
-		} else if (tobj.createTextRange) { //兼容IE
-			var rng = tobj.createTextRange();
-			rng.move('character', spos);
-			rng.select();
-		}
+	var tobj = document.getElementById('tdInput');
+	if(spos < 0) spos = tobj.value.length;
+	if(tobj.setSelectionRange) { //兼容火狐,谷歌
+		setTimeout(function() {
+			tobj.setSelectionRange(spos, spos);
+			tobj.focus();
+		}, 0);
+	} else if(tobj.createTextRange) { //兼容IE
+		var rng = tobj.createTextRange();
+		rng.move('character', spos);
+		rng.select();
 	}
-
+}
 //取消冒泡
-function stopPropagation() {  
-    var e = e || window.event;  
-    if(e.stopPropagation) {
-        e.stopPropagation();  
-    } else {  
-        e.cancelBubble = true; 
-    }  
-    } 
+function stopPropagation() {
+	var e = e || window.event;
+	if(e.stopPropagation) {
+		e.stopPropagation();
+	} else {
+		e.cancelBubble = true;
+	}
+}
 //数组去重
 function removeDuplicatedItem(ar) {
-		var ret = [];
+	var ret = [];
 
-		for (var i = 0, j = ar.length; i < j; i++) {
-			if (ret.indexOf(ar[i]) === -1) {
-				ret.push(ar[i]);
-			}
+	for(var i = 0, j = ar.length; i < j; i++) {
+		if(ret.indexOf(ar[i]) === -1) {
+			ret.push(ar[i]);
 		}
-		ret = ret.join(' ');
-		return ret
-
 	}
+	ret = ret.join(' ');
+	return ret
 
+}
+function removeUied(){
+	$('.ui-selected').find('tr').removeClass('ui-selected');
+    $('.ui-selected').find('tbody').removeClass('ui-selected');
+}
 
 var settings={
 	rowCount:100,
@@ -395,11 +506,33 @@ var settings={
 		'楷体':'font_Kai',
 		'微软雅黑':'font_Mirco'
 
+	},
+	fontSize:{
+		'10':'fsize_10',
+		'12':'fsize_12',
+		'14':'fsize_14',
+		'16':'fsize_16',
+		'18':'fsize_18',
+		'20':'fsize_20'
+	},
+	fontBold:1,
+	fontColor:{
+		'red':'fc_red',
+		'yellow':'fc_yellow',
+		'green':'fc_green',
+		'orange':'fc_orange',
+		'blue':'fc_blue',
+		'aqua':'fc_aqua',
+		'purple':'fc_purple',
+		'black':'fc_black',
+		'white':'fc_white',
+		'grey':'fc_grey'
 	}
 }
  
 var box=$('.box'); 
 var t=new iTable(box,settings);
+$("#iTable1").selectable();
 t.createContent();
 t.createXaxis();
 t.createYaxis();
@@ -412,4 +545,8 @@ t.createHeader();
 //
 
 t.fontFamily();
-$("#iTable1").selectable();
+t.fontSize();
+t.fontBold();
+t.fontItalic();
+t.fontOverline();
+

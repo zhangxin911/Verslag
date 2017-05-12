@@ -2,6 +2,7 @@
 		margin:0;
 		padding:0;
 		font-size: 14px;
+		list-style-type: none;
 	}
 	body{
 		height:100%;
@@ -132,19 +133,20 @@
 		.styleTool dl dd{
 			float: left;
 		}
-		.toolBox{
-			width:100%;
-		    position:absolute;
-		}
+		 
 		
 	/*  下拉按钮 */	
 	/** 字体 **/
 	
 	
-	 
+	 .toolBox{
+	 	width:auto;
+	 	float:left;
+	 	
+	 }
 
 
-	#fontFamily{
+	#fontFamily,#fontSize{
 		display: inline-block;
         height:24px;
         line-height: 24px;
@@ -155,11 +157,11 @@
 		font-size: 14px;
 		position:relative;
 		background:url(../img/arrow-down.png) no-repeat;
-		background-position-x: right;
-		background-position-y: center;
+		background-position:right center;
+		
 		
 	}
-    #fontFamily+ul+li{
+    #fontFamily+ul+li,#fontSize+ul+li{
 		background-color:#ffffff;		 
 		position:relative;
 	}
@@ -168,9 +170,11 @@
 	#fontFamily+ul li a:hover{
         cursor: pointer;
 	}
+    #fontSize+ul li a:hover{
+    	cursor: pointer;
+    }
 
-
-	#fontFamily+ul li a{
+	#fontFamily+ul li a,#fontSize+ul li a{
 	display:inline-block;
 	width:84px;
 	height: 24px;
@@ -182,58 +186,7 @@
 
 	}	
 
- /** 字号 **/
- 	#ul_fs{
-		list-style-type:none;
-		width:98px;
-		border-top:1px solid #DDDDDD;
-		border-left:1px solid #DDDDDD;
-		border-right:1px solid #DDDDDD;
-		border-bottom:1px solid #DDDDDD;
-		display:none;
-		position: absolute;
-		z-index: 111;
-		
-	}
 
-
-	#ipt_fs{
-		display: inline-block;
-        line-height:28px;
-		vertical-align: middle;
-		width:84px;
-		border-radius:0 ;
-		text-align: center; 
-		font-size: 14px;
-		position:relative;
-		background:url(../img/arrow-down.png) no-repeat;
-		background-position-x: right;
-		background-position-y: center;
-		
-	}
-    #ul_fs>li{
-		background-color:#ffffff;
-		 
-		position:relative;
-	}
-
-
-	#ul_fs>li a:hover{
-        cursor: pointer;
-	}
-
-
-	#ul_fs>li a{
-	display:inline-block;
-	width:98px;
-	text-decoration:none;
-	color:#646464;
-	 text-align: center;
-	background-color:#ffffff;
-	height: 24px;
-	line-height: 24px;
-
-	}	
 	
 	/** 字体颜色 **/
 	
@@ -260,26 +213,27 @@
 	
     .fbold{
     	width:28px;
-    	height:28px;
+    	height:24px;
     	display: inline-block;
     	text-align: center;
-    	line-height: 28px;
+    	line-height: 24px;
     	background:url(../img/fbold.png) no-repeat center;
+    	cursor:pointer;
     }
     .fitalic{
     	width:28px;
-    	height:28px;
+    	height:24px;
     	display: inline-block;
     	text-align: center;
-    	line-height: 28px;
+    	line-height: 24px;
     	background:url(../img/fitalic.png) no-repeat center;
     }
     .foverline{
     	width:28px;
-    	height:28px;
+    	height:24px;
     	display: inline-block;
     	text-align: center;
-    	line-height: 28px;
+    	line-height: 24px;
     	background:url(../img/overline.png) no-repeat center;
     }
     .fcolor{
