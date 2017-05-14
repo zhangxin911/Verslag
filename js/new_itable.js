@@ -401,7 +401,7 @@ iTable.prototype.fontOverline=function(){
 	});  
 	
 }
-
+//字体颜色
 iTable.prototype.fontColor=function(){
 	var select=this.createCellMenu('fontColor',this.settings.fontColor);
 	var td=$(select[0]).find('table tr td');
@@ -428,6 +428,36 @@ iTable.prototype.fontColor=function(){
 		$('.ui-selected').removeAttr('class');
 		 
 		selThem.addClass(curClass);
+	});
+}
+//表格背景
+iTable.prototype.bgColor=function(){
+	var select=this.createCellMenu('fontColor',this.settings.bgColor);
+	var td=$(select[0]).find('table tr td');
+	var className,curClass;
+    var selThem;
+    
+	td.on('click',function(){
+		
+        
+        className=$(this).attr('class');
+        $('.ui-selected').addClass(className);
+        
+		var reg = new RegExp("(((ffill_)[A-Za-z0-9_]+\s*)+)", "g");
+		
+		curClass = $('.ui-selected').attr('class');
+		if(!!curClass) {
+				curClass = curClass.replace(reg,className);
+			} else {
+				return;
+		}
+		var arr = curClass.split(' ');
+		curClass = removeDuplicatedItem(arr);
+        selThem=$('.ui-selected');
+		$('.ui-selected').removeAttr('class');
+		 
+		selThem.addClass(curClass);
+		removeUied(); 
 	});
 }
 
@@ -555,8 +585,12 @@ return size;
 };
 
 function removeUied(){
-	$('.ui-selected').find('tr').removeClass('ui-selected');
-    $('.ui-selected').find('tbody').removeClass('ui-selected');
+//	$('.ui-selected').find('tr').removeClass('ui-selected');
+//  $('.ui-selected').find('tbody').removeClass('ui-selected');
+//   $('.ui-selected').find('tbody').removeClass('ui-selectee');
+//  $('.ui-selected').find('tbody').removeAttr('class');
+    $('.ui-selectable').find('tbody').removeAttr('class');
+    $('.ui-selectable').find('tr').removeAttr('class');
 }
 
 var settings={
@@ -621,6 +655,49 @@ var settings={
 			'tdclass':'ffc_grey',
 			'fclass':'fc_grey',
 		}
+	},
+	bgColor:{
+		'red':{
+			    'tdclass':'ffill_red',
+			    'fclass' :'fill_red'
+			  },
+		'yellow':{
+			'tdclass':'ffill_yellow',
+			'fclass':'fill_yellow',
+		}
+		,
+		'green':{
+			'tdclass':'ffill_green',
+			'fclass':'fill_green',
+		},
+		'orange':{
+			'tdclass':'ffill_orange',
+			'fclass':'fill_orange',
+		},
+		'blue':{
+			'tdclass':'ffill_blue',
+			'fclass':'fill_blue',
+		},
+		'aqua':{
+			'tdclass':'ffill_aqua',
+			'fclass':'fill_aqua',
+		},
+		'purple':{
+			'tdclass':'ffill_purple',
+			'fclass':'fill_purple',
+		},
+		'black':{
+			'tdclass':'ffill_black',
+			'fclass':'fill_black',
+		},
+		'white':{
+			'tdclass':'ffill_white',
+			'fclass':'fill_white',
+		},
+		'grey':{
+			'tdclass':'ffill_grey',
+			'fclass':'fill_grey',
+		}
 	}
 }
  
@@ -644,4 +721,5 @@ t.fontBold();
 t.fontItalic();
 t.fontOverline();
 t.fontColor();
+t.bgColor();
 $("#iTable1").selectable();

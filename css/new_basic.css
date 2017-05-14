@@ -503,7 +503,7 @@
 .ffill_black{
 	background-color:#000000;
 }
-.ffill_black i{
+.fill_black{
 	width:16px;
 	height:16px;
 	background-color:#000000;
@@ -513,10 +513,10 @@
 
 
 
-.ffill_gray{
+.ffill_grey{
 	background-color:#888888;
 }
-.ffill_gray i{
+.fill_grey{
 	width:16px;
 	height:16px;
 	background-color:#888888;
@@ -526,7 +526,7 @@
 .ffill_white{
 	background-color:#FFFFFF;
 }
-.ffill_white i{
+.fill_white{
 	width:16px;
 	height:16px;
 	background-color:#FFFFFF;
@@ -536,7 +536,7 @@
 .ffill_red{
 	background-color:red;
 }
-.ffill_red i{
+.fill_red{
 	width:16px;
 	height:16px;
 	background-color:red;
@@ -546,7 +546,7 @@
 .ffill_yellow{
 	background-color:yellow;
 }
-.ffill_yellow i{
+.fill_yellow{
 	width:16px;
 	height:16px;
 	background-color:yellow;
@@ -555,7 +555,7 @@
 .ffill_orange{
 	background-color:orange;
 }
-.ffill_orange i{
+.fill_orange{
 	width:16px;
 	height:16px;
 	background-color:orange;
@@ -565,7 +565,7 @@
 .ffill_green{
 	background-color:#7fff00;
 }
-.ffill_green i{
+.fill_green{
 	width:16px;
 	height:16px;
 	background-color:#7fff00;
@@ -575,7 +575,7 @@
 	background-color:#00ffff;
 }
 
-.ffill_aqua i{
+.fill_aqua{
 	width:16px;
 	height:16px;
 	background-color:#00ffff;
@@ -586,7 +586,7 @@
 .ffill_blue{
 	background-color:blue;
 }
-.ffill_blue i{
+.fill_blue{
 	width:16px;
 	height:16px;
 	background-color:blue;
@@ -595,7 +595,7 @@
 .ffill_purple{
 	background-color:#9400d3
 }
-.ffill_purple i{
+.fill_purple{
 	width:16px;
 	height:16px;
 	background-color:#9400d3;
