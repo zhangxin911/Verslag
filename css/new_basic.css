@@ -361,129 +361,106 @@
 .contentdl dd{
 	float:left;
 }
-#ul_fcolor{
-
-	
-	 
-	list-style-type:none;
-	background-color:#FFFFFF;	
-		border-top:1px solid #DDDDDD;
-		border-left:1px solid #DDDDDD;
-		border-right:1px solid #DDDDDD;
-		border-bottom:1px solid #DDDDDD;
-		display:none;
-		position: absolute;
-		z-index: 111;
-}
-#ul_fcolor td{
-	cursor: pointer;
+.fontColor{
+	width:100%;
 }
 .fc_black{
 	color:#000000;
 }
-.fc_black i{
+.ffc_black {
 	width:16px;
 	height:16px;
-	background-color:#000000;
-	display: block;
-	
+	background-color:#000000;	
 }
 
 
 
-.fc_gray{
+.fc_grey{
 	color:#888888;
 }
-.fc_gray i{
+.ffc_grey{
 	width:16px;
 	height:16px;
 	background-color:#888888;
-	display: block;
 }
 
 .fc_white{
 	color:#FFFFFF;
 }
-.fc_white i{
+.ffc_white{
 	width:16px;
 	height:16px;
 	background-color:#FFFFFF;
-	display: block;
+	
 }
 
 .fc_red{
 	color:red;
 }
-.fc_red i{
+.ffc_red{
 	width:16px;
 	height:16px;
 	background-color:red;
-	display: block;
 }
 
 .fc_yellow{
 	color:yellow;
 }
-.fc_yellow i{
+.ffc_yellow{
 	width:16px;
 	height:16px;
 	background-color:yellow;
-	display: block;
 }
 .fc_orange{
 	color:orange;
 }
-.fc_orange i{
+.ffc_orange{
 	width:16px;
 	height:16px;
 	background-color:orange;
-	display: block;
 }
 
 .fc_green{
 	color:#7fff00;
 }
-.fc_green i{
+.ffc_green{
 	width:16px;
 	height:16px;
 	background-color:#7fff00;
-	display: block;
 }
 .fc_aqua{
 	color:#00ffff;
 }
 
-.fc_aqua i{
+.ffc_aqua{
 	width:16px;
 	height:16px;
 	background-color:#00ffff;
-	display: block;
 	
 }
 
 .fc_blue{
 	color:blue;
 }
-.fc_blue i{
+.ffc_blue{
 	width:16px;
 	height:16px;
 	background-color:blue;
-	display: block;
 }
 .fc_purple{
 	color:#9400d3
 }
-.fc_purple i{
+.ffc_purple{
 	width:16px;
 	height:16px;
 	background-color:#9400d3;
-	display: block;
 }
 /*bg*/
 
 #ipt_ffill{
 		display: inline-block;
-       /* line-height:28px;*/
+        line-height:28px;
+        height:28px;
 		vertical-align: middle;
 		width:44px;
 		border-radius:0 ;

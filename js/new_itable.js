@@ -402,6 +402,35 @@ iTable.prototype.fontOverline=function(){
 	
 }
 
+iTable.prototype.fontColor=function(){
+	var select=this.createCellMenu('fontColor',this.settings.fontColor);
+	var td=$(select[0]).find('table tr td');
+	var className,curClass;
+    var selThem;
+    
+	td.on('click',function(){
+		removeUied(); 
+        
+        className=$(this).find('a').attr('class');
+        $('.ui-selected').addClass(className);
+        
+		var reg = new RegExp("(((fc_)[A-Za-z0-9_]+\s*)+)", "g");
+		
+		curClass = $('.ui-selected').attr('class');
+		if(!!curClass) {
+				curClass = curClass.replace(reg,className);
+			} else {
+				return;
+		}
+		var arr = curClass.split(' ');
+		curClass = removeDuplicatedItem(arr);
+        selThem=$('.ui-selected');
+		$('.ui-selected').removeAttr('class');
+		 
+		selThem.addClass(curClass);
+	});
+}
+
 //创建工具栏下拉菜单
 iTable.prototype.createSelection=function(id,menus){
 	 var selection=$('<div class="toolBox"></div>');
@@ -441,16 +470,41 @@ iTable.prototype.createSimpleMenu=function(className){
 	return menus;
 }
 //创建工具栏格子菜单
-iTable.prototype.createCellMenu=function(menus){
+iTable.prototype.createCellMenu=function(className,menus){
+	
 	var selection=$('<div class="toolBox"></div>');
-	var selectHead=$('<div id="'+id+'"></div>');
-	var selectTb=$('<table id=""></table>');
-	var selectTd;
+	var selectHead=$('<div id=ipt_ffill></div>');
+	var selectTb=$('<table class="'+className+'"></table>');
+	var selectTr=$('<tr></tr>');
+	var selectTd,length=JSONLength(menus);
+	var arr1=[],arr2=[]
 	 for(var index in menus){
-	 	 selectTd=$('<td><a class="'+menus[index]+'"></a></td>');	 	  	 	
-	 	 selectTb.append(selectTd);
-	 }	  	 
+	 	    arr1.push(menus[index].tdclass);
+	 	    arr2.push(menus[index].fclass);          
+//       	selectTd=$('<td class="'+menus[index].tdclass+'"><a class="'+menus[index].fclass+'"></a></td>');	    
+	 }
+	 for(var i=0;i<arr1.length+1;i++){
+	 	selectTd=$('<td class="'+arr1[i]+'"><a class="'+arr2[i]+'"></a></td>');
+	 	selectTr.append(selectTd);
+	 	if(i%5==0&&i!=0){
+	 	
+	 	selectTb.append(selectTr);
+	 	selectTr=$('<tr></tr>');
+	 	 
+	 	}
+	 	
+	 }
+	 
 	 selectHead.after(selectTb);
+	 selection.append(selectHead);
+	 this.header.append(selection);
+	 
+	 selectTb.hide();
+	 selectHead.on('click',function(){
+	 	selectTb.toggle();
+	 });
+	 return selection;
+	 
 }
 
 
@@ -491,6 +545,15 @@ function removeDuplicatedItem(ar) {
 	return ret
 
 }
+//获取key个数
+function JSONLength(obj) {
+var size = 0, key;
+for (key in obj) {
+if (obj.hasOwnProperty(key)) size++;
+}
+return size;
+};
+
 function removeUied(){
 	$('.ui-selected').find('tr').removeClass('ui-selected');
     $('.ui-selected').find('tbody').removeClass('ui-selected');
@@ -517,22 +580,53 @@ var settings={
 	},
 	fontBold:1,
 	fontColor:{
-		'red':'fc_red',
-		'yellow':'fc_yellow',
-		'green':'fc_green',
-		'orange':'fc_orange',
-		'blue':'fc_blue',
-		'aqua':'fc_aqua',
-		'purple':'fc_purple',
-		'black':'fc_black',
-		'white':'fc_white',
-		'grey':'fc_grey'
+		'red':{
+			    'tdclass':'ffc_red',
+			    'fclass' :'fc_red'
+			  },
+		'yellow':{
+			'tdclass':'ffc_yellow',
+			'fclass':'fc_yellow',
+		}
+		,
+		'green':{
+			'tdclass':'ffc_green',
+			'fclass':'fc_green',
+		},
+		'orange':{
+			'tdclass':'ffc_orange',
+			'fclass':'fc_orange',
+		},
+		'blue':{
+			'tdclass':'ffc_blue',
+			'fclass':'fc_blue',
+		},
+		'aqua':{
+			'tdclass':'ffc_aqua',
+			'fclass':'fc_aqua',
+		},
+		'purple':{
+			'tdclass':'ffc_purple',
+			'fclass':'fc_purple',
+		},
+		'black':{
+			'tdclass':'ffc_black',
+			'fclass':'fc_black',
+		},
+		'white':{
+			'tdclass':'ffc_white',
+			'fclass':'fc_white',
+		},
+		'grey':{
+			'tdclass':'ffc_grey',
+			'fclass':'fc_grey',
+		}
 	}
 }
  
 var box=$('.box'); 
 var t=new iTable(box,settings);
-$("#iTable1").selectable();
+
 t.createContent();
 t.createXaxis();
 t.createYaxis();
@@ -549,4 +643,5 @@ t.fontSize();
 t.fontBold();
 t.fontItalic();
 t.fontOverline();
-
+t.fontColor();
+$("#iTable1").selectable();
