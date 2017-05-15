@@ -273,14 +273,19 @@ iTable.prototype.createFooter=function(){
 	var addBox=$('<div class="addBox"><div class="addSheet"></div></div>');
 	this.footer.append(addBox);
 	
-	var sheetQueue=$('<div class="sheetqueue"><div><dl class="sheet"><dd class="sheet" id="sheet1">1</dd></dl></div></div>');
+	var sheetQueue=$('<div class="sheetqueue"><div><dl class="sheetqueuedl"><dd class="sheet sheetdefault" id="sheet1">1</dd></dl></div></div>');
 	this.footer.append(sheetQueue);
+	
+	var sheetFloat=$('<div class="sheetfloat"><span class="lsheet"></span><span class="rsheet"></span></div>');
+	this.footer.append(sheetFloat);
+	
+	
 }
 
 //创建头部容器
 iTable.prototype.createHeader=function(){
 	this.header=$('<div class="header"></div>');
-	this.header.css({
+	this.header.css({ 
 		'z-index':103
 	})
 	this.header.insertBefore(this.container);
@@ -403,7 +408,7 @@ iTable.prototype.fontOverline=function(){
 }
 //字体颜色
 iTable.prototype.fontColor=function(){
-	var select=this.createCellMenu('fontColor',this.settings.fontColor);
+	var select=this.createCellMenu('d_fcolor','fontColor',this.settings.fontColor);
 	var td=$(select[0]).find('table tr td');
 	var className,curClass;
     var selThem;
@@ -432,7 +437,7 @@ iTable.prototype.fontColor=function(){
 }
 //表格背景
 iTable.prototype.bgColor=function(){
-	var select=this.createCellMenu('fontColor',this.settings.bgColor);
+	var select=this.createCellMenu('d_fill','bgColor',this.settings.bgColor);
 	var td=$(select[0]).find('table tr td');
 	var className,curClass;
     var selThem;
@@ -460,6 +465,211 @@ iTable.prototype.bgColor=function(){
 		removeUied(); 
 	});
 }
+
+
+//字符对齐
+iTable.prototype.textAlign=function(){
+	var select=this.createCellMenu('f_align','textAlign',this.settings.textAlign);
+	var td=$(select[0]).find('table tr td');
+	var className,curClass;
+    var selThem;
+    td.css({'background':'#FFFFFF'});
+	td.on('click',function(){
+		
+        
+        className=$(this).attr('class');
+        $('.ui-selected').addClass(className);
+        
+		var reg = new RegExp("(((falign_)[A-Za-z0-9_]+\s*)+)", "g");
+		
+		curClass = $('.ui-selected').attr('class');
+		if(!!curClass) {
+				curClass = curClass.replace(reg,className);
+			} else {
+				return;
+		}
+		var arr = curClass.split(' ');
+		curClass = removeDuplicatedItem(arr);
+        selThem=$('.ui-selected');
+		$('.ui-selected').removeAttr('class');
+		 
+		selThem.addClass(curClass);
+		removeUied(); 
+    });
+    
+    td.mouseover(function(){
+		  $(this).css({'background':'#ECECEC'});
+		  
+	});
+	td.mouseout(function(){
+		 $(this).css({'background':'#FFFFFF'});
+	});	
+}
+
+
+//合并单元格
+iTable.prototype.mergeTd=function(){
+	  var mergeBtn=this.createSimpleMenu('mergeBtn');
+	  mergeBtn.on('click',function(){
+	  	var $t =$('.dataTable');
+		if ($("table", $t).length > 0) {
+			alert("不支持嵌套表格！");
+			return;
+		}
+
+		var sigDel = "sign4delete";
+		var sigSel = "ui-selected";
+
+
+		$("th,td", $t).each(function() {
+
+			var ridx = $("tr", $t).index($(this).parent("tr"));
+			var cidx = $(this).parent().children("th,td").index(this);
+			
+			
+			var rowspan = Number($(this).attr("rowspan")) || 1;
+			var colspan = Number($(this).attr("colspan")) || 1;
+			var isSel = $(this).hasClass(sigSel);
+            
+
+			if (rowspan <= 1 && colspan <= 1) return;
+
+			$("tr", $t).each(function() {
+				var idx = $("tr", $t).index(this);
+				var arr, $td = $("<td>").addClass(isSel ? sigSel : sigDel);
+               
+                
+				if (idx == ridx) {
+					// 本行在 [cidx] 后插入 colspan-1 个
+
+					arr = $(); // 准备待插单元格
+					for (var i = 0; i < colspan - 1; i++)
+					arr = arr.add($td.clone());
+					// 插入
+					$("th,td", this).eq(cidx).after(arr);
+					
+                   
+				} else if (ridx < idx && idx < ridx + rowspan) {
+					// 以下行在 [cidx] 前插入 colspan 个
+
+					arr = $(); // 准备待插单元格
+					for (var i = 0; i < colspan; i++)
+					arr = arr.add($td.clone());
+					// 插入
+					if (cidx > 0 && $("th,td", this).eq(cidx - 1).length > 0) $("th,td", this).eq(cidx - 1).after(arr);
+					else if ($("th,td", this).eq(cidx).length > 0) $("th,td", this).eq(cidx).before(arr);
+					else $(this).prepend(arr);
+				}
+			});
+		});
+
+		var rmin = 10000,
+			cmin = 10000;
+		var rmax = 0,
+			cmax = 0;
+		var rnum, cnum;
+		// 计算起始和跨距
+		$("th,td", $t).filter("." + sigSel).each(function() {
+			var ridx = $("tr", $t).index($(this).parent("tr"));
+			
+			rmin = ridx < rmin ? ridx : rmin;
+			rmax = ridx > rmax ? ridx : rmax;
+			
+			var cidx = $(this).parent().children("th,td").index(this);
+			
+			cmin = cidx < cmin ? cidx : cmin;
+			cmax = cidx > cmax ? cidx : cmax;
+			
+		});
+		rnum = rmax - rmin + 1;
+		cnum = cmax - cmin + 1;
+       
+		// 合并单元格
+		$("th,td", $t).each(function() {
+			var ridx = $("tr", $t).index($(this).parent("tr"));
+			var cidx = $(this).parent().children("th,td").index(this);
+           
+             var tWidth;
+            cnum>3?tWidth=103:tWidth=102;
+			if (rmin <= ridx && ridx <= rmax && cmin <= cidx && cidx <= cmax) $(this).addClass(sigDel);
+
+			if (ridx == rmin && cidx == cmin) $(this).removeClass(sigDel).attr({
+				rowspan: rnum,
+				colspan: cnum
+			}).width(cnum*tWidth);
+           
+			if ($(this).attr("rowspan") == 1) $(this).removeAttr("rowspan");
+			if ($(this).attr("colspan") == 1) $(this).removeAttr("colspan");
+		}).remove("." + sigDel);
+	  });
+}
+//拆分单元格
+iTable.prototype.splitTd=function(){
+	var splitBtn=this.createSimpleMenu('splitBtn');
+	splitBtn.on('click',function(){
+		var $t = $(".dataTable");
+
+		if ($("table", $t).length > 0) {
+			alert("不支持嵌套表格！");
+			return;
+		}
+
+		var sigDel = "sign4delete";
+		var sigSel = "ui-selected";
+
+
+		$("th,td", $t).each(function() {
+
+			var ridx = $("tr", $t).index($(this).parent("tr"));
+			var cidx = $(this).parent().children("th,td").index(this);
+			var rowspan = Number($(this).attr("rowspan")) || 1;
+			var colspan = Number($(this).attr("colspan")) || 1;
+			var isSel = $(this).hasClass(sigSel);
+
+
+			if (rowspan <= 1 && colspan <= 1) return;
+
+			if (isSel) $(this).removeAttr("colspan").removeAttr("rowspan");
+
+			// 跨格开插
+			$("tr", $t).each(function() {
+				var idx = $("tr", $t).index(this);
+				var arr, $td = $("<td>");
+                
+				if (!isSel) $td.addClass(sigDel);
+
+				if (idx == ridx) {
+					// 本行在 [cidx] 后插入 colspan-1 个
+
+					arr = $(); // 准备待插单元格
+					for (var i = 0; i < colspan - 1; i++)
+					arr = arr.add($td.clone());
+                  
+					$("th,td", this).eq(cidx).after(arr);
+					
+                   
+				}else if (ridx < idx && idx < ridx + rowspan) {
+					// 以下行在 [cidx] 前插入 colspan 个
+                   
+					arr = $(); // 准备待插单元格
+					for (var i = 0; i < colspan; i++)
+					arr = arr.add($td.clone());
+                    
+					if (cidx > 0 && $("th,td", this).eq(cidx - 1).length > 0) $("th,td", this).eq(cidx - 1).after(arr);
+					else if ($("th,td", this).eq(cidx).length > 0) $("th,td", this).eq(cidx).before(arr);
+					else $(this).prepend(arr);
+					
+				}
+			});
+		});
+
+		// 重新获取以取到删者并删之
+		$("th,td", $t).remove("." + sigDel);
+	});
+	
+}
+
+
 
 //创建工具栏下拉菜单
 iTable.prototype.createSelection=function(id,menus){
@@ -500,10 +710,10 @@ iTable.prototype.createSimpleMenu=function(className){
 	return menus;
 }
 //创建工具栏格子菜单
-iTable.prototype.createCellMenu=function(className,menus){
+iTable.prototype.createCellMenu=function(dClass,className,menus){
 	
 	var selection=$('<div class="toolBox"></div>');
-	var selectHead=$('<div id=ipt_ffill></div>');
+	var selectHead=$('<div class="'+dClass+'"></div>');
 	var selectTb=$('<table class="'+className+'"></table>');
 	var selectTr=$('<tr></tr>');
 	var selectTd,length=JSONLength(menus);
@@ -516,17 +726,20 @@ iTable.prototype.createCellMenu=function(className,menus){
 	 for(var i=0;i<arr1.length+1;i++){
 	 	selectTd=$('<td class="'+arr1[i]+'"><a class="'+arr2[i]+'"></a></td>');
 	 	selectTr.append(selectTd);
-	 	if(i%5==0&&i!=0){
-	 	
+	 	if((i+1)%5==0&&(i+1)!=0){
+	 	 
 	 	selectTb.append(selectTr);
 	 	selectTr=$('<tr></tr>');
 	 	 
+	 	}else{
+	 	selectTb.append(selectTr);
 	 	}
 	 	
 	 }
-	 
+	  
 	 selectHead.after(selectTb);
 	 selection.append(selectHead);
+	  
 	 this.header.append(selection);
 	 
 	 selectTb.hide();
@@ -536,9 +749,89 @@ iTable.prototype.createCellMenu=function(className,menus){
 	 return selection;
 	 
 }
+//增加sheet
+iTable.prototype.addSheet=function(){
+	    var i = 2;
+        var box=this.container;
+		$('.sheet').on('click', function() {
+
+			$(this).addClass('sheetdefault').siblings().removeClass('sheetdefault');
+            
+
+			return false;
+		});
+        var that=this;
+		$('.addSheet').click(function() {
+			box.html('');
+			that.createContent();			 
+			var dd = $("<dd class='sheet sheetdefault' id=sheet" + i + ">sheet" + i + "</dd>");
+			var curId = $(".sheetdefault").attr('id');
+			curId=curId.replace('sheet','');
+            curId=parseInt(curId);
+            
+			$("#sheet" + curId).removeClass('sheetdefault');
+
+			var neId = parseInt(curId) + 1;
+//			$("#dataTable"+neId).show();
+//			fillTd(neId);
+           
+			$('.sheetqueuedl').append(dd);
 
 
-//input光标
+			$("#dataTable" + neId).selectable();
+
+
+			dd.on('click', function() {
+
+
+				var dId = $(this).attr('id');
+				dId = dId.replace('sheet','');
+				dId = parseInt(dId);
+				$("#dataTable" + dId).selectable();
+				$(this).addClass('sheetdefault').siblings().removeClass('sheetdefault');
+				 
+				 
+
+
+
+				return false;
+			});
+			i++;
+           
+
+		});
+
+
+}
+
+iTable.prototype.sheetMove=function(){
+		var lsheet=$('.lsheet');
+    	var rsheet=$('.rsheet');
+    	var sDl=$(".sheetqueuedl");
+	    var num=0;
+	    
+	    
+    	rsheet.click(function(){
+        num==sDl.find('dd').length-1?num=sDl.find('dd').length-1:num++;
+ 		toNavPos();
+    	});
+    	
+    	lsheet.click(function(){   		   		  				
+    		num==0?num=0:num--;
+     		toNavPos();
+    	});
+    	
+    	function toNavPos(){
+		sDl.stop().animate({'margin-left':-num*80},100);
+	}
+}
+
+//sheet移动
+
+
+
+
+//Input光标
 function set_text_value_position(obj, spos) {
 	var tobj = document.getElementById('tdInput');
 	if(spos < 0) spos = tobj.value.length;
@@ -698,7 +991,22 @@ var settings={
 			'tdclass':'ffill_grey',
 			'fclass':'fill_grey',
 		}
+	},
+	textAlign:{
+		'left':{
+			'tdclass':'falign_left',
+			'fclass':'ffalign_left',
+		},
+		'center':{
+			'tdclass':'falign_center',
+			'fclass':'ffalign_center',
+		},
+		'right':{
+			'tdclass':'falign_right',
+			'fclass':'ffalign_right',
+		}
 	}
+	
 }
  
 var box=$('.box'); 
@@ -722,4 +1030,9 @@ t.fontItalic();
 t.fontOverline();
 t.fontColor();
 t.bgColor();
+t.mergeTd();
+t.splitTd();
+t.textAlign();
+t.addSheet();
+t.sheetMove();
 $("#iTable1").selectable();

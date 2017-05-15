@@ -39,7 +39,7 @@
 		 
 		 
 		.titleTable tr{
-			background-color:#f5f5f5;
+			background-color:#DDDDDD;
 		}
 		
 		 
@@ -59,6 +59,9 @@
 			border-bottom:1px solid #AAAAAA;
 			border-right:1px solid #AAAAAA
 			
+		}
+		.leftTable tr{
+			background:#DDDDDD;
 		}
 		.titleTable td{
 			height:30px;
@@ -144,7 +147,9 @@
 	 	float:left;
 	 	
 	 }
-
+     .toolBox>table{
+     	position: absolute;
+     }
 
 	#fontFamily,#fontSize{
 		display: inline-block;
@@ -189,22 +194,13 @@
 
 	
 	/** 字体颜色 **/
-	
-	
-
-
-	#ipt_fcolor{
-		display: inline-block;
-        /*line-height:28px;*/
-		vertical-align: middle;
-		width:44px;
-		border-radius:0 ;
-		text-align: center; 
-		font-size: 14px;
-		position:relative;
-		background:url(../img/arrow-down.png) no-repeat;
-		background-position-x: right;
-		background-position-y: center;
+	.d_fcolor{
+		width:28px;
+    	height:28px;
+    	display: inline-block;
+    	text-align: center;
+    	line-height: 28px;
+    	background:url(../img/fcolor.png) no-repeat center;
 		
 	}
     
@@ -362,7 +358,7 @@
 	float:left;
 }
 .fontColor{
-	width:100%;
+	/*width:100%;*/
 }
 .fc_black{
 	color:#000000;
@@ -457,19 +453,13 @@
 }
 /*bg*/
 
-#ipt_ffill{
-		display: inline-block;
-        line-height:28px;
-        height:28px;
-		vertical-align: middle;
-		width:44px;
-		border-radius:0 ;
-		text-align: center; 
-		font-size: 14px;
-		position:relative;
-		background:url(../img/arrow-down.png) no-repeat;
-		background-position-x: right;
-		background-position-y: center;
+.d_fill{
+		width:28px;
+    	height:28px;
+    	display: inline-block;
+    	text-align: center;
+    	line-height: 28px;
+    	background:url(../img/ffillcolor.png) no-repeat center;
 		
 	}
 
@@ -604,7 +594,7 @@
 
 
  
-.btnMerge{
+.mergeBtn{
 	width:28px;
     	height:28px;
     	display: inline-block;
@@ -614,7 +604,7 @@
 }
 
 
-.btnSplit{
+.splitBtn{
 	width:28px;
     	height:28px;
     	display: inline-block;
@@ -649,7 +639,7 @@
 
 
 
- .falign{
+ .f_align{
     	width:28px;
     	height:28px;
     	display: inline-block;
@@ -675,19 +665,25 @@
 .falign_left{
 	text-align: left;
 }
-.falign_left i{
+.falign_center{
+	text-align:center;
+}
+.falign_right{
+	text-align:right;
+}
+.ffalign_left{
 	width:16px;
 	height:16px;
 	background:url(../img/lalign.png) no-repeat;
 	display: block;
 }
-.falign_right i{
+.ffalign_right{
 	width:16px;
 	height:16px;
 	background:url(../img/ralign.png) no-repeat;
 	display: block;
 }
-.falign_center i{
+.ffalign_center{
 	width:16px;
 	height:16px;
 	background:url(../img/calign.png) no-repeat;
@@ -696,12 +692,6 @@
 
 
 
-.falign_center{
-	text-align:center;
-}
-.falign_right{
-	text-align:right;
-}
 
 	#ul_fx{
 		list-style-type:none;
