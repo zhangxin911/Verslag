@@ -7,6 +7,16 @@
 	body{
 		height:100%;
 		overflow: hidden;
+		
+			-moz-user-select: none;
+			/*火狐*/
+			-webkit-user-select: none;
+			/*webkit浏览器*/
+			-ms-user-select: none;
+			/*IE10*/
+			-khtml-user-select: none;
+			/*早期浏览器*/
+			user-select: none;
 	}	
  
 		 
@@ -344,15 +354,16 @@
 }
 
 .sheetdefault{
-	width:80px;
+	/*width:80px;*/
 	background-color:#FFFFFF;
 	text-align: center;
-	
+	padding:0px 6px;
 }
 .sheet{
-	width:80px;
+	/*width:80px;*/
 	text-align: center;
 	cursor: pointer;
+	padding:0px 10px;
 }
 .contentdl dd{
 	float:left;
@@ -821,8 +832,10 @@
     background-color:rgb(214,228,241) \9 !important ;
    
     }
-    
-    
-   .box{
-   	
-   } 
+ .stInput{
+ 	text-align: center;
+ 	border:none;
+ 	padding:0;
+ 	margin:0;
+ 	outline: none;
+ }

@@ -1,518 +1,510 @@
-
-
-function iTable(tContainer,tSettings){
-	this.rowCount=tSettings.rowCount;
-	this.cellCount=tSettings.cellCount;
-	this.tIndex=tSettings.tIndex;
-	this.container=tContainer;
-	this.settings=tSettings;
-	var header,footer;
+function iTable(tContainer, tSettings) {
+	this.rowCount = tSettings.rowCount;
+	this.cellCount = tSettings.cellCount;
+	this.container = tContainer;
+	this.settings = tSettings;
+	var header, footer;
 }
 
-
-iTable.prototype.createContent=function(){
-	var num = ~~(this.tIndex);
-	var myContainer=this.container;	
+iTable.prototype.createContent = function(tid) {
+	var tId; 
+//	(!!tid)?tId=tid:1;
+    if(tid!=undefined){
+    	tId=tid;
+    }else{
+    	tId=1;
+    }
+	console.log(tid);
+	var myContainer = this.container;
 	myContainer.html('');
-	var tb = $("<table class='dataTable' id='iTable" + this.tIndex + "'></table>");
+	var tb = $("<table class='dataTable' id='iTable" + tId + "'></table>");
 	myContainer.append(tb);
- 
-	for (var i = 0; i < this.rowCount; i++) {
-			var tr = this.createTr();
-			$("#iTable" + this.tIndex).append(tr);
-			for (var j = 0; j < this.cellCount; j++) {
-				var td = this.createTd('','');
-                  
-				tr.append(td);
-			}
 
+	for(var i = 0; i < this.rowCount;i++) {
+		var tr = this.createTr();
+		$("#iTable" + tId).append(tr);
+		for(var j = 0; j < this.cellCount; j++) {
+			var td = this.createTd('', '');
 
+			tr.append(td);
 		}
-	
-		
-}
 
-iTable.prototype.createTr=function() {
-		var tr = $("<tr></tr>");
-		return tr;
 	}
-iTable.prototype.createTd=function(className,tdValue){
-	
-		var td = $("<td class="+className+">"+tdValue+"</td>")
-		return td;
+
 }
-iTable.prototype.createXaxis=function(){
-	   
-	   var xAxis=$("<div class='xOrder'></div>");
-	   xAxis.html('');
-	   var xTable=$("<table class='titleTable'></table>"); 
-	   var xTdWidth=[];
-	   var curT=this.getCurTable();
-	   var firTds=curT.find('tr:first td');
-	   
-	   
-	   
-	   xAxis.insertBefore(this.container);
-	   xAxis.html(xTable);
-	   for (var i = 0; i < 1; i++) {
-			var tr = $("<tr></tr>");
 
-			tr.appendTo($(".titleTable"));
+iTable.prototype.createTr = function() {
+	var tr = $("<tr></tr>");
+	return tr;
+}
+iTable.prototype.createTd = function(className, tdValue) {
 
-			for (var j = 0; j < this.cellCount; j++) {
-				var th = $("<td>" + String.fromCharCode((65 + j)) + "</td>");
-//              th.css({
-//              	'max-width':firTds[j].offsetWidth,
-//              	'min-width':firTds[j].offsetWidth
-//              })
-				th.appendTo(tr);
-			}
+	var td = $("<td class=" + className + ">" + tdValue + "</td>")
+	return td;
+}
+iTable.prototype.createXaxis = function() {
 
+	var xAxis = $("<div class='xOrder'></div>");
+	xAxis.html('');
+	var xTable = $("<table class='titleTable'></table>");
+	var xTdWidth = [];
+	var curT = this.getCurTable();
+	var firTds = curT.find('tr:first td');
+
+	xAxis.insertBefore(this.container);
+	xAxis.html(xTable);
+	for(var i = 0; i < 1; i++) {
+		var tr = $("<tr></tr>");
+
+		tr.appendTo($(".titleTable"));
+
+		for(var j = 0; j < this.cellCount; j++) {
+			var th = $("<td>" + String.fromCharCode((65 + j)) + "</td>");
+			//              th.css({
+			//              	'max-width':firTds[j].offsetWidth,
+			//              	'min-width':firTds[j].offsetWidth
+			//              })
+			th.appendTo(tr);
 		}
-//	    for(j=0;j<firTds.length;j++){
-//	   	  xTdWidth.push(firTds[j].offsetWidth);
-//	    }
-	     
+
+	}
+	//	    for(j=0;j<firTds.length;j++){
+	//	   	  xTdWidth.push(firTds[j].offsetWidth);
+	//	    }
 
 }
-iTable.prototype.createYaxis=function(){
-	 var yAxis=$("<div class='yOrder'></div>");
-	 var yTable=$("<table class='leftTable'></table>"); 
-	   
-	   yAxis.html('');
-	   yAxis.insertBefore(this.container);
-	   yAxis.html(yTable);
-	   for (var i = 0; i < this.rowCount; i++) {
-			var tr = $("<tr></tr>");
+iTable.prototype.createYaxis = function() {
+	var yAxis = $("<div class='yOrder'></div>");
+	var yTable = $("<table class='leftTable'></table>");
 
-			tr.appendTo($(".leftTable"));
+	yAxis.html('');
+	yAxis.insertBefore(this.container);
+	yAxis.html(yTable);
+	for(var i = 0; i < this.rowCount; i++) {
+		var tr = $("<tr></tr>");
 
-			for (var j = 0; j < 1; j++) {
-				var th = $("<td>" + (i + 1) + "</td>");
+		tr.appendTo($(".leftTable"));
 
-				th.appendTo(tr);
-			}
+		for(var j = 0; j < 1; j++) {
+			var th = $("<td>" + (i + 1) + "</td>");
 
+			th.appendTo(tr);
 		}
+
+	}
 }
-iTable.prototype.createTip=function(){
-	var content=$('<div></div>');
-	tLeft=$('.yOrder');
-	tHead=$('.xOrder');
-	 
-	bLeft=tLeft.find('table tr:first td:first').outerWidth();
-	bTop=tHead.find('table tr:first td:first').outerHeight(); 
+iTable.prototype.createTip = function() {
+	var content = $('<div></div>');
+	tLeft = $('.yOrder');
+	tHead = $('.xOrder');
+
+	bLeft = tLeft.find('table tr:first td:first').outerWidth();
+	bTop = tHead.find('table tr:first td:first').outerHeight();
 	content.css({
-		'position':'fixed',
-		'background':'#f5f5f5',
-		'z-index':101,
-		'top':'0',
-		'left':'0',
-		'width':bLeft,
-		'height':bTop,
-		'border-right':'1px solid #AAAAAA',
-		'border-bottom':'1px solid #AAAAAA',
-		'margin-top':'70px'
+		'position': 'fixed',
+		'background': '#f5f5f5',
+		'z-index': 101,
+		'top': '0',
+		'left': '0',
+		'width': bLeft,
+		'height': bTop,
+		'border-right': '1px solid #AAAAAA',
+		'border-bottom': '1px solid #AAAAAA',
+		'margin-top': '70px'
 	});
 	content.insertBefore(this.container);
 }
 
-
-iTable.prototype.getCurTable=function(){
-	 var t;
-	 t=this.container.find('table:visible');
-	 return t
+iTable.prototype.getCurTable = function() {
+	var t;
+	t = this.container.find('table:visible');
+	return t
 }
 
-iTable.prototype.setCss=function(){
-	var viewWidth=$(window).width();
-	var viewHeight=$(window).height();
-	tBody=this.getCurTable().parent();
-	
-	tLeft=$('.yOrder');
-	tHead=$('.xOrder');
-	 
-	bLeft=tLeft.find('table tr:first td:first').outerWidth()+1;
-	bTop=tHead.find('table tr:first td:first').outerHeight()+1; 
-	 
-	
+iTable.prototype.setCss = function() {
+	var viewWidth = $(window).width();
+	var viewHeight = $(window).height();
+	tBody = this.getCurTable().parent();
+
+	tLeft = $('.yOrder');
+	tHead = $('.xOrder');
+
+	bLeft = tLeft.find('table tr:first td:first').outerWidth() + 1;
+	bTop = tHead.find('table tr:first td:first').outerHeight() + 1;
+
 	tLeft.css({
-		'position':'fixed',
-		'z-index':'99',
-		'background':'#f5f5f5',
-		'height':viewHeight,
-		'overflow':'hidden',
-		'left':'0'
+		'position': 'fixed',
+		'z-index': '99',
+		'background': '#f5f5f5',
+		'height': viewHeight,
+		'overflow': 'hidden',
+		'left': '0'
 	});
 	tHead.css({
-		'position':'fixed',
-		'z-index':'100',
-		'background':'#f5f5f5',
-		'width':viewWidth-bLeft,
-		'overflow':'hidden',
-		'margin-left':bLeft,
-		'margin-top':'70px',
-		'top':'0'
+		'position': 'fixed',
+		'z-index': '100',
+		'background': '#f5f5f5',
+		'width': viewWidth - bLeft,
+		'overflow': 'hidden',
+		'margin-left': bLeft,
+		'margin-top': '70px',
+		'top': '0'
 	});
-	
+
 	tBody.css({
-		'margin-left':bLeft,
-		'margin-top':bTop+70,
-		'width':viewWidth-bLeft,
-		'height':viewHeight-bTop-110,
-		'overflow':'scroll'
+		'margin-left': bLeft,
+		'margin-top': bTop + 70,
+		'width': viewWidth - bLeft,
+		'height': viewHeight - bTop - 110,
+		'overflow': 'scroll'
 	});
-	
-	var that=this.container;
-	$(window).resize(function(){
-		var viewWidth=$(window).width();
-        var viewHeight=$(window).height();
 
-		
-		that.width(viewWidth-bLeft);
-	    that.height(viewHeight-bTop);
+	var that = this.container;
+	$(window).resize(function() {
+		var viewWidth = $(window).width();
+		var viewHeight = $(window).height();
+
+		that.width(viewWidth - bLeft);
+		that.height(viewHeight - bTop);
 	});
-	 
+
 }
 
-iTable.prototype.tableScroll=function(){
-	   this.container.scroll(function(){
-			var scrollY = $(this).scrollTop();
-			var scrollX = $(this).scrollLeft();
+iTable.prototype.tableScroll = function() {
+	this.container.scroll(function() {
+		var scrollY = $(this).scrollTop();
+		var scrollX = $(this).scrollLeft();
 
-			$(".yOrder table").css('margin-top', -scrollY);
-			$(".xOrder table").css('margin-left', -scrollX);
+		$(".yOrder table").css('margin-top', -scrollY);
+		$(".xOrder table").css('margin-left', -scrollX);
 
-		}); 
+	});
 }
- 
 
 //填写表格
-iTable.prototype.fillTd=function(){
- 
-        var id=1;
-         
-		$('#iTable1 tr').find('td').each(function() {
-             
-			$(this).dblclick(function(){
+iTable.prototype.fillTd = function() {
+    var curT = this.getCurTable();
+	var id = curT.attr('id');
 
-				var that = $(this);
-				var ev = ev || window.event;
-				that.attr('fid', 'tttt')
+	$('#iTable'+id+' tr').find('td').each(function() {
 
-				var tdWidth = that.width();
-				var tdHeight = that.height();
-				var tdText = that.text();
+		$(this).dblclick(function() {
 
-				var tdInput = $("<input type='text'  id='tdInput' class='tdInput'  value='" + tdText + "'></input>");
+			var that = $(this);
+			var ev = ev || window.event;
+			that.attr('fid', 'tttt')
 
-				tdInput.width(tdWidth);
-				tdInput.height(tdHeight);
+			var tdWidth = that.width();
+			var tdHeight = that.height();
+			var tdText = that.text();
 
-				that.html(tdInput);
+			var tdInput = $("<input type='text'  id='tdInput' class='tdInput'  value='" + tdText + "'></input>");
 
-				set_text_value_position(tdInput, -1);
- 
- 
-				$('.tdInput').blur(function() {
-					var content = $('.tdInput').val();
-					
-					if (tdText == content) {
- 
-                        $(this).parent().html(content);
-                       
-					} else {
- 
-                        $(this).parent().html(content);
-                        
-					}
-                    $('.tdInput').remove();
-                    
-					event.stopPropagation();
-				});
+			tdInput.width(tdWidth);
+			tdInput.height(tdHeight);
 
-				$(".tdInput").keyup(function(ev) {
-					if (ev.keyCode == 13) {
-						$('.tdInput').blur();
-					}
-				});
-				
-				
-				$('#iTable'+id+' tr td').click(function(){
+			that.html(tdInput);
+
+			set_text_value_position(tdInput, -1);
+
+			$('.tdInput').blur(function() {
+				var content = $('.tdInput').val();
+
+				if(tdText == content) {
+
+					$(this).parent().html(content);
+
+				} else {
+
+					$(this).parent().html(content);
+
+				}
+				$('.tdInput').remove();
+
+				event.stopPropagation();
+			});
+
+			$(".tdInput").keyup(function(ev) {
+				if(ev.keyCode == 13) {
 					$('.tdInput').blur();
-				});
-				
+				}
 			});
 
-
-			$(this).click(function() {
-                
-                var tr=$(this).parent();
-				$('.dataTable').find('td').removeClass('ui-selected');
-				$(this).addClass('ui-selected');
-				//		 	
-				$(".dataTable tr td").removeAttr('chosed');
-				$(this).attr('chosed', 'clickone');
-             
+			$('#iTable' + id + ' tr td').click(function() {
+				$('.tdInput').blur();
 			});
-
-
 
 		});
 
-	
+		$(this).click(function() {
+
+			var tr = $(this).parent();
+			$('.dataTable').find('td').removeClass('ui-selected');
+			$(this).addClass('ui-selected');
+			//		 	
+			$(".dataTable tr td").removeAttr('chosed');
+			$(this).attr('chosed', 'clickone');
+
+		});
+
+	});
+
 }
 //创建底部容器
-iTable.prototype.createFooter=function(){
-	this.footer=$('<div class="footer"></div>');
+iTable.prototype.createFooter = function() {
+	this.footer = $('<div class="footer"></div>');
 	this.footer.css({
-		'z-index':102
+		'z-index': 102
 	})
 	this.container.after(this.footer);
-	
-	var addBox=$('<div class="addBox"><div class="addSheet"></div></div>');
+
+	var addBox = $('<div class="addBox"><div class="addSheet"></div></div>');
 	this.footer.append(addBox);
-	
-	var sheetQueue=$('<div class="sheetqueue"><div><dl class="sheetqueuedl"><dd class="sheet sheetdefault" id="sheet1">1</dd></dl></div></div>');
+
+	var sheetQueue = $('<div class="sheetqueue"><div><dl class="sheetqueuedl"><dd class="sheet sheetdefault" id="sheet1">1</dd></dl></div></div>');
 	this.footer.append(sheetQueue);
-	
-	var sheetFloat=$('<div class="sheetfloat"><span class="lsheet"></span><span class="rsheet"></span></div>');
+
+	var sheetFloat = $('<div class="sheetfloat"><span class="lsheet"></span><span class="rsheet"></span></div>');
 	this.footer.append(sheetFloat);
-	
-	
+
 }
 
 //创建头部容器
-iTable.prototype.createHeader=function(){
-	this.header=$('<div class="header"></div>');
-	this.header.css({ 
-		'z-index':103
+iTable.prototype.createHeader = function() {
+	this.header = $('<div class="header"></div>');
+	this.header.css({
+		'z-index': 103
 	})
 	this.header.insertBefore(this.container);
-	 
+
 }
 //字体类型
-iTable.prototype.fontFamily=function(){
-	var select=this.createSelection('fontFamily',this.settings.fontFamily);
-	var sel_a=$(select[0]).find('ul li a');
-    var className,curClass;
-    var selThem;
-     
-	sel_a.on('click',function(){
-       
-        removeUied(); 
-        
-        className=$(this).attr('class');
-        $('.ui-selected').addClass(className);
-        
+iTable.prototype.fontFamily = function() {
+	var select = this.createSelection('fontFamily', this.settings.fontFamily);
+	var sel_a = $(select[0]).find('ul li a');
+	var className, curClass;
+	var selThem;
+
+	sel_a.on('click', function() {
+
+		removeUied();
+
+		className = $(this).attr('class');
+		$('.ui-selected').addClass(className);
+
 		var reg = new RegExp("(((font_)[A-Za-z0-9_]+\s*)+)", "g");
 
 		curClass = $('.ui-selected').attr('class');
 		if(!!curClass) {
-				curClass = curClass.replace(reg,className);
-			} else {
-				return;
+			curClass = curClass.replace(reg, className);
+		} else {
+			return;
 		}
 		var arr = curClass.split(' ');
 		curClass = removeDuplicatedItem(arr);
-        selThem=$('.ui-selected');
+		selThem = $('.ui-selected');
 		$('.ui-selected').removeAttr('class');
-		 
-		selThem.addClass(curClass);
-	});  
-	
-	 
-	
-	sel_a.mouseover(function(){
-		  $(this).css({'background':'#ECECEC'});
-		  
-	});
-	sel_a.mouseout(function(){
-		 $(this).css({'background':'#FFFFFF'});
-	});	
 
-	
+		selThem.addClass(curClass);
+	});
+
+	sel_a.mouseover(function() {
+		$(this).css({
+			'background': '#ECECEC'
+		});
+
+	});
+	sel_a.mouseout(function() {
+		$(this).css({
+			'background': '#FFFFFF'
+		});
+	});
+
 }
 //字体大小
-iTable.prototype.fontSize=function(){
-	var select=this.createSelection('fontSize',this.settings.fontSize);
-	var sel_a=$(select[0]).find('ul li a');
-    var className,curClass;
-    var selThem;
-     
-	sel_a.on('click',function(){
-		
-        removeUied(); 
-        
-        className=$(this).attr('class');
-        $('.ui-selected').addClass(className);
-        
+iTable.prototype.fontSize = function() {
+	var select = this.createSelection('fontSize', this.settings.fontSize);
+	var sel_a = $(select[0]).find('ul li a');
+	var className, curClass;
+	var selThem;
+
+	sel_a.on('click', function() {
+
+		removeUied();
+
+		className = $(this).attr('class');
+		$('.ui-selected').addClass(className);
+
 		var reg = new RegExp("(((fsize_)[A-Za-z0-9_]+\s*)+)", "g");
 
 		curClass = $('.ui-selected').attr('class');
 		if(!!curClass) {
-				curClass = curClass.replace(reg,className);
-			} else {
-				return;
+			curClass = curClass.replace(reg, className);
+		} else {
+			return;
 		}
 		var arr = curClass.split(' ');
 		curClass = removeDuplicatedItem(arr);
-        selThem=$('.ui-selected');
+		selThem = $('.ui-selected');
 		$('.ui-selected').removeAttr('class');
-		 
+
 		selThem.addClass(curClass);
-	});  
-	
-	 
-	
-	sel_a.mouseover(function(){
-		  $(this).css({'background':'#ECECEC'});
-		  
 	});
-	sel_a.mouseout(function(){
-		 $(this).css({'background':'#FFFFFF'});
-	});	
+
+	sel_a.mouseover(function() {
+		$(this).css({
+			'background': '#ECECEC'
+		});
+
+	});
+	sel_a.mouseout(function() {
+		$(this).css({
+			'background': '#FFFFFF'
+		});
+	});
 }
 //字体粗细
-iTable.prototype.fontBold=function(){
-	var simMenu=this.createSimpleMenu('fbold');
-	var sel_a=$(simMenu[0]).children(0);     
-	sel_a.on('click',function(){
-        removeUied();       
-       	$('.ui-selected').hasClass('ffbold') ? $('.ui-selected').removeClass('ffbold') : $('.ui-selected').addClass('ffbold');
+iTable.prototype.fontBold = function() {
+	var simMenu = this.createSimpleMenu('fbold');
+	var sel_a = $(simMenu[0]).children(0);
+	sel_a.on('click', function() {
+		removeUied();
+		$('.ui-selected').hasClass('ffbold') ? $('.ui-selected').removeClass('ffbold') : $('.ui-selected').addClass('ffbold');
 
-	});  
-	
+	});
+
 }
 //字体倾斜
-iTable.prototype.fontItalic=function(){
-	var simMenu=this.createSimpleMenu('fitalic');
-	var sel_a=$(simMenu[0]).children(0);     
-	sel_a.on('click',function(){
-        removeUied();       
-       	$('.ui-selected').hasClass('ffitalic') ? $('.ui-selected').removeClass('ffitalic') : $('.ui-selected').addClass('ffitalic');
+iTable.prototype.fontItalic = function() {
+	var simMenu = this.createSimpleMenu('fitalic');
+	var sel_a = $(simMenu[0]).children(0);
+	sel_a.on('click', function() {
+		removeUied();
+		$('.ui-selected').hasClass('ffitalic') ? $('.ui-selected').removeClass('ffitalic') : $('.ui-selected').addClass('ffitalic');
 
-	});  
-	
+	});
+
 }
 //字体下划线
-iTable.prototype.fontOverline=function(){
-	var simMenu=this.createSimpleMenu('foverline');
-	var sel_a=$(simMenu[0]).children(0);     
-	sel_a.on('click',function(){
-        removeUied();       
-       	$('.ui-selected').hasClass('ffoverline') ? $('.ui-selected').removeClass('ffoverline') : $('.ui-selected').addClass('ffoverline');
+iTable.prototype.fontOverline = function() {
+	var simMenu = this.createSimpleMenu('foverline');
+	var sel_a = $(simMenu[0]).children(0);
+	sel_a.on('click', function() {
+		removeUied();
+		$('.ui-selected').hasClass('ffoverline') ? $('.ui-selected').removeClass('ffoverline') : $('.ui-selected').addClass('ffoverline');
 
-	});  
-	
+	});
+
 }
 //字体颜色
-iTable.prototype.fontColor=function(){
-	var select=this.createCellMenu('d_fcolor','fontColor',this.settings.fontColor);
-	var td=$(select[0]).find('table tr td');
-	var className,curClass;
-    var selThem;
-    
-	td.on('click',function(){
-		removeUied(); 
-        
-        className=$(this).find('a').attr('class');
-        $('.ui-selected').addClass(className);
-        
+iTable.prototype.fontColor = function() {
+	var select = this.createCellMenu('d_fcolor', 'fontColor', this.settings.fontColor);
+	var td = $(select[0]).find('table tr td');
+	var className, curClass;
+	var selThem;
+
+	td.on('click', function() {
+		removeUied();
+
+		className = $(this).find('a').attr('class');
+		$('.ui-selected').addClass(className);
+
 		var reg = new RegExp("(((fc_)[A-Za-z0-9_]+\s*)+)", "g");
-		
+
 		curClass = $('.ui-selected').attr('class');
 		if(!!curClass) {
-				curClass = curClass.replace(reg,className);
-			} else {
-				return;
+			curClass = curClass.replace(reg, className);
+		} else {
+			return;
 		}
 		var arr = curClass.split(' ');
 		curClass = removeDuplicatedItem(arr);
-        selThem=$('.ui-selected');
+		selThem = $('.ui-selected');
 		$('.ui-selected').removeAttr('class');
-		 
+
 		selThem.addClass(curClass);
 	});
 }
 //表格背景
-iTable.prototype.bgColor=function(){
-	var select=this.createCellMenu('d_fill','bgColor',this.settings.bgColor);
-	var td=$(select[0]).find('table tr td');
-	var className,curClass;
-    var selThem;
-    
-	td.on('click',function(){
-		
-        
-        className=$(this).attr('class');
-        $('.ui-selected').addClass(className);
-        
+iTable.prototype.bgColor = function() {
+	var select = this.createCellMenu('d_fill', 'bgColor', this.settings.bgColor);
+	var td = $(select[0]).find('table tr td');
+	var className, curClass;
+	var selThem;
+
+	td.on('click', function() {
+
+		className = $(this).attr('class');
+		$('.ui-selected').addClass(className);
+
 		var reg = new RegExp("(((ffill_)[A-Za-z0-9_]+\s*)+)", "g");
-		
+
 		curClass = $('.ui-selected').attr('class');
 		if(!!curClass) {
-				curClass = curClass.replace(reg,className);
-			} else {
-				return;
+			curClass = curClass.replace(reg, className);
+		} else {
+			return;
 		}
 		var arr = curClass.split(' ');
 		curClass = removeDuplicatedItem(arr);
-        selThem=$('.ui-selected');
+		selThem = $('.ui-selected');
 		$('.ui-selected').removeAttr('class');
-		 
+
 		selThem.addClass(curClass);
-		removeUied(); 
+		removeUied();
 	});
 }
-
 
 //字符对齐
-iTable.prototype.textAlign=function(){
-	var select=this.createCellMenu('f_align','textAlign',this.settings.textAlign);
-	var td=$(select[0]).find('table tr td');
-	var className,curClass;
-    var selThem;
-    td.css({'background':'#FFFFFF'});
-	td.on('click',function(){
-		
-        
-        className=$(this).attr('class');
-        $('.ui-selected').addClass(className);
-        
+iTable.prototype.textAlign = function() {
+	var select = this.createCellMenu('f_align', 'textAlign', this.settings.textAlign);
+	var td = $(select[0]).find('table tr td');
+	var className, curClass;
+	var selThem;
+	td.css({
+		'background': '#FFFFFF'
+	});
+	td.on('click', function() {
+
+		className = $(this).attr('class');
+		$('.ui-selected').addClass(className);
+
 		var reg = new RegExp("(((falign_)[A-Za-z0-9_]+\s*)+)", "g");
-		
+
 		curClass = $('.ui-selected').attr('class');
 		if(!!curClass) {
-				curClass = curClass.replace(reg,className);
-			} else {
-				return;
+			curClass = curClass.replace(reg, className);
+		} else {
+			return;
 		}
 		var arr = curClass.split(' ');
 		curClass = removeDuplicatedItem(arr);
-        selThem=$('.ui-selected');
+		selThem = $('.ui-selected');
 		$('.ui-selected').removeAttr('class');
-		 
+
 		selThem.addClass(curClass);
-		removeUied(); 
-    });
-    
-    td.mouseover(function(){
-		  $(this).css({'background':'#ECECEC'});
-		  
+		removeUied();
 	});
-	td.mouseout(function(){
-		 $(this).css({'background':'#FFFFFF'});
-	});	
+
+	td.mouseover(function() {
+		$(this).css({
+			'background': '#ECECEC'
+		});
+
+	});
+	td.mouseout(function() {
+		$(this).css({
+			'background': '#FFFFFF'
+		});
+	});
 }
 
-
 //合并单元格
-iTable.prototype.mergeTd=function(){
-	  var mergeBtn=this.createSimpleMenu('mergeBtn');
-	  mergeBtn.on('click',function(){
-	  	var $t =$('.dataTable');
-		if ($("table", $t).length > 0) {
+iTable.prototype.mergeTd = function() {
+	var mergeBtn = this.createSimpleMenu('mergeBtn');
+	mergeBtn.on('click', function() {
+		var $t = $('.dataTable');
+		if($("table", $t).length > 0) {
 			alert("不支持嵌套表格！");
 			return;
 		}
@@ -520,44 +512,39 @@ iTable.prototype.mergeTd=function(){
 		var sigDel = "sign4delete";
 		var sigSel = "ui-selected";
 
-
 		$("th,td", $t).each(function() {
 
 			var ridx = $("tr", $t).index($(this).parent("tr"));
 			var cidx = $(this).parent().children("th,td").index(this);
-			
-			
+
 			var rowspan = Number($(this).attr("rowspan")) || 1;
 			var colspan = Number($(this).attr("colspan")) || 1;
 			var isSel = $(this).hasClass(sigSel);
-            
 
-			if (rowspan <= 1 && colspan <= 1) return;
+			if(rowspan <= 1 && colspan <= 1) return;
 
 			$("tr", $t).each(function() {
 				var idx = $("tr", $t).index(this);
 				var arr, $td = $("<td>").addClass(isSel ? sigSel : sigDel);
-               
-                
-				if (idx == ridx) {
+
+				if(idx == ridx) {
 					// 本行在 [cidx] 后插入 colspan-1 个
 
 					arr = $(); // 准备待插单元格
-					for (var i = 0; i < colspan - 1; i++)
-					arr = arr.add($td.clone());
+					for(var i = 0; i < colspan - 1; i++)
+						arr = arr.add($td.clone());
 					// 插入
 					$("th,td", this).eq(cidx).after(arr);
-					
-                   
-				} else if (ridx < idx && idx < ridx + rowspan) {
+
+				} else if(ridx < idx && idx < ridx + rowspan) {
 					// 以下行在 [cidx] 前插入 colspan 个
 
 					arr = $(); // 准备待插单元格
-					for (var i = 0; i < colspan; i++)
-					arr = arr.add($td.clone());
+					for(var i = 0; i < colspan; i++)
+						arr = arr.add($td.clone());
 					// 插入
-					if (cidx > 0 && $("th,td", this).eq(cidx - 1).length > 0) $("th,td", this).eq(cidx - 1).after(arr);
-					else if ($("th,td", this).eq(cidx).length > 0) $("th,td", this).eq(cidx).before(arr);
+					if(cidx > 0 && $("th,td", this).eq(cidx - 1).length > 0) $("th,td", this).eq(cidx - 1).after(arr);
+					else if($("th,td", this).eq(cidx).length > 0) $("th,td", this).eq(cidx).before(arr);
 					else $(this).prepend(arr);
 				}
 			});
@@ -571,52 +558,51 @@ iTable.prototype.mergeTd=function(){
 		// 计算起始和跨距
 		$("th,td", $t).filter("." + sigSel).each(function() {
 			var ridx = $("tr", $t).index($(this).parent("tr"));
-			
+
 			rmin = ridx < rmin ? ridx : rmin;
 			rmax = ridx > rmax ? ridx : rmax;
-			
+
 			var cidx = $(this).parent().children("th,td").index(this);
-			
+
 			cmin = cidx < cmin ? cidx : cmin;
 			cmax = cidx > cmax ? cidx : cmax;
-			
+
 		});
 		rnum = rmax - rmin + 1;
 		cnum = cmax - cmin + 1;
-       
+
 		// 合并单元格
 		$("th,td", $t).each(function() {
 			var ridx = $("tr", $t).index($(this).parent("tr"));
 			var cidx = $(this).parent().children("th,td").index(this);
-           
-             var tWidth;
-            cnum>3?tWidth=103:tWidth=102;
-			if (rmin <= ridx && ridx <= rmax && cmin <= cidx && cidx <= cmax) $(this).addClass(sigDel);
 
-			if (ridx == rmin && cidx == cmin) $(this).removeClass(sigDel).attr({
+			var tWidth;
+			cnum > 3 ? tWidth = 103 : tWidth = 102;
+			if(rmin <= ridx && ridx <= rmax && cmin <= cidx && cidx <= cmax) $(this).addClass(sigDel);
+
+			if(ridx == rmin && cidx == cmin) $(this).removeClass(sigDel).attr({
 				rowspan: rnum,
 				colspan: cnum
-			}).width(cnum*tWidth);
-           
-			if ($(this).attr("rowspan") == 1) $(this).removeAttr("rowspan");
-			if ($(this).attr("colspan") == 1) $(this).removeAttr("colspan");
+			}).width(cnum * tWidth);
+
+			if($(this).attr("rowspan") == 1) $(this).removeAttr("rowspan");
+			if($(this).attr("colspan") == 1) $(this).removeAttr("colspan");
 		}).remove("." + sigDel);
-	  });
+	});
 }
 //拆分单元格
-iTable.prototype.splitTd=function(){
-	var splitBtn=this.createSimpleMenu('splitBtn');
-	splitBtn.on('click',function(){
+iTable.prototype.splitTd = function() {
+	var splitBtn = this.createSimpleMenu('splitBtn');
+	splitBtn.on('click', function() {
 		var $t = $(".dataTable");
 
-		if ($("table", $t).length > 0) {
+		if($("table", $t).length > 0) {
 			alert("不支持嵌套表格！");
 			return;
 		}
 
 		var sigDel = "sign4delete";
 		var sigSel = "ui-selected";
-
 
 		$("th,td", $t).each(function() {
 
@@ -626,39 +612,37 @@ iTable.prototype.splitTd=function(){
 			var colspan = Number($(this).attr("colspan")) || 1;
 			var isSel = $(this).hasClass(sigSel);
 
+			if(rowspan <= 1 && colspan <= 1) return;
 
-			if (rowspan <= 1 && colspan <= 1) return;
-
-			if (isSel) $(this).removeAttr("colspan").removeAttr("rowspan");
+			if(isSel) $(this).removeAttr("colspan").removeAttr("rowspan");
 
 			// 跨格开插
 			$("tr", $t).each(function() {
 				var idx = $("tr", $t).index(this);
 				var arr, $td = $("<td>");
-                
-				if (!isSel) $td.addClass(sigDel);
 
-				if (idx == ridx) {
+				if(!isSel) $td.addClass(sigDel);
+
+				if(idx == ridx) {
 					// 本行在 [cidx] 后插入 colspan-1 个
 
 					arr = $(); // 准备待插单元格
-					for (var i = 0; i < colspan - 1; i++)
-					arr = arr.add($td.clone());
-                  
+					for(var i = 0; i < colspan - 1; i++)
+						arr = arr.add($td.clone());
+
 					$("th,td", this).eq(cidx).after(arr);
-					
-                   
-				}else if (ridx < idx && idx < ridx + rowspan) {
+
+				} else if(ridx < idx && idx < ridx + rowspan) {
 					// 以下行在 [cidx] 前插入 colspan 个
-                   
+
 					arr = $(); // 准备待插单元格
-					for (var i = 0; i < colspan; i++)
-					arr = arr.add($td.clone());
-                    
-					if (cidx > 0 && $("th,td", this).eq(cidx - 1).length > 0) $("th,td", this).eq(cidx - 1).after(arr);
-					else if ($("th,td", this).eq(cidx).length > 0) $("th,td", this).eq(cidx).before(arr);
+					for(var i = 0; i < colspan; i++)
+						arr = arr.add($td.clone());
+
+					if(cidx > 0 && $("th,td", this).eq(cidx - 1).length > 0) $("th,td", this).eq(cidx - 1).after(arr);
+					else if($("th,td", this).eq(cidx).length > 0) $("th,td", this).eq(cidx).before(arr);
 					else $(this).prepend(arr);
-					
+
 				}
 			});
 		});
@@ -666,170 +650,191 @@ iTable.prototype.splitTd=function(){
 		// 重新获取以取到删者并删之
 		$("th,td", $t).remove("." + sigDel);
 	});
-	
+
 }
 
-
-
 //创建工具栏下拉菜单
-iTable.prototype.createSelection=function(id,menus){
-	 var selection=$('<div class="toolBox"></div>');
-	 var selectHead=$('<div id="'+id+'"></div>');
-	 var selectUl=$('<ul id=""></ul>');
-	 var selectLi,arr=[];	 
-	 
-	 for(var index in menus){
-	 	 arr.push(index);
-	 	 selectHead.text(arr[0]);	 	  	 	   
-	 	 selectLi=$('<li><a class="'+menus[index]+'">'+index+'</a></li>');	 	  	 	
-	 	 selectUl.append(selectLi);
-	 }	  	 
-	 selectHead.after(selectUl);
-	
-	 
-	 selection.append(selectHead);	 
-	 this.header.append(selection);
-	 selectUl.hide();
-	 selectHead.on('click',function(){ 	
-	 selectUl.toggle();	 
-	 });
-	 
-	 selectUl.find('li a').on('click',function(){
-       
-	 	$(selectHead[0]).text($(this).text());
-	 })
-	 return selection;
+iTable.prototype.createSelection = function(id, menus) {
+	var selection = $('<div class="toolBox"></div>');
+	var selectHead = $('<div id="' + id + '"></div>');
+	var selectUl = $('<ul id=""></ul>');
+	var selectLi, arr = [];
+
+	for(var index in menus) {
+		arr.push(index);
+		selectHead.text(arr[0]);
+		selectLi = $('<li><a class="' + menus[index] + '">' + index + '</a></li>');
+		selectUl.append(selectLi);
+	}
+	selectHead.after(selectUl);
+
+	selection.append(selectHead);
+	this.header.append(selection);
+	selectUl.hide();
+	selectHead.on('click', function() {
+		selectUl.toggle();
+	});
+
+	selectUl.find('li a').on('click', function() {
+
+		$(selectHead[0]).text($(this).text());
+	})
+	return selection;
 }
 
 //创建工具栏单个菜单
-iTable.prototype.createSimpleMenu=function(className){
-	var menus=$('<div class="toolBox"></div>');
-	var simTool=$('<span class="'+className+'"></span>');
+iTable.prototype.createSimpleMenu = function(className) {
+	var menus = $('<div class="toolBox"></div>');
+	var simTool = $('<span class="' + className + '"></span>');
 	menus.append(simTool);
 	this.header.append(menus);
 	return menus;
 }
 //创建工具栏格子菜单
-iTable.prototype.createCellMenu=function(dClass,className,menus){
-	
-	var selection=$('<div class="toolBox"></div>');
-	var selectHead=$('<div class="'+dClass+'"></div>');
-	var selectTb=$('<table class="'+className+'"></table>');
-	var selectTr=$('<tr></tr>');
-	var selectTd,length=JSONLength(menus);
-	var arr1=[],arr2=[]
-	 for(var index in menus){
-	 	    arr1.push(menus[index].tdclass);
-	 	    arr2.push(menus[index].fclass);          
-//       	selectTd=$('<td class="'+menus[index].tdclass+'"><a class="'+menus[index].fclass+'"></a></td>');	    
-	 }
-	 for(var i=0;i<arr1.length+1;i++){
-	 	selectTd=$('<td class="'+arr1[i]+'"><a class="'+arr2[i]+'"></a></td>');
-	 	selectTr.append(selectTd);
-	 	if((i+1)%5==0&&(i+1)!=0){
-	 	 
-	 	selectTb.append(selectTr);
-	 	selectTr=$('<tr></tr>');
-	 	 
-	 	}else{
-	 	selectTb.append(selectTr);
-	 	}
-	 	
-	 }
-	  
-	 selectHead.after(selectTb);
-	 selection.append(selectHead);
-	  
-	 this.header.append(selection);
-	 
-	 selectTb.hide();
-	 selectHead.on('click',function(){
-	 	selectTb.toggle();
-	 });
-	 return selection;
-	 
+iTable.prototype.createCellMenu = function(dClass, className, menus) {
+
+	var selection = $('<div class="toolBox"></div>');
+	var selectHead = $('<div class="' + dClass + '"></div>');
+	var selectTb = $('<table class="' + className + '"></table>');
+	var selectTr = $('<tr></tr>');
+	var selectTd, length = JSONLength(menus);
+	var arr1 = [],
+		arr2 = []
+	for(var index in menus) {
+		arr1.push(menus[index].tdclass);
+		arr2.push(menus[index].fclass);
+		//       	selectTd=$('<td class="'+menus[index].tdclass+'"><a class="'+menus[index].fclass+'"></a></td>');	    
+	}
+	for(var i = 0; i < arr1.length + 1; i++) {
+		selectTd = $('<td class="' + arr1[i] + '"><a class="' + arr2[i] + '"></a></td>');
+		selectTr.append(selectTd);
+		if((i + 1) % 5 == 0 && (i + 1) != 0) {
+
+			selectTb.append(selectTr);
+			selectTr = $('<tr></tr>');
+
+		} else {
+			selectTb.append(selectTr);
+		}
+
+	}
+
+	selectHead.after(selectTb);
+	selection.append(selectHead);
+
+	this.header.append(selection);
+
+	selectTb.hide();
+	selectHead.on('click', function() {
+		selectTb.toggle();
+	});
+	return selection;
+
 }
 //增加sheet
-iTable.prototype.addSheet=function(){
-	    var i = 2;
-        var box=this.container;
-		$('.sheet').on('click', function() {
+iTable.prototype.addSheet = function() {
+	var i = 2;
+	var box = this.container;
+	$('.sheet').on('click', function() {
 
+		$(this).addClass('sheetdefault').siblings().removeClass('sheetdefault');
+
+		return false;
+	});
+
+	var that = this;
+	$('.addSheet').click(function() {
+		box.html('');
+		
+		var dd = $("<dd class='sheet sheetdefault' id=sheet" + i + ">sheet" + i + "</dd>");
+		var curId = $(".sheetdefault").attr('id');
+		curId = curId.replace('sheet', '');
+		curId = parseInt(curId);
+
+		$("#sheet" + curId).removeClass('sheetdefault');
+
+		var neId = parseInt(curId) + 1;
+
+		$('.sheetqueuedl').append(dd);
+        that.createContent(neId);
+		$("#iTable" + neId).selectable();
+
+		dd.on('click', function() {
+            box.html('');
+			var dId = $(this).attr('id');
+			dId = dId.replace('sheet', '');
+			dId = parseInt(dId);
+			 that.createContent(dId);
+			$("#iTable" + dId).selectable();
 			$(this).addClass('sheetdefault').siblings().removeClass('sheetdefault');
-            
 
 			return false;
 		});
-        var that=this;
-		$('.addSheet').click(function() {
-			box.html('');
-			that.createContent();			 
-			var dd = $("<dd class='sheet sheetdefault' id=sheet" + i + ">sheet" + i + "</dd>");
-			var curId = $(".sheetdefault").attr('id');
-			curId=curId.replace('sheet','');
-            curId=parseInt(curId);
-            
-			$("#sheet" + curId).removeClass('sheetdefault');
+		i++;
+		dd.on('dblclick', function() {
+			var that = $(this);
+			var ev = ev || window.event;
+			var tdWidth = that.width();
+			var tdHeight = that.height();
+			var tdText = that.text();
 
-			var neId = parseInt(curId) + 1;
-//			$("#dataTable"+neId).show();
-//			fillTd(neId);
-           
-			$('.sheetqueuedl').append(dd);
+			var stInput = $("<input type='text' class='stInput'  value='" + tdText + "'></input>");
 
+			stInput.width(tdWidth - 2);
+			stInput.height(tdHeight - 2);
 
-			$("#dataTable" + neId).selectable();
+			that.html(stInput);
+			$('.stInput').blur(function() {
+				var content = $('.stInput').val();
 
+				if(tdText == content) {
 
-			dd.on('click', function() {
+					$(this).parent().html(content);
 
+				} else {
 
-				var dId = $(this).attr('id');
-				dId = dId.replace('sheet','');
-				dId = parseInt(dId);
-				$("#dataTable" + dId).selectable();
-				$(this).addClass('sheetdefault').siblings().removeClass('sheetdefault');
-				 
-				 
+					$(this).parent().html(content);
 
+				}
+				$('.stInput').remove();
 
-
-				return false;
+				event.stopPropagation();
 			});
-			i++;
-           
-
+            $(".stInput").keyup(function(ev) {
+				if(ev.keyCode == 13) {
+					$('.stInput').blur();
+				}
+			});
 		});
 
-
+	});
 }
 
-iTable.prototype.sheetMove=function(){
-		var lsheet=$('.lsheet');
-    	var rsheet=$('.rsheet');
-    	var sDl=$(".sheetqueuedl");
-	    var num=0;
-	    
-	    
-    	rsheet.click(function(){
-        num==sDl.find('dd').length-1?num=sDl.find('dd').length-1:num++;
- 		toNavPos();
-    	});
-    	
-    	lsheet.click(function(){   		   		  				
-    		num==0?num=0:num--;
-     		toNavPos();
-    	});
-    	
-    	function toNavPos(){
-		sDl.stop().animate({'margin-left':-num*80},100);
+iTable.prototype.sheetMove = function() {
+	var lsheet = $('.lsheet');
+	var rsheet = $('.rsheet');
+	var sDl = $(".sheetqueuedl");
+	var num = 0;
+
+	rsheet.click(function(){
+		num == sDl.find('dd').length - 1 ? num = sDl.find('dd').length - 1 : num++;
+		toNavPos();
+		
+	});
+
+	lsheet.click(function(){
+		num == 0 ? num = 0 : num--;
+		toNavPos();
+	});
+
+	function toNavPos(){
+		sDl.stop().animate({
+			'margin-left': -num * 80
+		}, 100);
 	}
 }
 
 //sheet移动
-
-
-
 
 //Input光标
 function set_text_value_position(obj, spos) {
@@ -870,147 +875,145 @@ function removeDuplicatedItem(ar) {
 }
 //获取key个数
 function JSONLength(obj) {
-var size = 0, key;
-for (key in obj) {
-if (obj.hasOwnProperty(key)) size++;
-}
-return size;
+	var size = 0,
+		key;
+	for(key in obj) {
+		if(obj.hasOwnProperty(key)) size++;
+	}
+	return size;
 };
 
-function removeUied(){
-//	$('.ui-selected').find('tr').removeClass('ui-selected');
-//  $('.ui-selected').find('tbody').removeClass('ui-selected');
-//   $('.ui-selected').find('tbody').removeClass('ui-selectee');
-//  $('.ui-selected').find('tbody').removeAttr('class');
-    $('.ui-selectable').find('tbody').removeAttr('class');
-    $('.ui-selectable').find('tr').removeAttr('class');
+function removeUied() {
+	//	$('.ui-selected').find('tr').removeClass('ui-selected');
+	//  $('.ui-selected').find('tbody').removeClass('ui-selected');
+	//   $('.ui-selected').find('tbody').removeClass('ui-selectee');
+	//  $('.ui-selected').find('tbody').removeAttr('class');
+	$('.ui-selectable').find('tbody').removeAttr('class');
+	$('.ui-selectable').find('tr').removeAttr('class');
 }
 
-var settings={
-	rowCount:100,
-	cellCount:26,
-	tIndex:1,
-	fontFamily:{
-		'黑体':'font_Black',
-		'宋体':'font_Song',
-		'楷体':'font_Kai',
-		'微软雅黑':'font_Mirco'
+var settings = {
+	rowCount: 100,
+	cellCount: 26,
+	fontFamily: {
+		'黑体': 'font_Black',
+		'宋体': 'font_Song',
+		'楷体': 'font_Kai',
+		'微软雅黑': 'font_Mirco'
 
 	},
-	fontSize:{
-		'10':'fsize_10',
-		'12':'fsize_12',
-		'14':'fsize_14',
-		'16':'fsize_16',
-		'18':'fsize_18',
-		'20':'fsize_20'
+	fontSize: {
+		'10': 'fsize_10',
+		'12': 'fsize_12',
+		'14': 'fsize_14',
+		'16': 'fsize_16',
+		'18': 'fsize_18',
+		'20': 'fsize_20'
 	},
-	fontBold:1,
-	fontColor:{
-		'red':{
-			    'tdclass':'ffc_red',
-			    'fclass' :'fc_red'
-			  },
-		'yellow':{
-			'tdclass':'ffc_yellow',
-			'fclass':'fc_yellow',
-		}
-		,
-		'green':{
-			'tdclass':'ffc_green',
-			'fclass':'fc_green',
+	fontBold: 1,
+	fontColor: {
+		'red': {
+			'tdclass': 'ffc_red',
+			'fclass': 'fc_red'
 		},
-		'orange':{
-			'tdclass':'ffc_orange',
-			'fclass':'fc_orange',
+		'yellow': {
+			'tdclass': 'ffc_yellow',
+			'fclass': 'fc_yellow',
 		},
-		'blue':{
-			'tdclass':'ffc_blue',
-			'fclass':'fc_blue',
+		'green': {
+			'tdclass': 'ffc_green',
+			'fclass': 'fc_green',
 		},
-		'aqua':{
-			'tdclass':'ffc_aqua',
-			'fclass':'fc_aqua',
+		'orange': {
+			'tdclass': 'ffc_orange',
+			'fclass': 'fc_orange',
 		},
-		'purple':{
-			'tdclass':'ffc_purple',
-			'fclass':'fc_purple',
+		'blue': {
+			'tdclass': 'ffc_blue',
+			'fclass': 'fc_blue',
 		},
-		'black':{
-			'tdclass':'ffc_black',
-			'fclass':'fc_black',
+		'aqua': {
+			'tdclass': 'ffc_aqua',
+			'fclass': 'fc_aqua',
 		},
-		'white':{
-			'tdclass':'ffc_white',
-			'fclass':'fc_white',
+		'purple': {
+			'tdclass': 'ffc_purple',
+			'fclass': 'fc_purple',
 		},
-		'grey':{
-			'tdclass':'ffc_grey',
-			'fclass':'fc_grey',
-		}
-	},
-	bgColor:{
-		'red':{
-			    'tdclass':'ffill_red',
-			    'fclass' :'fill_red'
-			  },
-		'yellow':{
-			'tdclass':'ffill_yellow',
-			'fclass':'fill_yellow',
-		}
-		,
-		'green':{
-			'tdclass':'ffill_green',
-			'fclass':'fill_green',
+		'black': {
+			'tdclass': 'ffc_black',
+			'fclass': 'fc_black',
 		},
-		'orange':{
-			'tdclass':'ffill_orange',
-			'fclass':'fill_orange',
+		'white': {
+			'tdclass': 'ffc_white',
+			'fclass': 'fc_white',
 		},
-		'blue':{
-			'tdclass':'ffill_blue',
-			'fclass':'fill_blue',
-		},
-		'aqua':{
-			'tdclass':'ffill_aqua',
-			'fclass':'fill_aqua',
-		},
-		'purple':{
-			'tdclass':'ffill_purple',
-			'fclass':'fill_purple',
-		},
-		'black':{
-			'tdclass':'ffill_black',
-			'fclass':'fill_black',
-		},
-		'white':{
-			'tdclass':'ffill_white',
-			'fclass':'fill_white',
-		},
-		'grey':{
-			'tdclass':'ffill_grey',
-			'fclass':'fill_grey',
+		'grey': {
+			'tdclass': 'ffc_grey',
+			'fclass': 'fc_grey',
 		}
 	},
-	textAlign:{
-		'left':{
-			'tdclass':'falign_left',
-			'fclass':'ffalign_left',
+	bgColor: {
+		'red': {
+			'tdclass': 'ffill_red',
+			'fclass': 'fill_red'
 		},
-		'center':{
-			'tdclass':'falign_center',
-			'fclass':'ffalign_center',
+		'yellow': {
+			'tdclass': 'ffill_yellow',
+			'fclass': 'fill_yellow',
 		},
-		'right':{
-			'tdclass':'falign_right',
-			'fclass':'ffalign_right',
+		'green': {
+			'tdclass': 'ffill_green',
+			'fclass': 'fill_green',
+		},
+		'orange': {
+			'tdclass': 'ffill_orange',
+			'fclass': 'fill_orange',
+		},
+		'blue': {
+			'tdclass': 'ffill_blue',
+			'fclass': 'fill_blue',
+		},
+		'aqua': {
+			'tdclass': 'ffill_aqua',
+			'fclass': 'fill_aqua',
+		},
+		'purple': {
+			'tdclass': 'ffill_purple',
+			'fclass': 'fill_purple',
+		},
+		'black': {
+			'tdclass': 'ffill_black',
+			'fclass': 'fill_black',
+		},
+		'white': {
+			'tdclass': 'ffill_white',
+			'fclass': 'fill_white',
+		},
+		'grey': {
+			'tdclass': 'ffill_grey',
+			'fclass': 'fill_grey',
+		}
+	},
+	textAlign: {
+		'left': {
+			'tdclass': 'falign_left',
+			'fclass': 'ffalign_left',
+		},
+		'center': {
+			'tdclass': 'falign_center',
+			'fclass': 'ffalign_center',
+		},
+		'right': {
+			'tdclass': 'falign_right',
+			'fclass': 'ffalign_right',
 		}
 	}
-	
+
 }
- 
-var box=$('.box'); 
-var t=new iTable(box,settings);
+
+var box = $('.box');
+var t = new iTable(box, settings);
 
 t.createContent();
 t.createXaxis();
