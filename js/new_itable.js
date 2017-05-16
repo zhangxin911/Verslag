@@ -25,7 +25,7 @@ iTable.prototype.createContent = function(tid) {
 		var tr = this.createTr();
 		$("#iTable" + tId).append(tr);
 		for(var j = 0; j < this.cellCount; j++) {
-			var td = this.createTd('', '');
+			var td = this.createTd('','');
 
 			tr.append(td);
 		}
@@ -38,7 +38,7 @@ iTable.prototype.createTr = function() {
 	var tr = $("<tr></tr>");
 	return tr;
 }
-iTable.prototype.createTd = function(className, tdValue) {
+iTable.prototype.createTd = function(className,tdValue) {
 
 	var td = $("<td class=" + className + ">" + tdValue + "</td>")
 	return td;
@@ -60,18 +60,15 @@ iTable.prototype.createXaxis = function() {
 		tr.appendTo($(".titleTable"));
 
 		for(var j = 0; j < this.cellCount; j++) {
-			var th = $("<td>" + String.fromCharCode((65 + j)) + "</td>");
+			var td = $("<td>" + String.fromCharCode((65 + j)) + "</td>");
 			//              th.css({
 			//              	'max-width':firTds[j].offsetWidth,
 			//              	'min-width':firTds[j].offsetWidth
 			//              })
-			th.appendTo(tr);
+			td.appendTo(tr);
 		}
 
 	}
-	//	    for(j=0;j<firTds.length;j++){
-	//	   	  xTdWidth.push(firTds[j].offsetWidth);
-	//	    }
 
 }
 iTable.prototype.createYaxis = function() {
@@ -239,6 +236,7 @@ iTable.prototype.fillTd = function(tid) {
 
 			$('#iTable' + tid + ' tr td').click(function() {
 				$('.tdInput').blur();
+				 
 			});
 
 		});
@@ -251,7 +249,8 @@ iTable.prototype.fillTd = function(tid) {
 			//		 	
 			$(".dataTable tr td").removeAttr('chosed');
 			$(this).attr('chosed', 'clickone');
-
+			
+            
 		});
 
 	});
@@ -507,8 +506,9 @@ iTable.prototype.textAlign = function() {
 }
 
 //合并单元格
-iTable.prototype.mergeTd = function() {
+iTable.prototype.mergeTd = function(){
 	var mergeBtn = this.createSimpleMenu('mergeBtn');
+	var that=this;
 	mergeBtn.on('click', function() {
 		var $t = $('.dataTable');
 		if($("table", $t).length > 0) {
@@ -584,22 +584,26 @@ iTable.prototype.mergeTd = function() {
 			var cidx = $(this).parent().children("th,td").index(this);
 
 			var tWidth;
-			cnum > 3 ? tWidth = 103 : tWidth = 102;
+//			cnum > 3 ? tWidth = 103 : tWidth = 102;
 			if(rmin <= ridx && ridx <= rmax && cmin <= cidx && cidx <= cmax) $(this).addClass(sigDel);
 
 			if(ridx == rmin && cidx == cmin) $(this).removeClass(sigDel).attr({
 				rowspan: rnum,
 				colspan: cnum
-			}).width(cnum * tWidth);
+			});
 
 			if($(this).attr("rowspan") == 1) $(this).removeAttr("rowspan");
 			if($(this).attr("colspan") == 1) $(this).removeAttr("colspan");
 		}).remove("." + sigDel);
+		 that.setIndex();
 	});
+	
+	
 }
 //拆分单元格
 iTable.prototype.splitTd = function() {
 	var splitBtn = this.createSimpleMenu('splitBtn');
+	var that=this;
 	splitBtn.on('click', function() {
 		var $t = $(".dataTable");
 
@@ -656,6 +660,7 @@ iTable.prototype.splitTd = function() {
 
 		// 重新获取以取到删者并删之
 		$("th,td", $t).remove("." + sigDel);
+		 that.setIndex();
 	});
 
 }
@@ -750,7 +755,7 @@ iTable.prototype.addSheet = function() {
 		    that.fillTd('1');
 		    $("#iTable1").selectable();
 			return false;
-		});
+	});
 
 	
 	$('.addSheet').click(function() {
@@ -845,6 +850,43 @@ iTable.prototype.sheetMove = function() {
 		}, 100);
 	}
 }
+iTable.prototype.setIndex = function() {
+	var offsetLeftArray = new Array();
+	var cell; // 单元格Dom  
+	var col; // 单元格实际所在列  
+	var cellStr; // 每个cell以row,col,rowSpan,colSpan,value形式  
+	var cellStrArray = [];
+	var objTab = document.getElementById('iTable1');
+     
+	// 遍历第一次取出offsetLeft集合  
+	for(var i = 0; i < objTab.rows.length; i++) {
+		for(var j = 0; j < objTab.rows[i].cells.length; j++) {
+			cell = objTab.rows[i].cells[j];
+			if(offsetLeftArray.contains(cell.offsetLeft) == -1)
+				offsetLeftArray.push(cell.offsetLeft);
+		}
+	}
+
+	offsetLeftArray.sort(function(x, y) {
+		return parseInt(x) - parseInt(y);
+	});
+
+	// 遍历第二次生成cellStrArray  
+	for(var i = 0; i < objTab.rows.length; i++) {
+		for(var j = 0; j < objTab.rows[i].cells.length; j++) {
+			cell = objTab.rows[i].cells[j];
+
+			col = offsetLeftArray.contains(cell.offsetLeft);
+			cellStr = i + ',' + col + ',' + cell.rowSpan + ',' + cell.colSpan;
+			cellStrArray.push(cellStr);
+			cell.setAttribute('rows', i+1);
+			cell.setAttribute('cols', col+1);
+		}
+	}
+
+//	console.log(cellStrArray);
+
+}
 
 //Input光标
 function set_text_value_position(obj, spos) {
@@ -883,8 +925,8 @@ function removeDuplicatedItem(ar) {
 	return ret
 
 }
-//获取key个数
-function JSONLength(obj) {
+//
+function JSONLength(obj){
 	var size = 0,
 		key;
 	for(key in obj) {
@@ -901,6 +943,34 @@ function removeUied() {
 	$('.ui-selectable').find('tbody').removeAttr('class');
 	$('.ui-selectable').find('tr').removeAttr('class');
 }
+
+function IntToChr(index){
+	    var start=65;
+        var str='';
+       
+        if(Math.floor(index/26)>0){ 
+           str+=IntToChr(Math.floor(index/26)-1);
+        } 
+        str+=String.fromCharCode(index%26+start);
+        console.log(str);
+        return str;
+        
+         
+}
+
+function containsArray(array, obj) {
+	for(var i = 0; i < array.length; i++) {
+		if(array[i] == obj) {
+			return i;
+			break;
+		}
+	}
+	return -1;
+}
+Array.prototype.contains = function(obj) {
+	return containsArray(this, obj);
+}
+
 
 var settings = {
 	rowCount: 100,
@@ -1048,4 +1118,6 @@ t.splitTd();
 t.textAlign();
 t.addSheet();
 t.sheetMove();
+t.setIndex();
 $("#iTable1").selectable();
+IntToChr(29);
