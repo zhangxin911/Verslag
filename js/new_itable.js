@@ -923,15 +923,35 @@ iTable.prototype.remakeTr = function(obj,rowNum) {
 		$("#iTable1").find('tr:eq('+rowNum+')').after(tr);
 		
 		
-		_self.setIndex();
+		
 		var ltr=$("<tr></tr>");
-		var ltd =$("<td>" + rowNum + "</td>");
+		var ltd =$("<td></td>");
 		ltr.append(ltd);
 		$('.leftTable').find('tr:eq('+rowNum+')').after(ltr);
-		
+	    _self.remarkLeft($('.leftTable'),rowNum);	
+	    _self.setIndex();
+	});
+	delTr.on('click',function(){
+		$('.leftTable').find('tr:eq('+rowNum+')').remove();
+		$("#iTable1").find('tr:eq('+rowNum+')').remove();
+		_self.remarkLeft($('.leftTable'),rowNum);	
+		_self.setIndex();
 	});
 	
+	
 }
+iTable.prototype.remarkLeft=function(obj,startNum){
+	   var leftTb=obj;
+	   var trs=$(leftTb[0]).find('tr td');
+	   var trLength=trs.length;
+	  for(var i=startNum;i<trLength;i++){
+	  	$(trs[i]).text(i+1);
+	  }
+	
+	
+}
+
+
 
 //Input光标
 function set_text_value_position(obj, spos) {
