@@ -62,13 +62,14 @@
 			border-bottom:1px solid #AAAAAA;
 			border-right:1px solid #AAAAAA;
 			min-width:100px;
+			
 		}
 		.leftTable td{
 			height:30px;
 			width:63px;
 			border-bottom:1px solid #AAAAAA;
 			border-right:1px solid #AAAAAA
-			
+			 
 		}
 		.leftTable tr{
 			background:#DDDDDD;
@@ -839,3 +840,24 @@
  	margin:0;
  	outline: none;
  }
+ .trBtn{
+ 	 float: right;
+ 	 display: inline;
+ 	 z-index:999;
+ }
+ .trBtn span{
+ 	float: right;
+ 	padding:2px;
+ 	cursor: pointer;
+ 	font-size:16px; 
+ }
+.addTr{
+	 
+	background:#FFFFFF;
+	color:#57A957;
+}
+.delTr{
+	 
+	background:#FFFFFF;
+	color:#CD0A0A;
+}

@@ -25,7 +25,7 @@ iTable.prototype.createContent = function(tid) {
 		var tr = this.createTr();
 		$("#iTable" + tId).append(tr);
 		for(var j = 0; j < this.cellCount; j++) {
-			var td = this.createTd('','');
+			var td = this.createTd('', '');
 
 			tr.append(td);
 		}
@@ -38,9 +38,9 @@ iTable.prototype.createTr = function() {
 	var tr = $("<tr></tr>");
 	return tr;
 }
-iTable.prototype.createTd = function(className,tdValue) {
+iTable.prototype.createTd = function(className, tdValue) {
 
-	var td = $("<td class=" + className + ">" + tdValue + "</td>")
+	var td = $("<td class=" + className + ">" + tdValue + "</td>");
 	return td;
 }
 iTable.prototype.createXaxis = function() {
@@ -182,14 +182,14 @@ iTable.prototype.tableScroll = function() {
 //填写表格
 iTable.prototype.fillTd = function(tid) {
 
-    var tid;
+	var tid;
 
 	if(tid != undefined) {
 		tid = tid;
 	} else {
 		tid = 1;
 	}
-
+	var _self = this;
 	$('#iTable' + tid).find('tr td').each(function() {
 
 		$(this).dblclick(function() {
@@ -204,8 +204,8 @@ iTable.prototype.fillTd = function(tid) {
 
 			var tdInput = $("<input type='text'  id='tdInput' class='tdInput'  value='" + tdText + "'></input>");
 
-			tdInput.width(tdWidth);
-			tdInput.height(tdHeight);
+			tdInput.width(tdWidth - 2);
+			tdInput.height(tdHeight - 2);
 
 			that.html(tdInput);
 
@@ -236,7 +236,7 @@ iTable.prototype.fillTd = function(tid) {
 
 			$('#iTable' + tid + ' tr td').click(function() {
 				$('.tdInput').blur();
-				 
+
 			});
 
 		});
@@ -246,11 +246,16 @@ iTable.prototype.fillTd = function(tid) {
 			var tr = $(this).parent();
 			$('.dataTable').find('td').removeClass('ui-selected');
 			$(this).addClass('ui-selected');
-			//		 	
+
 			$(".dataTable tr td").removeAttr('chosed');
 			$(this).attr('chosed', 'clickone');
-			
-            
+			var xCoo = Number($(this).attr('cols')),
+				yCoo = Number($(this).attr('rows')) - 1;
+
+			console.log($(this).attr('rowspan'), $(this).attr('colspan'));
+			var target = $(".yOrder table").find('tr:eq(' + yCoo + ')');
+			_self.remakeTr(target,yCoo);
+
 		});
 
 	});
@@ -293,8 +298,6 @@ iTable.prototype.fontFamily = function() {
 
 	sel_a.on('click', function() {
 
-		removeUied();
-
 		className = $(this).attr('class');
 		$('.ui-selected').addClass(className);
 
@@ -309,6 +312,7 @@ iTable.prototype.fontFamily = function() {
 		var arr = curClass.split(' ');
 		curClass = removeDuplicatedItem(arr);
 		selThem = $('.ui-selected');
+		removeUied();
 		$('.ui-selected').removeAttr('class');
 
 		selThem.addClass(curClass);
@@ -336,8 +340,6 @@ iTable.prototype.fontSize = function() {
 
 	sel_a.on('click', function() {
 
-		removeUied();
-
 		className = $(this).attr('class');
 		$('.ui-selected').addClass(className);
 
@@ -352,6 +354,7 @@ iTable.prototype.fontSize = function() {
 		var arr = curClass.split(' ');
 		curClass = removeDuplicatedItem(arr);
 		selThem = $('.ui-selected');
+		removeUied();
 		$('.ui-selected').removeAttr('class');
 
 		selThem.addClass(curClass);
@@ -506,9 +509,9 @@ iTable.prototype.textAlign = function() {
 }
 
 //合并单元格
-iTable.prototype.mergeTd = function(){
+iTable.prototype.mergeTd = function() {
 	var mergeBtn = this.createSimpleMenu('mergeBtn');
-	var that=this;
+	var that = this;
 	mergeBtn.on('click', function() {
 		var $t = $('.dataTable');
 		if($("table", $t).length > 0) {
@@ -584,7 +587,7 @@ iTable.prototype.mergeTd = function(){
 			var cidx = $(this).parent().children("th,td").index(this);
 
 			var tWidth;
-//			cnum > 3 ? tWidth = 103 : tWidth = 102;
+			//			cnum > 3 ? tWidth = 103 : tWidth = 102;
 			if(rmin <= ridx && ridx <= rmax && cmin <= cidx && cidx <= cmax) $(this).addClass(sigDel);
 
 			if(ridx == rmin && cidx == cmin) $(this).removeClass(sigDel).attr({
@@ -595,15 +598,14 @@ iTable.prototype.mergeTd = function(){
 			if($(this).attr("rowspan") == 1) $(this).removeAttr("rowspan");
 			if($(this).attr("colspan") == 1) $(this).removeAttr("colspan");
 		}).remove("." + sigDel);
-		 that.setIndex();
+		that.setIndex();
 	});
-	
-	
+
 }
 //拆分单元格
 iTable.prototype.splitTd = function() {
 	var splitBtn = this.createSimpleMenu('splitBtn');
-	var that=this;
+	var that = this;
 	splitBtn.on('click', function() {
 		var $t = $(".dataTable");
 
@@ -660,7 +662,7 @@ iTable.prototype.splitTd = function() {
 
 		// 重新获取以取到删者并删之
 		$("th,td", $t).remove("." + sigDel);
-		 that.setIndex();
+		that.setIndex();
 	});
 
 }
@@ -715,7 +717,7 @@ iTable.prototype.createCellMenu = function(dClass, className, menus) {
 	for(var index in menus) {
 		arr1.push(menus[index].tdclass);
 		arr2.push(menus[index].fclass);
-		//       	selectTd=$('<td class="'+menus[index].tdclass+'"><a class="'+menus[index].fclass+'"></a></td>');	    
+	
 	}
 	for(var i = 0; i < arr1.length + 1; i++) {
 		selectTd = $('<td class="' + arr1[i] + '"><a class="' + arr2[i] + '"></a></td>');
@@ -750,14 +752,13 @@ iTable.prototype.addSheet = function() {
 	var that = this;
 	$('#sheet1').on('click', function() {
 
-			$(this).addClass('sheetdefault').siblings().removeClass('sheetdefault');
-		    that.createContent('1');
-		    that.fillTd('1');
-		    $("#iTable1").selectable();
-			return false;
+		$(this).addClass('sheetdefault').siblings().removeClass('sheetdefault');
+		that.createContent('1');
+		that.fillTd('1');
+		$("#iTable1").selectable();
+		return false;
 	});
 
-	
 	$('.addSheet').click(function() {
 		box.empty();
 
@@ -850,6 +851,7 @@ iTable.prototype.sheetMove = function() {
 		}, 100);
 	}
 }
+//设置坐标
 iTable.prototype.setIndex = function() {
 	var offsetLeftArray = new Array();
 	var cell; // 单元格Dom  
@@ -857,7 +859,7 @@ iTable.prototype.setIndex = function() {
 	var cellStr; // 每个cell以row,col,rowSpan,colSpan,value形式  
 	var cellStrArray = [];
 	var objTab = document.getElementById('iTable1');
-     
+
 	// 遍历第一次取出offsetLeft集合  
 	for(var i = 0; i < objTab.rows.length; i++) {
 		for(var j = 0; j < objTab.rows[i].cells.length; j++) {
@@ -877,15 +879,58 @@ iTable.prototype.setIndex = function() {
 			cell = objTab.rows[i].cells[j];
 
 			col = offsetLeftArray.contains(cell.offsetLeft);
-			cellStr = i + ',' + col + ',' + cell.rowSpan + ',' + cell.colSpan;
+			cellStr = i + ',' + col;
 			cellStrArray.push(cellStr);
-			cell.setAttribute('rows', i+1);
-			cell.setAttribute('cols', col+1);
+			var coo = (i + 1) + ',' + (col + 1);
+			var coo = cellStrArray[j];
+			cell.setAttribute('rows', i + 1);
+			cell.setAttribute('cols', col + 1);
 		}
 	}
 
-//	console.log(cellStrArray);
+}
+//创建操作行按钮
+iTable.prototype.remakeTr = function(obj,rowNum) {
+	var btnBox = $('<div class="trBtn"></div>');
+	var addTr = $('<span class="addTr">+</span>');
+	var delTr = $('<span class="delTr">-</span>');
+	var _self=this;
+	
+	
+	var targetTd = obj.children(0);
+	var otherTd = obj.siblings().children(0);
+	btnBox.append(addTr);
+	btnBox.append(delTr);
 
+   
+	for(var i = 0; i < otherTd.length; i++) {
+        $(otherTd[i]).children(0).remove();
+	}
+	
+    if(targetTd.children(0)){
+    	targetTd.children(0).remove();
+    }else{
+    	targetTd.append(btnBox);
+    }
+    
+	targetTd.append(btnBox);
+	addTr.on('click',function(){
+		 var tr=_self.createTr();
+		 for(var j = 0; j < _self.cellCount; j++) {
+			var td = _self.createTd('','');
+			tr.append(td);
+		}
+		$("#iTable1").find('tr:eq('+rowNum+')').after(tr);
+		
+		
+		_self.setIndex();
+		var ltr=$("<tr></tr>");
+		var ltd =$("<td>" + rowNum + "</td>");
+		ltr.append(ltd);
+		$('.leftTable').find('tr:eq('+rowNum+')').after(ltr);
+		
+	});
+	
 }
 
 //Input光标
@@ -926,7 +971,7 @@ function removeDuplicatedItem(ar) {
 
 }
 //
-function JSONLength(obj){
+function JSONLength(obj) {
 	var size = 0,
 		key;
 	for(key in obj) {
@@ -936,26 +981,21 @@ function JSONLength(obj){
 };
 
 function removeUied() {
-	//	$('.ui-selected').find('tr').removeClass('ui-selected');
-	//  $('.ui-selected').find('tbody').removeClass('ui-selected');
-	//   $('.ui-selected').find('tbody').removeClass('ui-selectee');
-	//  $('.ui-selected').find('tbody').removeAttr('class');
 	$('.ui-selectable').find('tbody').removeAttr('class');
 	$('.ui-selectable').find('tr').removeAttr('class');
 }
 
-function IntToChr(index){
-	    var start=65;
-        var str='';
-       
-        if(Math.floor(index/26)>0){ 
-           str+=IntToChr(Math.floor(index/26)-1);
-        } 
-        str+=String.fromCharCode(index%26+start);
-        console.log(str);
-        return str;
-        
-         
+function IntToChr(index) {
+	var start = 65;
+	var str = '';
+
+	if(Math.floor(index / 26) > 0) {
+		str += IntToChr(Math.floor(index / 26) - 1);
+	}
+	str += String.fromCharCode(index % 26 + start);
+
+	return str;
+
 }
 
 function containsArray(array, obj) {
@@ -970,7 +1010,6 @@ function containsArray(array, obj) {
 Array.prototype.contains = function(obj) {
 	return containsArray(this, obj);
 }
-
 
 var settings = {
 	rowCount: 100,
