@@ -840,12 +840,12 @@
  	margin:0;
  	outline: none;
  }
- .trBtn{
+ .trBtn,.colBtn{
  	 float: right;
  	 display: inline;
  	 z-index:999;
  }
- .trBtn span{
+ .trBtn span,.colBtn span{
  	float: right;
  	padding:2px;
  	cursor: pointer;
@@ -858,6 +858,14 @@
 }
 .delTr{
 	 
+	background:#FFFFFF;
+	color:#CD0A0A;
+}
+.addCol{
+	background:#FFFFFF;
+	color:#57A957;
+}
+.delCol{
 	background:#FFFFFF;
 	color:#CD0A0A;
 }

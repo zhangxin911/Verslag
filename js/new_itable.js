@@ -249,12 +249,14 @@ iTable.prototype.fillTd = function(tid) {
 
 			$(".dataTable tr td").removeAttr('chosed');
 			$(this).attr('chosed', 'clickone');
-			var xCoo = Number($(this).attr('cols')),
+			var xCoo = Number($(this).attr('cols')) - 1,
 				yCoo = Number($(this).attr('rows')) - 1;
 
-			console.log($(this).attr('rowspan'), $(this).attr('colspan'));
-			var target = $(".yOrder table").find('tr:eq(' + yCoo + ')');
-			_self.remakeTr(target,yCoo);
+			//console.log($(this).attr('rowspan'), $(this).attr('colspan'));
+			var targetY = $(".yOrder table").find('tr:eq(' + yCoo + ')');
+			var targetX = $(".xOrder table").find('tr td:eq(' + xCoo + ')');
+			_self.remakeRow(targetY, yCoo);
+			_self.remakeCol(targetX, xCoo);
 
 		});
 
@@ -717,7 +719,7 @@ iTable.prototype.createCellMenu = function(dClass, className, menus) {
 	for(var index in menus) {
 		arr1.push(menus[index].tdclass);
 		arr2.push(menus[index].fclass);
-	
+
 	}
 	for(var i = 0; i < arr1.length + 1; i++) {
 		selectTd = $('<td class="' + arr1[i] + '"><a class="' + arr2[i] + '"></a></td>');
@@ -852,13 +854,22 @@ iTable.prototype.sheetMove = function() {
 	}
 }
 //设置坐标
-iTable.prototype.setIndex = function() {
+iTable.prototype.setIndex = function(){
 	var offsetLeftArray = new Array();
 	var cell; // 单元格Dom  
 	var col; // 单元格实际所在列  
 	var cellStr; // 每个cell以row,col,rowSpan,colSpan,value形式  
 	var cellStrArray = [];
-	var objTab = document.getElementById('iTable1');
+	var t=this.getCurTable();
+//	var tid;
+//	if(!!tid){
+//		tid=id
+//	}else{
+//		tid=(t.attr('id')).replace('iTable','');
+//	}
+    var id=(t.attr('id')).replace('iTable','');
+
+	var objTab = document.getElementById('iTable'+id);
 
 	// 遍历第一次取出offsetLeft集合  
 	for(var i = 0; i < objTab.rows.length; i++) {
@@ -890,68 +901,115 @@ iTable.prototype.setIndex = function() {
 
 }
 //创建操作行按钮
-iTable.prototype.remakeTr = function(obj,rowNum) {
+iTable.prototype.remakeRow = function(obj, rowNum) {
 	var btnBox = $('<div class="trBtn"></div>');
 	var addTr = $('<span class="addTr">+</span>');
 	var delTr = $('<span class="delTr">-</span>');
-	var _self=this;
-	
-	
+	var _self = this;
+	var t = this.getCurTable();
+	var id = (t.attr('id')).replace('iTable', '');
+
 	var targetTd = obj.children(0);
 	var otherTd = obj.siblings().children(0);
 	btnBox.append(addTr);
 	btnBox.append(delTr);
 
-   
 	for(var i = 0; i < otherTd.length; i++) {
-        $(otherTd[i]).children(0).remove();
+		$(otherTd[i]).children(0).remove();
 	}
-	
-    if(targetTd.children(0)){
-    	targetTd.children(0).remove();
-    }else{
-    	targetTd.append(btnBox);
-    }
-    
+
+	if(targetTd.children(0)) {
+		targetTd.children(0).remove();
+	} else {
+		targetTd.append(btnBox);
+	}
+
 	targetTd.append(btnBox);
-	addTr.on('click',function(){
-		 var tr=_self.createTr();
-		 for(var j = 0; j < _self.cellCount; j++) {
-			var td = _self.createTd('','');
+	addTr.on('click', function() {
+		var tr = _self.createTr();
+		for(var j = 0; j < _self.cellCount; j++) {
+			var td = _self.createTd('', '22');
 			tr.append(td);
 		}
-		$("#iTable1").find('tr:eq('+rowNum+')').after(tr);
-		
-		
-		
-		var ltr=$("<tr></tr>");
-		var ltd =$("<td></td>");
+		$("#iTable" + id).find('tr:eq(' + rowNum + ')').after(tr);
+
+		var ltr = $("<tr></tr>");
+		var ltd = $("<td></td>");
 		ltr.append(ltd);
-		$('.leftTable').find('tr:eq('+rowNum+')').after(ltr);
-	    _self.remarkLeft($('.leftTable'),rowNum);	
-	    _self.setIndex();
-	});
-	delTr.on('click',function(){
-		$('.leftTable').find('tr:eq('+rowNum+')').remove();
-		$("#iTable1").find('tr:eq('+rowNum+')').remove();
-		_self.remarkLeft($('.leftTable'),rowNum);	
+		$('.leftTable').find('tr:eq(' + rowNum + ')').after(ltr);
+		_self.remarkLeft($('.leftTable'), rowNum);
 		_self.setIndex();
+		_self.fillTd(id);
 	});
-	
-	
+	delTr.on('click', function() {
+		$('.leftTable').find('tr:eq(' + rowNum + ')').remove();
+		$("#iTable" + id).find('tr:eq(' + rowNum + ')').remove();
+		_self.remarkLeft($('.leftTable'), rowNum);
+		_self.setIndex();
+		_self.fillTd(id);
+	});
+
 }
-iTable.prototype.remarkLeft=function(obj,startNum){
-	   var leftTb=obj;
-	   var trs=$(leftTb[0]).find('tr td');
-	   var trLength=trs.length;
-	  for(var i=startNum;i<trLength;i++){
-	  	$(trs[i]).text(i+1);
-	  }
-	
-	
+//创建列操作按钮
+iTable.prototype.remakeCol = function(obj, rowNum) {
+	var btnBox = $('<div class="colBtn"></div>');
+	var addCol = $('<span class="addCol">+</span>');
+	var delCol = $('<span class="delCol">-</span>');
+	var _self = this;
+	var t = this.getCurTable();
+	var id = (t.attr('id')).replace('iTable', '');
+
+	var targetTd = obj;
+	var otherTd = obj.parent().children(0);
+	btnBox.append(addCol);
+	btnBox.append(delCol);
+
+	for(var i = 0; i < otherTd.length; i++) {
+		$(otherTd[i]).children(0).remove();
+	}
+
+	if(targetTd.children(0)) {
+		targetTd.children(0).remove();
+	} else {
+		targetTd.append(btnBox);
+	}
+	targetTd.append(btnBox);
+
+	addCol.on('click', function() {
+
+		for(var j = 0; j < _self.rowCount; j++) {
+			var td = _self.createTd('', 'test');
+			//tr.append(td);
+			
+			$("#iTable"+id).find('tr:eq(' + j + ') td:eq(' + rowNum + ')').after(td);
+			
+//		    $("#iTable" + id).find('tr:eq(' + rowNum + ')').remove();
+		}
+		var ttd = $("<td></td>");
+		$('.titleTable').find('tr:eq(0) td:eq(' + rowNum + ')').after(ttd);
+		_self.remarkTop($('.titleTable'), rowNum);
+		_self.setIndex();
+		_self.fillTd(id);
+	});
+}
+iTable.prototype.remarkTop = function(obj, startNum) {
+	var TopTb = obj;
+	var trs = $(TopTb[0]).find('tr td');
+	var trLength = trs.length;
+	//console.log(trLength);
+	for(var i = startNum; i < trLength; i++) {
+		$(trs[i]).text(i + 1);
+	}
 }
 
-
+iTable.prototype.remarkLeft = function(obj, startNum) {
+	var leftTb = obj;
+	var trs = $(leftTb[0]).find('tr td');
+	var trLength = trs.length;
+	for(var i = startNum; i < trLength; i++) {
+		$(trs[i]).text(i + 1);
+	}
+}
 
 //Input光标
 function set_text_value_position(obj, spos) {
