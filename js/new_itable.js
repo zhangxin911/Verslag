@@ -31,7 +31,7 @@ iTable.prototype.createContent = function(tid) {
 		}
 
 	}
-
+	this.setIndex();
 }
 
 iTable.prototype.createTr = function() {
@@ -251,12 +251,25 @@ iTable.prototype.fillTd = function(tid) {
 			$(this).attr('chosed', 'clickone');
 			var xCoo = Number($(this).attr('cols')) - 1,
 				yCoo = Number($(this).attr('rows')) - 1;
-
-			//console.log($(this).attr('rowspan'), $(this).attr('colspan'));
+			var colspan = Number($(this).attr('colspan'));
+			var rowspan = Number($(this).attr('rowspan'));
+			if(!!colspan) {
+				colspan = colspan;
+			} else {
+				colspan = 1;
+			}
+			if(!!rowspan) {
+				rowspan = rowspan;
+			} else {
+				rowspan = 1;
+			}
+			var xIndex = $(this).index() + 1;
+			var yIndex = $(this).parent().index() + 1;
 			var targetY = $(".yOrder table").find('tr:eq(' + yCoo + ')');
 			var targetX = $(".xOrder table").find('tr td:eq(' + xCoo + ')');
-			_self.remakeRow(targetY, yCoo);
-			_self.remakeCol(targetX, xCoo);
+
+			_self.remakeRow(targetY, yCoo, xIndex, yIndex, rowspan, colspan);
+			_self.remakeCol(targetX, xCoo, xIndex, yIndex, rowspan, colspan);
 
 		});
 
@@ -854,22 +867,22 @@ iTable.prototype.sheetMove = function() {
 	}
 }
 //设置坐标
-iTable.prototype.setIndex = function(){
+iTable.prototype.setIndex = function() {
 	var offsetLeftArray = new Array();
 	var cell; // 单元格Dom  
 	var col; // 单元格实际所在列  
 	var cellStr; // 每个cell以row,col,rowSpan,colSpan,value形式  
 	var cellStrArray = [];
-	var t=this.getCurTable();
-//	var tid;
-//	if(!!tid){
-//		tid=id
-//	}else{
-//		tid=(t.attr('id')).replace('iTable','');
-//	}
-    var id=(t.attr('id')).replace('iTable','');
+	var t = this.getCurTable();
+	//	var tid;
+	//	if(!!tid){
+	//		tid=id
+	//	}else{
+	//		tid=(t.attr('id')).replace('iTable','');
+	//	}
+	var id = (t.attr('id')).replace('iTable', '');
 
-	var objTab = document.getElementById('iTable'+id);
+	var objTab = document.getElementById('iTable' + id);
 
 	// 遍历第一次取出offsetLeft集合  
 	for(var i = 0; i < objTab.rows.length; i++) {
@@ -901,13 +914,17 @@ iTable.prototype.setIndex = function(){
 
 }
 //创建操作行按钮
-iTable.prototype.remakeRow = function(obj, rowNum) {
+iTable.prototype.remakeRow = function(obj, rowNum, xIndex, yIndex, rowspan, colspan) {
 	var btnBox = $('<div class="trBtn"></div>');
 	var addTr = $('<span class="addTr">+</span>');
 	var delTr = $('<span class="delTr">-</span>');
 	var _self = this;
 	var t = this.getCurTable();
 	var id = (t.attr('id')).replace('iTable', '');
+	var xIndex = xIndex,
+		yIndex = yIndex;
+	var rowSpan = rowspan,
+		colSpan = colspan;
 
 	var targetTd = obj.children(0);
 	var otherTd = obj.siblings().children(0);
@@ -926,17 +943,33 @@ iTable.prototype.remakeRow = function(obj, rowNum) {
 
 	targetTd.append(btnBox);
 	addTr.on('click', function() {
-		var tr = _self.createTr();
-		for(var j = 0; j < _self.cellCount; j++) {
-			var td = _self.createTd('', '22');
-			tr.append(td);
-		}
-		$("#iTable" + id).find('tr:eq(' + rowNum + ')').after(tr);
+		console.log(xIndex, yIndex, );
+		for(var i = 0; i < rowspan; i++) {
+			var tr = _self.createTr();
+			for(var j = 0; j < _self.cellCount; j++) {
+				var td = _self.createTd('', '22');
+				tr.append(td);
+			}
+			if(rowspan == 1) {
+				$("#iTable" + id).find('tr:eq(' + rowNum + ')').after(tr);
+			} else {
+				$("#iTable" + id).find('tr:eq(' + (rowSpan + yIndex - 2) + ')').after(tr);
+			}
 
-		var ltr = $("<tr></tr>");
-		var ltd = $("<td></td>");
-		ltr.append(ltd);
-		$('.leftTable').find('tr:eq(' + rowNum + ')').after(ltr);
+		}
+
+		for(var k = 0; k < rowSpan; k++) {
+			var ltr = $("<tr></tr>");
+			var ltd = $("<td></td>");
+			ltr.append(ltd);
+			if(rowspan == 1) {
+				$('.leftTable').find('tr:eq(' + rowNum + ')').after(ltr);
+			} else {
+				$('.leftTable').find('tr:eq(' + (rowSpan + yIndex - 2) + ')').after(ltr);
+
+			}
+		}
+
 		_self.remarkLeft($('.leftTable'), rowNum);
 		_self.setIndex();
 		_self.fillTd(id);
@@ -951,7 +984,7 @@ iTable.prototype.remakeRow = function(obj, rowNum) {
 
 }
 //创建列操作按钮
-iTable.prototype.remakeCol = function(obj, rowNum) {
+iTable.prototype.remakeCol = function(obj, rowNum, xIndex, yIndex, rowspan, colspan) {
 	var btnBox = $('<div class="colBtn"></div>');
 	var addCol = $('<span class="addCol">+</span>');
 	var delCol = $('<span class="delCol">-</span>');
@@ -961,6 +994,11 @@ iTable.prototype.remakeCol = function(obj, rowNum) {
 
 	var targetTd = obj;
 	var otherTd = obj.parent().children(0);
+	var xIndex = xIndex,
+		yIndex = yIndex;
+	var rowSpan = rowspan,
+		colSpan = colspan;
+	
 	btnBox.append(addCol);
 	btnBox.append(delCol);
 
@@ -979,11 +1017,10 @@ iTable.prototype.remakeCol = function(obj, rowNum) {
 
 		for(var j = 0; j < _self.rowCount; j++) {
 			var td = _self.createTd('', 'test');
-			//tr.append(td);
 			
-			$("#iTable"+id).find('tr:eq(' + j + ') td:eq(' + rowNum + ')').after(td);
-			
-//		    $("#iTable" + id).find('tr:eq(' + rowNum + ')').remove();
+			$("#iTable" + id).find('tr:eq(' + j + ') td:eq(' + rowNum + ')').after(td);
+
+		
 		}
 		var ttd = $("<td></td>");
 		$('.titleTable').find('tr:eq(0) td:eq(' + rowNum + ')').after(ttd);
@@ -1009,6 +1046,7 @@ iTable.prototype.remarkLeft = function(obj, startNum) {
 	for(var i = startNum; i < trLength; i++) {
 		$(trs[i]).text(i + 1);
 	}
+	//console.log(startNum);
 }
 
 //Input光标
