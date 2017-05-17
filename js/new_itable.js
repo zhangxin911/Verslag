@@ -60,7 +60,7 @@ iTable.prototype.createXaxis = function() {
 		tr.appendTo($(".titleTable"));
 
 		for(var j = 0; j < this.cellCount; j++) {
-			var td = $("<td>" + String.fromCharCode((65 + j)) + "</td>");
+			var td = $("<td>" + IntToChr(j) + "</td>");
  
 			td.appendTo(tr);
 		}
@@ -1047,7 +1047,7 @@ iTable.prototype.remarkTop = function(obj, startNum) {
 	var TopTb = obj;
 	var trs = $(TopTb[0]).find('tr td');
 	var trLength = trs.length;
-	//console.log(trLength);
+	 
 	for(var i = startNum; i < trLength; i++) {
 		$(trs[i]).text(i + 1);
 	}
@@ -1143,7 +1143,7 @@ Array.prototype.contains = function(obj) {
 
 var settings = {
 	rowCount: 100,
-	cellCount: 6,
+	cellCount: 26,
 	fontFamily: {
 		'黑体': 'font_Black',
 		'宋体': 'font_Song',
