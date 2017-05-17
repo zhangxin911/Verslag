@@ -774,7 +774,7 @@ iTable.prototype.addSheet = function() {
 		box.empty();
 		var dd = $("<dd class='sheet sheetdefault' id=sheet" + i + ">sheet" + i + "</dd>");
 		var curId = $(".sheetdefault").attr('id');
-		curId = curId.replace('sheet','');
+		curId = curId.replace('sheet', '');
 		curId = parseInt(curId);
 
 		$("#sheet" + curId).removeClass('sheetdefault');
@@ -934,9 +934,10 @@ iTable.prototype.remakeRow = function(obj, rowNum, xIndex, yIndex, rowspan, cols
 	targetTd.append(btnBox);
 	addTr.on('click', function() {
 
-		//_self.cellCount++;
+		
 		for(var i = 0; i < rowspan; i++) {
 			var tr = _self.createTr();
+			console.log(_self.cellCount);
 			for(var j = 0; j < _self.cellCount; j++) {
 				var td = _self.createTd('', '22');
 				tr.append(td);
@@ -960,7 +961,7 @@ iTable.prototype.remakeRow = function(obj, rowNum, xIndex, yIndex, rowspan, cols
 
 			}
 		}
-
+        _self.cellCount++;
 		_self.remarkLeft($('.leftTable'), rowNum);
 		_self.setIndex();
 		_self.fillTd(id);
@@ -1008,7 +1009,7 @@ iTable.prototype.remakeCol = function(obj, rowNum, xIndex, yIndex, rowspan, cols
 
 	addCol.on('click', function() {
 
-		_self.rowCount++;
+		
 		for(var j = 0; j < _self.rowCount; j++) {
 
 			var td = _self.createTd('', 'test');
@@ -1027,17 +1028,17 @@ iTable.prototype.remakeCol = function(obj, rowNum, xIndex, yIndex, rowspan, cols
 			}
 
 		}
-
+        
 		var ttd = $("<td></td>");
 		$('.titleTable').find('tr:eq(0) td:eq(' + rowNum + ')').after(ttd);
 		_self.remarkTop($('.titleTable'), rowNum);
 		_self.setIndex();
 		_self.fillTd(id);
-
+        _self.rowCount++;
 	});
-	
-	delCol.on('click',function(){
-		
+    
+	delCol.on('click', function() {
+
 	});
 }
 iTable.prototype.remarkTop = function(obj, startNum) {
@@ -1111,7 +1112,7 @@ function removeUied() {
 	$('.ui-selectable').find('tbody').removeAttr('class');
 	$('.ui-selectable').find('tr').removeAttr('class');
 }
-
+//数字转字母 27->AA
 function IntToChr(index) {
 	var start = 65;
 	var str = '';
@@ -1270,7 +1271,7 @@ t.tableScroll();
 t.createTip();
 t.createFooter();
 t.createHeader();
-//
+
 
 t.fontFamily();
 t.fontSize();
