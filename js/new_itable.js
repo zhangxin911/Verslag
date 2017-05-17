@@ -526,7 +526,7 @@ iTable.prototype.mergeTd = function() {
 	var that = this;
 	mergeBtn.on('click', function() {
 		var $t = $('.dataTable');
-		if($("table", $t).length > 0) {
+		if ($("table", $t).length > 0) {
 			alert("不支持嵌套表格！");
 			return;
 		}
@@ -534,39 +534,44 @@ iTable.prototype.mergeTd = function() {
 		var sigDel = "sign4delete";
 		var sigSel = "ui-selected";
 
+
 		$("th,td", $t).each(function() {
 
 			var ridx = $("tr", $t).index($(this).parent("tr"));
 			var cidx = $(this).parent().children("th,td").index(this);
-
+			 
+			
 			var rowspan = Number($(this).attr("rowspan")) || 1;
 			var colspan = Number($(this).attr("colspan")) || 1;
 			var isSel = $(this).hasClass(sigSel);
+            
 
-			if(rowspan <= 1 && colspan <= 1) return;
+			if (rowspan <= 1 && colspan <= 1) return;
 
 			$("tr", $t).each(function() {
 				var idx = $("tr", $t).index(this);
 				var arr, $td = $("<td>").addClass(isSel ? sigSel : sigDel);
-
-				if(idx == ridx) {
+               
+                
+				if (idx == ridx) {
 					// 本行在 [cidx] 后插入 colspan-1 个
 
 					arr = $(); // 准备待插单元格
-					for(var i = 0; i < colspan - 1; i++)
-						arr = arr.add($td.clone());
+					for (var i = 0; i < colspan - 1; i++)
+					arr = arr.add($td.clone());
 					// 插入
 					$("th,td", this).eq(cidx).after(arr);
-
-				} else if(ridx < idx && idx < ridx + rowspan) {
+					
+                   
+				} else if (ridx < idx && idx < ridx + rowspan) {
 					// 以下行在 [cidx] 前插入 colspan 个
 
 					arr = $(); // 准备待插单元格
-					for(var i = 0; i < colspan; i++)
-						arr = arr.add($td.clone());
+					for (var i = 0; i < colspan; i++)
+					arr = arr.add($td.clone());
 					// 插入
-					if(cidx > 0 && $("th,td", this).eq(cidx - 1).length > 0) $("th,td", this).eq(cidx - 1).after(arr);
-					else if($("th,td", this).eq(cidx).length > 0) $("th,td", this).eq(cidx).before(arr);
+					if (cidx > 0 && $("th,td", this).eq(cidx - 1).length > 0) $("th,td", this).eq(cidx - 1).after(arr);
+					else if ($("th,td", this).eq(cidx).length > 0) $("th,td", this).eq(cidx).before(arr);
 					else $(this).prepend(arr);
 				}
 			});
@@ -580,35 +585,34 @@ iTable.prototype.mergeTd = function() {
 		// 计算起始和跨距
 		$("th,td", $t).filter("." + sigSel).each(function() {
 			var ridx = $("tr", $t).index($(this).parent("tr"));
-
+			
 			rmin = ridx < rmin ? ridx : rmin;
 			rmax = ridx > rmax ? ridx : rmax;
-
+			
 			var cidx = $(this).parent().children("th,td").index(this);
-
+			
 			cmin = cidx < cmin ? cidx : cmin;
 			cmax = cidx > cmax ? cidx : cmax;
-
+			
 		});
 		rnum = rmax - rmin + 1;
 		cnum = cmax - cmin + 1;
-
+       
 		// 合并单元格
 		$("th,td", $t).each(function() {
 			var ridx = $("tr", $t).index($(this).parent("tr"));
 			var cidx = $(this).parent().children("th,td").index(this);
+           
+            
+			if (rmin <= ridx && ridx <= rmax && cmin <= cidx && cidx <= cmax) $(this).addClass(sigDel);
 
-			var tWidth;
-			//			cnum > 3 ? tWidth = 103 : tWidth = 102;
-			if(rmin <= ridx && ridx <= rmax && cmin <= cidx && cidx <= cmax) $(this).addClass(sigDel);
-
-			if(ridx == rmin && cidx == cmin) $(this).removeClass(sigDel).attr({
+			if (ridx == rmin && cidx == cmin) $(this).removeClass(sigDel).attr({
 				rowspan: rnum,
 				colspan: cnum
 			});
-
-			if($(this).attr("rowspan") == 1) $(this).removeAttr("rowspan");
-			if($(this).attr("colspan") == 1) $(this).removeAttr("colspan");
+           
+			if ($(this).attr("rowspan") == 1) $(this).removeAttr("rowspan");
+			if ($(this).attr("colspan") == 1) $(this).removeAttr("colspan");
 		}).remove("." + sigDel);
 		that.setIndex();
 	});
@@ -880,6 +884,7 @@ iTable.prototype.setIndex = function() {
 			cell = objTab.rows[i].cells[j];
 			if(offsetLeftArray.contains(cell.offsetLeft) == -1)
 				offsetLeftArray.push(cell.offsetLeft);
+				 
 		}
 	}
 
@@ -893,6 +898,7 @@ iTable.prototype.setIndex = function() {
 			cell = objTab.rows[i].cells[j];
 
 			col = offsetLeftArray.contains(cell.offsetLeft);
+ 
 			cellStr = i + ',' + col;
 			cellStrArray.push(cellStr);
 			var coo = (i + 1) + ',' + (col + 1);
@@ -935,14 +941,14 @@ iTable.prototype.remakeRow = function(obj, rowNum, xIndex, yIndex, rowspan, cols
 	addTr.on('click', function() {
 
 		
-		for(var i = 0; i < rowspan; i++) {
+		for(var i = 0; i < rowSpan; i++) {
 			var tr = _self.createTr();
-			console.log(_self.cellCount);
+			 
 			for(var j = 0; j < _self.cellCount; j++) {
 				var td = _self.createTd('', '22');
 				tr.append(td);
 			}
-			if(rowspan == 1) {
+			if(rowSpan == 1) {
 				$("#iTable" + id).find('tr:eq(' + rowNum + ')').after(tr);
 			} else {
 				$("#iTable" + id).find('tr:eq(' + (rowSpan + yIndex - 2) + ')').after(tr);
@@ -961,15 +967,19 @@ iTable.prototype.remakeRow = function(obj, rowNum, xIndex, yIndex, rowspan, cols
 
 			}
 		}
-        _self.cellCount++;
+//      _self.cellCount++;
 		_self.remarkLeft($('.leftTable'), rowNum);
 		_self.setIndex();
 		_self.fillTd(id);
 
 	});
-	delTr.on('click', function() {
+	delTr.on('click', function(){
 		$('.leftTable').find('tr:eq(' + rowNum + ')').remove();
+		
+		
 		$("#iTable" + id).find('tr:eq(' + rowNum + ')').remove();
+		
+		
 		_self.remarkLeft($('.leftTable'), rowNum);
 		_self.setIndex();
 		_self.fillTd(id);
@@ -1034,7 +1044,7 @@ iTable.prototype.remakeCol = function(obj, rowNum, xIndex, yIndex, rowspan, cols
 		_self.remarkTop($('.titleTable'), rowNum);
 		_self.setIndex();
 		_self.fillTd(id);
-        _self.rowCount++;
+//      _self.rowCount++;
 	});
     
 	delCol.on('click', function() {
@@ -1163,7 +1173,7 @@ Array.prototype.contains = function(obj) {
 
 var settings = {
 	rowCount: 40,
-	cellCount: 6,
+	cellCount: 16,
 	fontFamily: {
 		'黑体': 'font_Black',
 		'宋体': 'font_Song',
