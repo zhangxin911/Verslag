@@ -51,7 +51,7 @@ iTable.prototype.createXaxis = function() {
 	var xTdWidth = [];
 	var curT = this.getCurTable();
 	var firTds = curT.find('tr:first td');
-
+    
 	xAxis.insertBefore(this.container);
 	xAxis.append(xTable);
 	for(var i = 0; i < 1; i++) {
@@ -61,10 +61,7 @@ iTable.prototype.createXaxis = function() {
 
 		for(var j = 0; j < this.cellCount; j++) {
 			var td = $("<td>" + String.fromCharCode((65 + j)) + "</td>");
-			//              th.css({
-			//              	'max-width':firTds[j].offsetWidth,
-			//              	'min-width':firTds[j].offsetWidth
-			//              })
+ 
 			td.appendTo(tr);
 		}
 
@@ -943,7 +940,7 @@ iTable.prototype.remakeRow = function(obj, rowNum, xIndex, yIndex, rowspan, cols
 
 	targetTd.append(btnBox);
 	addTr.on('click', function() {
-		console.log(xIndex, yIndex, );
+
 		for(var i = 0; i < rowspan; i++) {
 			var tr = _self.createTr();
 			for(var j = 0; j < _self.cellCount; j++) {
@@ -998,7 +995,7 @@ iTable.prototype.remakeCol = function(obj, rowNum, xIndex, yIndex, rowspan, cols
 		yIndex = yIndex;
 	var rowSpan = rowspan,
 		colSpan = colspan;
-	
+
 	btnBox.append(addCol);
 	btnBox.append(delCol);
 
@@ -1016,11 +1013,26 @@ iTable.prototype.remakeCol = function(obj, rowNum, xIndex, yIndex, rowspan, cols
 	addCol.on('click', function() {
 
 		for(var j = 0; j < _self.rowCount; j++) {
-			var td = _self.createTd('', 'test');
 			
-			$("#iTable" + id).find('tr:eq(' + j + ') td:eq(' + rowNum + ')').after(td);
-
-		
+			var td = _self.createTd('', 'test');
+			 
+             console.log(yIndex,xIndex);
+			
+			if((yIndex-1)<j&&j<=(yIndex+rowSpan-2)){
+            	$("#iTable" + id).find('tr:eq(' + j + ') td:eq(' + (xIndex - 2) + ')').after(td);
+            	
+            }
+			else{
+			    if((yIndex-1)==j) {
+				$("#iTable" + id).find('tr:eq(' + j + ') td:eq(' + (xIndex - 1) + ')').after(td);
+				 
+                }else{
+                   $("#iTable" + id).find('tr:eq(' + j + ') td:eq(' + (colSpan + xIndex - 2) + ')').after(td);
+                }
+				
+			}
+            
+ 
 		}
 		var ttd = $("<td></td>");
 		$('.titleTable').find('tr:eq(0) td:eq(' + rowNum + ')').after(ttd);
@@ -1129,7 +1141,7 @@ Array.prototype.contains = function(obj) {
 
 var settings = {
 	rowCount: 100,
-	cellCount: 26,
+	cellCount: 6,
 	fontFamily: {
 		'黑体': 'font_Black',
 		'宋体': 'font_Song',
