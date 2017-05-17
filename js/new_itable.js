@@ -4,7 +4,7 @@ function iTable(tContainer, tSettings) {
 	this.container = tContainer;
 	this.settings = tSettings;
 	var header, footer, curIndex;
-
+	var trueCellNum, tureRowNum;
 }
 
 iTable.prototype.createContent = function(tid) {
@@ -51,7 +51,7 @@ iTable.prototype.createXaxis = function() {
 	var xTdWidth = [];
 	var curT = this.getCurTable();
 	var firTds = curT.find('tr:first td');
-    
+
 	xAxis.insertBefore(this.container);
 	xAxis.append(xTable);
 	for(var i = 0; i < 1; i++) {
@@ -61,7 +61,7 @@ iTable.prototype.createXaxis = function() {
 
 		for(var j = 0; j < this.cellCount; j++) {
 			var td = $("<td>" + IntToChr(j) + "</td>");
- 
+
 			td.appendTo(tr);
 		}
 
@@ -672,7 +672,6 @@ iTable.prototype.splitTd = function() {
 			});
 		});
 
-		// 重新获取以取到删者并删之
 		$("th,td", $t).remove("." + sigDel);
 		that.setIndex();
 	});
@@ -725,7 +724,7 @@ iTable.prototype.createCellMenu = function(dClass, className, menus) {
 	var selectTr = $('<tr></tr>');
 	var selectTd, length = JSONLength(menus);
 	var arr1 = [],
-		arr2 = []
+		arr2 = [];
 	for(var index in menus) {
 		arr1.push(menus[index].tdclass);
 		arr2.push(menus[index].fclass);
@@ -773,10 +772,9 @@ iTable.prototype.addSheet = function() {
 
 	$('.addSheet').click(function() {
 		box.empty();
-
 		var dd = $("<dd class='sheet sheetdefault' id=sheet" + i + ">sheet" + i + "</dd>");
 		var curId = $(".sheetdefault").attr('id');
-		curId = curId.replace('sheet', '');
+		curId = curId.replace('sheet','');
 		curId = parseInt(curId);
 
 		$("#sheet" + curId).removeClass('sheetdefault');
@@ -871,12 +869,7 @@ iTable.prototype.setIndex = function() {
 	var cellStr; // 每个cell以row,col,rowSpan,colSpan,value形式  
 	var cellStrArray = [];
 	var t = this.getCurTable();
-	//	var tid;
-	//	if(!!tid){
-	//		tid=id
-	//	}else{
-	//		tid=(t.attr('id')).replace('iTable','');
-	//	}
+
 	var id = (t.attr('id')).replace('iTable', '');
 
 	var objTab = document.getElementById('iTable' + id);
@@ -941,6 +934,7 @@ iTable.prototype.remakeRow = function(obj, rowNum, xIndex, yIndex, rowspan, cols
 	targetTd.append(btnBox);
 	addTr.on('click', function() {
 
+		//_self.cellCount++;
 		for(var i = 0; i < rowspan; i++) {
 			var tr = _self.createTr();
 			for(var j = 0; j < _self.cellCount; j++) {
@@ -970,6 +964,7 @@ iTable.prototype.remakeRow = function(obj, rowNum, xIndex, yIndex, rowspan, cols
 		_self.remarkLeft($('.leftTable'), rowNum);
 		_self.setIndex();
 		_self.fillTd(id);
+
 	});
 	delTr.on('click', function() {
 		$('.leftTable').find('tr:eq(' + rowNum + ')').remove();
@@ -980,7 +975,6 @@ iTable.prototype.remakeRow = function(obj, rowNum, xIndex, yIndex, rowspan, cols
 	});
 
 }
-
 
 //创建列操作按钮
 iTable.prototype.remakeCol = function(obj, rowNum, xIndex, yIndex, rowspan, colspan) {
@@ -1014,42 +1008,45 @@ iTable.prototype.remakeCol = function(obj, rowNum, xIndex, yIndex, rowspan, cols
 
 	addCol.on('click', function() {
 
+		_self.rowCount++;
 		for(var j = 0; j < _self.rowCount; j++) {
-			
+
 			var td = _self.createTd('', 'test');
-			 
-         
-			
-			if((yIndex-1)<j&&j<=(yIndex+rowSpan-2)){
-            	$("#iTable" + id).find('tr:eq(' + j + ') td:eq(' + (xIndex - 2) + ')').after(td);
-            	
-            }
-			else{
-			    if((yIndex-1)==j) {
-				$("#iTable" + id).find('tr:eq(' + j + ') td:eq(' + (xIndex - 1) + ')').after(td);
-				 
-                }else{
-                   $("#iTable" + id).find('tr:eq(' + j + ') td:eq(' + (colSpan + xIndex - 2) + ')').after(td);
-                }
-				
+
+			if((yIndex - 1) < j && j <= (yIndex + rowSpan - 2)) {
+				$("#iTable" + id).find('tr:eq(' + j + ') td:eq(' + (xIndex - 2) + ')').after(td);
+
+			} else {
+				if((yIndex - 1) == j) {
+					$("#iTable" + id).find('tr:eq(' + j + ') td:eq(' + (xIndex - 1) + ')').after(td);
+
+				} else {
+					$("#iTable" + id).find('tr:eq(' + j + ') td:eq(' + (colSpan + xIndex - 2) + ')').after(td);
+				}
+
 			}
-            
- 
+
 		}
+
 		var ttd = $("<td></td>");
 		$('.titleTable').find('tr:eq(0) td:eq(' + rowNum + ')').after(ttd);
 		_self.remarkTop($('.titleTable'), rowNum);
 		_self.setIndex();
 		_self.fillTd(id);
+
+	});
+	
+	delCol.on('click',function(){
+		
 	});
 }
 iTable.prototype.remarkTop = function(obj, startNum) {
 	var TopTb = obj;
 	var trs = $(TopTb[0]).find('tr td');
 	var trLength = trs.length;
-	 
+
 	for(var i = startNum; i < trLength; i++) {
-		$(trs[i]).text(i + 1);
+		$(trs[i]).text(IntToChr(i));
 	}
 }
 
@@ -1060,7 +1057,7 @@ iTable.prototype.remarkLeft = function(obj, startNum) {
 	for(var i = startNum; i < trLength; i++) {
 		$(trs[i]).text(i + 1);
 	}
-	 
+
 }
 
 //Input光标
@@ -1142,8 +1139,8 @@ Array.prototype.contains = function(obj) {
 }
 
 var settings = {
-	rowCount: 100,
-	cellCount: 26,
+	rowCount: 40,
+	cellCount: 6,
 	fontFamily: {
 		'黑体': 'font_Black',
 		'宋体': 'font_Song',
