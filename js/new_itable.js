@@ -980,6 +980,8 @@ iTable.prototype.remakeRow = function(obj, rowNum, xIndex, yIndex, rowspan, cols
 	});
 
 }
+
+
 //创建列操作按钮
 iTable.prototype.remakeCol = function(obj, rowNum, xIndex, yIndex, rowspan, colspan) {
 	var btnBox = $('<div class="colBtn"></div>');
@@ -1016,7 +1018,7 @@ iTable.prototype.remakeCol = function(obj, rowNum, xIndex, yIndex, rowspan, cols
 			
 			var td = _self.createTd('', 'test');
 			 
-             console.log(yIndex,xIndex);
+         
 			
 			if((yIndex-1)<j&&j<=(yIndex+rowSpan-2)){
             	$("#iTable" + id).find('tr:eq(' + j + ') td:eq(' + (xIndex - 2) + ')').after(td);
@@ -1058,7 +1060,7 @@ iTable.prototype.remarkLeft = function(obj, startNum) {
 	for(var i = startNum; i < trLength; i++) {
 		$(trs[i]).text(i + 1);
 	}
-	//console.log(startNum);
+	 
 }
 
 //Input光标
