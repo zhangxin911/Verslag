@@ -1038,7 +1038,28 @@ iTable.prototype.remakeCol = function(obj, rowNum, xIndex, yIndex, rowspan, cols
 	});
     
 	delCol.on('click', function() {
+       for(var j = 0; j < _self.rowCount; j++) {
 
+			 
+
+			if((yIndex - 1) < j && j <= (yIndex + rowSpan - 2)) {
+				$("#iTable" + id).find('tr:eq(' + j + ') td:eq(' + (xIndex - 2) + ')').remove();
+
+			} else {
+				if((yIndex - 1) == j) {
+					$("#iTable" + id).find('tr:eq(' + j + ') td:eq(' + (xIndex - 1) + ')').remove();
+
+				} else {
+					$("#iTable" + id).find('tr:eq(' + j + ') td:eq(' + (colSpan + xIndex - 2) + ')').remove();
+				}
+
+			}
+
+		}
+      $('.titleTable').find('tr td:eq(' + xIndex + ')').remove();
+		_self.remarkTop($('.titleTable'), rowNum);
+		_self.setIndex();
+		_self.fillTd(id);
 	});
 }
 iTable.prototype.remarkTop = function(obj, startNum) {
@@ -1112,6 +1133,7 @@ function removeUied() {
 	$('.ui-selectable').find('tbody').removeAttr('class');
 	$('.ui-selectable').find('tr').removeAttr('class');
 }
+
 //数字转字母 27->AA
 function IntToChr(index) {
 	var start = 65;
