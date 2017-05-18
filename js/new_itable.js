@@ -267,7 +267,6 @@ iTable.prototype.fillTd = function(tid) {
 
 			_self.remakeRow(targetY, yCoo, xIndex, yIndex, rowspan, colspan);
 			_self.remakeCol(targetX, xCoo, xIndex, yIndex, rowspan, colspan,xCoo,yCoo);
-			_self.getWrong($(this));
 
 		});
 
@@ -935,7 +934,7 @@ iTable.prototype.remakeRow = function(obj, rowNum, xIndex, yIndex, rowspan, cols
 
 	targetTd.append(btnBox);
 	addTr.on('click', function() {
-
+     console.log(_self.cellCount);
 		for(var i = 0; i < rowSpan; i++) {
 			var tr = _self.createTr();
 
@@ -962,7 +961,7 @@ iTable.prototype.remakeRow = function(obj, rowNum, xIndex, yIndex, rowspan, cols
 
 			}
 		}
-		//      _self.cellCount++;
+		_self.rowCount++;
 		_self.remarkLeft($('.leftTable'), rowNum);
 		_self.setIndex();
 		_self.fillTd(id);
@@ -1008,14 +1007,7 @@ iTable.prototype.remakeCol = function(obj, colNum, xIndex, yIndex, rowspan, cols
 		colSpan = colspan;
 	var xCoo=xCoo||1;
 	 
-    var trueX;
-     
-    if(colspan==1){
-    	trueX=xCoo+1;
-    }else{
-    	trueX=xCoo+colSpan;
-    }
-    
+  
   
 	btnBox.append(addCol);
 	btnBox.append(delCol);
@@ -1036,8 +1028,8 @@ iTable.prototype.remakeCol = function(obj, colNum, xIndex, yIndex, rowspan, cols
 		for(var j = 0; j < _self.rowCount; j++) {
 
 			var td = _self.createTd('', 'new');
-             var num=Number(xCoo)+Number(colSpan);
-            console.log(num);
+            var num=Number(xCoo)+Number(colSpan);
+             
             $("[pos='"+j+"-"+num+"']").before(td);
           
 
@@ -1045,27 +1037,19 @@ iTable.prototype.remakeCol = function(obj, colNum, xIndex, yIndex, rowspan, cols
         
 		var ttd = $("<td></td>");
 		$('.titleTable').find('tr:eq(0) td:eq(' + colNum + ')').after(ttd);
+		_self.cellCount++;
 		_self.remarkTop($('.titleTable'), colNum);
+		
 		_self.setIndex();
 		_self.fillTd(id);
-		//      _self.rowCount++;
 	});
 
 	delCol.on('click', function() {
 		for(var j = 0; j < _self.rowCount; j++) {
-
-			if((yIndex - 1) < j && j <= (yIndex + rowSpan - 2)) {
-				$("#iTable" + id).find('tr:eq(' + j + ') td:eq(' + (xIndex - 2) + ')').remove();
-
-			} else {
-				if((yIndex - 1) == j) {
-					$("#iTable" + id).find('tr:eq(' + j + ') td:eq(' + (xIndex - 1) + ')').remove();
-
-				} else {
-					$("#iTable" + id).find('tr:eq(' + j + ') td:eq(' + (colSpan + xIndex - 2) + ')').remove();
-				}
-
-			}
+              var num=Number(xCoo)+Number(colSpan)-1;
+ 
+            $("[pos='"+j+"-"+num+"']").remove();
+ 
 
 		}
 		$('.titleTable').find('tr td:eq(' + xIndex + ')').remove();
@@ -1100,7 +1084,7 @@ iTable.prototype.getWrong = function(obj) {
 	var yIndex = obj.parent().index() + 1;
 	var yCoo = obj.attr('rows');
 	var xCoo = obj.attr('cols');
-	//	console.log(rowspan,colspan,xIndex,yIndex,xCoo,yCoo);
+	 
 
 	var tr = [];
 
