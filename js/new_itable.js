@@ -266,7 +266,8 @@ iTable.prototype.fillTd = function(tid) {
 			var targetX = $(".xOrder table").find('tr td:eq(' + xCoo + ')');
 
 			_self.remakeRow(targetY, yCoo, xIndex, yIndex, rowspan, colspan);
-			_self.remakeCol(targetX, xCoo, xIndex, yIndex, rowspan, colspan);
+			_self.remakeCol(targetX, xCoo, xIndex, yIndex, rowspan, colspan,xCoo,yCoo);
+			_self.getWrong($(this));
 
 		});
 
@@ -899,6 +900,7 @@ iTable.prototype.setIndex = function() {
 			var coo = cellStrArray[j];
 			cell.setAttribute('rows', i + 1);
 			cell.setAttribute('cols', col + 1);
+			cell.setAttribute('pos',i+'-'+col);
 		}
 	}
 
@@ -971,11 +973,11 @@ iTable.prototype.remakeRow = function(obj, rowNum, xIndex, yIndex, rowspan, cols
 
 		if(rowSpan != 1) {
 			$("#iTable" + id).find('tr:eq(' + rowNum + ')').remove();
-			for(var j = rowNum; j < rowSpan+rowNum-1; j++) {
+			for(var j = rowNum; j < rowSpan + rowNum - 1; j++) {
 				for(var i = 0; i < colSpan; i++) {
 
 					$("#iTable" + id).find('tr:eq(' + j + ')').append($("<td></td>"));
-                    console.log(rowNum);
+					console.log(rowNum);
 				}
 			}
 		} else {
@@ -990,7 +992,7 @@ iTable.prototype.remakeRow = function(obj, rowNum, xIndex, yIndex, rowspan, cols
 }
 
 //创建列操作按钮
-iTable.prototype.remakeCol = function(obj, rowNum, xIndex, yIndex, rowspan, colspan) {
+iTable.prototype.remakeCol = function(obj, colNum, xIndex, yIndex, rowspan, colspan,xCoo,yCoo) {
 	var btnBox = $('<div class="colBtn"></div>');
 	var addCol = $('<span class="addCol">+</span>');
 	var delCol = $('<span class="delCol">-</span>');
@@ -1004,7 +1006,17 @@ iTable.prototype.remakeCol = function(obj, rowNum, xIndex, yIndex, rowspan, cols
 		yIndex = yIndex;
 	var rowSpan = rowspan,
 		colSpan = colspan;
-
+	var xCoo=xCoo||1;
+	 
+    var trueX;
+     
+    if(colspan==1){
+    	trueX=xCoo+1;
+    }else{
+    	trueX=xCoo+colSpan;
+    }
+    
+  
 	btnBox.append(addCol);
 	btnBox.append(delCol);
 
@@ -1020,29 +1032,20 @@ iTable.prototype.remakeCol = function(obj, rowNum, xIndex, yIndex, rowspan, cols
 	targetTd.append(btnBox);
 
 	addCol.on('click', function() {
-
+        
 		for(var j = 0; j < _self.rowCount; j++) {
 
-			var td = _self.createTd('', 'test');
-
-			if((yIndex - 1) < j && j <= (yIndex + rowSpan - 2)) {
-				$("#iTable" + id).find('tr:eq(' + j + ') td:eq(' + (xIndex - 2) + ')').after(td);
-
-			} else {
-				if((yIndex - 1) == j) {
-					$("#iTable" + id).find('tr:eq(' + j + ') td:eq(' + (xIndex - 1) + ')').after(td);
-
-				} else {
-					$("#iTable" + id).find('tr:eq(' + j + ') td:eq(' + (colSpan + xIndex - 2) + ')').after(td);
-				}
-
-			}
+			var td = _self.createTd('', 'new');
+             var num=Number(xCoo)+Number(colSpan);
+            console.log(num);
+            $("[pos='"+j+"-"+num+"']").before(td);
+          
 
 		}
-
+        
 		var ttd = $("<td></td>");
-		$('.titleTable').find('tr:eq(0) td:eq(' + rowNum + ')').after(ttd);
-		_self.remarkTop($('.titleTable'), rowNum);
+		$('.titleTable').find('tr:eq(0) td:eq(' + colNum + ')').after(ttd);
+		_self.remarkTop($('.titleTable'), colNum);
 		_self.setIndex();
 		_self.fillTd(id);
 		//      _self.rowCount++;
@@ -1066,7 +1069,7 @@ iTable.prototype.remakeCol = function(obj, rowNum, xIndex, yIndex, rowspan, cols
 
 		}
 		$('.titleTable').find('tr td:eq(' + xIndex + ')').remove();
-		_self.remarkTop($('.titleTable'), rowNum);
+		_self.remarkTop($('.titleTable'), colNum);
 		_self.setIndex();
 		_self.fillTd(id);
 	});
@@ -1090,7 +1093,18 @@ iTable.prototype.remarkLeft = function(obj, startNum) {
 	}
 
 }
+iTable.prototype.getWrong = function(obj) {
+	var rowspan = obj.attr('rowspan') || 1;
+	var colspan = obj.attr('colspan') || 1;
+	var xIndex = obj.index() + 1;
+	var yIndex = obj.parent().index() + 1;
+	var yCoo = obj.attr('rows');
+	var xCoo = obj.attr('cols');
+	//	console.log(rowspan,colspan,xIndex,yIndex,xCoo,yCoo);
 
+	var tr = [];
+
+}
 //Input光标
 function set_text_value_position(obj, spos) {
 	var tobj = document.getElementById('tdInput');
