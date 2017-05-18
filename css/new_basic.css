@@ -365,6 +365,8 @@
 	text-align: center;
 	cursor: pointer;
 	padding:0px 10px;
+	max-width:120px;
+	min-width: 80px;
 }
 .contentdl dd{
 	float:left;
