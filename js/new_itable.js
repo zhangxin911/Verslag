@@ -180,12 +180,12 @@ iTable.prototype.tableScroll = function() {
 iTable.prototype.fillTd = function(tid) {
 
 	var tid;
-
-	if(tid != undefined) {
-		tid = tid;
-	} else {
-		tid = 1;
-	}
+    tid=tid||1;
+//	if(tid != undefined) {
+//		tid = tid;
+//	} else {
+//		tid = 1;
+//	}
 	var _self = this;
 	$('#iTable' + tid).find('tr td').each(function() {
 
@@ -266,7 +266,7 @@ iTable.prototype.fillTd = function(tid) {
 			var targetX = $(".xOrder table").find('tr td:eq(' + xCoo + ')');
 
 			_self.remakeRow(targetY, yCoo, xIndex, yIndex, rowspan, colspan);
-			_self.remakeCol(targetX, xCoo, xIndex, yIndex, rowspan, colspan,xCoo,yCoo);
+			_self.remakeCol(targetX, xCoo, xIndex, yIndex, rowspan, colspan, xCoo, yCoo);
 
 		});
 
@@ -899,7 +899,7 @@ iTable.prototype.setIndex = function() {
 			var coo = cellStrArray[j];
 			cell.setAttribute('rows', i + 1);
 			cell.setAttribute('cols', col + 1);
-			cell.setAttribute('pos',i+'-'+col);
+			cell.setAttribute('pos', i + '-' + col);
 		}
 	}
 
@@ -934,21 +934,20 @@ iTable.prototype.remakeRow = function(obj, rowNum, xIndex, yIndex, rowspan, cols
 
 	targetTd.append(btnBox);
 	addTr.on('click', function() {
-     console.log(_self.cellCount);
-		for(var i = 0; i < rowSpan; i++) {
-			var tr = _self.createTr();
+		//		for(var i = 0; i < rowSpan; i++) {
+		var tr = _self.createTr();
 
-			for(var j = 0; j < _self.cellCount; j++) {
-				var td = _self.createTd('', '22');
-				tr.append(td);
-			}
-			if(rowSpan == 1) {
-				$("#iTable" + id).find('tr:eq(' + rowNum + ')').after(tr);
-			} else {
-				$("#iTable" + id).find('tr:eq(' + (rowSpan + yIndex - 2) + ')').after(tr);
-			}
-
+		for(var j = 0; j < _self.cellCount; j++) {
+			var td = _self.createTd('', '22');
+			tr.append(td);
 		}
+		if(rowSpan == 1) {
+			$("#iTable" + id).find('tr:eq(' + rowNum + ')').after(tr);
+		} else {
+			$("#iTable" + id).find('tr:eq(' + (rowSpan + yIndex - 2) + ')').after(tr);
+		}
+
+		//		}
 
 		for(var k = 0; k < rowSpan; k++) {
 			var ltr = $("<tr></tr>");
@@ -991,7 +990,7 @@ iTable.prototype.remakeRow = function(obj, rowNum, xIndex, yIndex, rowspan, cols
 }
 
 //创建列操作按钮
-iTable.prototype.remakeCol = function(obj, colNum, xIndex, yIndex, rowspan, colspan,xCoo,yCoo) {
+iTable.prototype.remakeCol = function(obj, colNum, xIndex, yIndex, rowspan, colspan, xCoo, yCoo) {
 	var btnBox = $('<div class="colBtn"></div>');
 	var addCol = $('<span class="addCol">+</span>');
 	var delCol = $('<span class="delCol">-</span>');
@@ -1005,10 +1004,8 @@ iTable.prototype.remakeCol = function(obj, colNum, xIndex, yIndex, rowspan, cols
 		yIndex = yIndex;
 	var rowSpan = rowspan,
 		colSpan = colspan;
-	var xCoo=xCoo||1;
-	 
-  
-  
+	var xCoo = xCoo;
+
 	btnBox.append(addCol);
 	btnBox.append(delCol);
 
@@ -1024,32 +1021,29 @@ iTable.prototype.remakeCol = function(obj, colNum, xIndex, yIndex, rowspan, cols
 	targetTd.append(btnBox);
 
 	addCol.on('click', function() {
-        
+
 		for(var j = 0; j < _self.rowCount; j++) {
 
 			var td = _self.createTd('', 'new');
-            var num=Number(xCoo)+Number(colSpan);
-             
-            $("[pos='"+j+"-"+num+"']").before(td);
-          
-
+			var num = Number(xCoo) + Number(colSpan);
+			
+			$("[pos='" + j + "-" + num + "']").before(td);
 		}
-        
+
 		var ttd = $("<td></td>");
 		$('.titleTable').find('tr:eq(0) td:eq(' + colNum + ')').after(ttd);
 		_self.cellCount++;
 		_self.remarkTop($('.titleTable'), colNum);
-		
+
 		_self.setIndex();
 		_self.fillTd(id);
 	});
 
 	delCol.on('click', function() {
 		for(var j = 0; j < _self.rowCount; j++) {
-              var num=Number(xCoo)+Number(colSpan)-1;
- 
-            $("[pos='"+j+"-"+num+"']").remove();
- 
+			var num = Number(xCoo) + Number(colSpan) - 1;
+
+			$("[pos='" + j + "-" + num + "']").remove();
 
 		}
 		$('.titleTable').find('tr td:eq(' + xIndex + ')').remove();
@@ -1084,7 +1078,6 @@ iTable.prototype.getWrong = function(obj) {
 	var yIndex = obj.parent().index() + 1;
 	var yCoo = obj.attr('rows');
 	var xCoo = obj.attr('cols');
-	 
 
 	var tr = [];
 
@@ -1170,7 +1163,7 @@ Array.prototype.contains = function(obj) {
 
 var settings = {
 	rowCount: 40,
-	cellCount: 16,
+	cellCount: 26,
 	fontFamily: {
 		'黑体': 'font_Black',
 		'宋体': 'font_Song',

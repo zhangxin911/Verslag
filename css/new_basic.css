@@ -51,18 +51,18 @@
 		.titleTable tr{
 			background-color:#DDDDDD;
 		}
-		
 		 
 		 
+		 
 		
-		
+		 
 		.dataTable tr td{
 			height:30px;
 			width:100px;
 			border-bottom:1px solid #AAAAAA;
 			border-right:1px solid #AAAAAA;
 			min-width:100px;
-			
+			max-width: 100px;
 		}
 		.leftTable td{
 			height:30px;
