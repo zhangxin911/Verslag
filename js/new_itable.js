@@ -762,7 +762,7 @@ iTable.prototype.addSheet = function() {
 		that.createContent(neId);
 		that.fillTd(neId);
 		$("#iTable" + neId).selectable();
-
+        //dd=$('.sheet');  
 		dd.on('click', function() {
 			box.empty();
 			var dId = $(this).attr('id');
@@ -1065,6 +1065,13 @@ iTable.prototype.remarkLeft = function(obj, startNum) {
 
 }
 
+iTable.prototype.fillBlank=function(){
+   var fxBox=$('<div class="fx"></div>');
+   var fxInput=$('<input type="text" id="ip_fx">');
+   fxBox.append(fxInput);
+   this.header.append(fxBox);
+}
+
 //Input光标
 function set_text_value_position(obj, spos) {
 	var tobj = document.getElementById('tdInput');
@@ -1290,4 +1297,5 @@ t.textAlign();
 t.addSheet();
 t.sheetMove();
 t.setIndex();
+t.fillBlank();
 $("#iTable1").selectable();
