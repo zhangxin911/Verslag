@@ -51,10 +51,12 @@
 		.titleTable tr{
 			background-color:#DDDDDD;
 		}
-		 
-		 
-		 
 		
+		.tdTip{
+			padding:2px 6px;
+			border:1px solid #DDDDDD;
+			background:#FFFFFF;
+		}		 
 		 
 		.dataTable tr td{
 			height:30px;
@@ -63,6 +65,9 @@
 			border-right:1px solid #AAAAAA;
 			min-width:100px;
 			max-width: 100px;
+			white-space:nowrap;
+			overflow:hidden;
+			text-overflow:ellipsis;
 		}
 		.leftTable td{
 			height:30px;

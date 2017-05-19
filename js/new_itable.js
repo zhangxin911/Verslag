@@ -256,10 +256,59 @@ iTable.prototype.fillTd = function(tid) {
             removeUied();
             $('#ip_fx').blur();
 		});
+		$(this).mouseenter(function(){
+			var text=$(this).text();
+			var div=$('<div class="tdTip">'+text+'</div>');
+			var len=getStrLength(text);
+			if(len>10){
+			$('body').append(div);
+			var dis=mouseCoords();
+			
+			div.css({
+				'position':'absolute',
+				'top':dis.y,
+				'left':dis.x
+			});
+			}else{
+				return;
+			}
+			console.log(len);
+		});
+		$(this).mouseout(function(){
+			$('.tdTip').remove();
+		});
+		 
 
 	});
 
 }
+function getStrLength(str) {
+        ///<summary>获得字符串实际长度，中文2，英文1</summary>
+        ///<param name="str">要获得长度的字符串</param>
+        var realLength = 0, len = str.length, charCode = -1;
+        for (var i = 0; i < len; i++) {
+            charCode = str.charCodeAt(i);
+            if (charCode >= 0 && charCode <= 128) realLength += 1;
+            else realLength += 2;
+        }
+        return realLength;
+    };
+
+function mouseCoords(ev) {
+		var ev = ev || window.event;
+		if (ev.pageX || ev.pageY) {
+			return {
+				x: ev.pageX,
+				y: ev.pageY
+			};
+		}
+		return {
+			x: ev.clientX + document.body.scrollLeft - document.body.clientLeft,
+			y: ev.clientY + document.body.scrollTop - document.body.clientTop
+		};
+	}
+
+
 //创建底部容器
 iTable.prototype.createFooter = function() {
 	this.footer = $('<div class="footer"></div>');
@@ -288,6 +337,9 @@ iTable.prototype.createHeader = function() {
 	this.header.insertBefore(this.container);
 
 }
+
+ 
+
 //字体类型
 iTable.prototype.fontFamily = function() {
 	var select = this.createSelection('fontFamily', this.settings.fontFamily);
