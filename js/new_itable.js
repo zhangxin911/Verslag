@@ -1086,16 +1086,16 @@ iTable.prototype.fillWork = function() {
 
 	ifx.keyup(function(ev) {
 		pValue = ifx.val();
-		flReg = /\+|\-|\*|\/|\(|\)/;
-		reg = /((\(*([a-zA-Z]([1-9]\d*))\)*(\+|-|\/|\*))*([a-zA-Z]([1-9]\d*))*\)*)|([a-zA-Z]([1-9]\d*))/;
+		flReg = /\+|\-|\*|\/|\(|\)|\=/;
+		reg = /\=((\(*([a-zA-Z]([1-9]\d*))\)*(\+|-|\/|\*))*([a-zA-Z]([1-9]\d*))*\)*)|([a-zA-Z]([1-9]\d*))/;
 		res = pValue.match(reg);
-
+        console.log(res);
 		if(!!res[0]) {
 			endText = res[0].toString();
 			pArr = endText.split(flReg);
 
 			for(var i = 0; i < pArr.length; i++) {
-				if(!!pArr[i]) {					 
+				if(!!pArr[i]) {
 					if(String(nValue).indexOf(pArr[i]) <= -1) {
 						lightTd(pArr[i]);
 						cLightTd(pArr[i].substr(0, pArr[i].length - 1));
@@ -1108,9 +1108,7 @@ iTable.prototype.fillWork = function() {
 
 		//删除
 		if((ev.keyCode == 8)) {
-
 			delRes = nValue.match(/([a-zA-Z]([1-9]\d*))(((\-|\+|\*|\\){1}([a-zA-Z]{1})(([1-9]\d*){1})))*/);
-
 			if(!!nValue) {
 
 				dArr = nValue.split(flReg);
@@ -1183,13 +1181,11 @@ function cLightTd(tmp) {
 	var posX = tmp.match(/\+?[1-9][0-9]*$/g);
 	posY = posY.toString();
 	posY = posY.toLocaleLowerCase().charCodeAt(0) - 96;
-
 	if(posY == null || posX == null || posY.length == 0 || String(posX).length == 0) {
 		return;
 	}
 	posY--;
 	posX = posX.toString() - 1;
-	lTd = $("[pos='" + posX + "-" + posX + "']");
 
 	$('[mpos="' + posX + '-' + posY + '"]').remove();
 
