@@ -195,10 +195,13 @@ iTable.prototype.fillTd = function(tid) {
 			that.html(tdInput);
 
 			set_text_value_position(tdInput, -1);
-
+            $('.tdInput').keyup(function(){
+            	$('#ip_fx').val($(this).val());
+            });
+            
 			$('.tdInput').blur(function() {
 				var content = $('.tdInput').val();
-
+                
 				if(tdText == content) {
 
 					$(this).parent().html(content);
@@ -249,7 +252,9 @@ iTable.prototype.fillTd = function(tid) {
 
 			_self.remakeRow(targetY, yCoo, xIndex, yIndex, rowspan, colspan);
 			_self.remakeCol(targetX, xCoo, xIndex, yIndex, rowspan, colspan, xCoo, yCoo);
-
+            _self.tdTofx($(this));
+            removeUied();
+            $('#ip_fx').blur();
 		});
 
 	});
@@ -1046,6 +1051,7 @@ iTable.prototype.remakeCol = function(obj, colNum, xIndex, yIndex, rowspan, cols
 		_self.fillTd(id);
 	});
 }
+//更新顶部
 iTable.prototype.remarkTop = function(obj, startNum) {
 	var TopTb = obj;
 	var trs = $(TopTb[0]).find('tr td');
@@ -1055,7 +1061,7 @@ iTable.prototype.remarkTop = function(obj, startNum) {
 		$(trs[i]).text(IntToChr(i));
 	}
 }
-
+//更新左侧
 iTable.prototype.remarkLeft = function(obj, startNum) {
 	var leftTb = obj;
 	var trs = $(leftTb[0]).find('tr td');
@@ -1065,7 +1071,7 @@ iTable.prototype.remarkLeft = function(obj, startNum) {
 	}
 
 }
-
+//创建输入框
 iTable.prototype.fillBlank = function() {
 	var fxBox = $('<div class="fx"></div>');
 	var fxInput = $('<input type="text" id="ip_fx">');
@@ -1073,6 +1079,7 @@ iTable.prototype.fillBlank = function() {
 	this.header.append(fxBox);
 	this.fillWork();
 }
+//输入操作
 iTable.prototype.fillWork = function() {
 
 	var ev = ev || event;
@@ -1089,8 +1096,9 @@ iTable.prototype.fillWork = function() {
 		flReg = /^\=|\+|\-|\*|\/|\(|\)/;
 		reg = /^\=(((\(*([a-zA-Z]([1-9]\d*))\)*(\+|-|\/|\*))*([a-zA-Z]([1-9]\d*))*\)*)|([a-zA-Z]([1-9]\d*)))/;
 		res = pValue.match(reg);
-        
-		if(!!res[0]) {
+         
+		if((!!res)&&(!!res[0])) {
+ 
 			endText = res[0].toString();
 			pArr = endText.split(flReg);
 
@@ -1105,7 +1113,12 @@ iTable.prototype.fillWork = function() {
 			}
 
 		}
-
+		if($('.ui-selected').length>1){
+			return;
+		}else{
+			$('.ui-selected').text(pValue); 
+		}
+        
 		//删除
 		if((ev.keyCode == 8)) {
 			delRes = nValue.match(/([a-zA-Z]([1-9]\d*))(((\-|\+|\*|\\){1}([a-zA-Z]{1})(([1-9]\d*){1})))*/);
@@ -1130,13 +1143,10 @@ iTable.prototype.fillWork = function() {
 	ifx.keydown(function(ev) {
 		nValue = ifx.val();
 	});
-	ifx.blur(function(){
-		
-		$('.mask').remove();
-	});
+	 
 
 }
-
+//高亮蒙版
 iTable.prototype.createMask = function(left, top, width, height, posX, posY) {
 	var mask = $('<div class="mask"></div>');
 	var color = getRandomColor();
@@ -1155,7 +1165,14 @@ iTable.prototype.createMask = function(left, top, width, height, posX, posY) {
 	this.container.append(mask);
 
 }
-
+iTable.prototype.tdTofx=function(obj){
+	 
+	var tdVal=obj.text();
+	var fx=$('#ip_fx');
+	fx.val(tdVal);
+	 
+}
+//高亮单元格
 function lightTd(tmp) {
 
 	var posY = tmp.match(/^[a-zA-Z]{1}/gi);
@@ -1173,7 +1190,7 @@ function lightTd(tmp) {
 	t.createMask(left, top, width, height, posX, posY);
 
 }
-
+//随机颜色
 function getRandomColor() {
 	return '#' + ('00000' + (Math.random() * 0x1000000 << 0).toString(16)).slice(-6);
 
