@@ -249,7 +249,7 @@ iTable.prototype.fillTd = function(tid) {
 			var yIndex = $(this).parent().index() + 1;
 			var targetY = $(".yOrder table").find('tr:eq(' + yCoo + ')');
 			var targetX = $(".xOrder table").find('tr td:eq(' + xCoo + ')');
-
+            $('.disbox').text(IntToChr(xCoo)+String(yCoo+1));
 			_self.remakeRow(targetY, yCoo, xIndex, yIndex, rowspan, colspan);
 			_self.remakeCol(targetX, xCoo, xIndex, yIndex, rowspan, colspan, xCoo, yCoo);
             _self.tdTofx($(this));
@@ -1127,6 +1127,8 @@ iTable.prototype.remarkLeft = function(obj, startNum) {
 iTable.prototype.fillBlank = function() {
 	var fxBox = $('<div class="fx"></div>');
 	var fxInput = $('<input type="text" id="ip_fx">');
+	var dis=$('<span class="disbox"></span>');
+	fxBox.append(dis);
 	fxBox.append(fxInput);
 	this.header.append(fxBox);
 	this.fillWork();
