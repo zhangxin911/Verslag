@@ -1086,10 +1086,10 @@ iTable.prototype.fillWork = function() {
 
 	ifx.keyup(function(ev) {
 		pValue = ifx.val();
-		flReg = /\+|\-|\*|\/|\(|\)|\=/;
-		reg = /\=((\(*([a-zA-Z]([1-9]\d*))\)*(\+|-|\/|\*))*([a-zA-Z]([1-9]\d*))*\)*)|([a-zA-Z]([1-9]\d*))/;
+		flReg = /^\=|\+|\-|\*|\/|\(|\)/;
+		reg = /^\=(((\(*([a-zA-Z]([1-9]\d*))\)*(\+|-|\/|\*))*([a-zA-Z]([1-9]\d*))*\)*)|([a-zA-Z]([1-9]\d*)))/;
 		res = pValue.match(reg);
-        console.log(res);
+        
 		if(!!res[0]) {
 			endText = res[0].toString();
 			pArr = endText.split(flReg);
@@ -1130,11 +1130,15 @@ iTable.prototype.fillWork = function() {
 	ifx.keydown(function(ev) {
 		nValue = ifx.val();
 	});
+	ifx.blur(function(){
+		
+		$('.mask').remove();
+	});
 
 }
 
 iTable.prototype.createMask = function(left, top, width, height, posX, posY) {
-	var mask = $('<div></div>');
+	var mask = $('<div class="mask"></div>');
 	var color = getRandomColor();
 
 	mask.css({
@@ -1143,7 +1147,7 @@ iTable.prototype.createMask = function(left, top, width, height, posX, posY) {
 		'left': left,
 		'top': top,
 		'position': 'absolute',
-
+ 
 		'border': '1px dashed' + color,
 		'z-index': '99'
 	});
