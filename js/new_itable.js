@@ -144,7 +144,8 @@ iTable.prototype.setCss = function() {
 		'margin-top': bTop + 70,
 		'width': viewWidth - bLeft,
 		'height': viewHeight - bTop - 110,
-		'overflow': 'scroll'
+		'overflow': 'scroll',
+		'position': 'relative'
 	});
 
 	var that = this.container;
@@ -762,7 +763,7 @@ iTable.prototype.addSheet = function() {
 		that.createContent(neId);
 		that.fillTd(neId);
 		$("#iTable" + neId).selectable();
-        //dd=$('.sheet');  
+		//dd=$('.sheet');  
 		dd.on('click', function() {
 			box.empty();
 			var dId = $(this).attr('id');
@@ -1065,11 +1066,155 @@ iTable.prototype.remarkLeft = function(obj, startNum) {
 
 }
 
-iTable.prototype.fillBlank=function(){
-   var fxBox=$('<div class="fx"></div>');
-   var fxInput=$('<input type="text" id="ip_fx">');
-   fxBox.append(fxInput);
-   this.header.append(fxBox);
+iTable.prototype.fillBlank = function() {
+	var fxBox = $('<div class="fx"></div>');
+	var fxInput = $('<input type="text" id="ip_fx">');
+	fxBox.append(fxInput);
+	this.header.append(fxBox);
+	this.fillWork();
+}
+iTable.prototype.fillWork = function() {
+
+	var ev = ev || event;
+	var ifx = $('#ip_fx');
+	var pValue, nValue;
+	var pArr, nArr, cArr;
+	var endText;
+	var res, delRes;
+	var delText;
+	var reg, flReg;
+
+	ifx.keyup(function(ev) {
+		pValue = ifx.val();
+		flReg = /\+|\-|\*|\/|\(|\)/;
+		reg = /((\(*([a-zA-Z]([1-9]\d*))\)*(\+|-|\/|\*))*([a-zA-Z]([1-9]\d*))*\)*)|([a-zA-Z]([1-9]\d*))/;
+		res = pValue.match(reg);
+
+		if(!!res[0]) {
+			endText = res[0].toString();
+			pArr = endText.split(flReg);
+
+			for(var i = 0; i < pArr.length; i++) {
+				if(!!pArr[i]) {					 
+					if(String(nValue).indexOf(pArr[i]) <= -1) {
+						lightTd(pArr[i]);
+						cLightTd(pArr[i].substr(0, pArr[i].length - 1));
+					}
+
+				}
+			}
+
+		}
+
+		//删除
+		if((ev.keyCode == 8)) {
+
+			delRes = nValue.match(/([a-zA-Z]([1-9]\d*))(((\-|\+|\*|\\){1}([a-zA-Z]{1})(([1-9]\d*){1})))*/);
+
+			if(!!nValue) {
+
+				dArr = nValue.split(flReg);
+
+				cArr = pValue.split(flReg);
+
+				delTmp = getUniqueSet(cArr, dArr);
+
+				if(!!delTmp[1]) {
+					cLightTd(delTmp[1]);
+				}
+
+			}
+
+		}
+
+	});
+
+	ifx.keydown(function(ev) {
+		nValue = ifx.val();
+	});
+
+}
+
+iTable.prototype.createMask = function(left, top, width, height, posX, posY) {
+	var mask = $('<div></div>');
+	var color = getRandomColor();
+
+	mask.css({
+		'width': width - 2,
+		'height': height - 2,
+		'left': left,
+		'top': top,
+		'position': 'absolute',
+
+		'border': '1px dashed' + color,
+		'z-index': '99'
+	});
+	mask.attr('mpos', posX + '-' + posY);
+	this.container.append(mask);
+
+}
+
+function lightTd(tmp) {
+
+	var posY = tmp.match(/^[a-zA-Z]{1}/gi);
+	var posX = tmp.match(/\+?[1-9][0-9]*$/g);
+	posY = posY.toString();
+	posY = posY.toLocaleLowerCase().charCodeAt(0) - 96;
+	posY--;
+	posX = posX.toString() - 1;
+
+	lTd = $("[pos='" + posX + "-" + posY + "']");
+	var width = lTd[0].offsetWidth,
+		height = lTd[0].offsetHeight;
+	var left = lTd[0].offsetLeft,
+		top = lTd[0].offsetTop;
+	t.createMask(left, top, width, height, posX, posY);
+
+}
+
+function getRandomColor() {
+	return '#' + ('00000' + (Math.random() * 0x1000000 << 0).toString(16)).slice(-6);
+
+}
+
+function cLightTd(tmp) {
+
+	var posY = tmp.match(/^[a-zA-Z]{1}/gi);
+	var posX = tmp.match(/\+?[1-9][0-9]*$/g);
+	posY = posY.toString();
+	posY = posY.toLocaleLowerCase().charCodeAt(0) - 96;
+
+	if(posY == null || posX == null || posY.length == 0 || String(posX).length == 0) {
+		return;
+	}
+	posY--;
+	posX = posX.toString() - 1;
+	lTd = $("[pos='" + posX + "-" + posX + "']");
+
+	$('[mpos="' + posX + '-' + posY + '"]').remove();
+
+}
+
+//字符串取异
+function getUniqueSet(setA, setB) {
+
+	var temp = {};
+	for(var i = 0, len = setA.length; i < len; i++) {
+		temp[setA[i]] = 0;
+	}
+	for(var j = 0, len = setB.length; j < len; j++) {
+		if(typeof temp[setB[j]] === 'undefined') {
+			temp[setB[j]] = 0;
+		} else {
+			temp[setB[j]]++;
+		}
+	}
+	//output
+	var ret = [];
+	for(var item in temp) {
+		!temp[item] && ret.push(item);
+	}
+	return ret;
 }
 
 //Input光标
