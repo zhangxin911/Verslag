@@ -272,7 +272,7 @@ iTable.prototype.fillTd = function(tid) {
 			}else{
 				return;
 			}
-			console.log(len);
+			
 		});
 		$(this).mouseout(function(){
 			$('.tdTip').remove();
@@ -1026,7 +1026,7 @@ iTable.prototype.remakeRow = function(obj, rowNum, xIndex, yIndex, rowspan, cols
 				for(var i = 0; i < colSpan; i++) {
 
 					$("#iTable" + id).find('tr:eq(' + j + ')').append($("<td></td>"));
-					console.log(rowNum);
+					 
 				}
 			}
 		} else {
