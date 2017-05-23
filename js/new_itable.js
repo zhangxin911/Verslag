@@ -3,8 +3,8 @@ function iTable(tContainer, tSettings) {
 	this.cellCount = tSettings.cellCount;
 	this.container = tContainer;
 	this.settings = tSettings;
-	var header, footer, curIndex;
-
+	var header, footer, curIndex,tools;
+  
 }
 
 iTable.prototype.createContent = function(tid) {
@@ -325,7 +325,42 @@ iTable.prototype.createFooter = function() {
 
 	var sheetFloat = $('<div class="sheetfloat"><span class="lsheet"></span><span class="rsheet"></span></div>');
 	this.footer.append(sheetFloat);
+    $('#sheet1').on('dblclick',function() {       
+			var that = $(this);
+			var ev = ev || window.event;
+			var tdWidth = that.width();
+			var tdHeight = that.height();
+			var tdText = that.text();
 
+			var stInput = $("<input type='text' class='stInput'  value='" + tdText + "'></input>");
+
+			stInput.width(tdWidth - 2);
+			stInput.height(tdHeight - 2);
+
+			that.html(stInput);
+			$('.stInput').blur(function() {
+				var content = $('.stInput').val();
+
+				if(tdText == content) {
+
+					$(this).parent().html(content);
+
+				} else {
+
+					$(this).parent().html(content);
+
+				}
+				$('.stInput').remove();
+
+				event.stopPropagation();
+			});
+			$(".stInput").keyup(function(ev) {
+				if(ev.keyCode == 13) {
+					$('.stInput').blur();
+				}
+			});
+		
+	}); 
 }
 
 //创建头部容器
@@ -334,6 +369,8 @@ iTable.prototype.createHeader = function() {
 	this.header.css({
 		'z-index': 103
 	})
+	this.tools=$('<div class="tools"></div>');
+	this.header.append(this.tools);
 	this.header.insertBefore(this.container);
 
 }
@@ -556,6 +593,33 @@ iTable.prototype.textAlign = function() {
 		});
 	});
 }
+//公式选择
+iTable.prototype.express=function(){
+	var select = this.createSelection('express', this.settings.express);
+	var sel_a = $(select[0]).find('ul li a');
+	var className, curClass;
+	var selThem;
+
+	sel_a.on('click', function() {
+        
+	});
+
+	sel_a.mouseover(function() {
+		$(this).css({
+			'background': '#ECECEC'
+		});
+
+	});
+	sel_a.mouseout(function() {
+		$(this).css({
+			'background': '#FFFFFF'
+		});
+	});
+}
+iTable.prototype.formula=function(){
+	
+}
+
 
 //合并单元格
 iTable.prototype.mergeTd = function() {
@@ -729,7 +793,7 @@ iTable.prototype.createSelection = function(id, menus) {
 	selectHead.after(selectUl);
 
 	selection.append(selectHead);
-	this.header.append(selection);
+	this.tools.append(selection);
 	selectUl.hide();
 	selectHead.on('click', function() {
 		selectUl.toggle();
@@ -747,7 +811,7 @@ iTable.prototype.createSimpleMenu = function(className) {
 	var menus = $('<div class="toolBox"></div>');
 	var simTool = $('<span class="' + className + '"></span>');
 	menus.append(simTool);
-	this.header.append(menus);
+	this.tools.append(menus);
 	return menus;
 }
 //创建工具栏格子菜单
@@ -782,7 +846,7 @@ iTable.prototype.createCellMenu = function(dClass, className, menus) {
 	selectHead.after(selectTb);
 	selection.append(selectHead);
 
-	this.header.append(selection);
+	this.tools.append(selection);
 
 	selectTb.hide();
 	selectHead.on('click', function() {
@@ -802,9 +866,11 @@ iTable.prototype.addSheet = function() {
 		that.createContent('1');
 		that.fillTd('1');
 		$("#iTable1").selectable();
+		
 		return false;
 	});
-
+        
+    
 	$('.addSheet').click(function() {
 		box.empty();
 		var dd = $("<dd class='sheet sheetdefault' id=sheet" + i + ">sheet" + i + "</dd>");
@@ -820,7 +886,7 @@ iTable.prototype.addSheet = function() {
 		that.createContent(neId);
 		that.fillTd(neId);
 		$("#iTable" + neId).selectable();
-		//dd=$('.sheet');  
+		 
 		dd.on('click', function() {
 			box.empty();
 			var dId = $(this).attr('id');
@@ -1123,7 +1189,7 @@ iTable.prototype.remarkLeft = function(obj, startNum) {
 	}
 
 }
-//创建输入框
+//创建公式输入框
 iTable.prototype.fillBlank = function() {
 	var fxBox = $('<div class="fx"></div>');
 	var fxInput = $('<input type="text" id="ip_fx">');
@@ -1211,7 +1277,6 @@ iTable.prototype.createMask = function(left, top, width, height, posX, posY) {
 		'left': left,
 		'top': top,
 		'position': 'absolute',
- 
 		'border': '1px dashed' + color,
 		'z-index': '99'
 	});
@@ -1249,7 +1314,7 @@ function getRandomColor() {
 	return '#' + ('00000' + (Math.random() * 0x1000000 << 0).toString(16)).slice(-6);
 
 }
-
+//取消高亮
 function cLightTd(tmp) {
 
 	var posY = tmp.match(/^[a-zA-Z]{1}/gi);
@@ -1483,7 +1548,16 @@ var settings = {
 			'tdclass': 'falign_right',
 			'fclass': 'ffalign_right',
 		}
+	},
+	express: {
+		'求和': 'fx_sum',
+		'平均': 'fx_avg',
+		'计数': 'fx_count',
+		'最大': 'fx_max',
+		'最小': 'fx_min'
+
 	}
+	
 
 }
 
@@ -1510,8 +1584,10 @@ t.bgColor();
 t.mergeTd();
 t.splitTd();
 t.textAlign();
+t.express();
 t.addSheet();
 t.sheetMove();
 t.setIndex();
 t.fillBlank();
+
 $("#iTable1").selectable();
