@@ -4,7 +4,7 @@ function iTable(tContainer, tSettings) {
 	this.container = tContainer;
 	this.settings = tSettings;
 	var header, footer, curIndex,tools;
-  
+    var enterValue;
 }
 
 iTable.prototype.createContent = function(tid) {
@@ -152,13 +152,12 @@ iTable.prototype.setCss = function() {
 	$(window).resize(function() {
 		var viewWidth = $(window).width();
 		var viewHeight = $(window).height();
-
 		that.width(viewWidth - bLeft);
 		that.height(viewHeight - bTop);
 	});
 
 }
-
+//滚动
 iTable.prototype.tableScroll = function() {
 	this.container.scroll(function() {
 		var scrollY = $(this).scrollTop();
@@ -283,8 +282,7 @@ iTable.prototype.fillTd = function(tid) {
 
 }
 function getStrLength(str) {
-        ///<summary>获得字符串实际长度，中文2，英文1</summary>
-        ///<param name="str">要获得长度的字符串</param>
+         
         var realLength = 0, len = str.length, charCode = -1;
         for (var i = 0; i < len; i++) {
             charCode = str.charCodeAt(i);
@@ -599,9 +597,10 @@ iTable.prototype.express=function(){
 	var sel_a = $(select[0]).find('ul li a');
 	var className, curClass;
 	var selThem;
-
+    var that=this;
 	sel_a.on('click', function() {
-        
+        var ways=$(this).attr('class').replace('fx_','');
+        that.formula(ways);
 	});
 
 	sel_a.mouseover(function() {
@@ -616,10 +615,46 @@ iTable.prototype.express=function(){
 		});
 	});
 }
-iTable.prototype.formula=function(){
-	
+//单元格上的公式区域
+iTable.prototype.formula=function(ways){
+	removeUied();
+	var func=ways;
+	var target=$('.ui-selected')[0];
+	var tmpContent=$(target).text();
+	var xCoo=$(target).attr('cols');
+	var yCoo=$(target).attr('rows');
+	var input=$('<input type="text">');
+	var width=target.offsetWidth;
+	var height=target.offsetHeight;
+	var left=target.offsetLeft;
+	var top=target.offsetTop;
+	var enterDiv=$('<div></div>');
+    console.log(width,height);
+	enterDiv.append(input);
+	enterDiv.css({
+		'min-width': width - 2,
+		'height': height - 2,
+		'left': left,
+		'top': top,
+		'position': 'absolute',
+		'border': '1px solid red',
+		'z-index': '98',
+		'background':'#ffffff'
+	});
+	input.css({
+		'height':height-10,
+		'line-height':height-10,
+		'border':'none',
+		'outline':'none'
+		
+		
+	}); 
+	this.container.append(enterDiv);
+	 
 }
-
+iTable.prototype.sum=function(){   
+	console.log('1');
+}
 
 //合并单元格
 iTable.prototype.mergeTd = function() {
@@ -1210,7 +1245,7 @@ iTable.prototype.fillWork = function() {
 	var res, delRes;
 	var delText;
 	var reg, flReg;
-
+    var that=this;
 	ifx.keyup(function(ev) {
 		pValue = ifx.val();
 		flReg = /^\=|\+|\-|\*|\/|\(|\)/;
@@ -1221,7 +1256,7 @@ iTable.prototype.fillWork = function() {
  
 			endText = res[0].toString();
 			pArr = endText.split(flReg);
-
+            this.enterValue=pArr;  
 			for(var i = 0; i < pArr.length; i++) {
 				if(!!pArr[i]) {
 					if(String(nValue).indexOf(pArr[i]) <= -1) {
@@ -1277,7 +1312,7 @@ iTable.prototype.createMask = function(left, top, width, height, posX, posY) {
 		'left': left,
 		'top': top,
 		'position': 'absolute',
-		'border': '1px dashed' + color,
+		'border': '1px solid' + color,
 		'z-index': '99'
 	});
 	mask.attr('mpos', posX + '-' + posY);
