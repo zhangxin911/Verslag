@@ -4,7 +4,6 @@ function iTable(tContainer, tSettings) {
 	this.container = tContainer;
 	this.settings = tSettings;
 	var header, footer, curIndex,tools;
-    var enterValue;
 }
 
 iTable.prototype.createContent = function(tid) {
@@ -25,6 +24,7 @@ iTable.prototype.createContent = function(tid) {
 
 	}
 	this.setIndex();
+	$("[pos=0-0]").addClass('ui-selected');
 }
 
 iTable.prototype.createTr = function() {
@@ -629,7 +629,7 @@ iTable.prototype.formula=function(ways){
 	var left=target.offsetLeft;
 	var top=target.offsetTop;
 	var enterDiv=$('<div></div>');
-    console.log(width,height);
+     
 	enterDiv.append(input);
 	enterDiv.css({
 		'min-width': width - 2,
@@ -650,10 +650,18 @@ iTable.prototype.formula=function(ways){
 		
 	}); 
 	this.container.append(enterDiv);
-	 
+	
 }
-iTable.prototype.sum=function(){   
-	console.log('1');
+
+iTable.prototype.sum=function(val){   	 
+	 var total;
+	 for(var i=0;i<val.length;i++){
+	 	 if(val[i]!=''){
+	 	 	total+=parseInt(val[i]);
+	 	 }
+	 }
+	 console.log(total);
+	 return total;
 }
 
 //合并单元格
@@ -1249,25 +1257,35 @@ iTable.prototype.fillWork = function() {
 	ifx.keyup(function(ev) {
 		pValue = ifx.val();
 		flReg = /^\=|\+|\-|\*|\/|\(|\)/;
-		reg = /^\=(((\(*([a-zA-Z]([1-9]\d*))\)*(\+|-|\/|\*))*([a-zA-Z]([1-9]\d*))*\)*)|([a-zA-Z]([1-9]\d*)))/;
+		//reg = /^\=(((\(*([a-zA-Z]([1-9]\d*))\)*(\+|-|\/|\*))*([a-zA-Z]([1-9]\d*))*\)*)|([a-zA-Z]([1-9]\d*)))/;
+		
+		reg= /^\=((((\(*([a-zA-Z]([1-9]\d*))\)*|([1-9]\d*))(\+|-|\/|\*))*(([1-9]\d*)|([a-zA-Z]([1-9]\d*))*\)*))|([a-zA-Z]([1-9]\d*)))/;
 		res = pValue.match(reg);
-         
+		 
+		 
 		if((!!res)&&(!!res[0])) {
  
 			endText = res[0].toString();
 			pArr = endText.split(flReg);
-            this.enterValue=pArr;  
+            
 			for(var i = 0; i < pArr.length; i++) {
 				if(!!pArr[i]) {
 					if(String(nValue).indexOf(pArr[i]) <= -1) {
 						lightTd(pArr[i]);
 						cLightTd(pArr[i].substr(0, pArr[i].length - 1));
+						console.log(that.getValue(pArr[i]));
+						 
 					}
 
 				}
-			}
-
+			}			 
+//			var result =dal2Rpn(endText);
+//          console.log(result);
+            
 		}
+ 
+        
+        
 		if($('.ui-selected').length>1){
 			return;
 		}else{
@@ -1291,6 +1309,9 @@ iTable.prototype.fillWork = function() {
 
 			}
 
+		}
+		if((ev.keyCode == 13)) {
+			ifx.blur();
 		}
 
 	});
@@ -1326,6 +1347,19 @@ iTable.prototype.tdTofx=function(obj){
 	fx.val(tdVal);
 	 
 }
+iTable.prototype.getValue=function(arr){
+	arr=arr.toString();
+	 
+    var xCoo=arr.replace(/[a-zA-Z]*/,' ');
+    var yCoo=arr.replace(/[1-9]\d*/,' '); 
+    yCoo=yCoo.charCodeAt(0) - 96;
+    xCoo--;yCoo--; 
+    
+//	var yCoo=obj.attr('rows')-1;
+	var value=$('[pos="'+xCoo+'-'+yCoo+'"]').text();
+	return value;
+}
+
 //高亮单元格
 function lightTd(tmp) {
 
@@ -1335,19 +1369,20 @@ function lightTd(tmp) {
 	posY = posY.toLocaleLowerCase().charCodeAt(0) - 96;
 	posY--;
 	posX = posX.toString() - 1;
-
+    if(posY == null || posX == null || posY.length == 0 || String(posY).length == 0) {
+		return;
+	}
 	lTd = $("[pos='" + posX + "-" + posY + "']");
 	var width = lTd[0].offsetWidth,
 		height = lTd[0].offsetHeight;
 	var left = lTd[0].offsetLeft,
 		top = lTd[0].offsetTop;
 	t.createMask(left, top, width, height, posX, posY);
-
+    
 }
 //随机颜色
 function getRandomColor() {
 	return '#' + ('00000' + (Math.random() * 0x1000000 << 0).toString(16)).slice(-6);
-
 }
 //取消高亮
 function cLightTd(tmp) {
