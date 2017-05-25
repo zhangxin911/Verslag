@@ -1261,7 +1261,7 @@ iTable.prototype.fillWork = function() {
     var calText;
 	ifx.keyup(function(ev) {
 		pValue = ifx.val();
-		calText=pValue;
+		 
 		flReg = /^\=|\+|\-|\*|\/|\(|\)/;
 		//reg = /^\=(((\(*([a-zA-Z]([1-9]\d*))\)*(\+|-|\/|\*))*([a-zA-Z]([1-9]\d*))*\)*)|([a-zA-Z]([1-9]\d*)))/;
 		
@@ -1279,17 +1279,12 @@ iTable.prototype.fillWork = function() {
 					if(String(nValue).indexOf(pArr[i]) <= -1) {
 						lightTd(pArr[i]);
 						cLightTd(pArr[i].substr(0, pArr[i].length - 1));
-						 
-//                      var tmp=(pArr[i]).toString();
-//                      var tmpVal=that.getValue(pArr[i]);
-//                      calText.replace(tmp,tmpVal);
+ 
 					}
 
 				}
 			}
-//			console.log(calText);
-//			var result =dal2Rpn(calText);
-//         console.log(result);
+ 
             
 		}
  
@@ -1321,14 +1316,43 @@ iTable.prototype.fillWork = function() {
 		}
 		if((ev.keyCode == 13)) {
 			ifx.blur();
+			var allValue=pValue;
+			console.log(allValue);
+			calRes = allValue.match(reg);
+			if((!!calRes)&&(!!calRes[0])) {
+             
+			fText = calRes[0].toString();
+			allArr = fText.split(flReg);
+             
+			for(var i = 0; i < allArr.length; i++) {
+				if(!!allArr[i]) {											 
+                        var tmp=allArr[i];
+                        var tmpVal=String(that.getValue(allArr[i]));
+                        allValue=allValue.replace(tmp,tmpVal);					
+                        
+				}
+				 
+			}
+			calText=allValue;
+			calText=calText.substring(1);
+			 
+			console.log(calText);
+			
+		    //calText='('+calText+')';
+			
+			var result =dal2Rpn(calText);
+//			console.log(dal2Rpn('( 1 + 2 )'));
+			console.log(result);
 		}
 
-	});
+	}
 
 	ifx.keydown(function(ev) {
 		nValue = ifx.val();
 	});
 	 
+
+});
 
 }
 //高亮蒙版
@@ -1363,9 +1387,19 @@ iTable.prototype.getValue=function(arr){
     var yCoo=arr.replace(/[1-9]\d*/,' '); 
     yCoo=yCoo.charCodeAt(0) - 96;
     xCoo--;yCoo--; 
-    
-//	var yCoo=obj.attr('rows')-1;
-	var value=$('[pos="'+xCoo+'-'+yCoo+'"]').text();
+    var value;
+    var text=Number($('[pos="'+xCoo+'-'+yCoo+'"]').text());
+    if(typeof(text)!='number'){
+    	value=0;
+    }else{
+    	if(!!text){
+    		value=Number(text);
+    	}else{
+    		value=0;
+    	}
+    	
+    }
+	
 	return value;
 }
 
