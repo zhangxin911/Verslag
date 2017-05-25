@@ -600,7 +600,7 @@ iTable.prototype.express=function(){
     var that=this;
 	sel_a.on('click', function() {
         var ways=$(this).attr('class').replace('fx_','');
-        that.formula(ways);
+       // that.formula(ways);
 	});
 
 	sel_a.mouseover(function() {
@@ -1254,8 +1254,10 @@ iTable.prototype.fillWork = function() {
 	var delText;
 	var reg, flReg;
     var that=this;
+    var calText;
 	ifx.keyup(function(ev) {
 		pValue = ifx.val();
+		calText=pValue;
 		flReg = /^\=|\+|\-|\*|\/|\(|\)/;
 		//reg = /^\=(((\(*([a-zA-Z]([1-9]\d*))\)*(\+|-|\/|\*))*([a-zA-Z]([1-9]\d*))*\)*)|([a-zA-Z]([1-9]\d*)))/;
 		
@@ -1273,14 +1275,17 @@ iTable.prototype.fillWork = function() {
 					if(String(nValue).indexOf(pArr[i]) <= -1) {
 						lightTd(pArr[i]);
 						cLightTd(pArr[i].substr(0, pArr[i].length - 1));
-						console.log(that.getValue(pArr[i]));
 						 
+//                      var tmp=(pArr[i]).toString();
+//                      var tmpVal=that.getValue(pArr[i]);
+//                      calText.replace(tmp,tmpVal);
 					}
 
 				}
-			}			 
-//			var result =dal2Rpn(endText);
-//          console.log(result);
+			}
+//			console.log(calText);
+//			var result =dal2Rpn(calText);
+//         console.log(result);
             
 		}
  
