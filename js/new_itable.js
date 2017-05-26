@@ -327,42 +327,7 @@ iTable.prototype.createFooter = function() {
 
 	var sheetFloat = $('<div class="sheetfloat"><span class="lsheet"></span><span class="rsheet"></span></div>');
 	this.footer.append(sheetFloat);
-    $('#sheet1').on('dblclick',function() {       
-			var that = $(this);
-			var ev = ev || window.event;
-			var tdWidth = that.width();
-			var tdHeight = that.height();
-			var tdText = that.text();
-
-			var stInput = $("<input type='text' class='stInput'  value='" + tdText + "'></input>");
-
-			stInput.width(tdWidth - 2);
-			stInput.height(tdHeight - 2);
-
-			that.html(stInput);
-			$('.stInput').blur(function() {
-				var content = $('.stInput').val();
-
-				if(tdText == content) {
-
-					$(this).parent().html(content);
-
-				} else {
-
-					$(this).parent().html(content);
-
-				}
-				$('.stInput').remove();
-
-				event.stopPropagation();
-			});
-			$(".stInput").keyup(function(ev) {
-				if(ev.keyCode == 13) {
-					$('.stInput').blur();
-				}
-			});
-		
-	}); 
+	this.sheetWork();
 }
 
 //创建头部容器
@@ -906,18 +871,7 @@ iTable.prototype.createCellMenu = function(dClass, className, menus) {
 iTable.prototype.addSheet = function() {
 	var i = 2;
 	var box = this.container;
-	var that = this;
-	$('#sheet1').on('click', function() {
-
-		$(this).addClass('sheetdefault').siblings().removeClass('sheetdefault');
-		that.createContent('1');
-		that.fillTd('1');
-		$("#iTable1").selectable();
-		
-		return false;
-	});
-        
-    
+	var that = this;         
 	$('.addSheet').click(function() {
 		box.empty();
 		var dd = $("<dd class='sheet sheetdefault' id=sheet" + i + ">sheet" + i + "</dd>");
@@ -933,8 +887,15 @@ iTable.prototype.addSheet = function() {
 		that.createContent(neId);
 		that.fillTd(neId);
 		$("#iTable" + neId).selectable();
-		 
-		dd.on('click', function() {
+		i++;
+		that.sheetWork(); 
+		
+	 });
+}
+
+iTable.prototype.sheetWork=function(){
+	var that=this;
+	$('.sheet').on('click', function() {
 			box.empty();
 			var dId = $(this).attr('id');
 			dId = dId.replace('sheet', '');
@@ -946,8 +907,9 @@ iTable.prototype.addSheet = function() {
 
 			return false;
 		});
-		i++;
-		dd.on('dblclick', function() {
+		
+	
+		$('.sheet').on('dblclick', function() {
 			var that = $(this);
 			var ev = ev || window.event;
 			var tdWidth = that.width();
@@ -983,8 +945,9 @@ iTable.prototype.addSheet = function() {
 			});
 		});
 
-	});
 }
+
+
 //sheet移动
 iTable.prototype.sheetMove = function() {
 	var lsheet = $('.lsheet');
@@ -1317,7 +1280,7 @@ iTable.prototype.fillWork = function() {
 		if((ev.keyCode == 13)) {
 			ifx.blur();
 			var allValue=pValue;
-			console.log(allValue);
+			 
 			calRes = allValue.match(reg);
 			if((!!calRes)&&(!!calRes[0])) {
              
@@ -1335,14 +1298,11 @@ iTable.prototype.fillWork = function() {
 			}
 			calText=allValue;
 			calText=calText.substring(1);
-			 
-			console.log(calText);
-			
-		    //calText='('+calText+')';
+ 
 			
 			var result =dal2Rpn(calText);
-//			console.log(dal2Rpn('( 1 + 2 )'));
-			console.log(result);
+            $('.ui-selected').text(result); 
+            $('.mask').remove();
 		}
 
 	}
@@ -1355,6 +1315,8 @@ iTable.prototype.fillWork = function() {
 });
 
 }
+
+
 //高亮蒙版
 iTable.prototype.createMask = function(left, top, width, height, posX, posY) {
 	var mask = $('<div class="mask"></div>');
