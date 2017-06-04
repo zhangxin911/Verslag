@@ -1650,8 +1650,8 @@ var tabs={
 }
 var t = new iTable(box, settings,tabs);
 iTable.prototype.init=function(){
-	var tOption=this.tabs;
-	this.createContent();
+var tOption=this.tabs;
+this.createContent();
 this.createXaxis();
 this.createYaxis();
 this.setCss();
