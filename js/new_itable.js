@@ -1,8 +1,9 @@
-function iTable(tContainer, tSettings) {
+function iTable(tContainer, tSettings,tabs) {
 	this.rowCount = tSettings.rowCount;
 	this.cellCount = tSettings.cellCount;
 	this.container = tContainer;
 	this.settings = tSettings;
+	this.tabs=tabs;
 	var header, footer, curIndex, tools;
 }
 
@@ -1632,32 +1633,50 @@ var settings = {
 }
 
 var box = $('.box');
-var t = new iTable(box, settings);
+var tabs={
 
-t.createContent();
-t.createXaxis();
-t.createYaxis();
-t.setCss();
-t.fillTd();
-t.tableScroll();
-t.createTip();
-t.createFooter();
-t.createHeader();
+	fontColor:true,
+	fontFamily:true,
+	fontSize:true,
+	fontBold:true,
+	fontItalic:true,
+	fontOverline:true,
+	fontBgcolor:true,
+	fontFamily:true,
+	mergeTd:true,
+	splitTd:true,
+    textAlign:true,
+    
+}
+var t = new iTable(box, settings,tabs);
+iTable.prototype.init=function(){
+	var tOption=this.tabs;
+	this.createContent();
+this.createXaxis();
+this.createYaxis();
+this.setCss();
+this.fillTd();
+this.tableScroll();
+this.createTip();
+this.createFooter();
+this.createHeader();
 
-t.fontFamily();
-t.fontSize();
-t.fontBold();
-t.fontItalic();
-t.fontOverline();
-t.fontColor();
-t.bgColor();
-t.mergeTd();
-t.splitTd();
-t.textAlign();
-t.express();
-t.addSheet();
-t.sheetMove();
-t.setIndex();
-t.fillBlank();
+tOption.fontColor&&this.fontFamily();
+tOption.fontSize&&this.fontSize();
+tOption.fontBold&&this.fontBold();
+tOption.fontItalic&&this.fontItalic();
+tOption.fontOverline&&this.fontOverline();
+tOption.fontColor&&this.fontColor();
+tOption.bgColor&&this.bgColor();
+tOption.mergeTd&&this.mergeTd();
+tOption.splitTd&&this.splitTd();
+tOption.textAlign&&this.textAlign();
+this.express();
+this.addSheet();
+this.sheetMove();
+this.setIndex();
+this.fillBlank();
+}
 
+t.init();
 $("#iTable1").selectable();
