@@ -1661,7 +1661,7 @@ this.createTip();
 this.createFooter();
 this.createHeader();
 
-tOption.fontColor&&this.fontFamily();
+tOption.fontFamily&&this.fontFamily();
 tOption.fontSize&&this.fontSize();
 tOption.fontBold&&this.fontBold();
 tOption.fontItalic&&this.fontItalic();
