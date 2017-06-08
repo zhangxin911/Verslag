@@ -257,8 +257,9 @@ iTable.prototype.fillTd = function(tid) {
 			var targetY = $(".yOrder table").find('tr:eq(' + yCoo + ')');
 			var targetX = $(".xOrder table").find('tr td:eq(' + xCoo + ')');
 			$('.disbox').text(IntToChr(xCoo) + String(yCoo + 1));
-			_self.remakeRow(targetY, yCoo, xIndex, yIndex, rowspan, colspan);
-			_self.remakeCol(targetX, xCoo, xIndex, yIndex, rowspan, colspan, xCoo, yCoo);
+			 
+			//_self.remakeRow(targetY, yCoo, xIndex, yIndex, rowspan, colspan);
+			//_self.remakeCol(targetX, xCoo, xIndex, yIndex, rowspan, colspan, xCoo, yCoo);
 			_self.tdTofx($(this));
 			removeUied();
 			$('#ip_fx').blur();
@@ -287,6 +288,44 @@ iTable.prototype.fillTd = function(tid) {
 		});
 
 	});;
+}
+
+
+iTable.prototype.editRowCol=function(tid){
+	var tid = tid || 1;;
+	var _self = this;
+	$('#iTable' + tid).find('tr td').each(function() {
+		$(this).click(function() {
+             
+			var tr = $(this).parent();
+			$('.dataTable').find('td').removeClass('ui-selected');
+			$(this).addClass('ui-selected');
+
+			$(".dataTable tr td").removeAttr('chosed');
+			$(this).attr('chosed', 'clickone');
+			var xCoo = Number($(this).attr('cols')) - 1,
+				yCoo = Number($(this).attr('rows')) - 1;
+			var colspan = Number($(this).attr('colspan'));
+			var rowspan = Number($(this).attr('rowspan'));
+
+			colspan = colspan || 1;
+			rowspan = rowspan || 1;
+
+			var xIndex = $(this).index() + 1;
+			var yIndex = $(this).parent().index() + 1;
+			var targetY = $(".yOrder table").find('tr:eq(' + yCoo + ')');
+			var targetX = $(".xOrder table").find('tr td:eq(' + xCoo + ')');
+			$('.disbox').text(IntToChr(xCoo) + String(yCoo + 1));
+			 
+			_self.remakeRow(targetY, yCoo, xIndex, yIndex, rowspan, colspan);
+			_self.remakeCol(targetX, xCoo, xIndex, yIndex, rowspan, colspan, xCoo, yCoo);
+			//_self.tdTofx($(this));
+			removeUied();
+			//$('#ip_fx').blur();
+
+		});
+		
+	});
 }
 
 function getStrLength(str) {
@@ -891,6 +930,7 @@ iTable.prototype.addSheet = function() {
 		$('.sheetqueuedl').append(dd);
 		that.createContent(neId);
 		that.fillTd(neId);
+		that.editRowCol(neId);
 		$("#iTable" + neId).selectable();
 		i++;
 		that.sheetWork();
@@ -907,6 +947,7 @@ iTable.prototype.sheetWork = function() {
 		dId = parseInt(dId);
 		that.createContent(dId);
 		that.fillTd(dId);
+		that.editRowCol(dId);
 		$("#iTable" + dId).selectable();
 		$(this).addClass('sheetdefault').siblings().removeClass('sheetdefault');
 
@@ -1051,7 +1092,7 @@ iTable.prototype.remakeRow = function(obj, rowNum, xIndex, yIndex, rowspan, cols
 	var otherTd = obj.siblings().children(0);
 	btnBox.append(addTr);
 	btnBox.append(delTr);
-
+     
 	for(var i = 0; i < otherTd.length; i++) {
 		$(otherTd[i]).children(0).remove();
 	}
@@ -1167,6 +1208,7 @@ iTable.prototype.remakeCol = function(obj, colNum, xIndex, yIndex, rowspan, cols
 
 		_self.setIndex();
 		_self.fillTd(id);
+		_self.editRowCol(id);
 	});
 
 	delCol.on('click', function() {
@@ -1180,6 +1222,7 @@ iTable.prototype.remakeCol = function(obj, colNum, xIndex, yIndex, rowspan, cols
 		_self.remarkTop($('.titleTable'), colNum);
 		_self.setIndex();
 		_self.fillTd(id);
+		_self.editRowCol(id);
 	});
 }
 //更新顶部
@@ -1634,7 +1677,6 @@ var settings = {
 
 var box = $('.box');
 var tabs={
-
 	fontColor:true,
 	fontFamily:true,
 	fontSize:true,
@@ -1646,7 +1688,7 @@ var tabs={
 	mergeTd:true,
 	splitTd:true,
     textAlign:true,
-    
+    editRowCol:false,
 }
 var t = new iTable(box, settings,tabs);
 iTable.prototype.init=function(){
@@ -1661,6 +1703,7 @@ this.createTip();
 this.createFooter();
 this.createHeader();
 
+tOption.editRowCol&&this.editRowCol();
 tOption.fontFamily&&this.fontFamily();
 tOption.fontSize&&this.fontSize();
 tOption.fontBold&&this.fontBold();
