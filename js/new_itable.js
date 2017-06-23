@@ -26,6 +26,7 @@ iTable.prototype.createContent = function(tid) {
 	}
 	this.setIndex();
 	$("[pos=0-0]").addClass('ui-selected');
+	 
 }
 
 iTable.prototype.createTr = function() {
@@ -1374,6 +1375,98 @@ iTable.prototype.createMask = function(left, top, width, height, posX, posY) {
 	this.container.append(mask);
 
 }
+
+iTable.prototype.rMenus=function(){
+	var that=this;
+	var rMenus=this.createRmenus();
+	document.oncontextmenu=function(ev){
+		var ev=ev||window.event;
+		 var oX = ev.clientX;
+         var oY = ev.clientY;
+         
+        that.localRmenus(oX,oY,rMenus);
+		return false;
+		
+	}
+}
+iTable.prototype.createRmenus=function(){
+	var menus=$('<div></div>');
+	
+	var cut=this.cut();
+	menus.append(cut);
+	
+	var copy=this.copy();
+	menus.append(copy);
+	
+	var paste=this.paste();
+	menus.append(paste);
+	
+	
+	
+	
+    
+    menus.css({
+    	'position':'absolute',
+    	'width':'200px',
+    	'height':'300px',
+    	'background':'#FBFBFB',
+    	//'z-index':'199',
+    	'display':'none',
+    	'font-size':'14px'
+    });
+    $('body').append(menus);
+//  event.stopPropagation();   
+    $(document).on('click',function(){
+		console.log('2');
+		menus.hide();
+		return false;
+	});
+     
+    return menus;
+}
+iTable.prototype.localRmenus=function(x,y,obj){
+	$(obj).css({
+		'left':x,
+		'top':y,
+		'display':'block'
+	});
+	
+}
+
+iTable.prototype.cut=function(){
+	var cut=$('<div class="menu-cut"></div>');
+	cut.text('剪切');
+	cut.css({
+		'padding':'2px 10px'
+	})
+	cut.on('click',function(){
+		$(this).parent().hide();
+	});
+	return cut;
+}
+iTable.prototype.copy=function(){
+	var copy=$('<div class="menu-copy"></div>');
+	copy.text('复制');
+	copy.css({
+		'padding':'2px 10px'
+	})
+	copy.on('click',function(){
+		console.log('cut');
+	});
+	return copy;
+}
+iTable.prototype.paste=function(){
+	var paste=$('<div class="menu-paste"></div>');
+	paste.text('粘贴');
+	paste.css({
+		'padding':'2px 10px'
+	})
+	paste.on('click',function(){
+		console.log('cut');
+	});
+	return paste;
+}
+
 iTable.prototype.tdTofx = function(obj) {
 
 	var tdVal = obj.text();
@@ -1688,7 +1781,7 @@ var tabs={
 	mergeTd:true,
 	splitTd:true,
     textAlign:true,
-    editRowCol:false,
+    editRowCol:true,
 }
 var t = new iTable(box, settings,tabs);
 iTable.prototype.init=function(){
@@ -1719,6 +1812,7 @@ this.addSheet();
 this.sheetMove();
 this.setIndex();
 this.fillBlank();
+this.rMenus();
 }
 
 t.init();
