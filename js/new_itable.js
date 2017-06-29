@@ -1379,15 +1379,26 @@ iTable.prototype.createMask = function(left, top, width, height, posX, posY) {
 iTable.prototype.rMenus=function(){
 	var that=this;
 	var rMenus=this.createRmenus();
-	document.oncontextmenu=function(ev){
-		var ev=ev||window.event;
+     $('.dataTable')[0].oncontextmenu=function(){
+     	var ev=ev||window.event;
 		 var oX = ev.clientX;
          var oY = ev.clientY;
-         
         that.localRmenus(oX,oY,rMenus);
-		return false;
-		
-	}
+        return false;
+     };
+     $('.dataTable').find('tr td').each(function(){
+     	$(this)[0].oncontextmenu=function(){
+     		 
+     		 var arr=$('.ui-selected');
+     		 var obj=$(this)[0];
+     		 //for(var i=0;i<arr.length;i++){
+  		 	console.log(arr.contains(obj));
+               // console.log(arr);
+     		 //}
+     		 //has&&($('.dataTable').find('td').removeClass('ui-selected'));	
+			 $(this).addClass('ui-selected');
+     	};
+     })
 }
 iTable.prototype.createRmenus=function(){
 	var menus=$('<div></div>');
@@ -1402,13 +1413,13 @@ iTable.prototype.createRmenus=function(){
 	menus.append(paste);
 	
 	
-	
+	var that=this;
 	
     
     menus.css({
     	'position':'absolute',
     	'width':'200px',
-    	'height':'300px',
+    	'overflow':'hidden',
     	'background':'#FBFBFB',
     	//'z-index':'199',
     	'display':'none',
@@ -1417,11 +1428,16 @@ iTable.prototype.createRmenus=function(){
     $('body').append(menus);
 //  event.stopPropagation();   
     $(document).on('click',function(){
-		console.log('2');
+
 		menus.hide();
+		 
 		return false;
 	});
      
+    $('.dataTable').on('click',function(){
+		menus.hide();
+    	
+    });
     return menus;
 }
 iTable.prototype.localRmenus=function(x,y,obj){
@@ -1451,7 +1467,7 @@ iTable.prototype.copy=function(){
 		'padding':'2px 10px'
 	})
 	copy.on('click',function(){
-		console.log('cut');
+		$(this).parent().hide();
 	});
 	return copy;
 }
@@ -1462,7 +1478,7 @@ iTable.prototype.paste=function(){
 		'padding':'2px 10px'
 	})
 	paste.on('click',function(){
-		console.log('cut');
+		$(this).parent().hide();
 	});
 	return paste;
 }
