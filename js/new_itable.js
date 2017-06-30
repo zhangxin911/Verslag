@@ -1391,25 +1391,24 @@ iTable.prototype.rMenus=function(){
      		 
      		 var arr=$('.ui-selected');
      		 var obj=$(this)[0];
-     		 //for(var i=0;i<arr.length;i++){
-  		 	console.log(arr.contains(obj));
-               // console.log(arr);
-     		 //}
-     		 //has&&($('.dataTable').find('td').removeClass('ui-selected'));	
+     		 var has=containsArray(arr,obj);
+  		 	 if(has==-1){
+  		 	 	$('.dataTable').find('td').removeClass('ui-selected');
+  		 	 }     		 
 			 $(this).addClass('ui-selected');
      	};
      })
 }
 iTable.prototype.createRmenus=function(){
 	var menus=$('<div></div>');
-	
-	var cut=this.cut();
+	var dataArr=[];
+	var cut=this.cut(dataArr);
 	menus.append(cut);
 	
 	var copy=this.copy();
 	menus.append(copy);
 	
-	var paste=this.paste();
+	var paste=this.paste(dataArr);
 	menus.append(paste);
 	
 	
@@ -1449,14 +1448,33 @@ iTable.prototype.localRmenus=function(x,y,obj){
 	
 }
 
-iTable.prototype.cut=function(){
+iTable.prototype.cut=function(dataArr){
 	var cut=$('<div class="menu-cut"></div>');
 	cut.text('剪切');
 	cut.css({
 		'padding':'2px 10px'
 	})
+	
 	cut.on('click',function(){
-		$(this).parent().hide();
+		
+		var tdLength=$('.ui-selected').length;
+		$(this).parent().hide();	
+		if(tdLength<=1){
+			dataArr.length=0;
+			removeUied();
+			var td=$('.ui-selected')[0];
+            dataArr.push($(td).text());
+            $(td).text('');
+		}else{
+			dataArr.length=0;
+			for(var i=0;i<tdLength;i++){
+             removeUied();
+             var tds=$('.ui-selected')[i];
+             dataArr.push($(tds));
+             $(tds).text('');
+		   }
+		}
+ 
 	});
 	return cut;
 }
@@ -1467,18 +1485,46 @@ iTable.prototype.copy=function(){
 		'padding':'2px 10px'
 	})
 	copy.on('click',function(){
+		var tdLength=$('.ui-selected').length;
 		$(this).parent().hide();
+		if(tdLength<=1){
+			dataArr.length=0;
+			removeUied();
+			var td=$('.ui-selected')[0];
+            dataArr.push($(td).text());
+		}else{
+			dataArr.length=0;
+			for(var i=0;i<tdLength;i++){
+             removeUied();
+             var tds=$('.ui-selected')[i];
+             dataArr.push($(tds));
+		   }
+		}
 	});
 	return copy;
 }
-iTable.prototype.paste=function(){
+iTable.prototype.paste=function(dataArr){
 	var paste=$('<div class="menu-paste"></div>');
 	paste.text('粘贴');
 	paste.css({
 		'padding':'2px 10px'
-	})
+	});
 	paste.on('click',function(){
 		$(this).parent().hide();
+		removeUied();
+		var tdLength=$('.ui-selected').length;
+		if(tdLength<=1){
+			$('.ui-selected').text(dataArr[0]);
+		}else{
+			for(var i=0;i<tdLength;i++){
+//           removeUied();
+//           var tds=$('.ui-selected')[i];
+//           dataArr.push($(tds));
+//           $(tds).text('');
+             
+		   }
+		}
+		
 	});
 	return paste;
 }
