@@ -105,8 +105,18 @@ iTable.prototype.createTip = function() {
 	content.insertBefore(this.container);
 }
 
-
-
+iTable.prototype.keyMove=function(){
+//	obj.key
+}
+iTable.prototype.findSpan=function(obj){
+	var x=obj.attr('rows');
+	var y=obj.attr('cols');
+	var t=this.getCurTable();
+//	console.log(x,y);
+//  for(var i=0;i<t.find('tr').length;i++){
+//  	
+//  }
+}
 
 
 
@@ -263,6 +273,7 @@ iTable.prototype.fillTd = function(tid) {
 			//_self.remakeCol(targetX, xCoo, xIndex, yIndex, rowspan, colspan, xCoo, yCoo);
 			_self.tdTofx($(this));
 			removeUied();
+			_self.findSpan($(this));
 			$('#ip_fx').blur();
 
 		});
