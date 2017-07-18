@@ -119,7 +119,7 @@ iTable.prototype.findSpan=function(obj){
 }
 
 iTable.prototype.frameSelect=function(){
-	$('.dataTable').on('mousedown', function() {
+	$(document).off('click').on('mousedown', function() {
 		var selList = null;
 		var fileNodes = $('.dataTable tr td');
   
@@ -147,16 +147,17 @@ iTable.prototype.frameSelect=function(){
 		});
 
 		$('body').append(selDiv);
-		if($('.ui-selected').length>0){
-			$('.ui-selected').removeClass('ui-selected');
-		}
+//		if($('.ui-selected').length>0){
+//			$('.ui-selected').removeClass('ui-selected');
+//		}
 		
 		var _x = null;
 		var _y = null;
 	 
         
-        $('.dataTable').on('mousemove',function(){
+        $(document).off('mousemove').on('mousemove',function(){
         	evt = window.event || arguments[0];
+        	 
 			if(isSelect) {
 				if(selDiv.css('display') == "none") {
 					selDiv.css('display', '');
@@ -168,11 +169,8 @@ iTable.prototype.frameSelect=function(){
 					'top': Math.min(_y, oY),
 					'width': Math.abs(_x - oX),
 					'height': Math.abs(_y - oY)
-				})
+				});
 
-//				var x = selDiv.offset();
-//				var _l = x.left,
-//					_t = x.top;
                 var disWidth=$('.yOrder').width();
                 var disHeight=$('.xOrder').height()+$('.header').height();
                 var _l=parseInt(selDiv.css('left'))-disWidth;
@@ -184,19 +182,25 @@ iTable.prototype.frameSelect=function(){
 					var st = fileNodes[i].offsetHeight + fileNodes[i].offsetTop;
 					if(sl >= _l && st >= _t && fileNodes[i].offsetLeft <= _l + _w && fileNodes[i].offsetTop <= _t + _h) {
 
-							$(fileNodes[i]).addClass('ui-selected');
+						$(fileNodes[i]).addClass('ui-selected');
+						
+						if($(fileNodes[i]).attr('rowspan')){
+							console.log($(fileNodes[i]).attr('rowspan'));
+						}
 
+					}else{
+						 $(fileNodes[i]).removeClass('ui-selected');
 					}
 				}
 
 			}
-			event.stopPropagation();
+			 
         });
         
-        $(document).on('mouseup',function(){
+        $(document).off('mouseup').on('mouseup',function(){
+        	 
         	isSelect = false;
-			selList = $('.seled');
-                selDiv&&selDiv.remove();
+            selDiv&&selDiv.remove();
 			selList = null, _x = null, _y = null, selDiv = null, startX = null, startY = null, evt = null;
         });
  
@@ -204,6 +208,36 @@ iTable.prototype.frameSelect=function(){
 	});
 
 
+}
+
+iTable.prototype.typingTd=function(){
+	$(document).on('keyup',function(){
+		 if($('.ui-selected').length==1){
+		 	var input=$('<input type="text">');
+		 	input.css({
+		 		'border':'none',
+		 		'outline':'none'
+		 	});
+		 	$('.ui-selected').html(input);
+		 	input.focus();
+		 	input.on('keydown',function(){
+		 		  $(document).off('keyup');
+		 		  if(event.keyCode=='13'){
+		 		  	input.blur();
+		 		  	input.parent().html(input.val());
+		 		  	input.parent().removeClass('ui-selected');
+		 		  	input.remove();
+		 		    
+		 		  }
+		 		  
+               
+		 	});
+		 }else{
+		 	return;
+		 }
+		 stopPropagation();
+
+	});
 }
 
 
@@ -301,6 +335,7 @@ iTable.prototype.fillTd = function(tid) {
 			set_text_value_position(tdInput, -1);
 			$('.tdInput').keyup(function() {
 				$('#ip_fx').val($(this).val());
+				$(document).off('keyup');
 			});
 
 			$('.tdInput').blur(function() {
@@ -386,8 +421,8 @@ iTable.prototype.fillTd = function(tid) {
 		$(this).mouseout(function() {
 			$('.tdTip').remove();
 		});
-
-	});;
+   
+	});
 }
 
 
@@ -401,8 +436,8 @@ iTable.prototype.editRowCol=function(tid){
 			$('.dataTable').find('td').removeClass('ui-selected');
 			$(this).addClass('ui-selected');
 
-			$(".dataTable tr td").removeAttr('chosed');
-			$(this).attr('chosed', 'clickone');
+			//$(".dataTable tr td").removeAttr('chosed');
+			//$(this).attr('chosed', 'clickone');
 			var xCoo = Number($(this).attr('cols')) - 1,
 				yCoo = Number($(this).attr('rows')) - 1;
 			var colspan = Number($(this).attr('colspan'));
@@ -1739,7 +1774,7 @@ function set_text_value_position(obj, spos) {
 }
 //取消冒泡
 function stopPropagation() {
-	var e = e || window.event;
+	var e =  window.event || arguments[0];;
 	if(e.stopPropagation) {
 		e.stopPropagation();
 	} else {
@@ -1975,6 +2010,7 @@ this.setIndex();
 this.fillBlank();
 this.rMenus();
 this.frameSelect();
+this.typingTd();
 }
 
 t.init();
