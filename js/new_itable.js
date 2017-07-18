@@ -25,7 +25,7 @@ iTable.prototype.createContent = function(tid) {
 
 	}
 	this.setIndex();
-	$("[pos=0-0]").addClass('ui-selected');
+	//$("[pos=0-0]").addClass('ui-selected');
 	 
 }
 
@@ -118,6 +118,94 @@ iTable.prototype.findSpan=function(obj){
 //  }
 }
 
+iTable.prototype.frameSelect=function(){
+	$('.dataTable').on('mousedown', function() {
+		var selList = null;
+		var fileNodes = $('.dataTable tr td');
+  
+		var isSelect = true;
+		var ev = ev || window.event;
+		var oX = ev.clientX;
+		var oY = ev.clientY;
+		var selDiv = $('<div class="mapdiv"></div>');
+           
+		selDiv.css({
+			'position': 'absolute',
+			'width': '0px',
+			'height': '0px',
+			'font-size': '0px',
+			'margin': '0px',
+			'padding': '0px',
+			'border': '1px solid #1ab394',
+			'background-color': '#4acfb4',
+			'z-index': '1000',
+			'filter': 'alpha(opacity:60)',
+			'opacity': '0.6',
+			'display': 'none',
+			'left': oX,
+			'top': oY
+		});
+
+		$('body').append(selDiv);
+		if($('.ui-selected').length>0){
+			$('.ui-selected').removeClass('ui-selected');
+		}
+		
+		var _x = null;
+		var _y = null;
+	 
+        
+        $('.dataTable').on('mousemove',function(){
+        	evt = window.event || arguments[0];
+			if(isSelect) {
+				if(selDiv.css('display') == "none") {
+					selDiv.css('display', '');
+				}
+				_x = (evt.x || evt.clientX);
+				_y = (evt.y || evt.clientY);
+				selDiv.css({
+					'left': Math.min(_x, oX),
+					'top': Math.min(_y, oY),
+					'width': Math.abs(_x - oX),
+					'height': Math.abs(_y - oY)
+				})
+
+//				var x = selDiv.offset();
+//				var _l = x.left,
+//					_t = x.top;
+                var disWidth=$('.yOrder').width();
+                var disHeight=$('.xOrder').height()+$('.header').height();
+                var _l=parseInt(selDiv.css('left'))-disWidth;
+                var _t=parseInt(selDiv.css('top'))-disHeight;
+				var _w = selDiv.width(),
+					_h = selDiv.height();
+				for(var i = 0; i < fileNodes.length; i++) {
+					var sl = fileNodes[i].offsetWidth + fileNodes[i].offsetLeft;
+					var st = fileNodes[i].offsetHeight + fileNodes[i].offsetTop;
+					if(sl >= _l && st >= _t && fileNodes[i].offsetLeft <= _l + _w && fileNodes[i].offsetTop <= _t + _h) {
+
+							$(fileNodes[i]).addClass('ui-selected');
+
+					}
+				}
+
+			}
+			event.stopPropagation();
+        });
+        
+        $(document).on('mouseup',function(){
+        	isSelect = false;
+			selList = $('.seled');
+                selDiv&&selDiv.remove();
+			selList = null, _x = null, _y = null, selDiv = null, startX = null, startY = null, evt = null;
+        });
+ 
+
+	});
+
+
+}
+
 
 
 iTable.prototype.getCurTable = function() {
@@ -170,7 +258,7 @@ iTable.prototype.setCss = function() {
 		var viewWidth = $(window).width();
 		var viewHeight = $(window).height();
 		that.width(viewWidth - bLeft);
-		that.height(viewHeight - bTop);
+		that.height(viewHeight - bTop-113);
 	});
 
 }
@@ -1886,7 +1974,8 @@ this.sheetMove();
 this.setIndex();
 this.fillBlank();
 this.rMenus();
+this.frameSelect();
 }
 
 t.init();
-$("#iTable1").selectable();
+//$("#iTable1").selectable();
