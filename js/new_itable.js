@@ -1,9 +1,9 @@
-function iTable(tContainer, tSettings,tabs) {
+function iTable(tContainer, tSettings, tabs) {
 	this.rowCount = tSettings.rowCount;
 	this.cellCount = tSettings.cellCount;
 	this.container = tContainer;
 	this.settings = tSettings;
-	this.tabs=tabs;
+	this.tabs = tabs;
 	var header, footer, curIndex, tools;
 }
 
@@ -26,7 +26,7 @@ iTable.prototype.createContent = function(tid) {
 	}
 	this.setIndex();
 	//$("[pos=0-0]").addClass('ui-selected');
-	 
+
 }
 
 iTable.prototype.createTr = function() {
@@ -77,7 +77,6 @@ iTable.prototype.createYaxis = function() {
 
 		for(var j = 0; j < 1; j++) {
 			var th = $("<td>" + (i + 1) + "</td>");
-
 			th.appendTo(tr);
 		}
 
@@ -105,30 +104,31 @@ iTable.prototype.createTip = function() {
 	content.insertBefore(this.container);
 }
 
-iTable.prototype.keyMove=function(){
-//	obj.key
+iTable.prototype.keyMove = function() {
+	//	obj.key
 }
-iTable.prototype.findSpan=function(obj){
-	var x=obj.attr('rows');
-	var y=obj.attr('cols');
-	var t=this.getCurTable();
-//	console.log(x,y);
-//  for(var i=0;i<t.find('tr').length;i++){
-//  	
-//  }
+iTable.prototype.findSpan = function(obj) {
+	var x = obj.attr('rows');
+	var y = obj.attr('cols');
+	var t = this.getCurTable();
+	//	console.log(x,y);
+	//  for(var i=0;i<t.find('tr').length;i++){
+	//  	
+	//  }
 }
 
-iTable.prototype.frameSelect=function(){
-	$(document).off('click').on('mousedown', function() {
+iTable.prototype.frameSelect = function() {
+	var that=this;
+	$(this.container).off('click').on('mousedown', function() {
 		var selList = null;
 		var fileNodes = $('.dataTable tr td');
-  
+
 		var isSelect = true;
-		var ev = ev || window.event;
+		var ev = window.event || arguments[0];
 		var oX = ev.clientX;
 		var oY = ev.clientY;
 		var selDiv = $('<div class="mapdiv"></div>');
-           
+
 		selDiv.css({
 			'position': 'absolute',
 			'width': '0px',
@@ -147,23 +147,24 @@ iTable.prototype.frameSelect=function(){
 		});
 
 		$('body').append(selDiv);
-//		if($('.ui-selected').length>0){
-//			$('.ui-selected').removeClass('ui-selected');
-//		}
-		
+		//		if($('.ui-selected').length>0){
+		//			$('.ui-selected').removeClass('ui-selected');
+		//		}
+
 		var _x = null;
 		var _y = null;
-	 
-        
-        $(document).off('mousemove').on('mousemove',function(){
-        	evt = window.event || arguments[0];
-        	 
+       
+		$(that.container).on('mousemove', function() {
+			evt = window.event || arguments[0];
+
 			if(isSelect) {
 				if(selDiv.css('display') == "none") {
-					selDiv.css('display', '');
+					selDiv.css('display', 'none');
 				}
 				_x = (evt.x || evt.clientX);
 				_y = (evt.y || evt.clientY);
+				_x=_x+$(that.container).scrollLeft();
+				_y=_y+$(that.container).scrollTop();
 				selDiv.css({
 					'left': Math.min(_x, oX),
 					'top': Math.min(_y, oY),
@@ -171,76 +172,97 @@ iTable.prototype.frameSelect=function(){
 					'height': Math.abs(_y - oY)
 				});
 
-                var disWidth=$('.yOrder').width();
-                var disHeight=$('.xOrder').height()+$('.header').height();
-                var _l=parseInt(selDiv.css('left'))-disWidth;
-                var _t=parseInt(selDiv.css('top'))-disHeight;
+				var disWidth = $('.yOrder').width();
+				var disHeight = $('.xOrder').height() + $('.header').height();
+				var _l = parseInt(selDiv.css('left')) - disWidth;
+				var _t = parseInt(selDiv.css('top')) - disHeight;
 				var _w = selDiv.width(),
 					_h = selDiv.height();
+				var _st=~~($(that.container).scrollTop());
+				var _sl=~~($(that.container).scrollLeft());
 				for(var i = 0; i < fileNodes.length; i++) {
 					var sl = fileNodes[i].offsetWidth + fileNodes[i].offsetLeft;
 					var st = fileNodes[i].offsetHeight + fileNodes[i].offsetTop;
 					if(sl >= _l && st >= _t && fileNodes[i].offsetLeft <= _l + _w && fileNodes[i].offsetTop <= _t + _h) {
 
 						$(fileNodes[i]).addClass('ui-selected');
-						
-						if($(fileNodes[i]).attr('rowspan')){
+
+						if($(fileNodes[i]).attr('rowspan')) {
 							console.log($(fileNodes[i]).attr('rowspan'));
 						}
-
-					}else{
-						 $(fileNodes[i]).removeClass('ui-selected');
+                       
+					} else {
+						$(fileNodes[i]).removeClass('ui-selected');
 					}
 				}
 
 			}
-			 
-        });
-        
-        $(document).off('mouseup').on('mouseup',function(){
-        	 
-        	isSelect = false;
-            selDiv&&selDiv.remove();
+
+		});
+
+		$(document).off('mouseup').on('mouseup', function() {
+
+			isSelect = false;
+			selDiv && selDiv.remove();
 			selList = null, _x = null, _y = null, selDiv = null, startX = null, startY = null, evt = null;
-        });
- 
+		});
 
 	});
 
-
 }
 
-iTable.prototype.typingTd=function(){
-	$(document).on('keyup',function(){
-		 if($('.ui-selected').length==1){
-		 	var input=$('<input type="text">');
-		 	input.css({
-		 		'border':'none',
-		 		'outline':'none'
-		 	});
-		 	$('.ui-selected').html(input);
-		 	input.focus();
-		 	input.on('keydown',function(){
-		 		  $(document).off('keyup');
-		 		  if(event.keyCode=='13'){
-		 		  	input.blur();
-		 		  	input.parent().html(input.val());
-		 		  	input.parent().removeClass('ui-selected');
-		 		  	input.remove();
-		 		    
-		 		  }
-		 		  
-               
-		 	});
-		 }else{
-		 	return;
-		 }
-		 stopPropagation();
-
-	});
+iTable.prototype.typingTd = function() {
+	$(document).off('keydown').on('keydown', typing);
 }
 
+function typing() {
+	var event = window.event || arguments[0];
+	if($('.ui-selected').length == 1) {
 
+		if(event.keyCode == '13' && event.target == $('body')[0]) {
+
+			var sNode = $('.ui-selected');
+			var x = parseInt($(sNode).attr('cols')) - 1;
+			var y = parseInt($(sNode).attr('rows'));
+
+			$(sNode).removeClass('ui-selected');
+			$("[pos='" + y + "-" + x + "']").addClass('ui-selected');
+			stopPropagation();
+		} else {
+			var input = $('<input type="text">');
+			input.css({
+				'border': 'none',
+				'outline': 'none'
+			});
+			$('.ui-selected').html(input);
+			input.focus();
+			input.on('keydown', function() {
+				var event = window.event || arguments[0];
+				$(document).off('keyup');
+				if(event.keyCode == '13' && event.target == this) {
+					var pNode = $(this).parent();
+					$(pNode).html(input.val());
+					$(pNode).removeClass('ui-selected');
+
+					var x = parseInt($(pNode).attr('cols')) - 1;
+					var y = parseInt($(pNode).attr('rows'));
+					$("[pos='" + y + "-" + x + "']").addClass('ui-selected');
+					$(this).blur(function() {
+						$(this).remove();
+					});
+
+					$(document).on('keydown', typing);
+
+				}
+				stopPropagation();
+			});
+
+		}
+	} else {
+		return;
+	}
+
+}
 
 iTable.prototype.getCurTable = function() {
 	var t;
@@ -292,7 +314,7 @@ iTable.prototype.setCss = function() {
 		var viewWidth = $(window).width();
 		var viewHeight = $(window).height();
 		that.width(viewWidth - bLeft);
-		that.height(viewHeight - bTop-113);
+		that.height(viewHeight - bTop - 113);
 	});
 
 }
@@ -319,7 +341,7 @@ iTable.prototype.fillTd = function(tid) {
 
 			var that = $(this);
 			var ev = ev || window.event;
-			that.attr('fid', 'tttt')
+			//			that.attr('fid', 'tttt')
 
 			var tdWidth = that.width();
 			var tdHeight = that.height();
@@ -335,7 +357,8 @@ iTable.prototype.fillTd = function(tid) {
 			set_text_value_position(tdInput, -1);
 			$('.tdInput').keyup(function() {
 				$('#ip_fx').val($(this).val());
-				$(document).off('keyup');
+				//				$(document).off('keyup');
+				_self.typingTd();
 			});
 
 			$('.tdInput').blur(function() {
@@ -357,7 +380,13 @@ iTable.prototype.fillTd = function(tid) {
 
 			$(".tdInput").keyup(function(ev) {
 				if(ev.keyCode == 13) {
+					var pNode = $(this).parent();
+					var x = parseInt($(pNode).attr('cols')) - 1;
+					var y = parseInt($(pNode).attr('rows'));
+					pNode.removeClass('ui-selected');
+					$("[pos='" + y + "-" + x + "']").addClass('ui-selected');
 					$('.tdInput').blur();
+					$(document).on('keyup', typing);
 				}
 			});
 			$(".tdInput").click(function(ev) {
@@ -373,11 +402,12 @@ iTable.prototype.fillTd = function(tid) {
 		$(this).click(function() {
 
 			var tr = $(this).parent();
-			$('.dataTable').find('td').removeClass('ui-selected');
+			//$('.dataTable').find('td').removeClass('ui-selected');
+			$('.ui-selected').removeClass('ui-selected');
 			$(this).addClass('ui-selected');
 
-			$(".dataTable tr td").removeAttr('chosed');
-			$(this).attr('chosed', 'clickone');
+			//			$(".dataTable tr td").removeAttr('chosed');
+			//			$(this).attr('chosed', 'clickone');
 			var xCoo = Number($(this).attr('cols')) - 1,
 				yCoo = Number($(this).attr('rows')) - 1;
 			var colspan = Number($(this).attr('colspan'));
@@ -391,7 +421,7 @@ iTable.prototype.fillTd = function(tid) {
 			var targetY = $(".yOrder table").find('tr:eq(' + yCoo + ')');
 			var targetX = $(".xOrder table").find('tr td:eq(' + xCoo + ')');
 			$('.disbox').text(IntToChr(xCoo) + String(yCoo + 1));
-			 
+
 			//_self.remakeRow(targetY, yCoo, xIndex, yIndex, rowspan, colspan);
 			//_self.remakeCol(targetX, xCoo, xIndex, yIndex, rowspan, colspan, xCoo, yCoo);
 			_self.tdTofx($(this));
@@ -421,17 +451,16 @@ iTable.prototype.fillTd = function(tid) {
 		$(this).mouseout(function() {
 			$('.tdTip').remove();
 		});
-   
+
 	});
 }
 
-
-iTable.prototype.editRowCol=function(tid){
+iTable.prototype.editRowCol = function(tid) {
 	var tid = tid || 1;;
 	var _self = this;
 	$('#iTable' + tid).find('tr td').each(function() {
 		$(this).click(function() {
-             
+
 			var tr = $(this).parent();
 			$('.dataTable').find('td').removeClass('ui-selected');
 			$(this).addClass('ui-selected');
@@ -451,7 +480,7 @@ iTable.prototype.editRowCol=function(tid){
 			var targetY = $(".yOrder table").find('tr:eq(' + yCoo + ')');
 			var targetX = $(".xOrder table").find('tr td:eq(' + xCoo + ')');
 			$('.disbox').text(IntToChr(xCoo) + String(yCoo + 1));
-			 
+
 			_self.remakeRow(targetY, yCoo, xIndex, yIndex, rowspan, colspan);
 			_self.remakeCol(targetX, xCoo, xIndex, yIndex, rowspan, colspan, xCoo, yCoo);
 			//_self.tdTofx($(this));
@@ -459,7 +488,7 @@ iTable.prototype.editRowCol=function(tid){
 			//$('#ip_fx').blur();
 
 		});
-		
+
 	});
 }
 
@@ -769,18 +798,18 @@ iTable.prototype.formula = function(ways) {
 	var tmpContent = $(target).text();
 	var xCoo = $(target).attr('cols');
 	var yCoo = $(target).attr('rows');
-	var input ='<input type="text" class="fxInput" onkeyup="this.size=(this.value.length>4?this.value.length:4)";>';
+	var input = '<input type="text" class="fxInput" onkeyup="this.size=(this.value.length>4?this.value.length:4)";>';
 	var width = target.offsetWidth;
 	var height = target.offsetHeight;
 	var left = target.offsetLeft;
 	var top = target.offsetTop;
-	var enterDiv ='<div class="fxDiv">';
+	var enterDiv = '<div class="fxDiv">';
 
-	enterDiv=enterDiv+ways+'('+input+')'+'</div>';
-	
+	enterDiv = enterDiv + ways + '(' + input + ')' + '</div>';
+
 	this.container.append($(enterDiv));
-    $('.fxDiv').css({
-		
+	$('.fxDiv').css({
+
 		'height': height - 2,
 		'left': left,
 		'top': top,
@@ -796,21 +825,18 @@ iTable.prototype.formula = function(ways) {
 		'outline': 'none'
 
 	});
-	$('.fxInput').keyup(function(){
-		var ev=ev||event;
-		var endValue=$(this).val();
-		if(ev.keyCode==13){
+	$('.fxInput').keyup(function() {
+		var ev = ev || event;
+		var endValue = $(this).val();
+		if(ev.keyCode == 13) {
 			endValue.split();
 			$(this).blur();
 			$(this).parent().remove();
-			
-			
+
 		}
 	});
-	
+
 }
-
-
 
 //合并单元格
 iTable.prototype.mergeTd = function() {
@@ -1227,7 +1253,7 @@ iTable.prototype.remakeRow = function(obj, rowNum, xIndex, yIndex, rowspan, cols
 	var otherTd = obj.siblings().children(0);
 	btnBox.append(addTr);
 	btnBox.append(delTr);
-     
+
 	for(var i = 0; i < otherTd.length; i++) {
 		$(otherTd[i]).children(0).remove();
 	}
@@ -1393,7 +1419,7 @@ iTable.prototype.fillBlank = function() {
 //输入操作
 iTable.prototype.fillWork = function() {
 
-	var ev = ev || event;
+	var ev = window.event || arguments[0];
 	var ifx = $('#ip_fx');
 	var pValue, nValue;
 	var pArr, nArr, cArr;
@@ -1510,155 +1536,153 @@ iTable.prototype.createMask = function(left, top, width, height, posX, posY) {
 
 }
 
-iTable.prototype.rMenus=function(){
-	var that=this;
-	var rMenus=this.createRmenus();
-     $('.dataTable')[0].oncontextmenu=function(){
-     	var ev=ev||window.event;
-		 var oX = ev.clientX;
-         var oY = ev.clientY;
-        that.localRmenus(oX,oY,rMenus);
-        return false;
-     };
-     $('.dataTable').find('tr td').each(function(){
-     	$(this)[0].oncontextmenu=function(){
-     		 
-     		 var arr=$('.ui-selected');
-     		 var obj=$(this)[0];
-     		 var has=containsArray(arr,obj);
-  		 	 if(has==-1){
-  		 	 	$('.dataTable').find('td').removeClass('ui-selected');
-  		 	 }     		 
-			 $(this).addClass('ui-selected');
-     	};
-     })
+iTable.prototype.rMenus = function() {
+	var that = this;
+	var rMenus = this.createRmenus();
+	$('.dataTable')[0].oncontextmenu = function() {
+		var ev = ev || window.event;
+		var oX = ev.clientX;
+		var oY = ev.clientY;
+		that.localRmenus(oX, oY, rMenus);
+		return false;
+	};
+	$('.dataTable').find('tr td').each(function() {
+		$(this)[0].oncontextmenu = function() {
+
+			var arr = $('.ui-selected');
+			var obj = $(this)[0];
+			var has = containsArray(arr, obj);
+			if(has == -1) {
+				$('.dataTable').find('td').removeClass('ui-selected');
+			}
+			$(this).addClass('ui-selected');
+		};
+	})
 }
-iTable.prototype.createRmenus=function(){
-	var menus=$('<div></div>');
-	var dataArr=[];
-	var cut=this.cut(dataArr);
+iTable.prototype.createRmenus = function() {
+	var menus = $('<div></div>');
+	var dataArr = [];
+	var cut = this.cut(dataArr);
 	menus.append(cut);
-	
-	var copy=this.copy();
+
+	var copy = this.copy();
 	menus.append(copy);
-	
-	var paste=this.paste(dataArr);
+
+	var paste = this.paste(dataArr);
 	menus.append(paste);
-	
-	
-	var that=this;
-	
-    
-    menus.css({
-    	'position':'absolute',
-    	'width':'200px',
-    	'overflow':'hidden',
-    	'background':'#FBFBFB',
-    	//'z-index':'199',
-    	'display':'none',
-    	'font-size':'14px'
-    });
-    $('body').append(menus);
-//  event.stopPropagation();   
-    $(document).on('click',function(){
+
+	var that = this;
+
+	menus.css({
+		'position': 'absolute',
+		'width': '200px',
+		'overflow': 'hidden',
+		'background': '#FBFBFB',
+		//'z-index':'199',
+		'display': 'none',
+		'font-size': '14px'
+	});
+	$('body').append(menus);
+	//  event.stopPropagation();   
+	$(document).on('click', function() {
 
 		menus.hide();
-		 
+
 		return false;
 	});
-     
-    $('.dataTable').on('click',function(){
+
+	$('.dataTable').on('click', function() {
 		menus.hide();
-    	
-    });
-    return menus;
-}
-iTable.prototype.localRmenus=function(x,y,obj){
-	$(obj).css({
-		'left':x,
-		'top':y,
-		'display':'block'
+
 	});
-	
+	return menus;
+}
+iTable.prototype.localRmenus = function(x, y, obj) {
+	$(obj).css({
+		'left': x,
+		'top': y,
+		'display': 'block'
+	});
+
 }
 
-iTable.prototype.cut=function(dataArr){
-	var cut=$('<div class="menu-cut"></div>');
+iTable.prototype.cut = function(dataArr) {
+	var cut = $('<div class="menu-cut"></div>');
 	cut.text('剪切');
 	cut.css({
-		'padding':'2px 10px'
+		'padding': '2px 10px'
 	})
-	
-	cut.on('click',function(){
-		
-		var tdLength=$('.ui-selected').length;
-		$(this).parent().hide();	
-		if(tdLength<=1){
-			dataArr.length=0;
+
+	cut.on('click', function() {
+
+		var tdLength = $('.ui-selected').length;
+		$(this).parent().hide();
+		if(tdLength <= 1) {
+			dataArr.length = 0;
 			removeUied();
-			var td=$('.ui-selected')[0];
-            dataArr.push($(td).text());
-            $(td).text('');
-		}else{
-			dataArr.length=0;
-			for(var i=0;i<tdLength;i++){
-             removeUied();
-             var tds=$('.ui-selected')[i];
-             dataArr.push($(tds));
-             $(tds).text('');
-		   }
+			var td = $('.ui-selected')[0];
+			dataArr.push($(td).text());
+			$(td).text('');
+		} else {
+			dataArr.length = 0;
+			for(var i = 0; i < tdLength; i++) {
+				removeUied();
+				var tds = $('.ui-selected')[i];
+				dataArr.push($(tds));
+				$(tds).text('');
+			}
 		}
- 
+
 	});
 	return cut;
 }
-iTable.prototype.copy=function(){
-	var copy=$('<div class="menu-copy"></div>');
+iTable.prototype.copy = function() {
+	var copy = $('<div class="menu-copy"></div>');
 	copy.text('复制');
 	copy.css({
-		'padding':'2px 10px'
+		'padding': '2px 10px'
 	})
-	copy.on('click',function(){
-		var tdLength=$('.ui-selected').length;
+	copy.on('click', function() {
+		var tdLength = $('.ui-selected').length;
 		$(this).parent().hide();
-		if(tdLength<=1){
-			dataArr.length=0;
+		if(tdLength <= 1) {
+			dataArr.length = 0;
 			removeUied();
-			var td=$('.ui-selected')[0];
-            dataArr.push($(td).text());
-		}else{
-			dataArr.length=0;
-			for(var i=0;i<tdLength;i++){
-             removeUied();
-             var tds=$('.ui-selected')[i];
-             dataArr.push($(tds));
-		   }
+			var td = $('.ui-selected')[0];
+			dataArr.push($(td).text());
+		} else {
+			dataArr.length = 0;
+			for(var i = 0; i < tdLength; i++) {
+				removeUied();
+				var tds = $('.ui-selected')[i];
+				dataArr.push($(tds));
+			}
 		}
 	});
 	return copy;
 }
-iTable.prototype.paste=function(dataArr){
-	var paste=$('<div class="menu-paste"></div>');
+iTable.prototype.paste = function(dataArr) {
+	var paste = $('<div class="menu-paste"></div>');
 	paste.text('粘贴');
 	paste.css({
-		'padding':'2px 10px'
+		'padding': '2px 10px'
 	});
-	paste.on('click',function(){
+	paste.on('click', function() {
 		$(this).parent().hide();
 		removeUied();
-		var tdLength=$('.ui-selected').length;
-		if(tdLength<=1){
+		var tdLength = $('.ui-selected').length;
+		if(tdLength <= 1) {
 			$('.ui-selected').text(dataArr[0]);
-		}else{
-			for(var i=0;i<tdLength;i++){
-//           removeUied();
-//           var tds=$('.ui-selected')[i];
-//           dataArr.push($(tds));
-//           $(tds).text('');
-             
-		   }
+		} else {
+			for(var i = 0; i < tdLength; i++) {
+				//           removeUied();
+				//           var tds=$('.ui-selected')[i];
+				//           dataArr.push($(tds));
+				//           $(tds).text('');
+
+			}
 		}
-		
+
 	});
 	return paste;
 }
@@ -1774,7 +1798,7 @@ function set_text_value_position(obj, spos) {
 }
 //取消冒泡
 function stopPropagation() {
-	var e =  window.event || arguments[0];;
+	var e = window.event || arguments[0];;
 	if(e.stopPropagation) {
 		e.stopPropagation();
 	} else {
@@ -1965,52 +1989,52 @@ var settings = {
 }
 
 var box = $('.box');
-var tabs={
-	fontColor:true,
-	fontFamily:true,
-	fontSize:true,
-	fontBold:true,
-	fontItalic:true,
-	fontOverline:true,
-	fontBgcolor:true,
-	fontFamily:true,
-	mergeTd:true,
-	splitTd:true,
-    textAlign:true,
-    editRowCol:true,
+var tabs = {
+	fontColor: true,
+	fontFamily: true,
+	fontSize: true,
+	fontBold: true,
+	fontItalic: true,
+	fontOverline: true,
+	fontBgcolor: true,
+	fontFamily: true,
+	mergeTd: true,
+	splitTd: true,
+	textAlign: true,
+	editRowCol: true,
 }
-var t = new iTable(box, settings,tabs);
-iTable.prototype.init=function(){
-var tOption=this.tabs;
-this.createContent();
-this.createXaxis();
-this.createYaxis();
-this.setCss();
-this.fillTd();
-this.tableScroll();
-this.createTip();
-this.createFooter();
-this.createHeader();
+var t = new iTable(box, settings, tabs);
+iTable.prototype.init = function() {
+	var tOption = this.tabs;
+	this.createContent();
+	this.createXaxis();
+	this.createYaxis();
+	this.setCss();
+	this.fillTd();
+	this.tableScroll();
+	this.createTip();
+	this.createFooter();
+	this.createHeader();
 
-tOption.editRowCol&&this.editRowCol();
-tOption.fontFamily&&this.fontFamily();
-tOption.fontSize&&this.fontSize();
-tOption.fontBold&&this.fontBold();
-tOption.fontItalic&&this.fontItalic();
-tOption.fontOverline&&this.fontOverline();
-tOption.fontColor&&this.fontColor();
-tOption.bgColor&&this.bgColor();
-tOption.mergeTd&&this.mergeTd();
-tOption.splitTd&&this.splitTd();
-tOption.textAlign&&this.textAlign();
-this.express();
-this.addSheet();
-this.sheetMove();
-this.setIndex();
-this.fillBlank();
-this.rMenus();
-this.frameSelect();
-this.typingTd();
+	tOption.editRowCol && this.editRowCol();
+	tOption.fontFamily && this.fontFamily();
+	tOption.fontSize && this.fontSize();
+	tOption.fontBold && this.fontBold();
+	tOption.fontItalic && this.fontItalic();
+	tOption.fontOverline && this.fontOverline();
+	tOption.fontColor && this.fontColor();
+	tOption.bgColor && this.bgColor();
+	tOption.mergeTd && this.mergeTd();
+	tOption.splitTd && this.splitTd();
+	tOption.textAlign && this.textAlign();
+	this.express();
+	this.addSheet();
+	this.sheetMove();
+	this.setIndex();
+	this.fillBlank();
+	this.rMenus();
+	this.frameSelect();
+	this.typingTd();
 }
 
 t.init();
