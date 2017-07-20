@@ -118,9 +118,9 @@ iTable.prototype.findSpan = function(obj) {
 }
 
 iTable.prototype.frameSelect = function() {
-	var that=this;
-	var cWidth=$(this.container).width();
-	var cHeight=$(this.container).height();
+	var that = this;
+	var cWidth = $(this.container).width();
+	var cHeight = $(this.container).height();
 	$(this.container).off('click').on('mousedown', function() {
 		var selList = null;
 		var fileNodes = $('.dataTable tr td');
@@ -155,55 +155,54 @@ iTable.prototype.frameSelect = function() {
 
 		var _x = null;
 		var _y = null;
-       
+
 		$(that.container).on('mousemove', function() {
 			evt = window.event || arguments[0];
-            
+
 			if(isSelect) {
 				if(selDiv.css('display') == "none") {
-					selDiv.css('display', '');
+					selDiv.css('display', 'none');
 				}
 				_x = (evt.x || evt.clientX);
 				_y = (evt.y || evt.clientY);
-//				_x=_x+$(that.container).scrollLeft();
-//				_y=_y+$(that.container).scrollTop();
-				//console.log($(that.container).scrollLeft(),$(that.container).scrollTop());
+				//				_x=_x+$(that.container).scrollLeft();
+				//				_y=_y+$(that.container).scrollTop();
 				selDiv.css({
 					'left': Math.min(_x, oX),
 					'top': Math.min(_y, oY),
 					'width': Math.abs(_x - oX),
 					'height': Math.abs(_y - oY)
 				});
- 
-//              if(_x>=cWidth){
-//              	var sleft=$(that.container).scrollLeft();
-//              	sleft+=50;	
-//              	$(that.container).scrollLeft(sleft);
-//              }else{
-//              	var sleft=$(that.container).scrollLeft();
-//              	sleft-=50;	
-//              	$(that.container).scrollLeft(sleft);
-//              }
-//               if(_y>=cHeight){
-//              	var stop=$(that.container).scrollTop();
-//              	stop+=50;	
-//              	$(that.container).scrollTop(stop);
-//              }else{
-//              	var stop=$(that.container).scrollTop();
-//              	stop-=50;	
-//              	$(that.container).scrollTop(stop);
-//              }
-//              
-                
+
+				//              if(_x>=cWidth){
+				//              	var sleft=$(that.container).scrollLeft();
+				//              	sleft+=50;	
+				//              	$(that.container).scrollLeft(sleft);
+				//              }else{
+				//              	var sleft=$(that.container).scrollLeft();
+				//              	sleft-=50;	
+				//              	$(that.container).scrollLeft(sleft);
+				//              }
+				//               if(_y>=cHeight){
+				//              	var stop=$(that.container).scrollTop();
+				//              	stop+=50;	
+				//              	$(that.container).scrollTop(stop);
+				//              }else{
+				//              	var stop=$(that.container).scrollTop();
+				//              	stop-=50;	
+				//              	$(that.container).scrollTop(stop);
+				//              }
+				//              
+
 				var disWidth = $('.yOrder').width();
 				var disHeight = $('.xOrder').height() + $('.header').height();
-				var _st=~~($(that.container).scrollTop());
-				var _sl=~~($(that.container).scrollLeft());
-				var _l = parseInt(selDiv.css('left')) - disWidth+_sl;
-				var _t = parseInt(selDiv.css('top')) - disHeight+_st;
+				var _st = ~~($(that.container).scrollTop());
+				var _sl = ~~($(that.container).scrollLeft());
+				var _l = parseInt(selDiv.css('left')) - disWidth + _sl;
+				var _t = parseInt(selDiv.css('top')) - disHeight + _st;
 				var _w = selDiv.width(),
 					_h = selDiv.height();
-				
+
 				for(var i = 0; i < fileNodes.length; i++) {
 					var sl = fileNodes[i].offsetWidth + fileNodes[i].offsetLeft;
 					var st = fileNodes[i].offsetHeight + fileNodes[i].offsetTop;
@@ -214,7 +213,7 @@ iTable.prototype.frameSelect = function() {
 						if($(fileNodes[i]).attr('rowspan')) {
 							console.log($(fileNodes[i]).attr('rowspan'));
 						}
-                                
+
 					} else {
 						$(fileNodes[i]).removeClass('ui-selected');
 					}
@@ -241,16 +240,49 @@ iTable.prototype.typingTd = function() {
 
 function typing() {
 	var event = window.event || arguments[0];
+
+	var lastX;
+	var lastY;
 	if($('.ui-selected').length == 1) {
 
 		if(event.keyCode == '13' && event.target == $('body')[0]) {
-
+			console.log(lastX, lastY);
 			var sNode = $('.ui-selected');
-			var x = parseInt($(sNode).attr('cols')) - 1;
-			var y = parseInt($(sNode).attr('rows'));
+			if(!!sNode.attr('colspan') || !!sNode.attr('rowspan')) {
+				//当前单元格跨行或跨列	
+				var x = parseInt($(sNode).attr('cols')) - 1;
+				var y = parseInt($(sNode).attr('rows'));
+				var rowAdd = parseInt(sNode.attr('rowspan'));
+				var colAdd = parseInt(sNode.attr('colspan'));
+				x = x + colAdd;
+				y = y + rowAdd;
 
-			$(sNode).removeClass('ui-selected');
-			$("[pos='" + y + "-" + x + "']").addClass('ui-selected');
+				if($("[pos='" + y + "-" + x + "']").length > 0) {
+					$(sNode).removeClass('ui-selected');
+					$("[pos='" + lastY + "-" + lastX + "']").addClass('ui-selected');
+				}
+			} else {
+				//当前单元格不跨行不跨列	
+
+				var x = parseInt($(sNode).attr('cols')) - 1;
+				var y = parseInt($(sNode).attr('rows'));
+				lastX = x;
+				lastY = y;
+				console.log(lastX, lastY);
+				if($("[pos='" + y + "-" + x + "']").length > 0) {
+					$(sNode).removeClass('ui-selected');
+					$("[pos='" + y + "-" + x + "']").addClass('ui-selected');
+				} else {
+					while(x >= 0) {
+						if($("[pos='" + y + "-" + x + "']").attr('rowspan') || $("[pos='" + y + "-" + x + "']").attr('colspan')) {
+							$(sNode).removeClass('ui-selected');
+							$("[pos='" + y + "-" + x + "']").addClass('ui-selected');
+						}
+						x--;
+					}
+				}
+			}
+
 			stopPropagation();
 		} else {
 			var input = $('<input type="text">');
@@ -270,13 +302,17 @@ function typing() {
 
 					var x = parseInt($(pNode).attr('cols')) - 1;
 					var y = parseInt($(pNode).attr('rows'));
-					$("[pos='" + y + "-" + x + "']").addClass('ui-selected');
+					if($("[pos='" + y + "-" + x + "']").length > 0) {
+						$("[pos='" + y + "-" + x + "']").addClass('ui-selected');
+
+					}
 					$(this).blur(function() {
 						$(this).remove();
 						$(document).on('keydown', typing);
-					});				
+					});
 
 				}
+
 				stopPropagation();
 			});
 
@@ -425,12 +461,8 @@ iTable.prototype.fillTd = function(tid) {
 		$(this).click(function() {
 
 			var tr = $(this).parent();
-			//$('.dataTable').find('td').removeClass('ui-selected');
 			$('.ui-selected').removeClass('ui-selected');
 			$(this).addClass('ui-selected');
-
-			//			$(".dataTable tr td").removeAttr('chosed');
-			//			$(this).attr('chosed', 'clickone');
 			var xCoo = Number($(this).attr('cols')) - 1,
 				yCoo = Number($(this).attr('rows')) - 1;
 			var colspan = Number($(this).attr('colspan'));
