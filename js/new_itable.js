@@ -119,6 +119,8 @@ iTable.prototype.findSpan = function(obj) {
 
 iTable.prototype.frameSelect = function() {
 	var that=this;
+	var cWidth=$(this.container).width();
+	var cHeight=$(this.container).height();
 	$(this.container).off('click').on('mousedown', function() {
 		var selList = null;
 		var fileNodes = $('.dataTable tr td');
@@ -156,41 +158,63 @@ iTable.prototype.frameSelect = function() {
        
 		$(that.container).on('mousemove', function() {
 			evt = window.event || arguments[0];
-
+            
 			if(isSelect) {
 				if(selDiv.css('display') == "none") {
-					selDiv.css('display', 'none');
+					selDiv.css('display', '');
 				}
 				_x = (evt.x || evt.clientX);
 				_y = (evt.y || evt.clientY);
-				_x=_x+$(that.container).scrollLeft();
-				_y=_y+$(that.container).scrollTop();
+//				_x=_x+$(that.container).scrollLeft();
+//				_y=_y+$(that.container).scrollTop();
+				//console.log($(that.container).scrollLeft(),$(that.container).scrollTop());
 				selDiv.css({
 					'left': Math.min(_x, oX),
 					'top': Math.min(_y, oY),
 					'width': Math.abs(_x - oX),
 					'height': Math.abs(_y - oY)
 				});
-
+ 
+//              if(_x>=cWidth){
+//              	var sleft=$(that.container).scrollLeft();
+//              	sleft+=50;	
+//              	$(that.container).scrollLeft(sleft);
+//              }else{
+//              	var sleft=$(that.container).scrollLeft();
+//              	sleft-=50;	
+//              	$(that.container).scrollLeft(sleft);
+//              }
+//               if(_y>=cHeight){
+//              	var stop=$(that.container).scrollTop();
+//              	stop+=50;	
+//              	$(that.container).scrollTop(stop);
+//              }else{
+//              	var stop=$(that.container).scrollTop();
+//              	stop-=50;	
+//              	$(that.container).scrollTop(stop);
+//              }
+//              
+                
 				var disWidth = $('.yOrder').width();
 				var disHeight = $('.xOrder').height() + $('.header').height();
-				var _l = parseInt(selDiv.css('left')) - disWidth;
-				var _t = parseInt(selDiv.css('top')) - disHeight;
-				var _w = selDiv.width(),
-					_h = selDiv.height();
 				var _st=~~($(that.container).scrollTop());
 				var _sl=~~($(that.container).scrollLeft());
+				var _l = parseInt(selDiv.css('left')) - disWidth+_sl;
+				var _t = parseInt(selDiv.css('top')) - disHeight+_st;
+				var _w = selDiv.width(),
+					_h = selDiv.height();
+				
 				for(var i = 0; i < fileNodes.length; i++) {
 					var sl = fileNodes[i].offsetWidth + fileNodes[i].offsetLeft;
 					var st = fileNodes[i].offsetHeight + fileNodes[i].offsetTop;
-					if(sl >= _l && st >= _t && fileNodes[i].offsetLeft <= _l + _w && fileNodes[i].offsetTop <= _t + _h) {
+					if(sl > _l && st > _t && fileNodes[i].offsetLeft < _l + _w && fileNodes[i].offsetTop < _t + _h) {
 
 						$(fileNodes[i]).addClass('ui-selected');
 
 						if($(fileNodes[i]).attr('rowspan')) {
 							console.log($(fileNodes[i]).attr('rowspan'));
 						}
-                       
+                                
 					} else {
 						$(fileNodes[i]).removeClass('ui-selected');
 					}
@@ -249,9 +273,8 @@ function typing() {
 					$("[pos='" + y + "-" + x + "']").addClass('ui-selected');
 					$(this).blur(function() {
 						$(this).remove();
-					});
-
-					$(document).on('keydown', typing);
+						$(document).on('keydown', typing);
+					});				
 
 				}
 				stopPropagation();
