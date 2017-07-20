@@ -240,35 +240,43 @@ iTable.prototype.typingTd = function() {
 
 function typing() {
 	var event = window.event || arguments[0];
-
-	var lastX;
-	var lastY;
+	var lastX,lastY;
+	var time=0;
 	if($('.ui-selected').length == 1) {
-
+        
 		if(event.keyCode == '13' && event.target == $('body')[0]) {
-			console.log(lastX, lastY);
+			time=time+1;
+			if(time==1){
+				console.log(time);
+			}
+			
 			var sNode = $('.ui-selected');
-			if(!!sNode.attr('colspan') || !!sNode.attr('rowspan')) {
+			console.log(lastX,lastY);
+			if(!!sNode.attr('colspan') && !!sNode.attr('rowspan')) {
 				//当前单元格跨行或跨列	
 				var x = parseInt($(sNode).attr('cols')) - 1;
 				var y = parseInt($(sNode).attr('rows'));
 				var rowAdd = parseInt(sNode.attr('rowspan'));
 				var colAdd = parseInt(sNode.attr('colspan'));
-				x = x + colAdd;
-				y = y + rowAdd;
-
+                
 				if($("[pos='" + y + "-" + x + "']").length > 0) {
+					$(sNode).removeClass('ui-selected');
+					$("[pos='" + y + "-" + x + "']").addClass('ui-selected');
+				}else{
 					$(sNode).removeClass('ui-selected');
 					$("[pos='" + lastY + "-" + lastX + "']").addClass('ui-selected');
 				}
-			} else {
+				lastX=x+rowAdd;
+                lastY=y+colAdd;
+			}
+			
+			if(!sNode.attr('colspan')&&!sNode.attr('rowspan')){
 				//当前单元格不跨行不跨列	
-
+              
 				var x = parseInt($(sNode).attr('cols')) - 1;
 				var y = parseInt($(sNode).attr('rows'));
-				lastX = x;
-				lastY = y;
-				console.log(lastX, lastY);
+		        
+		       	console.log(time);	        
 				if($("[pos='" + y + "-" + x + "']").length > 0) {
 					$(sNode).removeClass('ui-selected');
 					$("[pos='" + y + "-" + x + "']").addClass('ui-selected');
@@ -281,8 +289,11 @@ function typing() {
 						x--;
 					}
 				}
+				lastX=x;
+                lastY=y;
+				console.log(lastX,lastY);
 			}
-
+ 
 			stopPropagation();
 		} else {
 			var input = $('<input type="text">');
