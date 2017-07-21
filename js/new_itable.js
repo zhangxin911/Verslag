@@ -253,7 +253,7 @@ function typing(event) {
 			var nowY = parseInt($(sNode).attr('rows'));
 
 			var colAdd = parseInt($(sNode).attr('colspan')) || 0;
-			var rowAdd = parseInt($(sNode).attr('rowspan')) || 0;
+			var rowAdd = parseInt($(sNode).attr('rowspan')) - 1 || 0;
 			//
 
 			nowX += colAdd;
@@ -288,31 +288,56 @@ function typing(event) {
 			if($("[pos='" + nowY + "-" + event.data.fixX + "']").length > 0) {
 				//如果下一个单元格存在
 				$(sNode).removeClass('ui-selected');
+
 				$("[pos='" + nowY + "-" + event.data.fixX + "']").addClass('ui-selected');
 			} else {
 				//如果下一个单元格不存在
 
 				var _nowY = nowY;
 				var _nowX = nowX;
+				console.log($("[pos='" + nowY + "-" + event.data.fixX + "']"));
+				//				console.log(_nowX);
+				//				   while(_nowX>=0){
+				//				    var nextRowspan = parseInt($("[pos='" + nowY + "-" + event.data.fixX + "']").attr('rowspan'));
+				//				    var nextColspan = parseInt($("[pos='" + nowY + "-" + event.data.fixX + "']").attr('colspan'));
+				//				    if(!nextRowspan&&nextColspan){
+				//						console.log(nowY,nextColspan);
+				//					$(sNode).removeClass('ui-selected');
+				//					$("[pos='" +nowY + "-" + _nowX + "']").addClass('ui-selected');
+				//					console.log('qq');
+				//					}
+				//					_nowX--;
+				//				        
+				//				        
+				//				        
+				//				    }
+
 				while(_nowY >= 0) {
 					while(_nowX >= 0) {
 						var nextRowspan = parseInt($("[pos='" + _nowY + "-" + _nowX + "']").attr('rowspan'));
 						var nextColspan = parseInt($("[pos='" + _nowY + "-" + _nowX + "']").attr('colspan'));
+
+						var _nextRowspan = parseInt($("[pos='" + nowY + "-" + event.data.fixX + "']").attr('rowspan'));
+						var _nextColspan = parseInt($("[pos='" + nowY + "-" + event.data.fixX + "']").attr('colspan'));
+
 						//下一个单元格只行合并 
-						if(nextRowspan && !nextColspan) {
-							$(sNode).removeClass('ui-selected');
-							$("[pos='" + parseInt(_nowY + nextRowspan) + "-" + event.data.fixX + "']").addClass('ui-selected');
-						}
-						//下一个单元格只列合并
-						if(!nextRowspan && nextColspan) {
-							$(sNode).removeClass('ui-selected');
-							$("[pos='" + nowY + "-" + event.data.fixX + "']").addClass('ui-selected');
+						$(sNode).removeClass('ui-selected');
+						
+						if(!nextRowspan && nextColspan){
+							
+							$("[pos='" + nowY + "-" + _nowX + "']").addClass('ui-selected');
 						}
 
+
+						if(!nextRowspan && nextColspan) {
+
+							$("[pos='" + nowY + "-" + event.data.fixX + "']").addClass('ui-selected');
+						}
 						if(nextRowspan && nextColspan) {
-							$(sNode).removeClass('ui-selected');
+                            
 							$("[pos='" + _nowY + "-" + _nowX + "']").addClass('ui-selected');
 						}
+
 						_nowX--;
 					}
 					_nowY--;
