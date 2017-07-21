@@ -235,66 +235,93 @@ iTable.prototype.frameSelect = function() {
 }
 
 iTable.prototype.typingTd = function() {
-	$(document).off('keydown').on('keydown', typing);
+	var event = window.event || arguments[0];
+	$(document).off('keydown').on('keydown', {
+		time: "0",
+		lastTd: "",
+		fixX: "",
+		fixY: ""
+	}, typing);
 }
 
-function typing() {
-	var event = window.event || arguments[0];
-	var lastX,lastY;
-	var time=0;
+function typing(event) {
+
 	if($('.ui-selected').length == 1) {
-        
 		if(event.keyCode == '13' && event.target == $('body')[0]) {
-			time=time+1;
-			if(time==1){
-				console.log(time);
-			}
-			
 			var sNode = $('.ui-selected');
-			console.log(lastX,lastY);
-			if(!!sNode.attr('colspan') && !!sNode.attr('rowspan')) {
-				//当前单元格跨行或跨列	
-				var x = parseInt($(sNode).attr('cols')) - 1;
-				var y = parseInt($(sNode).attr('rows'));
-				var rowAdd = parseInt(sNode.attr('rowspan'));
-				var colAdd = parseInt(sNode.attr('colspan'));
-                
-				if($("[pos='" + y + "-" + x + "']").length > 0) {
-					$(sNode).removeClass('ui-selected');
-					$("[pos='" + y + "-" + x + "']").addClass('ui-selected');
-				}else{
-					$(sNode).removeClass('ui-selected');
-					$("[pos='" + lastY + "-" + lastX + "']").addClass('ui-selected');
-				}
-				lastX=x+rowAdd;
-                lastY=y+colAdd;
-			}
-			
-			if(!sNode.attr('colspan')&&!sNode.attr('rowspan')){
-				//当前单元格不跨行不跨列	
-              
-				var x = parseInt($(sNode).attr('cols')) - 1;
-				var y = parseInt($(sNode).attr('rows'));
-		        
-		       	console.log(time);	        
-				if($("[pos='" + y + "-" + x + "']").length > 0) {
-					$(sNode).removeClass('ui-selected');
-					$("[pos='" + y + "-" + x + "']").addClass('ui-selected');
-				} else {
-					while(x >= 0) {
-						if($("[pos='" + y + "-" + x + "']").attr('rowspan') || $("[pos='" + y + "-" + x + "']").attr('colspan')) {
-							$(sNode).removeClass('ui-selected');
-							$("[pos='" + y + "-" + x + "']").addClass('ui-selected');
+			var nowX = parseInt($(sNode).attr('cols')) - 1;
+			var nowY = parseInt($(sNode).attr('rows'));
+
+			var colAdd = parseInt($(sNode).attr('colspan')) || 0;
+			var rowAdd = parseInt($(sNode).attr('rowspan')) || 0;
+			//
+
+			nowX += colAdd;
+			nowY += rowAdd;
+
+			event.data.time = parseInt(event.data.time) + 1;
+			if(event.data.time === 1) {
+				//获取第一次点击的单元格
+				event.data.lastTd = sNode;
+				event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
+				event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+
+			} else {
+				//后续选择的单元格与第一次选择的单元格不同时		 
+				if($(event.data.lastTd)[0] != $(sNode)[0]) {
+					if(event.data.fixX != nowX) {
+						//不同单元格x坐标不同
+						if(!$(sNode).attr('colspan') && !$(sNode).attr('rowspan')) {
+							//区分跨行列时，单元格x坐标不同情况
+							event.data.lastTd = sNode;
+							event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
+							event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+
 						}
-						x--;
+
 					}
+
 				}
-				lastX=x;
-                lastY=y;
-				console.log(lastX,lastY);
+
 			}
- 
+
+			if($("[pos='" + nowY + "-" + event.data.fixX + "']").length > 0) {
+				//如果下一个单元格存在
+				$(sNode).removeClass('ui-selected');
+				$("[pos='" + nowY + "-" + event.data.fixX + "']").addClass('ui-selected');
+			} else {
+				//如果下一个单元格不存在
+
+				var _nowY = nowY;
+				var _nowX = nowX;
+				while(_nowY >= 0) {
+					while(_nowX >= 0) {
+						var nextRowspan = parseInt($("[pos='" + _nowY + "-" + _nowX + "']").attr('rowspan'));
+						var nextColspan = parseInt($("[pos='" + _nowY + "-" + _nowX + "']").attr('colspan'));
+						//下一个单元格只行合并 
+						if(nextRowspan && !nextColspan) {
+							$(sNode).removeClass('ui-selected');
+							$("[pos='" + parseInt(_nowY + nextRowspan) + "-" + event.data.fixX + "']").addClass('ui-selected');
+						}
+						//下一个单元格只列合并
+						if(!nextRowspan && nextColspan) {
+							$(sNode).removeClass('ui-selected');
+							$("[pos='" + nowY + "-" + event.data.fixX + "']").addClass('ui-selected');
+						}
+
+						if(nextRowspan && nextColspan) {
+							$(sNode).removeClass('ui-selected');
+							$("[pos='" + _nowY + "-" + _nowX + "']").addClass('ui-selected');
+						}
+						_nowX--;
+					}
+					_nowY--;
+				}
+
+			}
+
 			stopPropagation();
+
 		} else {
 			var input = $('<input type="text">');
 			input.css({
