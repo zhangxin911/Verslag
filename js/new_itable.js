@@ -247,7 +247,31 @@ iTable.prototype.typingTd = function() {
 function typing(event) {
 
 	if($('.ui-selected').length == 1) {
-		if(event.keyCode == '13' && event.target == $('body')[0]) {
+		
+		var input = $('<input type="text">');
+		input.css({
+				'border': 'none',
+				'outline': 'none'
+		});
+		 
+		if(!$('.ui-selected input').length){
+			 $('.ui-selected').html(input);
+			
+		}
+		input.focus();
+		if(event.keyCode == '13') {						
+		  
+			if(event.target == $('body')[0]){
+				input.remove();
+			}
+
+		    if(event.target!=$('body')[0]){
+		    	$('.ui-selected').html($(event.target).val());
+				$(event.target).blur(function() {
+					console.log('remove');
+						$(this).remove();
+				});
+		}
 			var sNode = $('.ui-selected');
 			var nowX = parseInt($(sNode).attr('cols')) - 1;
 			var nowY = parseInt($(sNode).attr('rows'));
@@ -255,10 +279,10 @@ function typing(event) {
 			var colAdd = parseInt($(sNode).attr('colspan')) || 0;
 			var rowAdd = parseInt($(sNode).attr('rowspan')) - 1 || 0;
 			//
-
+           
 			nowX += colAdd;
 			nowY += rowAdd;
-
+ 
 			event.data.time = parseInt(event.data.time) + 1;
 			if(event.data.time === 1) {
 				//获取第一次点击的单元格
@@ -284,7 +308,6 @@ function typing(event) {
 				}
 
 			}
-
 			if($("[pos='" + nowY + "-" + event.data.fixX + "']").length > 0) {
 				//如果下一个单元格存在
 				$(sNode).removeClass('ui-selected');
@@ -292,25 +315,8 @@ function typing(event) {
 				$("[pos='" + nowY + "-" + event.data.fixX + "']").addClass('ui-selected');
 			} else {
 				//如果下一个单元格不存在
-
 				var _nowY = nowY;
 				var _nowX = nowX;
-				console.log($("[pos='" + nowY + "-" + event.data.fixX + "']"));
-				//				console.log(_nowX);
-				//				   while(_nowX>=0){
-				//				    var nextRowspan = parseInt($("[pos='" + nowY + "-" + event.data.fixX + "']").attr('rowspan'));
-				//				    var nextColspan = parseInt($("[pos='" + nowY + "-" + event.data.fixX + "']").attr('colspan'));
-				//				    if(!nextRowspan&&nextColspan){
-				//						console.log(nowY,nextColspan);
-				//					$(sNode).removeClass('ui-selected');
-				//					$("[pos='" +nowY + "-" + _nowX + "']").addClass('ui-selected');
-				//					console.log('qq');
-				//					}
-				//					_nowX--;
-				//				        
-				//				        
-				//				        
-				//				    }
 
 				while(_nowY >= 0) {
 					while(_nowX >= 0) {
@@ -320,21 +326,25 @@ function typing(event) {
 						var _nextRowspan = parseInt($("[pos='" + nowY + "-" + event.data.fixX + "']").attr('rowspan'));
 						var _nextColspan = parseInt($("[pos='" + nowY + "-" + event.data.fixX + "']").attr('colspan'));
 
-						//下一个单元格只行合并 
 						$(sNode).removeClass('ui-selected');
-						
-						if(!nextRowspan && nextColspan){
-							
+						//下一个单元格行列不合并 
+						if(!nextRowspan && !nextColspan) {
+							$("[pos='" + nowY + "-" + event.data.fixX + "']").addClass('ui-selected');
+							 
+						}
+						//下一个单元格只行合并 
+						if(!nextRowspan && nextColspan) {
+
 							$("[pos='" + nowY + "-" + _nowX + "']").addClass('ui-selected');
 						}
-
-
+						//下一个单元格只列合并 
 						if(!nextRowspan && nextColspan) {
 
 							$("[pos='" + nowY + "-" + event.data.fixX + "']").addClass('ui-selected');
 						}
+						//下一个单元格行列合并 
 						if(nextRowspan && nextColspan) {
-                            
+
 							$("[pos='" + _nowY + "-" + _nowX + "']").addClass('ui-selected');
 						}
 
@@ -344,42 +354,11 @@ function typing(event) {
 				}
 
 			}
-
+            
 			stopPropagation();
-
-		} else {
-			var input = $('<input type="text">');
-			input.css({
-				'border': 'none',
-				'outline': 'none'
-			});
-			$('.ui-selected').html(input);
-			input.focus();
-			input.on('keydown', function() {
-				var event = window.event || arguments[0];
-				$(document).off('keyup');
-				if(event.keyCode == '13' && event.target == this) {
-					var pNode = $(this).parent();
-					$(pNode).html(input.val());
-					$(pNode).removeClass('ui-selected');
-
-					var x = parseInt($(pNode).attr('cols')) - 1;
-					var y = parseInt($(pNode).attr('rows'));
-					if($("[pos='" + y + "-" + x + "']").length > 0) {
-						$("[pos='" + y + "-" + x + "']").addClass('ui-selected');
-
-					}
-					$(this).blur(function() {
-						$(this).remove();
-						$(document).on('keydown', typing);
-					});
-
-				}
-
-				stopPropagation();
-			});
-
+             
 		}
+	
 	} else {
 		return;
 	}
