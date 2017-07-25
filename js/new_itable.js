@@ -234,55 +234,264 @@ iTable.prototype.frameSelect = function() {
 
 }
 
-iTable.prototype.typingTd = function() {
+
+iTable.prototype.keyCursor = function() {
 	var event = window.event || arguments[0];
 	$(document).off('keydown').on('keydown', {
-		time: "0",
-		lastTd: "",
-		fixX: "",
-		fixY: ""
+		keyTime: "0",
+		keyLastTd: "",
+		keyFix: "",
+		keyFiy: ""
 	}, typing);
 }
 
 function typing(event) {
 
 	if($('.ui-selected').length == 1) {
-		
+
 		var input = $('<input type="text">');
 		input.css({
-				'border': 'none',
-				'outline': 'none'
+			'border': 'none',
+			'outline': 'none'
 		});
-		 
-		if(!$('.ui-selected input').length){
-			 $('.ui-selected').html(input);
-			
+
+		if(!$('.ui-selected input').length) {
+			$('.ui-selected').html(input);
+
 		}
 		input.focus();
-		if(event.keyCode == '13') {						
-		  
-			if(event.target == $('body')[0]){
+		
+		//→
+		if(event.keyCode == '39') {
+			if(event.target == $('body')[0]) {
 				input.remove();
 			}
 
-		    if(event.target!=$('body')[0]){
-		    	$('.ui-selected').html($(event.target).val());
+			if(event.target != $('body')[0]) {
+				$('.ui-selected').html($(event.target).val());
 				$(event.target).blur(function() {
-					console.log('remove');
-						$(this).remove();
+					$(this).remove();
 				});
+			}
+			var sNode = $('.ui-selected');
+			var nowX = parseInt($(sNode).attr('cols'));
+			var nowY = parseInt($(sNode).attr('rows')) - 1;
+
+			var colAdd = parseInt($(sNode).attr('colspan')) - 1 || 0;
+			var rowAdd = parseInt($(sNode).attr('rowspan')) || 0;
+			//
+
+			nowX += colAdd;
+			nowY += rowAdd;
+			event.data.time = parseInt(event.data.time) + 1;
+			if(event.data.time === 1) {
+				//获取第一次点击的单元格
+				event.data.lastTd = sNode;
+				event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+				event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
+
+			} else {
+				//后续选择的单元格与第一次选择的单元格不同时		 
+				if($(event.data.lastTd)[0] != $(sNode)[0]) {
+					if(event.data.fixY != nowY) {
+						//不同单元格x坐标不同
+						if(!$(sNode).attr('colspan') && !$(sNode).attr('rowspan')) {
+							//区分跨行列时，单元格x坐标不同情况
+							event.data.lastTd = sNode;
+							event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+							event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
+
+						}
+
+					}
+
+				}
+
+			}
+			if($("[pos='" + event.data.fixY + "-" + nowX + "']").length > 0) {
+				//如果下一个单元格存在
+				$(sNode).removeClass('ui-selected');
+				$("[pos='" + event.data.fixY + "-" + nowX + "']").addClass('ui-selected');
+			} else {
+				//如果下一个单元格不存在
+				var _nowY = nowY;
+				var _nowX = nowX;
+
+				while(_nowX >= 0) {
+					while(_nowY >= 0) {
+						var nextRowspan = parseInt($("[pos='" + _nowY + "-" + _nowX + "']").attr('rowspan'));
+						var nextColspan = parseInt($("[pos='" + _nowY + "-" + _nowX + "']").attr('colspan'));
+
+						var _nextRowspan = parseInt($("[pos='" + event.data.fixY + "-" + nowX + "']").attr('rowspan'));
+						var _nextColspan = parseInt($("[pos='" + event.data.fixY + "-" + nowX + "']").attr('colspan'));
+
+						$(sNode).removeClass('ui-selected');
+						//下一个单元格行列不合并 
+						if(!nextRowspan && !nextColspan) {
+							$("[pos='" + event.data.fixY + "-" + nowX + "']").addClass('ui-selected');
+
+						}
+						//下一个单元格只行合并 
+						if(!nextRowspan && nextColspan) {
+
+							$("[pos='" + _nowY + "-" + nowX + "']").addClass('ui-selected');
+						}
+						//下一个单元格只列合并 
+						if(!nextRowspan && nextColspan) {
+
+							$("[pos='" + event.data.fixY + "-" + nowX + "']").addClass('ui-selected');
+						}
+						//下一个单元格行列合并 
+						if(nextRowspan && nextColspan) {
+
+							$("[pos='" + _nowX + "-" + _nowY + "']").addClass('ui-selected');
+						}
+
+						_nowY--;
+					}
+					_nowX--;
+				}
+
+			}
+
+			stopPropagation();
+
+			//return false;
 		}
+		
+		//←
+        if(event.keyCode=='37') {
+        	
+			if(event.target == $('body')[0]) {
+				input.remove();
+			}
+
+			if(event.target != $('body')[0]) {
+				$('.ui-selected').html($(event.target).val());
+				$(event.target).blur(function() {
+					$(this).remove();
+				});
+			}
+			
+			
+			var sNode = $('.ui-selected');
+			var nowX = parseInt($(sNode).attr('cols'))-2;
+			var nowY = parseInt($(sNode).attr('rows')) - 1;
+
+			var colAdd = parseInt($(sNode).attr('colspan')) - 1 || 0;
+			var rowAdd = parseInt($(sNode).attr('rowspan')) || 0;
+			//
+
+			nowX += colAdd;
+			nowY += rowAdd;
+			event.data.time = parseInt(event.data.time) + 1;
+			if(event.data.time === 1) {
+				//获取第一次点击的单元格
+				event.data.lastTd = sNode;
+				event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+				event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
+
+			} else {
+				//后续选择的单元格与第一次选择的单元格不同时		 
+				if($(event.data.lastTd)[0] != $(sNode)[0]) {
+					if(event.data.fixY != nowY) {
+						//不同单元格x坐标不同
+						if(!$(sNode).attr('colspan') && !$(sNode).attr('rowspan')) {
+							//区分跨行列时，单元格x坐标不同情况
+							event.data.lastTd = sNode;
+							event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+							event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
+
+						}
+
+					}
+
+				}
+
+			}
+			if($("[pos='" + event.data.fixY + "-" + nowX + "']").length > 0) {
+				//如果下一个单元格存在
+				$(sNode).removeClass('ui-selected');
+				$("[pos='" + event.data.fixY + "-" + nowX + "']").addClass('ui-selected');
+			} else {
+				//如果下一个单元格不存在
+				var _nowY = nowY;
+				var _nowX = nowX;
+                 
+				while(_nowY >= 0) {
+					while(_nowX >= 0) {
+						console.log(event.data.fixY,nowX); 
+						var nextRowspan = parseInt($("[pos='" + _nowY + "-" + _nowX + "']").attr('rowspan'));
+						var nextColspan = parseInt($("[pos='" + _nowY + "-" + _nowX + "']").attr('colspan'));
+
+						var _nextRowspan = parseInt($("[pos='" + event.data.fixY + "-" + nowX + "']").attr('rowspan'));
+						var _nextColspan = parseInt($("[pos='" + event.data.fixY + "-" + nowX + "']").attr('colspan'));
+
+						$(sNode).removeClass('ui-selected');
+						//下一个单元格行列不合并 
+						if(!nextRowspan && !nextColspan) {
+							$("[pos='" + event.data.fixY + "-" + nowX + "']").addClass('ui-selected');
+
+						}
+						//下一个单元格只行合并 
+						if(!nextRowspan && nextColspan) {
+
+							$("[pos='" + (_nowY-1) + "-" + nowX + "']").addClass('ui-selected');
+						}
+						//下一个单元格只列合并 
+						if(!nextRowspan && nextColspan) {
+
+							$("[pos='" + event.data.fixY + "-" + _nowX + "']").addClass('ui-selected');
+						}
+						//下一个单元格行列合并 
+						if(nextRowspan && nextColspan) {
+
+							$("[pos='" + _nowY + "-" + _nowX + "']").addClass('ui-selected');
+						}
+
+						_nowX--;
+					}
+					_nowY--;
+				}
+
+			}
+
+			stopPropagation();
+
+			//return false;
+		
+         
+        }
+		
+		
+		
+		
+		
+		
+		//↑
+		if(event.keyCode=='38') {
+             
+			if(event.target == $('body')[0]) {
+				input.remove();
+			}
+
+			if(event.target != $('body')[0]) {
+				$('.ui-selected').html($(event.target).val());
+				$(event.target).blur(function() {					
+					$(this).remove();
+				});
+			}
 			var sNode = $('.ui-selected');
 			var nowX = parseInt($(sNode).attr('cols')) - 1;
-			var nowY = parseInt($(sNode).attr('rows'));
+			var nowY = parseInt($(sNode).attr('rows'))-2;
 
 			var colAdd = parseInt($(sNode).attr('colspan')) || 0;
 			var rowAdd = parseInt($(sNode).attr('rowspan')) - 1 || 0;
 			//
-           
+
 			nowX += colAdd;
 			nowY += rowAdd;
- 
+
 			event.data.time = parseInt(event.data.time) + 1;
 			if(event.data.time === 1) {
 				//获取第一次点击的单元格
@@ -330,7 +539,7 @@ function typing(event) {
 						//下一个单元格行列不合并 
 						if(!nextRowspan && !nextColspan) {
 							$("[pos='" + nowY + "-" + event.data.fixX + "']").addClass('ui-selected');
-							 
+
 						}
 						//下一个单元格只行合并 
 						if(!nextRowspan && nextColspan) {
@@ -354,11 +563,113 @@ function typing(event) {
 				}
 
 			}
-            
+
 			stopPropagation();
-             
+
 		}
-	
+        
+
+
+        //enter或↓
+		if(event.keyCode == '13'|| event.keyCode=='40') {
+             
+			if(event.target == $('body')[0]) {
+				input.remove();
+			}
+
+			if(event.target != $('body')[0]) {
+				$('.ui-selected').html($(event.target).val());
+				$(event.target).blur(function() {
+					$(this).remove();
+				});
+			}
+			var sNode = $('.ui-selected');
+			var nowX = parseInt($(sNode).attr('cols')) - 1;
+			var nowY = parseInt($(sNode).attr('rows'));
+
+			var colAdd = parseInt($(sNode).attr('colspan')) || 0;
+			var rowAdd = parseInt($(sNode).attr('rowspan')) - 1 || 0;
+			//
+
+			nowX += colAdd;
+			nowY += rowAdd;
+
+			event.data.time = parseInt(event.data.time) + 1;
+			if(event.data.time === 1) {
+				//获取第一次点击的单元格
+				event.data.lastTd = sNode;
+				event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
+				event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+
+			} else {
+				//后续选择的单元格与第一次选择的单元格不同时		 
+				if($(event.data.lastTd)[0] != $(sNode)[0]) {
+					if(event.data.fixX != nowX) {
+						//不同单元格x坐标不同
+						if(!$(sNode).attr('colspan') && !$(sNode).attr('rowspan')) {
+							//区分跨行列时，单元格x坐标不同情况
+							event.data.lastTd = sNode;
+							event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
+							event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+
+						}
+
+					}
+
+				}
+
+			}
+			if($("[pos='" + nowY + "-" + event.data.fixX + "']").length > 0) {
+				//如果下一个单元格存在
+				$(sNode).removeClass('ui-selected');
+
+				$("[pos='" + nowY + "-" + event.data.fixX + "']").addClass('ui-selected');
+			} else {
+				//如果下一个单元格不存在
+				var _nowY = nowY;
+				var _nowX = nowX;
+
+				while(_nowY >= 0) {
+					while(_nowX >= 0) {
+						var nextRowspan = parseInt($("[pos='" + _nowY + "-" + _nowX + "']").attr('rowspan'));
+						var nextColspan = parseInt($("[pos='" + _nowY + "-" + _nowX + "']").attr('colspan'));
+
+						var _nextRowspan = parseInt($("[pos='" + nowY + "-" + event.data.fixX + "']").attr('rowspan'));
+						var _nextColspan = parseInt($("[pos='" + nowY + "-" + event.data.fixX + "']").attr('colspan'));
+
+						$(sNode).removeClass('ui-selected');
+						//下一个单元格行列不合并 
+						if(!nextRowspan && !nextColspan) {
+							$("[pos='" + nowY + "-" + event.data.fixX + "']").addClass('ui-selected');
+
+						}
+						//下一个单元格只行合并 
+						if(!nextRowspan && nextColspan) {
+
+							$("[pos='" + nowY + "-" + _nowX + "']").addClass('ui-selected');
+						}
+						//下一个单元格只列合并 
+						if(!nextRowspan && nextColspan) {
+
+							$("[pos='" + nowY + "-" + event.data.fixX + "']").addClass('ui-selected');
+						}
+						//下一个单元格行列合并 
+						if(nextRowspan && nextColspan) {
+
+							$("[pos='" + _nowY + "-" + _nowX + "']").addClass('ui-selected');
+						}
+
+						_nowX--;
+					}
+					_nowY--;
+				}
+
+			}
+
+			stopPropagation();
+
+		}
+
 	} else {
 		return;
 	}
@@ -1895,7 +2206,7 @@ function set_text_value_position(obj, spos) {
 }
 //取消冒泡
 function stopPropagation() {
-	var e = window.event || arguments[0];;
+	var e = window.event || arguments[0];
 	if(e.stopPropagation) {
 		e.stopPropagation();
 	} else {
@@ -2131,7 +2442,8 @@ iTable.prototype.init = function() {
 	this.fillBlank();
 	this.rMenus();
 	this.frameSelect();
-	this.typingTd();
+	//this.typingTd();
+	this.keyCursor();
 }
 
 t.init();
