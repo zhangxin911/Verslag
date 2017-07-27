@@ -469,7 +469,7 @@ function typing(event) {
 		
         //←
         if(event.keyCode == '37') {
-			var kNum=0;
+			var r1=0,r2=0,r3=0;
 			if(event.target == $('body')[0]) {
 				input.remove();
 			}
@@ -543,29 +543,28 @@ function typing(event) {
 							$("[pos='" + (nextX-lastColspan) + "-" + nextY + "']").addClass('ui-selected');
 
 						}
-						//下一个单元格只行合并 
+						//下一个单元格只列合并 
 						if(!nextRowspan && nextColspan) {
-                            if($("[pos='" +(nextX-nextColspan+1) + "-" + _nowY + "']").length>0){
-                            	kNum++;
-                            	(kNum==1)&&($("[pos='" +(nextX-nextColspan+1) + "-" + _nowY + "']").addClass('ui-selected'));
+                            if($("[pos='" +(_nowX-nextColspan+1) + "-" + nextY + "']").length>0){
+                            	r1++;
+                            	(r1==1)&&($("[pos='" +(nextX-nextColspan+1) + "-" + nextY + "']").addClass('ui-selected'));
                             	
                             }
 							
 						}
-						//下一个单元格只列合并 
+						//下一个单元格只行合并 
 						if(nextRowspan && !nextColspan) {
-                            if($("[pos='" + _nowX + "-" + _nowY + "']").length>0){
-                            	kNum++;
-                            	(kNum==1)&&($("[pos='" + _nowX + "-" + _nowY + "']").addClass('ui-selected'));
+                            if($("[pos='" + nextX + "-" + _nowY + "']").length>0){
+                            	r2++;
+                            	(r2==1)&&($("[pos='" + nextX + "-" + _nowY + "']").addClass('ui-selected'));
                             	
-                            }
-							//$("[pos='" + _nowX + "-" + _nowY + "']").addClass('ui-selected');
+                            }							
 						}
 						//下一个单元格行列合并 
 						if(nextRowspan && nextColspan) {
 							if($("[pos='" + _nowX + "-" + _nowY + "']").length>0){
-								kNum++;
-								(kNum==1)&&($("[pos='" + _nowX + "-" + _nowY + "']").addClass('ui-selected'));
+								r3++;
+								(r3==1)&&($("[pos='" + _nowX + "-" + _nowY + "']").addClass('ui-selected'));
 								
 							}							                            								
 						}
@@ -583,7 +582,7 @@ function typing(event) {
         
         //↑
          if(event.keyCode == '38') {
-         	var kNum=0;
+         	var u1=0,u2=0,u3=0;
 			if(event.target == $('body')[0]) {
 				input.remove();
 			}
@@ -657,31 +656,30 @@ function typing(event) {
 							$("[pos='" + nextX + "-" + (nextY-lastRowspan) + "']").addClass('ui-selected');
 
 						}
-						//下一个单元格只行合并 
-						if(!nextRowspan && nextColspan) {
-							
-                             if($("[pos='" +nextX + "-" + (_nowY-nextColspan+1) + "']").length>0){
-							   kNum++;			
-							  (kNum==1)&&($("[pos='" +nextX + "-" + (_nowY-nextColspan+1) + "']").addClass('ui-selected'));
-							   	
-							  }
-                             
-						}
 						//下一个单元格只列合并 
-						if(nextRowspan && !nextColspan) {
-                            
-                            if($("[pos='" + _nowX + "-" + _nowY + "']").length>0){
-							  kNum++;	 			
-							  (kNum==1)&&($("[pos='" + _nowX + "-" + _nowY + "']").addClass('ui-selected'));
+						if(!nextRowspan && nextColspan) {
+							 if($("[pos='" + _nowX + "-" + nextY + "']").length>0){
+							  u1++;	 			
+							  (u1==1)&&($("[pos='" + _nowX + "-" + nextY + "']").addClass('ui-selected'));
 							   
 							  }
-							//$("[pos='" + _nowX + "-" + _nowY + "']").addClass('ui-selected');
+ 
+                             
+						}
+						//下一个单元格只行合并 
+						if(nextRowspan && !nextColspan) {
+                             if($("[pos='" +nextX + "-" + _nowY + "']").length>0){
+							   u2++;			
+							  (u2==1)&&($("[pos='" +nextX + "-" + _nowY + "']").addClass('ui-selected'));
+							   	
+							  }
+
 						}
 						//下一个单元格行列合并 
 						if(nextRowspan && nextColspan) {
                            if($("[pos='" + _nowX + "-" + _nowY + "']").length>0){
-                           	     kNum++;
-								(kNum==1)&&($("[pos='" + _nowX + "-" + _nowY + "']").addClass('ui-selected'));
+                           	     u3++;
+								(u3==1)&&($("[pos='" + _nowX + "-" + _nowY + "']").addClass('ui-selected'));
 								
 							}	
 						}
@@ -780,7 +778,6 @@ iTable.prototype.fillTd = function(tid) {
 
 			var that = $(this);
 			var ev = ev || window.event;
-			//			that.attr('fid', 'tttt')
 
 			var tdWidth = that.width();
 			var tdHeight = that.height();
@@ -796,7 +793,6 @@ iTable.prototype.fillTd = function(tid) {
 			set_text_value_position(tdInput, -1);
 			$('.tdInput').keyup(function() {
 				$('#ip_fx').val($(this).val());
-				//				$(document).off('keyup');
 				_self.typingTd();
 			});
 
