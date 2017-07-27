@@ -341,15 +341,15 @@ function typing(event) {
 							$("[pos='" + nextX + "-" + nextY + "']").addClass('ui-selected');
 
 						}
-						//下一个单元格只行合并 
+						//下一个单元格只列合并 
 						if(!nextRowspan && nextColspan) {
 
-							$("[pos='" + nextX + "-" + _nowY + "']").addClass('ui-selected');
+							$("[pos='" +_nowX + "-" + nextY + "']").addClass('ui-selected');
 						}
-						//下一个单元格只列合并 
+						//下一个单元格只行合并 
 						if(nextRowspan && !nextColspan) {
 
-							$("[pos='" + _nowX + "-" + nextY + "']").addClass('ui-selected');
+							$("[pos='" + _nowX + "-" +  nextY + "']").addClass('ui-selected');
 						}
 						//下一个单元格行列合并 
 						if(nextRowspan && nextColspan) {
@@ -444,12 +444,12 @@ function typing(event) {
 						//下一个单元格只行合并 
 						if(!nextRowspan && nextColspan) {
 
-							$("[pos='" + nextX + "-" + _nowY + "']").addClass('ui-selected');
+							$("[pos='" + _nowX + "-" + nextY + "']").addClass('ui-selected');
 						}
 						//下一个单元格只列合并 
 						if(nextRowspan && !nextColspan) {
 
-							$("[pos='" + _nowX + "-" + nextY + "']").addClass('ui-selected');
+							$("[pos='" + nextX + "-" + _nowY + "']").addClass('ui-selected');
 						}
 						//下一个单元格行列合并 
 						if(nextRowspan && nextColspan) {
@@ -469,7 +469,7 @@ function typing(event) {
 		
         //←
         if(event.keyCode == '37') {
-			
+			var kNum=0;
 			if(event.target == $('body')[0]) {
 				input.remove();
 			}
@@ -545,18 +545,29 @@ function typing(event) {
 						}
 						//下一个单元格只行合并 
 						if(!nextRowspan && nextColspan) {
-                            
-							$("[pos='" +(nextX-nextColspan+1) + "-" + _nowY + "']").addClass('ui-selected');
+                            if($("[pos='" +(nextX-nextColspan+1) + "-" + _nowY + "']").length>0){
+                            	kNum++;
+                            	(kNum==1)&&($("[pos='" +(nextX-nextColspan+1) + "-" + _nowY + "']").addClass('ui-selected'));
+                            	
+                            }
+							
 						}
 						//下一个单元格只列合并 
 						if(nextRowspan && !nextColspan) {
-
-							$("[pos='" + _nowX + "-" + _nowY + "']").addClass('ui-selected');
+                            if($("[pos='" + _nowX + "-" + _nowY + "']").length>0){
+                            	kNum++;
+                            	(kNum==1)&&($("[pos='" + _nowX + "-" + _nowY + "']").addClass('ui-selected'));
+                            	
+                            }
+							//$("[pos='" + _nowX + "-" + _nowY + "']").addClass('ui-selected');
 						}
 						//下一个单元格行列合并 
 						if(nextRowspan && nextColspan) {
-                            	$("[pos='" + _nowX + "-" + _nowY + "']").addClass('ui-selected');
-							
+							if($("[pos='" + _nowX + "-" + _nowY + "']").length>0){
+								kNum++;
+								(kNum==1)&&($("[pos='" + _nowX + "-" + _nowY + "']").addClass('ui-selected'));
+								
+							}							                            								
 						}
 
 						_nowX--;
@@ -572,6 +583,7 @@ function typing(event) {
         
         //↑
          if(event.keyCode == '38') {
+         	var kNum=0;
 			if(event.target == $('body')[0]) {
 				input.remove();
 			}
@@ -647,18 +659,31 @@ function typing(event) {
 						}
 						//下一个单元格只行合并 
 						if(!nextRowspan && nextColspan) {
-                            				
-							$("[pos='" +nextX + "-" + (_nowY-nextColspan+1) + "']").addClass('ui-selected');
+							
+                             if($("[pos='" +nextX + "-" + (_nowY-nextColspan+1) + "']").length>0){
+							   kNum++;			
+							  (kNum==1)&&($("[pos='" +nextX + "-" + (_nowY-nextColspan+1) + "']").addClass('ui-selected'));
+							   	
+							  }
+                             
 						}
 						//下一个单元格只列合并 
 						if(nextRowspan && !nextColspan) {
-
-							$("[pos='" + _nowX + "-" + _nowY + "']").addClass('ui-selected');
+                            
+                            if($("[pos='" + _nowX + "-" + _nowY + "']").length>0){
+							  kNum++;	 			
+							  (kNum==1)&&($("[pos='" + _nowX + "-" + _nowY + "']").addClass('ui-selected'));
+							   
+							  }
+							//$("[pos='" + _nowX + "-" + _nowY + "']").addClass('ui-selected');
 						}
 						//下一个单元格行列合并 
 						if(nextRowspan && nextColspan) {
-
-							$("[pos='" + _nowX + "-" + _nowY + "']").addClass('ui-selected');
+                           if($("[pos='" + _nowX + "-" + _nowY + "']").length>0){
+                           	     kNum++;
+								(kNum==1)&&($("[pos='" + _nowX + "-" + _nowY + "']").addClass('ui-selected'));
+								
+							}	
 						}
 
 						_nowY--;
