@@ -104,9 +104,6 @@ iTable.prototype.createTip = function() {
 	content.insertBefore(this.container);
 }
 
-iTable.prototype.keyMove = function() {
-	//	obj.key
-}
 iTable.prototype.findSpan = function(obj) {
 	var x = obj.attr('rows');
 	var y = obj.attr('cols');
@@ -121,6 +118,10 @@ iTable.prototype.frameSelect = function() {
 	var that = this;
 	var cWidth = $(this.container).width();
 	var cHeight = $(this.container).height();
+		
+	var disWidth = $('.yOrder').width();
+	var disHeight = $('.xOrder').height() + $('.header').height();
+	
 	$(this.container).off('click').on('mousedown', function() {
 		var selList = null;
 		var fileNodes = $('.dataTable tr td');
@@ -149,24 +150,22 @@ iTable.prototype.frameSelect = function() {
 		});
 
 		$('body').append(selDiv);
-		//		if($('.ui-selected').length>0){
-		//			$('.ui-selected').removeClass('ui-selected');
-		//		}
 
 		var _x = null;
 		var _y = null;
 
 		$(that.container).on('mousemove', function() {
-			evt = window.event || arguments[0];
-
+			var evt = window.event || arguments[0];
+			var xArr = [],
+				yArr = [];
 			if(isSelect) {
 				if(selDiv.css('display') == "none") {
 					selDiv.css('display', 'none');
 				}
 				_x = (evt.x || evt.clientX);
 				_y = (evt.y || evt.clientY);
-				//				_x=_x+$(that.container).scrollLeft();
-				//				_y=_y+$(that.container).scrollTop();
+				_x = _x + $(that.container).scrollLeft();
+				_y = _y + $(that.container).scrollTop();
 				selDiv.css({
 					'left': Math.min(_x, oX),
 					'top': Math.min(_y, oY),
@@ -174,32 +173,29 @@ iTable.prototype.frameSelect = function() {
 					'height': Math.abs(_y - oY)
 				});
 
-				//              if(_x>=cWidth){
-				//              	var sleft=$(that.container).scrollLeft();
-				//              	sleft+=50;	
-				//              	$(that.container).scrollLeft(sleft);
-				//              }else{
-				//              	var sleft=$(that.container).scrollLeft();
-				//              	sleft-=50;	
-				//              	$(that.container).scrollLeft(sleft);
-				//              }
-				//               if(_y>=cHeight){
-				//              	var stop=$(that.container).scrollTop();
-				//              	stop+=50;	
-				//              	$(that.container).scrollTop(stop);
-				//              }else{
-				//              	var stop=$(that.container).scrollTop();
-				//              	stop-=50;	
-				//              	$(that.container).scrollTop(stop);
-				//              }
-				//              
+				if(_x >= cWidth) {
+					var sleft = $(that.container).scrollLeft();
+					sleft += 100;
+					$(that.container).scrollLeft(sleft);
+				} else {
+					var sleft = $(that.container).scrollLeft();
+					sleft -= 100;
+					$(that.container).scrollLeft(sleft);
+				}
+				if(_y >= cHeight) {
+					var stop = $(that.container).scrollTop();
+					stop += 100;
+					$(that.container).scrollTop(stop);
+				} else {
+					var stop = $(that.container).scrollTop();
+					stop -= 100;
+					$(that.container).scrollTop(stop);
+				}
 
-				var disWidth = $('.yOrder').width();
-				var disHeight = $('.xOrder').height() + $('.header').height();
 				var _st = ~~($(that.container).scrollTop());
 				var _sl = ~~($(that.container).scrollLeft());
-				var _l = parseInt(selDiv.css('left')) - disWidth + _sl;
-				var _t = parseInt(selDiv.css('top')) - disHeight + _st;
+				var _l = parseInt(selDiv.css('left')) - disWidth ;
+				var _t = parseInt(selDiv.css('top')) - disHeight ;
 				var _w = selDiv.width(),
 					_h = selDiv.height();
 
@@ -208,16 +204,38 @@ iTable.prototype.frameSelect = function() {
 					var st = fileNodes[i].offsetHeight + fileNodes[i].offsetTop;
 					if(sl > _l && st > _t && fileNodes[i].offsetLeft < _l + _w && fileNodes[i].offsetTop < _t + _h) {
 
-						$(fileNodes[i]).addClass('ui-selected');
+						var nCols = parseInt($(fileNodes[i]).attr('cols')) - 1;
+						var nRows = parseInt($(fileNodes[i]).attr('rows')) - 1;
+						var nCspan = parseInt($(fileNodes[i]).attr('colspan')) || 0;
+						var nRspan = parseInt($(fileNodes[i]).attr('rowspan')) || 0;
+						var expectX = nCols + nCspan;
+						var expectY = nRows + nRspan;
+						xArr.push(expectX);
+						yArr.push(expectY);
+						var xMax = xArr.max(),
+							xMin = xArr.min(),
+							yMax = yArr.max(),
+							yMin = yArr.min();
 
-						if($(fileNodes[i]).attr('rowspan')) {
-							console.log($(fileNodes[i]).attr('rowspan'));
+						$(fileNodes[i]).addClass('ui-selected');
+						if(!!nCspan || !!nRspan) {
+							console.log($(fileNodes[i]));
 						}
 
 					} else {
 						$(fileNodes[i]).removeClass('ui-selected');
 					}
 				}
+				// console.log(xMax,xMin,yMax,yMin);
+				//				for(var i = yMin; i < yMax; i++) {
+				//					for(var j = xMin; j < xMax; j++) {
+				//						
+				//						if(($("[pos='" + j + "-" + i + "']").length>0)&&!$("[pos='" + j + "-" + i + "']").hasClass('ui-selected')){
+				//								$("[pos='" + j + "-" + i + "']").addClass('ui-selected');
+				//					             
+				//						}
+				//					}
+				//				}
 
 			}
 
@@ -233,6 +251,27 @@ iTable.prototype.frameSelect = function() {
 	});
 
 }
+Array.prototype.min = function() {
+	var min = this[0];
+	var len = this.length;
+	for(var i = 1; i < len; i++) {
+		if(this[i] < min) {
+			min = this[i];
+		}
+	}
+	return min;
+}
+//最大值
+Array.prototype.max = function() {
+	var max = this[0];
+	var len = this.length;
+	for(var i = 1; i < len; i++) {
+		if(this[i] > max) {
+			max = this[i];
+		}
+	}
+	return max;
+}
 
 iTable.prototype.keyCursor = function() {
 	var event = window.event || arguments[0];
@@ -246,7 +285,7 @@ iTable.prototype.keyCursor = function() {
 }
 
 function typing(event) {
-
+	var sNode = $('.ui-selected');
 	if($('.ui-selected').length == 1) {
 
 		var input = $('<input type="text">');
@@ -260,7 +299,6 @@ function typing(event) {
 		}
 		input.focus();
 
-		var sNode = $('.ui-selected');
 		var nowX = parseInt($(sNode).attr('cols')) - 1;
 		var nowY = parseInt($(sNode).attr('rows')) - 1;
 
@@ -276,7 +314,7 @@ function typing(event) {
 			event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
 			event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
 		}
-        //↓
+		//↓
 		if(event.keyCode == '13' || event.keyCode == '40') {
 			if(event.target == $('body')[0]) {
 				input.remove();
@@ -322,7 +360,7 @@ function typing(event) {
 					break;
 			}
 			var nextX = event.data.fixX;
-			var nextY = nowY+1;
+			var nextY = nowY + 1;
 			if($("[pos='" + nextX + "-" + nextY + "']").length > 0) {
 				$(sNode).removeClass('ui-selected');
 				$("[pos='" + nextX + "-" + nextY + "']").addClass('ui-selected');
@@ -334,7 +372,7 @@ function typing(event) {
 					while(_nowX >= 0) {
 						var nextRowspan = parseInt($("[pos='" + _nowX + "-" + _nowY + "']").attr('rowspan'));
 						var nextColspan = parseInt($("[pos='" + _nowX + "-" + _nowY + "']").attr('colspan'));
-						
+
 						$(sNode).removeClass('ui-selected');
 						//下一个单元格行列不合并 
 						if(!nextRowspan && !nextColspan) {
@@ -344,12 +382,12 @@ function typing(event) {
 						//下一个单元格只列合并 
 						if(!nextRowspan && nextColspan) {
 
-							$("[pos='" +_nowX + "-" + nextY + "']").addClass('ui-selected');
+							$("[pos='" + _nowX + "-" + nextY + "']").addClass('ui-selected');
 						}
 						//下一个单元格只行合并 
 						if(nextRowspan && !nextColspan) {
 
-							$("[pos='" + _nowX + "-" +  nextY + "']").addClass('ui-selected');
+							$("[pos='" + _nowX + "-" + nextY + "']").addClass('ui-selected');
 						}
 						//下一个单元格行列合并 
 						if(nextRowspan && nextColspan) {
@@ -361,14 +399,14 @@ function typing(event) {
 					}
 					_nowY--;
 				}
-				
+
 			}
 			event.data.keyCode = event.keyCode;
 		}
-		
+
 		//→
 		if(event.keyCode == '39') {
-			
+
 			if(event.target == $('body')[0]) {
 				input.remove();
 			}
@@ -395,7 +433,7 @@ function typing(event) {
 
 			}
 			var lastKey = String(event.data.keyCode);
-			
+
 			switch(lastKey) {
 				case '13':
 					event.data.lastTd = sNode;
@@ -407,21 +445,21 @@ function typing(event) {
 					event.data.lastTd = sNode;
 					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
 					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
-					
+
 					break;
 				case '37':
 					event.data.lastTd = sNode;
 					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
 					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
-					
-					break;	
+
+					break;
 				case '38':
 					event.data.lastTd = sNode;
 					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
 					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
 					break;
 			}
-			var nextX = nowX+1;
+			var nextX = nowX + 1;
 			var nextY = event.data.fixY;
 			if($("[pos='" + nextX + "-" + nextY + "']").length > 0) {
 				$(sNode).removeClass('ui-selected');
@@ -434,7 +472,7 @@ function typing(event) {
 					while(_nowY >= 0) {
 						var nextRowspan = parseInt($("[pos='" + _nowX + "-" + _nowY + "']").attr('rowspan'));
 						var nextColspan = parseInt($("[pos='" + _nowX + "-" + _nowY + "']").attr('colspan'));
-						
+
 						$(sNode).removeClass('ui-selected');
 						//下一个单元格行列不合并 
 						if(!nextRowspan && !nextColspan) {
@@ -461,15 +499,17 @@ function typing(event) {
 					}
 					_nowX--;
 				}
-				
+
 			}
 			event.data.keyCode = event.keyCode;
 
 		}
-		
-        //←
-        if(event.keyCode == '37') {
-			var r1=0,r2=0,r3=0;
+
+		//←
+		if(event.keyCode == '37') {
+			var r1 = 0,
+				r2 = 0,
+				r3 = 0;
 			if(event.target == $('body')[0]) {
 				input.remove();
 			}
@@ -496,7 +536,7 @@ function typing(event) {
 
 			}
 			var lastKey = String(event.data.keyCode);
-			
+
 			switch(lastKey) {
 				case '13':
 					event.data.lastTd = sNode;
@@ -508,7 +548,7 @@ function typing(event) {
 					event.data.lastTd = sNode;
 					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
 					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
-					
+
 					break;
 				case '38':
 					event.data.lastTd = sNode;
@@ -519,70 +559,71 @@ function typing(event) {
 					event.data.lastTd = sNode;
 					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
 					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
-					break;	
+					break;
 			}
-			var nextX = parseInt(nowX-1);
+			var nextX = parseInt(nowX - 1);
 			var nextY = parseInt(event.data.fixY);
 			if($("[pos='" + nextX + "-" + nextY + "']").length > 0) {
 				$(sNode).removeClass('ui-selected');
 				$("[pos='" + nextX + "-" + nextY + "']").addClass('ui-selected');
 			} else {
-				var _nowY = nowY ;
-				var _nowX = nowX ;
+				var _nowY = nowY;
+				var _nowX = nowX;
 
 				while(_nowY >= 0) {
-					_nowX = nowX ;
+					_nowX = nowX;
 					while(_nowX >= 0) {
 						var nextRowspan = parseInt($("[pos='" + _nowX + "-" + _nowY + "']").attr('rowspan'));
 						var nextColspan = parseInt($("[pos='" + _nowX + "-" + _nowY + "']").attr('colspan'));
-						var lastColspan=parseInt($(sNode).attr('colspan'))-1;
-						var lastRowspan=parseInt($(sNode).attr('rowspan'))-1;
+						var lastColspan = parseInt($(sNode).attr('colspan')) - 1;
+						var lastRowspan = parseInt($(sNode).attr('rowspan')) - 1;
 						$(sNode).removeClass('ui-selected');
 						//下一个单元格行列不合并 
 						if(!nextRowspan && !nextColspan) {
-							$("[pos='" + (nextX-lastColspan) + "-" + nextY + "']").addClass('ui-selected');
+							$("[pos='" + (nextX - lastColspan) + "-" + nextY + "']").addClass('ui-selected');
 
 						}
 						//下一个单元格只列合并 
 						if(!nextRowspan && nextColspan) {
-                            if($("[pos='" +(_nowX-nextColspan+1) + "-" + nextY + "']").length>0){
-                            	r1++;
-                            	(r1==1)&&($("[pos='" +(nextX-nextColspan+1) + "-" + nextY + "']").addClass('ui-selected'));
-                            	
-                            }
-							
+							if($("[pos='" + (_nowX - nextColspan + 1) + "-" + nextY + "']").length > 0) {
+								r1++;
+								(r1 == 1) && ($("[pos='" + (nextX - nextColspan + 1) + "-" + nextY + "']").addClass('ui-selected'));
+
+							}
+
 						}
 						//下一个单元格只行合并 
 						if(nextRowspan && !nextColspan) {
-                            if($("[pos='" + nextX + "-" + _nowY + "']").length>0){
-                            	r2++;
-                            	(r2==1)&&($("[pos='" + nextX + "-" + _nowY + "']").addClass('ui-selected'));
-                            	
-                            }							
+							if($("[pos='" + nextX + "-" + _nowY + "']").length > 0) {
+								r2++;
+								(r2 == 1) && ($("[pos='" + nextX + "-" + _nowY + "']").addClass('ui-selected'));
+
+							}
 						}
 						//下一个单元格行列合并 
 						if(nextRowspan && nextColspan) {
-							if($("[pos='" + _nowX + "-" + _nowY + "']").length>0){
+							if($("[pos='" + _nowX + "-" + _nowY + "']").length > 0) {
 								r3++;
-								(r3==1)&&($("[pos='" + _nowX + "-" + _nowY + "']").addClass('ui-selected'));
-								
-							}							                            								
+								(r3 == 1) && ($("[pos='" + _nowX + "-" + _nowY + "']").addClass('ui-selected'));
+
+							}
 						}
 
 						_nowX--;
 					}
 					_nowY--;
 				}
-				
+
 			}
 			event.data.keyCode = event.keyCode;
 
 		}
-        
-        
-        //↑
-         if(event.keyCode == '38') {
-         	var u1=0,u2=0,u3=0;
+
+		//↑
+		if(event.keyCode == '38') {
+			var u1 = 0,
+				u2 = 0,
+				u3 = 0;
 			if(event.target == $('body')[0]) {
 				input.remove();
 			}
@@ -609,7 +650,7 @@ function typing(event) {
 
 			}
 			var lastKey = String(event.data.keyCode);
-			
+
 			switch(lastKey) {
 				case '13':
 					event.data.lastTd = sNode;
@@ -621,7 +662,7 @@ function typing(event) {
 					event.data.lastTd = sNode;
 					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
 					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
-					
+
 					break;
 				case '37':
 					event.data.lastTd = sNode;
@@ -632,68 +673,66 @@ function typing(event) {
 					event.data.lastTd = sNode;
 					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
 					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
-					break;	
+					break;
 			}
 			var nextX = event.data.fixX;
-			var nextY = nowY-1;
+			var nextY = nowY - 1;
 			if($("[pos='" + nextX + "-" + nextY + "']").length > 0) {
 				$(sNode).removeClass('ui-selected');
 				$("[pos='" + nextX + "-" + nextY + "']").addClass('ui-selected');
 			} else {
-				var _nowY = nowY ;
-				var _nowX = nowX ;
+				var _nowY = nowY;
+				var _nowX = nowX;
 
 				while(_nowX >= 0) {
-					_nowY = nowY ;
+					_nowY = nowY;
 					while(_nowY >= 0) {
 						var nextRowspan = parseInt($("[pos='" + _nowX + "-" + _nowY + "']").attr('rowspan'));
 						var nextColspan = parseInt($("[pos='" + _nowX + "-" + _nowY + "']").attr('colspan'));
-						var lastColspan=parseInt($(sNode).attr('colspan'))-1;
-						var lastRowspan=parseInt($(sNode).attr('rowspan'))-1;
+						var lastColspan = parseInt($(sNode).attr('colspan')) - 1;
+						var lastRowspan = parseInt($(sNode).attr('rowspan')) - 1;
 						$(sNode).removeClass('ui-selected');
 						//下一个单元格行列不合并 
 						if(!nextRowspan && !nextColspan) {
-							$("[pos='" + nextX + "-" + (nextY-lastRowspan) + "']").addClass('ui-selected');
+							$("[pos='" + nextX + "-" + (nextY - lastRowspan) + "']").addClass('ui-selected');
 
 						}
 						//下一个单元格只列合并 
 						if(!nextRowspan && nextColspan) {
-							 if($("[pos='" + _nowX + "-" + nextY + "']").length>0){
-							  u1++;	 			
-							  (u1==1)&&($("[pos='" + _nowX + "-" + nextY + "']").addClass('ui-selected'));
-							   
-							  }
- 
-                             
+							if($("[pos='" + _nowX + "-" + nextY + "']").length > 0) {
+								u1++;
+								(u1 == 1) && ($("[pos='" + _nowX + "-" + nextY + "']").addClass('ui-selected'));
+
+							}
+
 						}
 						//下一个单元格只行合并 
 						if(nextRowspan && !nextColspan) {
-                             if($("[pos='" +nextX + "-" + _nowY + "']").length>0){
-							   u2++;			
-							  (u2==1)&&($("[pos='" +nextX + "-" + _nowY + "']").addClass('ui-selected'));
-							   	
-							  }
+							if($("[pos='" + nextX + "-" + _nowY + "']").length > 0) {
+								u2++;
+								(u2 == 1) && ($("[pos='" + nextX + "-" + _nowY + "']").addClass('ui-selected'));
+
+							}
 
 						}
 						//下一个单元格行列合并 
 						if(nextRowspan && nextColspan) {
-                           if($("[pos='" + _nowX + "-" + _nowY + "']").length>0){
-                           	     u3++;
-								(u3==1)&&($("[pos='" + _nowX + "-" + _nowY + "']").addClass('ui-selected'));
-								
-							}	
+							if($("[pos='" + _nowX + "-" + _nowY + "']").length > 0) {
+								u3++;
+								(u3 == 1) && ($("[pos='" + _nowX + "-" + _nowY + "']").addClass('ui-selected'));
+
+							}
 						}
 
 						_nowY--;
 					}
 					_nowX--;
 				}
-				
+
 			}
 			event.data.keyCode = event.keyCode;
 
-		}        
-       
+		}
 
 	} else {
 		return;
@@ -1662,7 +1701,7 @@ iTable.prototype.setIndex = function() {
 			var coo = cellStrArray[j];
 			cell.setAttribute('rows', i + 1);
 			cell.setAttribute('cols', col + 1);
-			cell.setAttribute('pos', col + '-' +i );
+			cell.setAttribute('pos', col + '-' + i);
 		}
 	}
 
