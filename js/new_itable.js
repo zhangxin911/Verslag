@@ -104,15 +104,7 @@ iTable.prototype.createTip = function() {
 	content.insertBefore(this.container);
 }
 
-iTable.prototype.findSpan = function(obj) {
-	var x = obj.attr('rows');
-	var y = obj.attr('cols');
-	var t = this.getCurTable();
-	//	console.log(x,y);
-	//  for(var i=0;i<t.find('tr').length;i++){
-	//  	
-	//  }
-}
+
 
 iTable.prototype.frameSelect = function() {
 	var that = this;
@@ -185,24 +177,23 @@ iTable.prototype.frameSelect = function() {
 					'height': Math.abs(_y - oY)
 				});
 
-				if(_x >= cWidth) {
-					
-					sleft += 100;
-					$(that.container).scrollLeft(sleft);
-				} else {
-					
-					sleft -= 100;
-					$(that.container).scrollLeft(sleft);
-				}
-				if(_y >= cHeight) {
-					 
-					stop += 100;
-					$(that.container).scrollTop(stop);
-				} else {
-					
-					stop -= 100;
-					$(that.container).scrollTop(stop);
-				}
+//				if(_x >= cWidth) {
+//					 
+//					sleft -= 100;
+//					$(that.container).scrollLeft(sleft);
+//				} else {
+//					sleft += 100;
+//					$(that.container).scrollLeft(sleft);
+//				}
+//				if(_y >= cHeight) {
+//					 
+//					stop += 100;
+//					$(that.container).scrollTop(stop);
+//				} else {
+//					
+//					stop -= 100;
+//					$(that.container).scrollTop(stop);
+//				}
 
  
 				
@@ -221,10 +212,12 @@ iTable.prototype.frameSelect = function() {
 
 						var nCols = parseInt($(fileNodes[i]).attr('cols')) - 1;
 						var nRows = parseInt($(fileNodes[i]).attr('rows')) - 1;
-						var nCspan = parseInt($(fileNodes[i]).attr('colspan')) || 0;
-						var nRspan = parseInt($(fileNodes[i]).attr('rowspan')) || 0;
-						var expectX = nCols + nCspan;
-						var expectY = nRows + nRspan;
+						var nCspan = parseInt($(fileNodes[i]).attr('colspan'))-1 || 0;
+						var nRspan = parseInt($(fileNodes[i]).attr('rowspan'))-1 || 0;
+						var expectX = nCols +nCspan;
+						var expectY = nRows +nRspan;
+						xArr.push(nCols);
+						yArr.push(nRows);
 						xArr.push(expectX);
 						yArr.push(expectY);
 						var xMax = xArr.max(),
@@ -233,24 +226,20 @@ iTable.prototype.frameSelect = function() {
 							yMin = yArr.min();
 
 						$(fileNodes[i]).addClass('ui-selected');
-						if(!!nCspan || !!nRspan) {
-
-						}
+			            
 
 					} else {
 						$(fileNodes[i]).removeClass('ui-selected');
 					}
 				}
+				
 				console.log('xMax:' + xMax, 'xMin:' + xMin, 'yMax:' + yMax, 'yMin:' + yMin);
-//				for(var i = yMin; i < yMax; i++) {
-//					for(var j = xMin; j < xMax; j++) {
-//
-//						if(($("[pos='" + j + "-" + i + "']").length > 0) && !$("[pos='" + j + "-" + i + "']").hasClass('ui-selected')) {
-//							$("[pos='" + j + "-" + i + "']").addClass('ui-selected');
-//
-//						}
-//					}
-//				}
+				for(var i = xMin; i < (xMax+1); i++) {
+					for(var j = yMin; j < (yMax+1); j++) {
+		          			$("[pos='" + i + "-" + j + "']").addClass('ui-selected');
+		          			console.log($("[pos='" + i + "-" + j + "']"));
+					}
+				}
 
 			}
 
@@ -916,7 +905,7 @@ iTable.prototype.fillTd = function(tid) {
 			//_self.remakeCol(targetX, xCoo, xIndex, yIndex, rowspan, colspan, xCoo, yCoo);
 			_self.tdTofx($(this));
 			removeUied();
-			_self.findSpan($(this));
+			//_self.findSpan($(this));
 			$('#ip_fx').blur();
 
 		});
