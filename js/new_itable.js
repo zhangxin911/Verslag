@@ -116,20 +116,26 @@ iTable.prototype.findSpan = function(obj) {
 
 iTable.prototype.frameSelect = function() {
 	var that = this;
-	var cWidth = $(this.container).width();
-	var cHeight = $(this.container).height();
-		
-	var disWidth = $('.yOrder').width();
-	var disHeight = $('.xOrder').height() + $('.header').height();
+	var cWidth = parseInt($(this.container).width());
+	var cHeight = parseInt($(this.container).height());
 	
-	$(this.container).off('click').on('mousedown', function() {
+    var disWidth = parseInt($('.yOrder').outerWidth());
+	var disHeight = parseInt($('.xOrder').outerHeight()) + parseInt($('.header').outerHeight());
+	
+
+	$(this.container).on('mousedown', function() {
 		var selList = null;
 		var fileNodes = $('.dataTable tr td');
-
+         
 		var isSelect = true;
 		var ev = window.event || arguments[0];
-		var oX = ev.clientX;
-		var oY = ev.clientY;
+		var sleft = parseInt($(this).scrollLeft());
+		var stop =  parseInt($(this).scrollTop());
+		
+		
+		var oX = ev.clientX-disWidth+sleft;
+		var oY = ev.clientY-disHeight+stop;
+	 
 		var selDiv = $('<div class="mapdiv"></div>');
 
 		selDiv.css({
@@ -149,23 +155,29 @@ iTable.prototype.frameSelect = function() {
 			'top': oY
 		});
 
-		$('body').append(selDiv);
+		$(this).append(selDiv);
 
 		var _x = null;
 		var _y = null;
-
+		var mergeArr = [];
 		$(that.container).on('mousemove', function() {
 			var evt = window.event || arguments[0];
 			var xArr = [],
 				yArr = [];
+			var sleft = $(this).scrollLeft();
+			var stop =  $(this).scrollTop();
 			if(isSelect) {
 				if(selDiv.css('display') == "none") {
-					selDiv.css('display', 'none');
+					selDiv.css('display', '');
 				}
 				_x = (evt.x || evt.clientX);
 				_y = (evt.y || evt.clientY);
-				_x = _x + $(that.container).scrollLeft();
-				_y = _y + $(that.container).scrollTop();
+				 
+				 
+				_x = _x + sleft- disWidth;
+				_y = _y + stop - disHeight;
+				
+				
 				selDiv.css({
 					'left': Math.min(_x, oX),
 					'top': Math.min(_y, oY),
@@ -174,32 +186,35 @@ iTable.prototype.frameSelect = function() {
 				});
 
 				if(_x >= cWidth) {
-					var sleft = $(that.container).scrollLeft();
+					
 					sleft += 100;
 					$(that.container).scrollLeft(sleft);
 				} else {
-					var sleft = $(that.container).scrollLeft();
+					
 					sleft -= 100;
 					$(that.container).scrollLeft(sleft);
 				}
 				if(_y >= cHeight) {
-					var stop = $(that.container).scrollTop();
+					 
 					stop += 100;
 					$(that.container).scrollTop(stop);
 				} else {
-					var stop = $(that.container).scrollTop();
+					
 					stop -= 100;
 					$(that.container).scrollTop(stop);
 				}
 
-				var _st = ~~($(that.container).scrollTop());
-				var _sl = ~~($(that.container).scrollLeft());
-				var _l = parseInt(selDiv.css('left')) - disWidth ;
-				var _t = parseInt(selDiv.css('top')) - disHeight ;
+ 
+				
+//				var _l = parseInt(selDiv.css('left')) - disWidth;
+//				var _t = parseInt(selDiv.css('top')) - disHeight;
+	            var _l = parseInt(selDiv.css('left')) ;
+				var _t = parseInt(selDiv.css('top')) ;
 				var _w = selDiv.width(),
 					_h = selDiv.height();
-
+                 
 				for(var i = 0; i < fileNodes.length; i++) {
+					 
 					var sl = fileNodes[i].offsetWidth + fileNodes[i].offsetLeft;
 					var st = fileNodes[i].offsetHeight + fileNodes[i].offsetTop;
 					if(sl > _l && st > _t && fileNodes[i].offsetLeft < _l + _w && fileNodes[i].offsetTop < _t + _h) {
@@ -219,30 +234,30 @@ iTable.prototype.frameSelect = function() {
 
 						$(fileNodes[i]).addClass('ui-selected');
 						if(!!nCspan || !!nRspan) {
-							console.log($(fileNodes[i]));
+
 						}
 
 					} else {
 						$(fileNodes[i]).removeClass('ui-selected');
 					}
 				}
-				// console.log(xMax,xMin,yMax,yMin);
-				//				for(var i = yMin; i < yMax; i++) {
-				//					for(var j = xMin; j < xMax; j++) {
-				//						
-				//						if(($("[pos='" + j + "-" + i + "']").length>0)&&!$("[pos='" + j + "-" + i + "']").hasClass('ui-selected')){
-				//								$("[pos='" + j + "-" + i + "']").addClass('ui-selected');
-				//					             
-				//						}
-				//					}
-				//				}
+				console.log('xMax:' + xMax, 'xMin:' + xMin, 'yMax:' + yMax, 'yMin:' + yMin);
+//				for(var i = yMin; i < yMax; i++) {
+//					for(var j = xMin; j < xMax; j++) {
+//
+//						if(($("[pos='" + j + "-" + i + "']").length > 0) && !$("[pos='" + j + "-" + i + "']").hasClass('ui-selected')) {
+//							$("[pos='" + j + "-" + i + "']").addClass('ui-selected');
+//
+//						}
+//					}
+//				}
 
 			}
 
 		});
 
 		$(document).off('mouseup').on('mouseup', function() {
-
+            //$('.ui-selected').removeClass('ui-selected');
 			isSelect = false;
 			selDiv && selDiv.remove();
 			selList = null, _x = null, _y = null, selDiv = null, startX = null, startY = null, evt = null;
@@ -308,11 +323,16 @@ function typing(event) {
 		nowX += colAdd;
 		nowY += rowAdd;
 		event.data.time = parseInt(event.data.time) + 1;
+
 		if(event.data.time === 1) {
 			//获取第一次点击的单元格
 			event.data.lastTd = sNode;
 			event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
 			event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
+		}
+
+		if(event.keyCode == '8' || event.keyCode == '18' || event.keyCode == '16' || event.keyCode == '9') {
+			return;
 		}
 		//↓
 		if(event.keyCode == '13' || event.keyCode == '40') {
@@ -2267,7 +2287,7 @@ function set_text_value_position(obj, spos) {
 	}
 }
 //取消冒泡
-function stopPropagation() {
+function stopPropagation(e) {
 	var e = window.event || arguments[0];
 	if(e.stopPropagation) {
 		e.stopPropagation();
@@ -2276,12 +2296,12 @@ function stopPropagation() {
 	}
 }
 //数组去重
-function removeDuplicatedItem(ar) {
+function removeDuplicatedItem(arr) {
 	var ret = [];
 
-	for(var i = 0, j = ar.length; i < j; i++) {
-		if(ret.indexOf(ar[i]) === -1) {
-			ret.push(ar[i]);
+	for(var i = 0, j = arr.length; i < j; i++) {
+		if(ret.indexOf(arr[i]) === -1) {
+			ret.push(arr[i]);
 		}
 	}
 	ret = ret.join(' ');
