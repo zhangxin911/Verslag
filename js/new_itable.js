@@ -169,7 +169,6 @@ iTable.prototype.frameSelect = function() {
 				_x = _x + sleft- disWidth;
 				_y = _y + stop - disHeight;
 				
-				console.log(oY,_y,'window'+$(window).height());
 				selDiv.css({
 					'left': Math.min(_x, oX),
 					'top': Math.min(_y, oY),
@@ -183,34 +182,6 @@ iTable.prototype.frameSelect = function() {
                 	sleft -= 100;
 					$(that.container).scrollLeft(sleft);
                 }
-//              if(_y+123>= cHeight) {
-//					stop += 100;
-//					$(that.container).scrollTop(stop);
-//				} else {
-//					stop -= 100;
-//					$(that.container).scrollTop(stop);
-//				}
-
-                
-                
-//				if(_x >= cWidth) {
-//					 
-//					sleft += 100;
-//					$(that.container).scrollLeft(sleft);
-//				} else {
-//					sleft -= 100;
-//					$(that.container).scrollLeft(sleft);
-//				}
-//				if(_y >= cHeight) {
-//					 
-//					stop += 100;
-//					$(that.container).scrollTop(stop);
-//				} else {
-//					
-//					stop -= 100;
-//					$(that.container).scrollTop(stop);
-//				}
-
 	            var _l = parseInt(selDiv.css('left')) ;
 				var _t = parseInt(selDiv.css('top')) ;
 				var _w = selDiv.width(),
@@ -455,7 +426,7 @@ function typing(event) {
 					event.data.lastTd = sNode;
 					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
 					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
-					console.log(event.data.lastTd);
+ 
 					break;
 				case '40':
 					event.data.lastTd = sNode;
@@ -558,7 +529,7 @@ function typing(event) {
 					event.data.lastTd = sNode;
 					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
 					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
-					console.log(event.data.lastTd);
+ 
 					break;
 				case '40':
 					event.data.lastTd = sNode;
@@ -672,7 +643,7 @@ function typing(event) {
 					event.data.lastTd = sNode;
 					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
 					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
-					console.log(event.data.lastTd);
+ 
 					break;
 				case '40':
 					event.data.lastTd = sNode;
