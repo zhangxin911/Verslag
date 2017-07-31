@@ -214,8 +214,8 @@ iTable.prototype.frameSelect = function() {
 						// that.lightCoor($("[pos='" + i + "-" + j + "']"));
 					}
 				}
-				//that.lightCoor($('.ui-selected'));
-
+				that.lightCoor($('.ui-selected'));
+				//console.log($('.ui-selected'));
 			}
 
 		});
@@ -920,18 +920,23 @@ iTable.prototype.fillTd = function(tid) {
 iTable.prototype.lightCoor = function(obj) {
 
 	var target = obj;
-	var cols = parseInt($(target).attr('cols')) - 1;
-	var rows = parseInt($(target).attr('rows')) - 1;
-	var cSpan = parseInt($(target).attr('colspan')) - 1 || 0;
-	var rSpan = parseInt($(target).attr('rowspan')) - 1 || 0;
-	 $('.leftTable tr td').removeClass('lCoo');
-	 $('.titleTable tr td').removeClass('lCoo');
 
-	for(var i = rows; i < rows + rSpan + 1; i++) {
-		$('.leftTable').find('tr').eq(i).find('td').addClass('lCoo');
-	}
-	for(var j = cols; j < cols + cSpan + 1; j++) {
-		$('.titleTable tr').find('td').eq(j).addClass('lCoo');
+	$('.leftTable tr td').removeClass('lCoo');
+	$('.titleTable tr td').removeClass('lCoo');
+	for(var t = 0; t < target.length; t++) {
+
+		var cols = parseInt($(target).eq(t).attr('cols')) - 1;
+		var rows = parseInt($(target).eq(t).attr('rows')) - 1;
+		var cSpan = parseInt($(target).eq(t).attr('colspan')) - 1 || 0;
+		var rSpan = parseInt($(target).eq(t).attr('rowspan')) - 1 || 0;
+
+		for(var i = rows; i < rows + rSpan + 1; i++) {
+			$('.leftTable').find('tr').eq(i).find('td').addClass('lCoo');
+		}
+		for(var j = cols; j < cols + cSpan + 1; j++) {
+			$('.titleTable tr').find('td').eq(j).addClass('lCoo');
+		}
+
 	}
 
 }
