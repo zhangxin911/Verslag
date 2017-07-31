@@ -271,16 +271,22 @@ function typing(event) {
 
 	if($('.ui-selected').length == 1) {
 
-		var input = $('<input type="text">');
-		input.css({
-			'border': 'none',
-			'outline': 'none'
-		});
+		var that = $(this);
+
+//		var tdWidth = that.width();
+//		var tdHeight = that.height();
+		var tdText = $('.ui-selected').text();
+
+		var tdInput = $("<input type='text'  id='tdInput' class='tdInput'  value='" + tdText + "'></input>");
+
+//			tdInput.width(tdWidth - 2);
+//			tdInput.height(tdHeight - 2);
+ 
 
 		if(!$('.ui-selected input').length) {
-			$('.ui-selected').html(input);
+			$('.ui-selected').html(tdInput);
 		}
-		input.focus();
+		tdInput.focus();
 
 		var nowX = parseInt($(sNode).attr('cols')) - 1;
 		var nowY = parseInt($(sNode).attr('rows')) - 1;
@@ -397,7 +403,7 @@ function typing(event) {
 		if(event.keyCode == '39') {
 
 			if(event.target == $('body')[0]) {
-				input.remove();
+				tdInput.remove();
 			}
 
 			if(event.target != $('body')[0]) {
@@ -500,7 +506,7 @@ function typing(event) {
 				r2 = 0,
 				r3 = 0;
 			if(event.target == $('body')[0]) {
-				input.remove();
+				tdInput.remove();
 			}
 
 			if(event.target != $('body')[0]) {
@@ -614,7 +620,7 @@ function typing(event) {
 				u2 = 0,
 				u3 = 0;
 			if(event.target == $('body')[0]) {
-				input.remove();
+				tdInput.remove();
 			}
 
 			if(event.target != $('body')[0]) {
