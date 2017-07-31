@@ -1,775 +1,788 @@
-	ul,li{
-		margin:0;
-		padding:0;
+	ul,
+	li {
+		margin: 0;
+		padding: 0;
 		font-size: 14px;
 		list-style-type: none;
 	}
-	body{
-		height:100%;
+	
+	body {
+		height: 100%;
 		overflow: hidden;
-		
-			-moz-user-select: none;
-			/*火狐*/
-			-webkit-user-select: none;
-			/*webkit浏览器*/
-			-ms-user-select: none;
-			/*IE10*/
-			-khtml-user-select: none;
-			/*早期浏览器*/
-			user-select: none;
-	}	
- 
-		 
-		
-		table th,td{
-			text-align: center;
-			 border-collapse: collapse;
-		}
-		
-		.footer{
-			width:100%;
-			height:40px;
-			line-height: 40px;
-			
-			position:fixed;
-			bottom:0;
-			border-top:1px solid #aaaaaa;
-			background-color:#ececec ;
-		}
-		.header{
-			width:100%;
-			height:69px;
-			top:0;
-			 
-			border-bottom:1px solid #aaaaaa;
-			background-color:#f5f5f5;
-			position:fixed;
-			z-index:999
-		}
-		 
-		 
-		.titleTable tr{
-			background-color:#DDDDDD;
-		}
-		
-		.tdTip{
-			padding:2px 6px;
-			border:1px solid #DDDDDD;
-			background:#FFFFFF;
-		}		 
-		 
-		.dataTable tr td{
-			height:30px;
-			width:100px;
-			border:1px solid #AAAAAA;
-			
-			min-width:100px;
-			max-width: 100px;
-			white-space:nowrap;
-			overflow:hidden;
-			text-overflow:ellipsis;
-		}
-		.leftTable td{
-			height:30px;
-			width:63px;
-			border:1px solid #AAAAAA;
-			/*border-left:1px solid #AAAAAA;
+		-moz-user-select: none;
+		/*火狐*/
+		-webkit-user-select: none;
+		/*webkit浏览器*/
+		-ms-user-select: none;
+		/*IE10*/
+		-khtml-user-select: none;
+		/*早期浏览器*/
+		user-select: none;
+	}
+	
+	table th,
+	td {
+		text-align: center;
+		border-collapse: collapse;
+	}
+	
+	.footer {
+		width: 100%;
+		height: 40px;
+		line-height: 40px;
+		position: fixed;
+		bottom: 0;
+		border-top: 1px solid #aaaaaa;
+		background-color: #ececec;
+	}
+	
+	.header {
+		width: 100%;
+		height: 69px;
+		top: 0;
+		border-bottom: 1px solid #aaaaaa;
+		background-color: #f5f5f5;
+		position: fixed;
+		z-index: 999
+	}
+	
+	.titleTable tr {
+		background-color: #DDDDDD;
+	}
+	
+	.tdTip {
+		padding: 2px 6px;
+		border: 1px solid #DDDDDD;
+		background: #FFFFFF;
+	}
+	
+	.dataTable tr td {
+		height: 30px;
+		width: 100px;
+		border: 1px solid #AAAAAA;
+		min-width: 100px;
+		max-width: 100px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	
+	.leftTable td {
+		height: 30px;
+		width: 63px;
+		border: 1px solid #AAAAAA;
+		/*border-left:1px solid #AAAAAA;
 			border-bottom:1px solid #AAAAAA;*/
-			 
-		}
-		.leftTable tr{
-			background:#DDDDDD;
-		}
-		.titleTable td{
-			height:30px;
-			width:100px;
-			min-width:100px;
-			border:1px solid #AAAAAA;
-			
-			
-		}
-		.disbox{
-			width:66px;
-			height:32px;
-			line-height: 32px;
-			display:inline-block;
-			float:left;
-			left:0;
-			background:#FFFFFF;
-			border-bottom:1px solid #AAAAAA;
-			text-align: center;
-		}
-		.tools{
-			position:absolute;
-			top:0;
-		}
-		.fx{
-			width:100%;
-         	background-color: #ffffff;
-			 
-			border-top:1px solid #aaaaaa;
-			height:32px;
-			line-height:32px;
-			margin-top:36px;
-			 
-			 
-			 
-		}
-		
-	 
-		.fx input{
-			width:70%;
-			border:none;
-			outline: none;
-			display: inline-block; 
-			height:28px;
-			line-height: 28px;
-			 
-			background:#f5f5f5;
-			border-left:1px solid #AAAAAA; 
-			background:url(../img/fx.png) no-repeat left center; 
-			padding-left:36px;
-			float:left;
-		}
-		.tipOrder{
-			width:61px;
-			height:32px;
-			position:fixed;
-			background-color:#DDDDDD;
-			border:1px solid #AAAAAA;;
-		    border-top:none;
-		
-		
-			z-index:3
-		}
-		
-		.tdInput{
-			height:28px;
-			width:100px;
-			outline: none;
-			border:none;
-			box-shadow:1px 2px 5px rgba(0, 0, 0, 0.4);
-		}
-		.tdInputBox{
-			margin-top: -25px;
-		}
-		.styleTool{
-			margin-left:20px;
-			
-		}
-		.styleTool dl dd{
-			float: left;
-		}
-		 
-		
-	/*  下拉按钮 */	
+	}
+	
+	.leftTable tr {
+		background: #DDDDDD;
+	}
+	
+	.titleTable td {
+		height: 30px;
+		width: 100px;
+		min-width: 100px;
+		border: 1px solid #AAAAAA;
+	}
+	
+	.disbox {
+		width: 66px;
+		height: 32px;
+		line-height: 32px;
+		display: inline-block;
+		float: left;
+		left: 0;
+		background: #FFFFFF;
+		border-bottom: 1px solid #AAAAAA;
+		text-align: center;
+	}
+	
+	.tools {
+		position: absolute;
+		top: 0;
+	}
+	
+	.fx {
+		width: 100%;
+		background-color: #ffffff;
+		border-top: 1px solid #aaaaaa;
+		height: 32px;
+		line-height: 32px;
+		margin-top: 36px;
+	}
+	
+	.fx input {
+		width: 70%;
+		border: none;
+		outline: none;
+		display: inline-block;
+		height: 28px;
+		line-height: 28px;
+		background: #f5f5f5;
+		border-left: 1px solid #AAAAAA;
+		background: url(../img/fx.png) no-repeat left center;
+		padding-left: 36px;
+		float: left;
+	}
+	
+	.tipOrder {
+		width: 61px;
+		height: 32px;
+		position: fixed;
+		background-color: #DDDDDD;
+		border: 1px solid #AAAAAA;
+		;
+		border-top: none;
+		z-index: 3
+	}
+	
+	.tdInput {
+		height: 28px;
+		width: 100px;
+		outline: none;
+		border: none;
+		box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.4);
+	}
+	
+	.tdInputBox {
+		margin-top: -25px;
+	}
+	
+	.styleTool {
+		margin-left: 20px;
+	}
+	
+	.styleTool dl dd {
+		float: left;
+	}
+	/*  下拉按钮 */
 	/** 字体 **/
 	
+	.toolBox {
+		width: auto;
+		float: left;
+		z-index: 11;
+	}
 	
-	 .toolBox{
-	 	width:auto;
-	 	float:left;
-	 	z-index:11;
-	 	
-	 }
-     .toolBox>table{
-     	position: absolute;
-     }
-
-	#fontFamily,#fontSize{
+	.toolBox>table {
+		position: absolute;
+	}
+	
+	#fontFamily,
+	#fontSize {
 		display: inline-block;
-        height:24px;
-        line-height: 24px;
+		height: 24px;
+		line-height: 24px;
 		vertical-align: middle;
-		width:84px;
-		border-radius:0 ;
-		text-align: center; 
+		width: 84px;
+		border-radius: 0;
+		text-align: center;
 		font-size: 14px;
-		position:relative;
-		background:url(../img/arrow-down.png) no-repeat;
-		background-position:right center;
-		
-		
+		position: relative;
+		background: url(../img/arrow-down.png) no-repeat;
+		background-position: right center;
 	}
-    #fontFamily+ul+li,#fontSize+ul+li{
-		background-color:#ffffff;		 
-		position:relative;
-	}
-
-
-	#fontFamily+ul li a:hover{
-        cursor: pointer;
-	}
-    #fontSize+ul li a:hover{
-    	cursor: pointer;
-    }
-
-	#fontFamily+ul li a,#fontSize+ul li a{
-	display:inline-block;
-	width:84px;
-	height: 24px;
-	line-height: 24px;
-	text-decoration:none;
-	color:#646464;
-	 text-align: center;
-	background-color:#ffffff;
-
-	}	
-
-
 	
+	#fontFamily+ul+li,
+	#fontSize+ul+li {
+		background-color: #ffffff;
+		position: relative;
+	}
+	
+	#fontFamily+ul li a:hover {
+		cursor: pointer;
+	}
+	
+	#fontSize+ul li a:hover {
+		cursor: pointer;
+	}
+	
+	#fontFamily+ul li a,
+	#fontSize+ul li a {
+		display: inline-block;
+		width: 84px;
+		height: 24px;
+		line-height: 24px;
+		text-decoration: none;
+		color: #646464;
+		text-align: center;
+		background-color: #ffffff;
+	}
 	/** 字体颜色 **/
-	.d_fcolor{
-		width:28px;
-    	height:28px;
-    	display: inline-block;
-    	text-align: center;
-    	line-height: 28px;
-    	background:url(../img/fcolor.png) no-repeat center;
-		
+	
+	.d_fcolor {
+		width: 28px;
+		height: 28px;
+		display: inline-block;
+		text-align: center;
+		line-height: 28px;
+		background: url(../img/fcolor.png) no-repeat center;
 	}
-    
 	
-	
-	
-    .fbold{
-    	width:28px;
-    	height:24px;
-    	display: inline-block;
-    	text-align: center;
-    	line-height: 24px;
-    	background:url(../img/fbold.png) no-repeat center;
-    	cursor:pointer;
-    }
-    .fitalic{
-    	width:28px;
-    	height:24px;
-    	display: inline-block;
-    	text-align: center;
-    	line-height: 24px;
-    	background:url(../img/fitalic.png) no-repeat center;
-    }
-    .foverline{
-    	width:28px;
-    	height:24px;
-    	display: inline-block;
-    	text-align: center;
-    	line-height: 24px;
-    	background:url(../img/overline.png) no-repeat center;
-    }
-    .fcolor{
-    	width:28px;
-    	height:28px;
-    	display: inline-block;
-    	text-align: center;
-    	line-height: 28px;
-    	background:url(../img/fcolor.png) no-repeat center;
-    }
-    
-    .fborder{
-    	width:28px;
-    	height:28px;
-    	display: inline-block;
-    	text-align: center;
-    	line-height: 28px;
-    	background:url(../img/fborder.png) no-repeat center;
-    }
-    
-    .ffill{
-    	width:28px;
-    	height:28px;
-    	display: inline-block;
-    	text-align: center;
-    	line-height: 28px;
-    	background:url(../img/ffillcolor.png) no-repeat center;
-    }
-    /*  字体类型   font_ */
-    .font_Black{
-    	font-family: 黑体;
-    }
-    .font_Mirco{
-    	font-family: 微软雅黑;
-    }
-    .font_Song{
-    	font-family: 宋体;
-    }
-    .font_Kai{
-    	font-family: "楷体";
-    }
-    .font_Arial{
-    	font-family: arial;
-    }
-    .font_Verdana{
-    	font-family: verdana;
-    }
-    .font_Impact{
-    	font-family: impact;
-    }
-    
-    /*  字体大小   fsize_ */
-     .fsize_10{
-     	font-size:10px;
-     }
-   .fsize_12{
-     	font-size:12px;
-     }
-   .fsize_14{
-     	font-size:14px;
-     }
-   .fsize_16{
-     	font-size:16px;
-     }
-   .fsize_18{
-     	font-size:18px;
-     }
-   .fsize_20{
-     	font-size:20px;
-     }
-   
-   .ffbold{
-   	font-weight: bold;
-   }
-   .ffitalic{
-   	font-style:italic;
-   }
-   .ffoverline{
-   	text-decoration:line-through;
-   }
-   
-   
-   
-   
-   
-   
-    .addSheet{
-    	width:32px;
-    	height:32px;
-    	background: url(../img/add.png);
-    	cursor: pointer;
-    	position:absolute;
-    	top:50%;
-    	margin-top:-16px;
-    	left:54px;
-    }
-    .addSheet:hover{
-    	border: 1px solid #AAAAAA;
-    	
-    }
-    
-.sheetqueue{
-	width:100%;
-	margin-left:100px;
-}
-.sheetqueuedl{
-	position:absolute;
-}
-
-.sheetqueue dl dd{
-	float: left;
-}
-
-.sheetdefault{
-	/*width:80px;*/
-	background-color:#FFFFFF;
-	text-align: center;
-	padding:0px 6px;
-}
-.sheet{
-	/*width:80px;*/
-	text-align: center;
-	cursor: pointer;
-	 
-	max-width:120px;
-	min-width: 80px;
-}
-.contentdl dd{
-	float:left;
-}
-.fontColor{
-	/*width:100%;*/
-}
-.fc_black{
-	color:#000000;
-}
-.ffc_black {
-	width:16px;
-	height:16px;
-	background-color:#000000;	
-}
-
-
-
-.fc_grey{
-	color:#888888;
-}
-.ffc_grey{
-	width:16px;
-	height:16px;
-	background-color:#888888;
-}
-
-.fc_white{
-	color:#FFFFFF;
-}
-.ffc_white{
-	width:16px;
-	height:16px;
-	background-color:#FFFFFF;
-	
-}
-
-.fc_red{
-	color:red;
-}
-.ffc_red{
-	width:16px;
-	height:16px;
-	background-color:red;
-}
-
-.fc_yellow{
-	color:yellow;
-}
-.ffc_yellow{
-	width:16px;
-	height:16px;
-	background-color:yellow;
-}
-.fc_orange{
-	color:orange;
-}
-.ffc_orange{
-	width:16px;
-	height:16px;
-	background-color:orange;
-}
-
-.fc_green{
-	color:#7fff00;
-}
-.ffc_green{
-	width:16px;
-	height:16px;
-	background-color:#7fff00;
-}
-.fc_aqua{
-	color:#00ffff;
-}
-
-.ffc_aqua{
-	width:16px;
-	height:16px;
-	background-color:#00ffff;
-	
-}
-
-.fc_blue{
-	color:blue;
-}
-.ffc_blue{
-	width:16px;
-	height:16px;
-	background-color:blue;
-}
-.fc_purple{
-	color:#9400d3
-}
-.ffc_purple{
-	width:16px;
-	height:16px;
-	background-color:#9400d3;
-}
-/*bg*/
-
-.d_fill{
-		width:28px;
-    	height:28px;
-    	display: inline-block;
-    	text-align: center;
-    	line-height: 28px;
-    	background:url(../img/ffillcolor.png) no-repeat center;
-		
+	.fbold {
+		width: 28px;
+		height: 24px;
+		display: inline-block;
+		text-align: center;
+		line-height: 24px;
+		background: url(../img/fbold.png) no-repeat center;
+		cursor: pointer;
 	}
-
-
- .ffill{
-    	width:28px;
-    	height:28px;
-    	display: inline-block;
-    	text-align: center;
-    	line-height: 28px;
-    	background:url(../img/ffillcolor.png) no-repeat center;
-    }
-
-
-.ffill_black{
-	background-color:#000000;
-}
-.fill_black{
-	width:16px;
-	height:16px;
-	background-color:#000000;
-	display: block;
 	
-}
-
-
-
-.ffill_grey{
-	background-color:#888888;
-}
-.fill_grey{
-	width:16px;
-	height:16px;
-	background-color:#888888;
-	display: block;
-}
-
-.ffill_white{
-	background-color:#FFFFFF;
-}
-.fill_white{
-	width:16px;
-	height:16px;
-	background-color:#FFFFFF;
-	display: block;
-}
-
-.ffill_red{
-	background-color:red;
-}
-.fill_red{
-	width:16px;
-	height:16px;
-	background-color:red;
-	display: block;
-}
-
-.ffill_yellow{
-	background-color:yellow;
-}
-.fill_yellow{
-	width:16px;
-	height:16px;
-	background-color:yellow;
-	display: block;
-}
-.ffill_orange{
-	background-color:orange;
-}
-.fill_orange{
-	width:16px;
-	height:16px;
-	background-color:orange;
-	display: block;
-}
-
-.ffill_green{
-	background-color:#7fff00;
-}
-.fill_green{
-	width:16px;
-	height:16px;
-	background-color:#7fff00;
-	display: block;
-}
-.ffill_aqua{
-	background-color:#00ffff;
-}
-
-.fill_aqua{
-	width:16px;
-	height:16px;
-	background-color:#00ffff;
-	display: block;
+	.fitalic {
+		width: 28px;
+		height: 24px;
+		display: inline-block;
+		text-align: center;
+		line-height: 24px;
+		background: url(../img/fitalic.png) no-repeat center;
+	}
 	
-}
-
-.ffill_blue{
-	background-color:blue;
-}
-.fill_blue{
-	width:16px;
-	height:16px;
-	background-color:blue;
-	display: block;
-}
-.ffill_purple{
-	background-color:#9400d3
-}
-.fill_purple{
-	width:16px;
-	height:16px;
-	background-color:#9400d3;
-	display: block;
-}
-
-
- 
-.mergeBtn{
-	width:28px;
-    	height:28px;
-    	display: inline-block;
-    	text-align: center;
-    	line-height: 28px;
-    	background:url(../img/mergeTd.png) no-repeat center;
-}
-
-
-.splitBtn{
-	width:28px;
-    	height:28px;
-    	display: inline-block;
-    	text-align: center;
-    	line-height: 28px;
-    	background:url(../img/splitTd.png) no-repeat center;
-}
-
-
-/* 对齐  */
-
-
-
-
- .f_align{
-    	width:28px;
-    	height:28px;
-    	display: inline-block;
-    	text-align: center;
-    	line-height: 28px;
-    	background:url(../img/calign.png) no-repeat center;
+	.foverline {
+		width: 28px;
+		height: 24px;
+		display: inline-block;
+		text-align: center;
+		line-height: 24px;
+		background: url(../img/overline.png) no-repeat center;
+	}
+	
+	.fcolor {
+		width: 28px;
+		height: 28px;
+		display: inline-block;
+		text-align: center;
+		line-height: 28px;
+		background: url(../img/fcolor.png) no-repeat center;
+	}
+	
+	.fborder {
+		width: 28px;
+		height: 28px;
+		display: inline-block;
+		text-align: center;
+		line-height: 28px;
+		background: url(../img/fborder.png) no-repeat center;
+	}
+	
+	.ffill {
+		width: 28px;
+		height: 28px;
+		display: inline-block;
+		text-align: center;
+		line-height: 28px;
+		background: url(../img/ffillcolor.png) no-repeat center;
+	}
+	/*  字体类型   font_ */
+	
+	.font_Black {
+		font-family: 黑体;
+	}
+	
+	.font_Mirco {
+		font-family: 微软雅黑;
+	}
+	
+	.font_Song {
+		font-family: 宋体;
+	}
+	
+	.font_Kai {
+		font-family: "楷体";
+	}
+	
+	.font_Arial {
+		font-family: arial;
+	}
+	
+	.font_Verdana {
+		font-family: verdana;
+	}
+	
+	.font_Impact {
+		font-family: impact;
+	}
+	/*  字体大小   fsize_ */
+	
+	.fsize_10 {
+		font-size: 10px;
+	}
+	
+	.fsize_12 {
+		font-size: 12px;
+	}
+	
+	.fsize_14 {
+		font-size: 14px;
+	}
+	
+	.fsize_16 {
+		font-size: 16px;
+	}
+	
+	.fsize_18 {
+		font-size: 18px;
+	}
+	
+	.fsize_20 {
+		font-size: 20px;
+	}
+	
+	.ffbold {
+		font-weight: bold;
+	}
+	
+	.ffitalic {
+		font-style: italic;
+	}
+	
+	.ffoverline {
+		text-decoration: line-through;
+	}
+	
+	.addSheet {
+		width: 32px;
+		height: 32px;
+		background: url(../img/add.png);
+		cursor: pointer;
+		position: absolute;
+		top: 50%;
+		margin-top: -16px;
+		left: 54px;
+	}
+	
+	.addSheet:hover {
+		border: 1px solid #AAAAAA;
+	}
+	
+	.sheetqueue {
+		width: 100%;
+		margin-left: 100px;
+	}
+	
+	.sheetqueuedl {
+		position: absolute;
+	}
+	
+	.sheetqueue dl dd {
+		float: left;
+	}
+	
+	.sheetdefault {
+		/*width:80px;*/
+		background-color: #FFFFFF;
+		text-align: center;
+		padding: 0px 6px;
+	}
+	
+	.sheet {
+		/*width:80px;*/
+		text-align: center;
+		cursor: pointer;
+		max-width: 120px;
+		min-width: 80px;
+	}
+	
+	.contentdl dd {
+		float: left;
+	}
+	
+	.fontColor {
+		/*width:100%;*/
+	}
+	
+	.fc_black {
+		color: #000000;
+	}
+	
+	.ffc_black {
+		width: 16px;
+		height: 16px;
+		background-color: #000000;
+	}
+	
+	.fc_grey {
+		color: #888888;
+	}
+	
+	.ffc_grey {
+		width: 16px;
+		height: 16px;
+		background-color: #888888;
+	}
+	
+	.fc_white {
+		color: #FFFFFF;
+	}
+	
+	.ffc_white {
+		width: 16px;
+		height: 16px;
+		background-color: #FFFFFF;
+	}
+	
+	.fc_red {
+		color: red;
+	}
+	
+	.ffc_red {
+		width: 16px;
+		height: 16px;
+		background-color: red;
+	}
+	
+	.fc_yellow {
+		color: yellow;
+	}
+	
+	.ffc_yellow {
+		width: 16px;
+		height: 16px;
+		background-color: yellow;
+	}
+	
+	.fc_orange {
+		color: orange;
+	}
+	
+	.ffc_orange {
+		width: 16px;
+		height: 16px;
+		background-color: orange;
+	}
+	
+	.fc_green {
+		color: #7fff00;
+	}
+	
+	.ffc_green {
+		width: 16px;
+		height: 16px;
+		background-color: #7fff00;
+	}
+	
+	.fc_aqua {
+		color: #00ffff;
+	}
+	
+	.ffc_aqua {
+		width: 16px;
+		height: 16px;
+		background-color: #00ffff;
+	}
+	
+	.fc_blue {
+		color: blue;
+	}
+	
+	.ffc_blue {
+		width: 16px;
+		height: 16px;
+		background-color: blue;
+	}
+	
+	.fc_purple {
+		color: #9400d3
+	}
+	
+	.ffc_purple {
+		width: 16px;
+		height: 16px;
+		background-color: #9400d3;
+	}
+	/*bg*/
+	
+	.d_fill {
+		width: 28px;
+		height: 28px;
+		display: inline-block;
+		text-align: center;
+		line-height: 28px;
+		background: url(../img/ffillcolor.png) no-repeat center;
+	}
+	
+	.ffill {
+		width: 28px;
+		height: 28px;
+		display: inline-block;
+		text-align: center;
+		line-height: 28px;
+		background: url(../img/ffillcolor.png) no-repeat center;
+	}
+	
+	.ffill_black {
+		background-color: #000000;
+	}
+	
+	.fill_black {
+		width: 16px;
+		height: 16px;
+		background-color: #000000;
+		display: block;
+	}
+	
+	.ffill_grey {
+		background-color: #888888;
+	}
+	
+	.fill_grey {
+		width: 16px;
+		height: 16px;
+		background-color: #888888;
+		display: block;
+	}
+	
+	.ffill_white {
+		background-color: #FFFFFF;
+	}
+	
+	.fill_white {
+		width: 16px;
+		height: 16px;
+		background-color: #FFFFFF;
+		display: block;
+	}
+	
+	.ffill_red {
+		background-color: red;
+	}
+	
+	.fill_red {
+		width: 16px;
+		height: 16px;
+		background-color: red;
+		display: block;
+	}
+	
+	.ffill_yellow {
+		background-color: yellow;
+	}
+	
+	.fill_yellow {
+		width: 16px;
+		height: 16px;
+		background-color: yellow;
+		display: block;
+	}
+	
+	.ffill_orange {
+		background-color: orange;
+	}
+	
+	.fill_orange {
+		width: 16px;
+		height: 16px;
+		background-color: orange;
+		display: block;
+	}
+	
+	.ffill_green {
+		background-color: #7fff00;
+	}
+	
+	.fill_green {
+		width: 16px;
+		height: 16px;
+		background-color: #7fff00;
+		display: block;
+	}
+	
+	.ffill_aqua {
+		background-color: #00ffff;
+	}
+	
+	.fill_aqua {
+		width: 16px;
+		height: 16px;
+		background-color: #00ffff;
+		display: block;
+	}
+	
+	.ffill_blue {
+		background-color: blue;
+	}
+	
+	.fill_blue {
+		width: 16px;
+		height: 16px;
+		background-color: blue;
+		display: block;
+	}
+	
+	.ffill_purple {
+		background-color: #9400d3
+	}
+	
+	.fill_purple {
+		width: 16px;
+		height: 16px;
+		background-color: #9400d3;
+		display: block;
+	}
+	
+	.mergeBtn {
+		width: 28px;
+		height: 28px;
+		display: inline-block;
+		text-align: center;
+		line-height: 28px;
+		background: url(../img/mergeTd.png) no-repeat center;
+	}
+	
+	.splitBtn {
+		width: 28px;
+		height: 28px;
+		display: inline-block;
+		text-align: center;
+		line-height: 28px;
+		background: url(../img/splitTd.png) no-repeat center;
+	}
+	/* 对齐  */
+	
+	.f_align {
+		width: 28px;
+		height: 28px;
+		display: inline-block;
+		text-align: center;
+		line-height: 28px;
+		background: url(../img/calign.png) no-repeat center;
+	}
+	
+	.falign_left {
+		text-align: left;
+	}
+	
+	.falign_center {
+		text-align: center;
+	}
+	
+	.falign_right {
+		text-align: right;
+	}
+	
+	.ffalign_left {
+		width: 16px;
+		height: 16px;
+		background: url(../img/lalign.png) no-repeat;
+		display: block;
+	}
+	
+	.ffalign_right {
+		width: 16px;
+		height: 16px;
+		background: url(../img/ralign.png) no-repeat;
+		display: block;
+	}
+	
+	.ffalign_center {
+		width: 16px;
+		height: 16px;
+		background: url(../img/calign.png) no-repeat;
+		display: block;
+	}
+	
+	.sheetfloat {
+		float: right;
+		width: 100px;
+		height: 40px;
+		line-height: 40px;
+		position: fixed;
+		right: 0;
+		border-left: 1px solid #aaaaaa;
+		background-color: #ececec;
+	}
+	
+	.sheetfloat span {
+		float: left;
+		width: 32px;
+		height: 32px;
+		cursor: pointer;
+	}
+	
+	.lsheet {
+		background: url(../img/larrow.png) center no-repeat;
+		position: absolute;
+		top: 50%;
+		margin-top: -16px;
+		margin-left: 16px;
+	}
+	
+	.rsheet {
+		background: url(../img/rarrow.png) center no-repeat;
+		position: absolute;
+		top: 50%;
+		margin-top: -16px;
+		margin-left: 48px;
+	}
+	
+	.sheetfloat span:hover {
+		border: 1px solid #AAAAAA;
+		cursor: pointer;
+	}
+	
+	.footer_tool_box,
+	.addBox {
+		width: 100px;
+		height: 40px;
+		float: left;
+		background-color: #ececec;
+		border-right: 1px solid #aaaaaa;
+		position: fixed;
+		z-index: 2
+	}
+	
+	td.ui-selecting {
+		border: 1px double #4887C7 !important;
+		background-color: rgba(51, 122, 183, 0.2) !important;
+		background-color: rgb(214, 228, 241) \9 !important;
+	}
+	
+	td.ui-selected {
+		border: 1px double #4887C7 !important;
+		background-color: rgba(51, 122, 183, 0.2) !important;
+		background-color: rgb(214, 228, 241) \9 !important;
+	}
+	
+	.stInput {
+		text-align: center;
+		border: none;
+		padding: 0;
+		margin: 0;
+		outline: none;
+	}
+	
+	.trBtn,
+	.colBtn {
+		float: right;
+		display: inline;
+		z-index: 999;
+	}
+	
+	.trBtn span,
+	.colBtn span {
+		float: right;
+		padding: 2px;
+		cursor: pointer;
+		font-size: 16px;
+	}
+	
+	.addTr {
+		color: #57A957;
+	}
+	
+	.delTr {
+		color: #CD0A0A;
+	}
+	
+	.addCol {
+		color: #57A957;
+	}
+	
+	.delCol {
+		color: #CD0A0A;
+	}
+	
+    .lCoo{
+    	background:#F6EC72
     }
-    
-
-
-.falign_left{
-	text-align: left;
-}
-.falign_center{
-	text-align:center;
-}
-.falign_right{
-	text-align:right;
-}
-.ffalign_left{
-	width:16px;
-	height:16px;
-	background:url(../img/lalign.png) no-repeat;
-	display: block;
-}
-.ffalign_right{
-	width:16px;
-	height:16px;
-	background:url(../img/ralign.png) no-repeat;
-	display: block;
-}
-.ffalign_center{
-	width:16px;
-	height:16px;
-	background:url(../img/calign.png) no-repeat;
-	display: block;
-}
-
-
-
- 
-
-
-    .sheetfloat{
-    	float:right;
-    	width:100px;
-    	height:40px;
-    	line-height: 40px;
-    	position: fixed;
-    	right: 0;
-    	border-left:1px solid #aaaaaa;
-    	background-color:#ececec;
-    }
-    .sheetfloat span{
-    	float:left;
-    	width:32px;
-    	height:32px;
-    	cursor: pointer;
-    }
-    .lsheet{
-    	background:url(../img/larrow.png) center no-repeat;
-    	position: absolute;
-    	top:50%;
-    	margin-top:-16px;
-    	margin-left:16px;
-    }
-    
-    
-    .rsheet{
-    	background:url(../img/rarrow.png) center no-repeat;
-    	position: absolute;
-    	top:50%;
-    	margin-top:-16px;
-    	margin-left:48px;
-    }
-    .sheetfloat span:hover{
-    	border: 1px solid #AAAAAA;
-    	cursor: pointer;
-    
-    }
-    
-    .footer_tool_box,.addBox{
-    	width:100px;
-    	height:40px;
-    	float:left;
-    	background-color:#ececec;
-    	border-right:1px solid #aaaaaa;
-    	position:fixed;
-    	z-index:2
-    }
-    
- td.ui-selecting { 
- 	border:1px double #4887C7 !important;
- 	
-    background-color:rgba(51, 122, 183, 0.2) !important ;
-    background-color:rgb(214,228,241) \9 !important ;
-    
-    }
- td.ui-selected  { 
- 	border:1px double #4887C7 !important;
- 	
-    background-color:rgba(51, 122, 183, 0.2) !important ;
-    background-color:rgb(214,228,241) \9 !important ;
-   
-    }
- .stInput{
- 	text-align: center;
- 	border:none;
- 	padding:0;
- 	margin:0;
- 	outline: none;
- }
- .trBtn,.colBtn{
- 	 float: right;
- 	 display: inline;
- 	 z-index:999;
- }
- .trBtn span,.colBtn span{
- 	float: right;
- 	padding:2px;
- 	cursor: pointer;
- 	font-size:16px; 
- }
-.addTr{
-	 
-	 
-	color:#57A957;
-}
-.delTr{
-	 
-	 
-	color:#CD0A0A;
-}
-.addCol{
-	 
-	color:#57A957;
-}
-.delCol{
-	 
-	color:#CD0A0A;
-}

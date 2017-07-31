@@ -25,7 +25,6 @@ iTable.prototype.createContent = function(tid) {
 
 	}
 	this.setIndex();
-	//$("[pos=0-0]").addClass('ui-selected');
 
 }
 
@@ -104,30 +103,26 @@ iTable.prototype.createTip = function() {
 	content.insertBefore(this.container);
 }
 
-
-
 iTable.prototype.frameSelect = function() {
 	var that = this;
 	var cWidth = parseInt($(this.container).width());
 	var cHeight = parseInt($(this.container).height());
-	
-    var disWidth = parseInt($('.yOrder').outerWidth());
+
+	var disWidth = parseInt($('.yOrder').outerWidth());
 	var disHeight = parseInt($('.xOrder').outerHeight()) + parseInt($('.header').outerHeight());
-	
 
 	$(this.container).on('mousedown', function() {
 		var selList = null;
 		var fileNodes = $('.dataTable tr td');
-         
+
 		var isSelect = true;
 		var ev = window.event || arguments[0];
 		var sleft = parseInt($(this).scrollLeft());
-		var stop =  parseInt($(this).scrollTop());
-		
-		
-		var oX = ev.clientX-disWidth+sleft;
-		var oY = ev.clientY-disHeight+stop;
-	 
+		var stop = parseInt($(this).scrollTop());
+
+		var oX = ev.clientX - disWidth + sleft;
+		var oY = ev.clientY - disHeight + stop;
+
 		var selDiv = $('<div class="mapdiv"></div>');
 
 		selDiv.css({
@@ -157,74 +152,76 @@ iTable.prototype.frameSelect = function() {
 			var xArr = [],
 				yArr = [];
 			var sleft = $(this).scrollLeft();
-			var stop =  $(this).scrollTop();
+			var stop = $(this).scrollTop();
 			if(isSelect) {
 				if(selDiv.css('display') == "none") {
-					selDiv.css('display', '');
+					selDiv.css('display', 'none');
 				}
 				_x = (evt.x || evt.clientX);
 				_y = (evt.y || evt.clientY);
-				 
-				 
-				_x = _x + sleft- disWidth;
+
+				_x = _x + sleft - disWidth;
 				_y = _y + stop - disHeight;
-				
+
 				selDiv.css({
 					'left': Math.min(_x, oX),
 					'top': Math.min(_y, oY),
 					'width': Math.abs(_x - oX),
 					'height': Math.abs(_y - oY)
 				});
-                if(_x+86>=cWidth){
-                	sleft += 100;
+				if(_x + 86 >= cWidth) {
+					sleft += 100;
 					$(that.container).scrollLeft(sleft);
-                }else{
-                	sleft -= 100;
+				} else {
+					sleft -= 100;
 					$(that.container).scrollLeft(sleft);
-                }
-	            var _l = parseInt(selDiv.css('left')) ;
-				var _t = parseInt(selDiv.css('top')) ;
+				}
+				var _l = parseInt(selDiv.css('left'));
+				var _t = parseInt(selDiv.css('top'));
 				var _w = selDiv.width(),
 					_h = selDiv.height();
-                 
+
 				for(var i = 0; i < fileNodes.length; i++) {
-					 
+
 					var sl = fileNodes[i].offsetWidth + fileNodes[i].offsetLeft;
 					var st = fileNodes[i].offsetHeight + fileNodes[i].offsetTop;
 					if(sl > _l && st > _t && fileNodes[i].offsetLeft < _l + _w && fileNodes[i].offsetTop < _t + _h) {
 
 						var nCols = parseInt($(fileNodes[i]).attr('cols')) - 1;
 						var nRows = parseInt($(fileNodes[i]).attr('rows')) - 1;
-						var nCspan = parseInt($(fileNodes[i]).attr('colspan'))-1 || 0;
-						var nRspan = parseInt($(fileNodes[i]).attr('rowspan'))-1 || 0;
-						var expectX = nCols +nCspan;
-						var expectY = nRows +nRspan;
+						var nCspan = parseInt($(fileNodes[i]).attr('colspan')) - 1 || 0;
+						var nRspan = parseInt($(fileNodes[i]).attr('rowspan')) - 1 || 0;
+						var expectX = nCols + nCspan;
+						var expectY = nRows + nRspan;
 						xArr.push(nCols);
 						yArr.push(nRows);
 						xArr.push(expectX);
 						yArr.push(expectY);
-						var xMax = xArr.max(),xMin = xArr.min(),yMax = yArr.max(),yMin = yArr.min();
-						$(fileNodes[i]).addClass('ui-selected');		            
-
+						var xMax = xArr.max(),
+							xMin = xArr.min(),
+							yMax = yArr.max(),
+							yMin = yArr.min();
+						$(fileNodes[i]).addClass('ui-selected');
+						//that.lightCoor($(fileNodes[i]));
 					} else {
 						$(fileNodes[i]).removeClass('ui-selected');
 					}
 				}
-				
-				 
-				for(var i = xMin; i < (xMax+1); i++) {
-					for(var j = yMin; j < (yMax+1); j++) {
-		          			$("[pos='" + i + "-" + j + "']").addClass('ui-selected');
-		          			 
+
+				for(var i = xMin; i < (xMax + 1); i++) {
+					for(var j = yMin; j < (yMax + 1); j++) {
+						$("[pos='" + i + "-" + j + "']").addClass('ui-selected');
+						// that.lightCoor($("[pos='" + i + "-" + j + "']"));
 					}
 				}
+				//that.lightCoor($('.ui-selected'));
 
 			}
 
 		});
 
 		$(document).off('mouseup').on('mouseup', function() {
-            //$('.ui-selected').removeClass('ui-selected');
+			//$('.ui-selected').removeClass('ui-selected');
 			isSelect = false;
 			selDiv && selDiv.remove();
 			selList = null, _x = null, _y = null, selDiv = null, startX = null, startY = null, evt = null;
@@ -257,17 +254,21 @@ Array.prototype.max = function() {
 
 iTable.prototype.keyCursor = function() {
 	var event = window.event || arguments[0];
+	var that = this;
 	$(document).off('keydown').on('keydown', {
 		time: "0",
 		lastTd: "",
 		fixX: "",
 		fixY: "",
-		keyCode: ""
+		keyCode: "",
+		callz: that
 	}, typing);
 }
 
 function typing(event) {
 	var sNode = $('.ui-selected');
+	var callZ = event.data.callz;
+
 	if($('.ui-selected').length == 1) {
 
 		var input = $('<input type="text">');
@@ -389,6 +390,7 @@ function typing(event) {
 
 			}
 			event.data.keyCode = event.keyCode;
+			callZ.lightCoor($('.ui-selected'));
 		}
 
 		//→
@@ -426,7 +428,7 @@ function typing(event) {
 					event.data.lastTd = sNode;
 					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
 					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
- 
+
 					break;
 				case '40':
 					event.data.lastTd = sNode;
@@ -489,7 +491,7 @@ function typing(event) {
 
 			}
 			event.data.keyCode = event.keyCode;
-
+			callZ.lightCoor($('.ui-selected'));
 		}
 
 		//←
@@ -529,7 +531,7 @@ function typing(event) {
 					event.data.lastTd = sNode;
 					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
 					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
- 
+
 					break;
 				case '40':
 					event.data.lastTd = sNode;
@@ -603,7 +605,7 @@ function typing(event) {
 
 			}
 			event.data.keyCode = event.keyCode;
-
+			callZ.lightCoor($('.ui-selected'));
 		}
 
 		//↑
@@ -643,7 +645,7 @@ function typing(event) {
 					event.data.lastTd = sNode;
 					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
 					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
- 
+
 					break;
 				case '40':
 					event.data.lastTd = sNode;
@@ -718,7 +720,7 @@ function typing(event) {
 
 			}
 			event.data.keyCode = event.keyCode;
-
+			callZ.lightCoor($('.ui-selected'));
 		}
 
 	} else {
@@ -877,11 +879,14 @@ iTable.prototype.fillTd = function(tid) {
 			var yIndex = $(this).parent().index() + 1;
 			var targetY = $(".yOrder table").find('tr:eq(' + yCoo + ')');
 			var targetX = $(".xOrder table").find('tr td:eq(' + xCoo + ')');
-			$('.disbox').text(IntToChr(xCoo) + String(yCoo + 1));
+			if($('.disbox').length > 0) {
+				$('.disbox').text(IntToChr(xCoo) + String(yCoo + 1));
+			}
 
 			//_self.remakeRow(targetY, yCoo, xIndex, yIndex, rowspan, colspan);
 			//_self.remakeCol(targetX, xCoo, xIndex, yIndex, rowspan, colspan, xCoo, yCoo);
 			_self.tdTofx($(this));
+			_self.lightCoor($(this));
 			removeUied();
 			//_self.findSpan($(this));
 			$('#ip_fx').blur();
@@ -910,6 +915,25 @@ iTable.prototype.fillTd = function(tid) {
 		});
 
 	});
+}
+
+iTable.prototype.lightCoor = function(obj) {
+
+	var target = obj;
+	var cols = parseInt($(target).attr('cols')) - 1;
+	var rows = parseInt($(target).attr('rows')) - 1;
+	var cSpan = parseInt($(target).attr('colspan')) - 1 || 0;
+	var rSpan = parseInt($(target).attr('rowspan')) - 1 || 0;
+	 $('.leftTable tr td').removeClass('lCoo');
+	 $('.titleTable tr td').removeClass('lCoo');
+
+	for(var i = rows; i < rows + rSpan + 1; i++) {
+		$('.leftTable').find('tr').eq(i).find('td').addClass('lCoo');
+	}
+	for(var j = cols; j < cols + cSpan + 1; j++) {
+		$('.titleTable tr').find('td').eq(j).addClass('lCoo');
+	}
+
 }
 
 iTable.prototype.editRowCol = function(tid) {
