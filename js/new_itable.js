@@ -202,7 +202,7 @@ iTable.prototype.frameSelect = function() {
 							yMax = yArr.max(),
 							yMin = yArr.min();
 						$(fileNodes[i]).addClass('ui-selected');
-						//that.lightCoor($(fileNodes[i]));
+
 					} else {
 						$(fileNodes[i]).removeClass('ui-selected');
 					}
@@ -211,17 +211,15 @@ iTable.prototype.frameSelect = function() {
 				for(var i = xMin; i < (xMax + 1); i++) {
 					for(var j = yMin; j < (yMax + 1); j++) {
 						$("[pos='" + i + "-" + j + "']").addClass('ui-selected');
-						// that.lightCoor($("[pos='" + i + "-" + j + "']"));
+
 					}
 				}
 				that.lightCoor($('.ui-selected'));
-				//console.log($('.ui-selected'));
 			}
 
 		});
 
 		$(document).off('mouseup').on('mouseup', function() {
-			//$('.ui-selected').removeClass('ui-selected');
 			isSelect = false;
 			selDiv && selDiv.remove();
 			selList = null, _x = null, _y = null, selDiv = null, startX = null, startY = null, evt = null;
@@ -270,19 +268,13 @@ function typing(event) {
 	var callZ = event.data.callz;
 
 	if($('.ui-selected').length == 1) {
-
+		if(event.keyCode == '8' || event.keyCode == '18' || event.keyCode == '16' || event.keyCode == '9') {
+			return;
+		}
 		var that = $(this);
-
-//		var tdWidth = that.width();
-//		var tdHeight = that.height();
 		var tdText = $('.ui-selected').text();
 
 		var tdInput = $("<input type='text'  id='tdInput' class='tdInput'  value='" + tdText + "'></input>");
-
-//			tdInput.width(tdWidth - 2);
-//			tdInput.height(tdHeight - 2);
- 
-
 		if(!$('.ui-selected input').length) {
 			$('.ui-selected').html(tdInput);
 		}
@@ -305,13 +297,10 @@ function typing(event) {
 			event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
 		}
 
-		if(event.keyCode == '8' || event.keyCode == '18' || event.keyCode == '16' || event.keyCode == '9') {
-			return;
-		}
 		//↓
 		if(event.keyCode == '13' || event.keyCode == '40') {
 			if(event.target == $('body')[0]) {
-				input.remove();
+				tdInput.remove();
 			}
 
 			if(event.target != $('body')[0]) {
@@ -728,7 +717,11 @@ function typing(event) {
 			event.data.keyCode = event.keyCode;
 			callZ.lightCoor($('.ui-selected'));
 		}
-
+		if($('.ui-selected').length > 0) {
+			var xCoo = Number($('.ui-selected').attr('cols')) - 1,
+				yCoo = Number($('.ui-selected').attr('rows')) - 1;
+			$('.disbox').text(IntToChr(xCoo) + String(yCoo + 1));
+		}
 	} else {
 		return;
 	}
@@ -956,9 +949,6 @@ iTable.prototype.editRowCol = function(tid) {
 			var tr = $(this).parent();
 			$('.dataTable').find('td').removeClass('ui-selected');
 			$(this).addClass('ui-selected');
-
-			//$(".dataTable tr td").removeAttr('chosed');
-			//$(this).attr('chosed', 'clickone');
 			var xCoo = Number($(this).attr('cols')) - 1,
 				yCoo = Number($(this).attr('rows')) - 1;
 			var colspan = Number($(this).attr('colspan'));
@@ -973,8 +963,8 @@ iTable.prototype.editRowCol = function(tid) {
 			var targetX = $(".xOrder table").find('tr td:eq(' + xCoo + ')');
 			$('.disbox').text(IntToChr(xCoo) + String(yCoo + 1));
 
-			_self.remakeRow(targetY, yCoo, xIndex, yIndex, rowspan, colspan);
-			_self.remakeCol(targetX, xCoo, xIndex, yIndex, rowspan, colspan, xCoo, yCoo);
+			//_self.remakeRow(targetY, yCoo, xIndex, yIndex, rowspan, colspan);
+			//_self.remakeCol(targetX, xCoo, xIndex, yIndex, rowspan, colspan, xCoo, yCoo);
 			//_self.tdTofx($(this));
 			removeUied();
 			//$('#ip_fx').blur();
@@ -1282,6 +1272,104 @@ iTable.prototype.express = function() {
 		});
 	});
 }
+
+//列插入
+iTable.prototype.insertCol = function() {
+	var simMenu = this.createSimpleMenu('fbold');
+	var sel_a = $(simMenu[0]).children(0);
+	
+	var that=this;
+	sel_a.on('click', function() {
+		var sNode = $('.ui-selected');
+		if(sNode.length >= 2) {
+
+		} else {
+			var index = parseInt(sNode.attr('cols'));
+			for(var i = 0; i < that.rowCount+1;i++)  {
+				var time = 0;
+				for(var j = index; j > -1; j--) {
+					
+                    var cols=parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('cols'));
+					if(cols==index){
+						var cspan=parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan'))||1;
+						if(cspan>=2){
+							$('td[cols=' + j + '][rows=' + i + ']').attr('colspan',cspan+1);
+						}else{
+							$('td[cols=' + j + '][rows=' + i + ']').after('<td style="background:orange"></td>');
+						}
+						
+					}else{
+                        if($('td[cols=' + j + '][rows=' + i + ']').length>0){
+                        	time++;
+                        	if(time==1){
+                        		var cspan=parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan'))||1;
+                        		if(cspan>=2){
+							       $('td[cols=' + j + '][rows=' + i + ']').attr('colspan',cspan+1);
+						        }                        		
+                        	}
+                        }
+
+					}
+					
+				}
+			}
+
+		}
+		that.setIndex();
+	});
+
+}
+//行插入
+iTable.prototype.insertRow = function() {
+	var simMenu = this.createSimpleMenu('fbold');
+	var sel_a = $(simMenu[0]).children(0);
+	
+	var that=this;
+	sel_a.on('click', function() {
+		var sNode = $('.ui-selected');
+		if(sNode.length >= 2) {
+
+		} else {
+			var index = parseInt(sNode.attr('rows'));
+	        for(var i=index;i>-1;i--){
+	        	var tr=$('<tr></tr>');
+	        	//var time = 0;
+	        	for(var j=0;j<that.cellCount;j++){
+	        		var rows=$('td[cols=' + j + '][rows=' + i + ']').attr('rows');
+	        	  
+	        		if(rows==index){
+	        			var rspan=parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan'))||1;
+						if(rspan>=2){
+							$('td[cols=' + j + '][rows=' + i + ']').attr('rowspan',rspan+1);
+						}else{
+							tr.append('<td style="background:orange"></td>');
+							$('td[cols=' + j + '][rows=' + i + ']').parent().after(tr);
+						}
+	        		}else{
+	        			  if($('td[cols=' + j + '][rows=' + i + ']').length>0){
+                        	//time++;
+                        	//if(time==1){
+                        		var rspan=parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan'))||1;
+                        		if(rspan>=2){
+							       $('td[cols=' + j + '][rows=' + i + ']').attr('rowspan',rspan+1);
+						        }                        		
+                        	//}
+                        }
+	        		}
+	        	}
+	        	
+	        	
+	        }
+
+		}
+		that.setIndex();
+	});
+
+}
+
+
+
+
 //单元格上的公式区域
 iTable.prototype.formula = function(ways) {
 	removeUied();
@@ -1728,156 +1816,157 @@ iTable.prototype.setIndex = function() {
 	}
 
 }
-//创建操作行按钮
-iTable.prototype.remakeRow = function(obj, rowNum, xIndex, yIndex, rowspan, colspan) {
-	var btnBox = $('<div class="trBtn"></div>');
-	var addTr = $('<span class="addTr">+</span>');
-	var delTr = $('<span class="delTr">-</span>');
-	var _self = this;
-	var t = this.getCurTable();
-	var id = (t.attr('id')).replace('iTable', '');
-	var xIndex = xIndex,
-		yIndex = yIndex;
-	var rowSpan = rowspan,
-		colSpan = colspan;
+////创建操作行按钮
+//iTable.prototype.remakeRow = function(obj, rowNum, xIndex, yIndex, rowspan, colspan) {
+//	var btnBox = $('<div class="trBtn"></div>');
+//	var addTr = $('<span class="addTr">+</span>');
+//	var delTr = $('<span class="delTr">-</span>');
+//	var _self = this;
+//	var t = this.getCurTable();
+//	var id = (t.attr('id')).replace('iTable', '');
+//	var xIndex = xIndex,
+//		yIndex = yIndex;
+//	var rowSpan = rowspan,
+//		colSpan = colspan;
+//
+//	var targetTd = obj.children(0);
+//	var otherTd = obj.siblings().children(0);
+//	btnBox.append(addTr);
+//	btnBox.append(delTr);
+//
+//	for(var i = 0; i < otherTd.length; i++) {
+//		$(otherTd[i]).children(0).remove();
+//	}
+//
+//	if(targetTd.children(0)) {
+//		targetTd.children(0).remove();
+//	} else {
+//		targetTd.append(btnBox);
+//	}
+//
+//	targetTd.append(btnBox);
+//	addTr.on('click', function() {
+//		//		for(var i = 0; i < rowSpan; i++) {
+//		var tr = _self.createTr();
+//
+//		for(var j = 0; j < _self.cellCount; j++) {
+//			var td = _self.createTd('', '22');
+//			tr.append(td);
+//		}
+//		if(rowSpan == 1) {
+//			$(t).find('tr:eq(' + rowNum + ')').after(tr);
+//		} else {
+//			$(t).find('tr:eq(' + (rowSpan + yIndex - 2) + ')').after(tr);
+//		}
+//
+//		//		}
+//
+//		for(var k = 0; k < rowSpan; k++) {
+//			var ltr = $("<tr></tr>");
+//			var ltd = $("<td></td>");
+//			ltr.append(ltd);
+//			if(rowspan == 1) {
+//				$('.leftTable').find('tr:eq(' + rowNum + ')').after(ltr);
+//			} else {
+//				$('.leftTable').find('tr:eq(' + (rowSpan + yIndex - 2) + ')').after(ltr);
+//
+//			}
+//		}
+//		_self.rowCount++;
+//		_self.remarkLeft($('.leftTable'), rowNum);
+//		_self.setIndex();
+//		_self.fillTd(id);
+//
+//	});
+//	delTr.on('click', function() {
+//		$('.leftTable').find('tr:eq(' + rowNum + ')').remove();
+//
+//		if(rowSpan != 1) {
+//			$("#iTable" + id).find('tr:eq(' + rowNum + ')').remove();
+//			for(var j = rowNum; j < rowSpan + rowNum - 1; j++) {
+//				for(var i = 0; i < colSpan; i++) {
+//
+//					$("#iTable" + id).find('tr:eq(' + j + ')').append($("<td></td>"));
+//
+//				}
+//			}
+//		} else {
+//			$("#iTable" + id).find('tr:eq(' + rowNum + ')').remove();
+//
+//		}
+//		_self.remarkLeft($('.leftTable'), rowNum);
+//		_self.setIndex();
+//		_self.fillTd(id);
+//	});
+//
+//}
+//
+////创建列操作按钮
+//iTable.prototype.remakeCol = function(obj, colNum, xIndex, yIndex, rowspan, colspan, xCoo, yCoo) {
+//	var btnBox = $('<div class="colBtn"></div>');
+//	var addCol = $('<span class="addCol">+</span>');
+//	var delCol = $('<span class="delCol">-</span>');
+//	var _self = this;
+//	var t = this.getCurTable();
+//	var id = (t.attr('id')).replace('iTable', '');
+//
+//	var targetTd = obj;
+//	var otherTd = obj.parent().children(0);
+//	var xIndex = xIndex,
+//		yIndex = yIndex;
+//	var rowSpan = rowspan,
+//		colSpan = colspan;
+//	var xCoo = xCoo;
+//
+//	btnBox.append(addCol);
+//	btnBox.append(delCol);
+//
+//	for(var i = 0; i < otherTd.length; i++) {
+//		$(otherTd[i]).children(0).remove();
+//	}
+//
+//	if(targetTd.children(0)) {
+//		targetTd.children(0).remove();
+//	} else {
+//		targetTd.append(btnBox);
+//	}
+//	targetTd.append(btnBox);
+//
+//	addCol.on('click', function() {
+//
+//		for(var j = 0; j < _self.rowCount; j++) {
+//
+//			var td = _self.createTd('', 'new');
+//			var num = Number(xCoo) + Number(colSpan);
+//
+//			$("[pos='" + j + "-" + num + "']").before(td);
+//		}
+//
+//		var ttd = $("<td></td>");
+//		$('.titleTable').find('tr:eq(0) td:eq(' + colNum + ')').after(ttd);
+//		_self.cellCount++;
+//		_self.remarkTop($('.titleTable'), colNum);
+//
+//		_self.setIndex();
+//		_self.fillTd(id);
+//		_self.editRowCol(id);
+//	});
+//
+//	delCol.on('click', function() {
+//		for(var j = 0; j < _self.rowCount; j++) {
+//			var num = Number(xCoo) + Number(colSpan) - 1;
+//
+//			$("[pos='" + j + "-" + num + "']").remove();
+//
+//		}
+//		$('.titleTable').find('tr td:eq(' + xIndex + ')').remove();
+//		_self.remarkTop($('.titleTable'), colNum);
+//		_self.setIndex();
+//		_self.fillTd(id);
+//		_self.editRowCol(id);
+//	});
+//}
 
-	var targetTd = obj.children(0);
-	var otherTd = obj.siblings().children(0);
-	btnBox.append(addTr);
-	btnBox.append(delTr);
-
-	for(var i = 0; i < otherTd.length; i++) {
-		$(otherTd[i]).children(0).remove();
-	}
-
-	if(targetTd.children(0)) {
-		targetTd.children(0).remove();
-	} else {
-		targetTd.append(btnBox);
-	}
-
-	targetTd.append(btnBox);
-	addTr.on('click', function() {
-		//		for(var i = 0; i < rowSpan; i++) {
-		var tr = _self.createTr();
-
-		for(var j = 0; j < _self.cellCount; j++) {
-			var td = _self.createTd('', '22');
-			tr.append(td);
-		}
-		if(rowSpan == 1) {
-			$(t).find('tr:eq(' + rowNum + ')').after(tr);
-		} else {
-			$(t).find('tr:eq(' + (rowSpan + yIndex - 2) + ')').after(tr);
-		}
-
-		//		}
-
-		for(var k = 0; k < rowSpan; k++) {
-			var ltr = $("<tr></tr>");
-			var ltd = $("<td></td>");
-			ltr.append(ltd);
-			if(rowspan == 1) {
-				$('.leftTable').find('tr:eq(' + rowNum + ')').after(ltr);
-			} else {
-				$('.leftTable').find('tr:eq(' + (rowSpan + yIndex - 2) + ')').after(ltr);
-
-			}
-		}
-		_self.rowCount++;
-		_self.remarkLeft($('.leftTable'), rowNum);
-		_self.setIndex();
-		_self.fillTd(id);
-
-	});
-	delTr.on('click', function() {
-		$('.leftTable').find('tr:eq(' + rowNum + ')').remove();
-
-		if(rowSpan != 1) {
-			$("#iTable" + id).find('tr:eq(' + rowNum + ')').remove();
-			for(var j = rowNum; j < rowSpan + rowNum - 1; j++) {
-				for(var i = 0; i < colSpan; i++) {
-
-					$("#iTable" + id).find('tr:eq(' + j + ')').append($("<td></td>"));
-
-				}
-			}
-		} else {
-			$("#iTable" + id).find('tr:eq(' + rowNum + ')').remove();
-
-		}
-		_self.remarkLeft($('.leftTable'), rowNum);
-		_self.setIndex();
-		_self.fillTd(id);
-	});
-
-}
-
-//创建列操作按钮
-iTable.prototype.remakeCol = function(obj, colNum, xIndex, yIndex, rowspan, colspan, xCoo, yCoo) {
-	var btnBox = $('<div class="colBtn"></div>');
-	var addCol = $('<span class="addCol">+</span>');
-	var delCol = $('<span class="delCol">-</span>');
-	var _self = this;
-	var t = this.getCurTable();
-	var id = (t.attr('id')).replace('iTable', '');
-
-	var targetTd = obj;
-	var otherTd = obj.parent().children(0);
-	var xIndex = xIndex,
-		yIndex = yIndex;
-	var rowSpan = rowspan,
-		colSpan = colspan;
-	var xCoo = xCoo;
-
-	btnBox.append(addCol);
-	btnBox.append(delCol);
-
-	for(var i = 0; i < otherTd.length; i++) {
-		$(otherTd[i]).children(0).remove();
-	}
-
-	if(targetTd.children(0)) {
-		targetTd.children(0).remove();
-	} else {
-		targetTd.append(btnBox);
-	}
-	targetTd.append(btnBox);
-
-	addCol.on('click', function() {
-
-		for(var j = 0; j < _self.rowCount; j++) {
-
-			var td = _self.createTd('', 'new');
-			var num = Number(xCoo) + Number(colSpan);
-
-			$("[pos='" + j + "-" + num + "']").before(td);
-		}
-
-		var ttd = $("<td></td>");
-		$('.titleTable').find('tr:eq(0) td:eq(' + colNum + ')').after(ttd);
-		_self.cellCount++;
-		_self.remarkTop($('.titleTable'), colNum);
-
-		_self.setIndex();
-		_self.fillTd(id);
-		_self.editRowCol(id);
-	});
-
-	delCol.on('click', function() {
-		for(var j = 0; j < _self.rowCount; j++) {
-			var num = Number(xCoo) + Number(colSpan) - 1;
-
-			$("[pos='" + j + "-" + num + "']").remove();
-
-		}
-		$('.titleTable').find('tr td:eq(' + xIndex + ')').remove();
-		_self.remarkTop($('.titleTable'), colNum);
-		_self.setIndex();
-		_self.fillTd(id);
-		_self.editRowCol(id);
-	});
-}
 //更新顶部
 iTable.prototype.remarkTop = function(obj, startNum) {
 	var TopTb = obj;
@@ -2031,24 +2120,41 @@ iTable.prototype.createMask = function(left, top, width, height, posX, posY) {
 iTable.prototype.rMenus = function() {
 	var that = this;
 	var rMenus = this.createRmenus();
-	$('.dataTable')[0].oncontextmenu = function() {
+	var winH = $(window).height() - $(this.footer).outerHeight();
+	var winW = $(window).width();
+
+	$('.dataTable').contextmenu(function() {
 		var ev = ev || window.event;
 		var oX = ev.clientX;
 		var oY = ev.clientY;
-		that.localRmenus(oX, oY, rMenus);
-		return false;
-	};
-	$('.dataTable').find('tr td').each(function() {
-		$(this)[0].oncontextmenu = function() {
 
+		var mH = $(rMenus).height();
+		var mW = $(rMenus).width();
+		$(rMenus).css({
+			'left': oX,
+			'top': oY,
+			'display': 'block'
+		});
+		(oY + mH > winH) && ($(rMenus).css({
+			'top': winH - mH - 20
+		}));
+		(oX + mW > winW) && ($(rMenus).css({
+			'left': winW - mW - 20
+		}));
+
+		return false;
+	});
+
+	$('.dataTable').find('tr td').each(function() {
+		$(this).contextmenu(function() {
 			var arr = $('.ui-selected');
-			var obj = $(this)[0];
+			var obj = this;
 			var has = containsArray(arr, obj);
 			if(has == -1) {
 				$('.dataTable').find('td').removeClass('ui-selected');
 			}
 			$(this).addClass('ui-selected');
-		};
+		});
 	})
 }
 iTable.prototype.createRmenus = function() {
@@ -2063,6 +2169,12 @@ iTable.prototype.createRmenus = function() {
 	var paste = this.paste(dataArr);
 	menus.append(paste);
 
+	var _insert = this._insert(dataArr);
+	menus.append(_insert);
+
+	var _delete = this._delete(dataArr);
+	menus.append(_delete);
+
 	var that = this;
 
 	menus.css({
@@ -2070,42 +2182,26 @@ iTable.prototype.createRmenus = function() {
 		'width': '200px',
 		'overflow': 'hidden',
 		'background': '#FBFBFB',
-		//'z-index':'199',
 		'display': 'none',
-		'font-size': '14px'
+		'font-size': '14px',
 	});
 	$('body').append(menus);
-	//  event.stopPropagation();   
+
 	$(document).on('click', function() {
-
 		menus.hide();
-
 		return false;
-	});
-
-	$('.dataTable').on('click', function() {
-		menus.hide();
-
 	});
 	return menus;
 }
-iTable.prototype.localRmenus = function(x, y, obj) {
-	$(obj).css({
-		'left': x,
-		'top': y,
-		'display': 'block'
-	});
-
-}
 
 iTable.prototype.cut = function(dataArr) {
-	var cut = $('<div class="menu-cut"></div>');
-	cut.text('剪切');
-	cut.css({
-		'padding': '2px 10px'
+	var cutDiv = $('<div class="menu-cut">剪切</div>');
+	cutDiv.css({
+		'padding': '2px 10px',
+		'cursor': 'pointer'
 	})
 
-	cut.on('click', function() {
+	cutDiv.on('click', function() {
 
 		var tdLength = $('.ui-selected').length;
 		$(this).parent().hide();
@@ -2126,15 +2222,16 @@ iTable.prototype.cut = function(dataArr) {
 		}
 
 	});
-	return cut;
+	return cutDiv;
 }
+
 iTable.prototype.copy = function() {
-	var copy = $('<div class="menu-copy"></div>');
-	copy.text('复制');
-	copy.css({
-		'padding': '2px 10px'
+	var copyDiv = $('<div class="menu-copy">复制</div>');
+	copyDiv.css({
+		'padding': '2px 10px',
+		'cursor': 'pointer'
 	})
-	copy.on('click', function() {
+	copyDiv.on('click', function() {
 		var tdLength = $('.ui-selected').length;
 		$(this).parent().hide();
 		if(tdLength <= 1) {
@@ -2151,15 +2248,15 @@ iTable.prototype.copy = function() {
 			}
 		}
 	});
-	return copy;
+	return copyDiv;
 }
 iTable.prototype.paste = function(dataArr) {
-	var paste = $('<div class="menu-paste"></div>');
-	paste.text('粘贴');
-	paste.css({
-		'padding': '2px 10px'
+	var pasteDiv = $('<div class="menu-paste">粘贴</div>');
+	pasteDiv.css({
+		'padding': '2px 10px',
+		'cursor': 'pointer'
 	});
-	paste.on('click', function() {
+	pasteDiv.on('click', function() {
 		$(this).parent().hide();
 		removeUied();
 		var tdLength = $('.ui-selected').length;
@@ -2176,7 +2273,47 @@ iTable.prototype.paste = function(dataArr) {
 		}
 
 	});
-	return paste;
+	return pasteDiv;
+}
+
+iTable.prototype._insert = function() {
+	var insertDiv = $('<div class="menu-insert">插入</div>');
+	var that = this;
+	insertDiv.css({
+		'padding': '2px 10px',
+		'cursor': 'pointer'
+	});
+
+	insertDiv.on('click', function() {
+		var ev = ev || window.event;
+		var winW = $(window).width();
+		var winH = $(window).height();
+		var toolsDiv = $('<div></div>');
+		var toolsTitle = $('<div><span>插入</span></div>');
+
+		toolsDiv.append(toolsTitle);
+		toolsDiv.css({
+			'position': 'absolute',
+			'top': '50%',
+			'left': '50%',
+			'width': '200px',
+			'background': '#ffffff'
+		});
+		$(that.container).append(toolsDiv);
+
+	});
+
+	return insertDiv;
+}
+
+iTable.prototype._delete = function() {
+	var deleteDiv = $('<div class="menu-delete">删除</div>');
+	deleteDiv.css({
+		'padding': '2px 10px',
+		'cursor': 'pointer'
+	});
+
+	return deleteDiv;
 }
 
 iTable.prototype.tdTofx = function(obj) {
@@ -2519,7 +2656,10 @@ iTable.prototype.init = function() {
 	tOption.mergeTd && this.mergeTd();
 	tOption.splitTd && this.splitTd();
 	tOption.textAlign && this.textAlign();
+
 	this.express();
+	this.insertCol();
+	this.insertRow();
 	this.addSheet();
 	this.sheetMove();
 	this.setIndex();
