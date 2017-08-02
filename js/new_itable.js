@@ -1700,8 +1700,7 @@ iTable.prototype.addSheet = function() {
 		var neId = parseInt(curId) + 1;
 		$('.sheetqueuedl').append(dd);
 		that.createContent(neId);
-		that.fillTd(neId);
-		$("#iTable" + neId).selectable();
+		that.fillTd(neId);		 
 		i++;
 		that.sheetWork();
 
