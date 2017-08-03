@@ -1243,7 +1243,7 @@ iTable.prototype.insertCol = function() {
            	    
            	  }
            }
-           
+           that.cellCount=that.cellCount+xMax-xMin+1;
            
 		} else {
 			var xIndex = parseInt(sNode.attr('cols'));
@@ -1269,11 +1269,9 @@ iTable.prototype.insertCol = function() {
 								var cspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
 								var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
 								if(cspan >= 2) {
+									//不同行拓宽
 									if(!(i<=yIndex&&(rspan+i)>=yIndex)){
-										console.log(i,yIndex);
 										 $('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cspan + 1);	
-									}else{
-										console.log(i,yIndex);
 									}
 									
 								}
@@ -1304,14 +1302,15 @@ iTable.prototype.insertRow = function() {
 		if(sNode.length >= 2) {
 
 		} else {
-			var index = parseInt(sNode.attr('rows'));
-			for(var i = index; i > -1; i--) {
+			var yIndex = parseInt(sNode.attr('rows'));
+			var xIndex = parseInt(sNode.attr('cols'));
+			for(var i = yIndex; i > -1; i--) {
 				var tr = $('<tr></tr>');
-				//var time = 0;
+				 
 				for(var j = 0; j < that.cellCount + 1; j++) {
 					var rows = $('td[cols=' + j + '][rows=' + i + ']').attr('rows');
-
-					if(rows == index) {
+                 
+					if(rows == yIndex) {
 						var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
 						if(rspan >= 2) {
 							$('td[cols=' + j + '][rows=' + i + ']').attr('rowspan', rspan + 1);
@@ -1321,13 +1320,16 @@ iTable.prototype.insertRow = function() {
 						}
 					} else {
 						if($('td[cols=' + j + '][rows=' + i + ']').length > 0) {
-							//time++;
-							//if(time==1){
+							
 							var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
+							var cspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
 							if(rspan >= 2) {
-								$('td[cols=' + j + '][rows=' + i + ']').attr('rowspan', rspan + 1);
+								if(!(j<=xIndex&&(cspan+j)>=xIndex)){
+										 $('td[cols=' + j + '][rows=' + i + ']').attr('rowspan', rspan + 1);	
+									}
+								 
 							}
-							//}
+							
 						}
 					}
 				}
