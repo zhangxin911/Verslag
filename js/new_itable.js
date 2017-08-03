@@ -1229,7 +1229,7 @@ iTable.prototype.insertCol = function() {
 			}
 
 			for(var _y = 0; _y < that.rowCount + 1; _y++) {
-				//var time = 0;
+				var time = 0;
 				for(var _x = xMin; _x < xMax + 1; _x++) {
 					var index=xMin;
 					if($('td[cols=' + xMin + '][rows=' + _y + ']').length > 0) {
@@ -1237,12 +1237,12 @@ iTable.prototype.insertCol = function() {
 					} else {
 						 while(index>-1){
 						 	if($('td[cols=' + index + '][rows=' + _y + ']').length > 0) {
-//						 		time++;
-//						 	    if(time==1){
+						 		time++;
+						 	    if(time==1){
 						 	    	$('td[cols=' + index + '][rows=' + _y + ']').after('<td style="background:orange"></td>');
-						 	        console.log($('td[cols=' + index + '][rows=' + _y + ']'));
-//						 	    }
-						 	   
+						 	
+						 	    }
+						 	    console.log($('td[cols=' + index + '][rows=' + _y + ']'));
 						 	}
 						 	
 						 	index--;
@@ -1257,10 +1257,11 @@ iTable.prototype.insertCol = function() {
 		} else {
 			var xIndex = parseInt(sNode.attr('cols'));
 			var yIndex = parseInt(sNode.attr('rows'));
-			
 			for(var i = 0; i < that.rowCount + 1; i++) {
-				var time=0;							
-				for(var j = xIndex; j > -1; j--) {  
+				var time = 0;
+
+				for(var j = xIndex; j > -1; j--) {
+
 					var cols = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('cols'));
 					if(cols == xIndex) {
 						var cspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
@@ -1268,41 +1269,27 @@ iTable.prototype.insertCol = function() {
 							$('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cspan + 1);
 						} else {
 							$('td[cols=' + xIndex + '][rows=' + i + ']').before('<td style="background:orange"></td>');
-							 
 						}
 
 					} else {
-						 
 						if($('td[cols=' + j + '][rows=' + i + ']').length > 0) {
 							time++;
 							if(time == 1) {
 								var cspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
 								var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
 								if(cspan >= 2) {
-									$('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cspan + 1);									
 									//不同行拓宽
-//									if(!(i <= yIndex && (rspan + i) >= yIndex)) {
-//										$('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cspan + 1);
-//									}else{
-//										//$('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cspan + 1);
-//									}
+									if(!(i <= yIndex && (rspan + i) >= yIndex)) {
+										$('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cspan + 1);
+									}
 
 								}
-						    }
-						
-						}else{	
-							console.log($('td[cols=' + j + '][rows=' + i + ']'));
-							$('td[cols=' + j + '][rows=' + i + ']').before('<td style="background:orange"></td>');							
-							
-							
+							}
 						}
 
 					}
 
-
 				}
-             
-
 			}
 			that.cellCount++;
 		}
