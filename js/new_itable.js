@@ -1222,21 +1222,22 @@ iTable.prototype.insertCol = function() {
 			  xMax = xArr.max(),xMin = xArr.min(),yMax = yArr.max(),yMin = yArr.min();
                   			 
            }
+           
            for(var _y=0;_y<that.rowCount + 1;_y++){
            	  for(var _x=xMin;_x<xMax+1;_x++){
+           	  	 var index=xMax;
            	  	if($('td[cols=' + xMin + '][rows=' + _y + ']').length>0){
            	  		$('td[cols=' + xMin + '][rows=' + _y + ']').before('<td style="background:orange"></td>');
            	  	}else{
-           	  		var index=xMax;
-           	  		while(index>-1){
-           	  			if($('td[cols=' + index + '][rows=' + _y + ']').length>0){
-           	  				$('td[cols=' + index + '][rows=' + _y + ']').before('<td style="background:orange"></td>');
-                            console.log(index);
-                            break;
-                            
-           	  			}           	  			
-           	  			index--;
-           	  		}
+           	  		$('td[cols=' + (xMin-1) + '][rows=' + _y + ']').after('<td style="background:orange"></td>');
+//         	  		while(index>-1){
+//         	  			if($('td[cols=' + index + '][rows=' + _y + ']').length>0){
+//         	  				$('td[cols=' + index + '][rows=' + _y + ']').after('<td style="background:orange"></td>');
+//                          break;
+//                          
+//         	  			}           	  			
+//         	  			index--;
+//         	  		}
            	  	}
            	  	
            	    
@@ -1245,27 +1246,35 @@ iTable.prototype.insertCol = function() {
            
            
 		} else {
-			var index = parseInt(sNode.attr('cols'));
+			var xIndex = parseInt(sNode.attr('cols'));
+			var yIndex = parseInt(sNode.attr('rows'));
 			for(var i = 0; i < that.rowCount + 1; i++) {
 				var time = 0;
-				for(var j = index; j > -1; j--) {
-
+				
+				for(var j = xIndex; j > -1; j--) {
+                    
 					var cols = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('cols'));
-					if(cols == index) {
+					if(cols == xIndex) {
 						var cspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
 						if(cspan >= 2) {
 							$('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cspan + 1);
 						} else {
-							$('td[cols=' + j + '][rows=' + i + ']').before('<td style="background:orange"></td>');
+							$('td[cols=' + xIndex + '][rows=' + i + ']').before('<td style="background:orange"></td>');
 						}
-
+                  
 					} else {
 						if($('td[cols=' + j + '][rows=' + i + ']').length > 0) {
 							time++;
 							if(time == 1) {
 								var cspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
+								var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
 								if(cspan >= 2) {
-									$('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cspan + 1);
+									if(rspan<=yIndex&&(rspan+i)>=yIndex){
+										
+									}else{
+									 $('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cspan + 1);	
+									}
+									
 								}
 							}
 						}
