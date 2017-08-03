@@ -1269,10 +1269,11 @@ iTable.prototype.insertCol = function() {
 								var cspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
 								var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
 								if(cspan >= 2) {
-									if(rspan<=yIndex&&(rspan+i)>=yIndex){
-										
+									if(!(i<=yIndex&&(rspan+i)>=yIndex)){
+										console.log(i,yIndex);
+										 $('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cspan + 1);	
 									}else{
-									 $('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cspan + 1);	
+										console.log(i,yIndex);
 									}
 									
 								}
