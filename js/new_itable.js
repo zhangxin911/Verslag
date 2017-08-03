@@ -208,8 +208,8 @@ iTable.prototype.frameSelect = function() {
 
 				for(var i = xMin; i < (xMax + 1); i++) {
 					for(var j = yMin; j < (yMax + 1); j++) {
-					 $("[pos='" + i + "-" + j + "']").addClass('ui-selected');
-					 
+						$("[pos='" + i + "-" + j + "']").addClass('ui-selected');
+
 					}
 				}
 
@@ -1211,48 +1211,56 @@ iTable.prototype.insertCol = function() {
 	var that = this;
 	sel_a.on('click', function() {
 		var sNode = $('.ui-selected');
-		var xArr=[],yArr=[];
-		var xMax,xMin,yMax,yMin;
+		var xArr = [],
+			yArr = [];
+		var xMax, xMin, yMax, yMin;
 		if(sNode.length >= 2) {
-           for(var i=0;i<sNode.length;i++){
-           	  var cols=parseInt(sNode.eq(i).attr('cols'));
-           	  var rows=parseInt(sNode.eq(i).attr('rows'));           	  
-           	  xArr.push(cols);
-			  yArr.push(rows);
-			  xMax = xArr.max(),xMin = xArr.min(),yMax = yArr.max(),yMin = yArr.min();
-                  			 
-           }
-           
-           for(var _y=0;_y<that.rowCount + 1;_y++){
-           	  for(var _x=xMin;_x<xMax+1;_x++){
-           	  	 var index=xMax;
-           	  	if($('td[cols=' + xMin + '][rows=' + _y + ']').length>0){
-           	  		$('td[cols=' + xMin + '][rows=' + _y + ']').before('<td style="background:orange"></td>');
-           	  	}else{
-           	  		$('td[cols=' + (xMin-1) + '][rows=' + _y + ']').after('<td style="background:orange"></td>');
-//         	  		while(index>-1){
-//         	  			if($('td[cols=' + index + '][rows=' + _y + ']').length>0){
-//         	  				$('td[cols=' + index + '][rows=' + _y + ']').after('<td style="background:orange"></td>');
-//                          break;
-//                          
-//         	  			}           	  			
-//         	  			index--;
-//         	  		}
-           	  	}
-           	  	
-           	    
-           	  }
-           }
-           that.cellCount=that.cellCount+xMax-xMin+1;
-           
+			for(var i = 0; i < sNode.length; i++) {
+				var cols = parseInt(sNode.eq(i).attr('cols'));
+				var rows = parseInt(sNode.eq(i).attr('rows'));
+				var cAdd=parseInt(sNode.eq(i).attr('colspan'))|| 1 ;
+				var rAdd=parseInt(sNode.eq(i).attr('rowspan'))|| 1 ;
+				cols=cols+cAdd-1;
+				rows=rows+rAdd-1;
+				xArr.push(cols);
+				yArr.push(rows);
+				xMax = xArr.max(), xMin = xArr.min(), yMax = yArr.max(), yMin = yArr.min();
+
+			}
+
+			for(var _y = 0; _y < that.rowCount + 1; _y++) {
+				//var time = 0;
+				for(var _x = xMin; _x < xMax + 1; _x++) {
+					var index=xMin;
+					if($('td[cols=' + xMin + '][rows=' + _y + ']').length > 0) {
+						$('td[cols=' + xMin + '][rows=' + _y + ']').before('<td style="background:orange"></td>');
+					} else {
+						 while(index>-1){
+						 	if($('td[cols=' + index + '][rows=' + _y + ']').length > 0) {
+//						 		time++;
+//						 	    if(time==1){
+						 	    	$('td[cols=' + index + '][rows=' + _y + ']').after('<td style="background:orange"></td>');
+						 	        console.log($('td[cols=' + index + '][rows=' + _y + ']'));
+//						 	    }
+						 	   
+						 	}
+						 	
+						 	index--;
+						 }
+						//$('td[cols=' + (xMin - 1) + '][rows=' + _y + ']').after('<td style="background:orange"></td>');
+					}
+
+				}
+			}
+			that.cellCount = that.cellCount + xMax - xMin + 1;
+
 		} else {
 			var xIndex = parseInt(sNode.attr('cols'));
 			var yIndex = parseInt(sNode.attr('rows'));
+			
 			for(var i = 0; i < that.rowCount + 1; i++) {
-				var time = 0;
-				
-				for(var j = xIndex; j > -1; j--) {
-                    
+				var time=0;							
+				for(var j = xIndex; j > -1; j--) {  
 					var cols = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('cols'));
 					if(cols == xIndex) {
 						var cspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
@@ -1260,27 +1268,41 @@ iTable.prototype.insertCol = function() {
 							$('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cspan + 1);
 						} else {
 							$('td[cols=' + xIndex + '][rows=' + i + ']').before('<td style="background:orange"></td>');
+							 
 						}
-                  
+
 					} else {
+						 
 						if($('td[cols=' + j + '][rows=' + i + ']').length > 0) {
 							time++;
 							if(time == 1) {
 								var cspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
 								var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
 								if(cspan >= 2) {
+									$('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cspan + 1);									
 									//不同行拓宽
-									if(!(i<=yIndex&&(rspan+i)>=yIndex)){
-										 $('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cspan + 1);	
-									}
-									
+//									if(!(i <= yIndex && (rspan + i) >= yIndex)) {
+//										$('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cspan + 1);
+//									}else{
+//										//$('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cspan + 1);
+//									}
+
 								}
-							}
+						    }
+						
+						}else{	
+							console.log($('td[cols=' + j + '][rows=' + i + ']'));
+							$('td[cols=' + j + '][rows=' + i + ']').before('<td style="background:orange"></td>');							
+							
+							
 						}
 
 					}
 
+
 				}
+             
+
 			}
 			that.cellCount++;
 		}
@@ -1299,17 +1321,44 @@ iTable.prototype.insertRow = function() {
 	var that = this;
 	sel_a.on('click', function() {
 		var sNode = $('.ui-selected');
+		var xArr = [],
+			yArr = [];
+		var xMax, xMin, yMax, yMin;
 		if(sNode.length >= 2) {
+			for(var i = 0; i < sNode.length; i++) {
+				var cols = parseInt(sNode.eq(i).attr('cols'));
+				var rows = parseInt(sNode.eq(i).attr('rows'));
+				var cAdd=parseInt(sNode.eq(i).attr('colspan'))|| 1 ;
+				var rAdd=parseInt(sNode.eq(i).attr('rowspan'))|| 1 ;
+				cols=cols+cAdd-1;
+				rows=rows+rAdd-1;
+				xArr.push(cols);
+				yArr.push(rows);
+				xMax = xArr.max(), xMin = xArr.min(), yMax = yArr.max(), yMin = yArr.min();
+			}
+
+			for(var _y = yMin; _y < yMax + 1; _y++) {
+				var tr = $('<tr></tr>');
+				for(var _x = 0; _x < that.cellCount + 1; _x++) {
+					if($('td[cols=' + _x + '][rows=' + yMin + ']').length > 0) {
+						tr.append('<td style="background:orange"></td>');
+						$('td[cols=' + _x + '][rows=' + yMin + ']').parent().before(tr);
+					} else {
+						$('td[cols=' + (_x - 1) + '][rows=' + yMin + ']').parent().after(tr);
+					}
+				}
+
+			}
 
 		} else {
 			var yIndex = parseInt(sNode.attr('rows'));
 			var xIndex = parseInt(sNode.attr('cols'));
 			for(var i = yIndex; i > -1; i--) {
 				var tr = $('<tr></tr>');
-				 
+
 				for(var j = 0; j < that.cellCount + 1; j++) {
 					var rows = $('td[cols=' + j + '][rows=' + i + ']').attr('rows');
-                 
+
 					if(rows == yIndex) {
 						var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
 						if(rspan >= 2) {
@@ -1320,16 +1369,16 @@ iTable.prototype.insertRow = function() {
 						}
 					} else {
 						if($('td[cols=' + j + '][rows=' + i + ']').length > 0) {
-							
+
 							var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
 							var cspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
 							if(rspan >= 2) {
-								if(!(j<=xIndex&&(cspan+j)>=xIndex)){
-										 $('td[cols=' + j + '][rows=' + i + ']').attr('rowspan', rspan + 1);	
-									}
-								 
+								if(!(j <= xIndex && (cspan + j) >= xIndex)) {
+									$('td[cols=' + j + '][rows=' + i + ']').attr('rowspan', rspan + 1);
+								}
+
 							}
-							
+
 						}
 					}
 				}
@@ -2021,7 +2070,7 @@ iTable.prototype.fillWork = function() {
 
 				fText = calRes[0].toString();
 				allArr = fText.split(flReg);
- 
+
 				for(var i = 0; i < allArr.length; i++) {
 					if(!!allArr[i]) {
 						var tmp = allArr[i];
@@ -2276,7 +2325,8 @@ iTable.prototype.tdTofx = function(obj) {
 iTable.prototype.getValue = function(arr) {
 	arr = arr.toString();
 
-	var xCoo = arr.replace(/[a-zA-Z]*/, ' '),yCoo = arr.replace(/[1-9]\d*/, ' ');
+	var xCoo = arr.replace(/[a-zA-Z]*/, ' '),
+		yCoo = arr.replace(/[1-9]\d*/, ' ');
 	yCoo = yCoo.charCodeAt(0) - 96;
 	xCoo--;
 	yCoo--;
@@ -2615,6 +2665,4 @@ var tabs = {
 }
 var t = new iTable(box, settings, tabs);
 
-
 t.init();
- 
