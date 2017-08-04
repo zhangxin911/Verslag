@@ -58,7 +58,7 @@
 	
 	.dataTable tr td {
 		height: 30px;
-		width: 100px;
+		/*width: 100px;*/
 		border: 1px solid #AAAAAA;
 		min-width: 100px;
 		max-width: 100px;
@@ -783,6 +783,21 @@
 		color: #CD0A0A;
 	}
 	
-    .lCoo{
-    	background:#A3DE83
-    }
+	.lCoo {
+		background: #A3DE83
+	}
+	
+	.sline {
+		width: 4px;
+		background: #000000;
+		float: right;
+	}
+	
+	.lline {
+		width: 1px;
+		border-left: 1px dashed #000000;
+		position: absolute;
+		display: block;
+		z-index: 100;
+		top: 0;
+	}
