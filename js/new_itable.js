@@ -905,6 +905,10 @@ iTable.prototype.lightCoor = function(obj) {
 
 }
 
+iTable.prototype._try=function(){
+	console.log('1');
+}
+
 function getStrLength(str) {
 
 	var realLength = 0,
@@ -1260,8 +1264,7 @@ iTable.prototype.insertCol = function() {
 			for(var i = 0; i < that.rowCount + 1; i++) {
 				var time = 0;
 
-				for(var j = xIndex; j > -1; j--) {
-
+				for(var j = xIndex; j > -1; j--) { 
 					var cols = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('cols'));
 
 					if(cols == xIndex) {
@@ -1274,7 +1277,6 @@ iTable.prototype.insertCol = function() {
 							if(rspan > 1) {
 								for(var r = i; r < i + rspan; r++) {
 									$('td[cols=' + (j - cspan) + '][rows=' + r + ']').after('<td style="background:orange"></td>');
-
 								}
 
 							} else {
@@ -1282,7 +1284,6 @@ iTable.prototype.insertCol = function() {
 							}
 
 						}
-
 					} else {
 						if($('td[cols=' + j + '][rows=' + i + ']').length > 0) {							
 							time++;
@@ -1291,18 +1292,15 @@ iTable.prototype.insertCol = function() {
 								var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
 								if(cspan >= 2) {
 									//不同行拓宽
-									if(!(i <= yIndex && (rspan + i) >= yIndex)) {
+									if(!(i < yIndex && (rspan + i) > yIndex)) {
 										$('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cspan + 1);
 									}
 
 								}
 							}
-						} else {
-							console.log(1);
-						}
+						} 
 
 					}
-
 				}
 			}
 			that.cellCount++;
@@ -2667,3 +2665,4 @@ var tabs = {
 var t = new iTable(box, settings, tabs);
 
 t.init();
+t._try();
