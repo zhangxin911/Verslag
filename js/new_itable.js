@@ -1999,7 +1999,6 @@ iTable.prototype.largeCol=function(){
      	   var x=event.clientX-exW;
      	   var newWidth;
      	   if(x-this.offsetLeft+8<w){
-     	   	 //console.log(x-this.offsetLeft-,w);
      	   	return;
      	   }
      	   
