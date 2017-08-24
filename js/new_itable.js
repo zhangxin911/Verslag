@@ -18,14 +18,24 @@ iTable.prototype.createContent = function(tid) {
 
 	for(var i = 0; i < this.rowCount; i++) {
 		var tr = this.createTr();
+		var th=$('<th></th>');
 		var colg=$('<colgroup></colgroup>');
-		for(var j = 0; j < this.cellCount; j++) {
+		tr.append(th);
+		for(var j = 0; j < this.cellCount+1; j++) {
 			var td = this.createTd('','');
-            var col=$('<col style="width:100px">');
+           
+            if(j==0){
+            	var col=$('<col style="width:63px">');
+            }else{
+            	 var col=$('<col style="width:100px">');
+            }
             colg.append(col);
+            
+//          tr.append(th);
             if(i==0){
 			$("#iTable" + tId).append(colg); 
 		    }
+            
 			tr.append(td);
 		}
 		
@@ -49,18 +59,24 @@ iTable.prototype.createXaxis = function() {
 	var xAxis = $("<div class='xOrder'></div>");
 	xAxis.empty();
 	var xTable = $("<table class='titleTable'></table>");
-	var xTdWidth = [];
 	var curT = this.getCurTable();
 	var firTds = curT.find('tr:first td');
-
+    var th=$('<th></th>');
 	xAxis.insertBefore(this.container);
 	xAxis.append(xTable);
+	var tr = $("<tr></tr>");
+	tr.append(th);
 	for(var i = 0; i < 1; i++) {
-		var tr = $("<tr></tr>");
+		
 		var colg=$('<colgroup></colgroup>');
-		for(var j = 0; j < this.cellCount; j++) {
+		for(var j = 0; j < this.cellCount+1; j++) {
 			var td = $("<td>" + IntToChr(j) + "</td>");
-             var col=$('<col style="width:100px">');
+			if(j==0){
+				var col=$('<col style="width:63px">');
+			}else{
+				var col=$('<col style="width:100px">'); 
+			}
+            
              colg.append(col);
             if(i==0){
 			xTable.append(colg); 
@@ -759,17 +775,17 @@ iTable.prototype.setCss = function() {
 		'position': 'fixed',
 		'z-index': '100',
 		'background': '#f5f5f5',
-		'width': viewWidth - bLeft,
+		'width': viewWidth,
 		'overflow': 'hidden',
-		'margin-left': bLeft,
+		'margin-left': 4,
 		'margin-top': '70px',
 		'top': '0'
 	});
 
 	tBody.css({
-		'margin-left': bLeft,
+		'margin-left': 4,
 		'margin-top': bTop + 70,
-		'width': viewWidth - bLeft,
+		'width': viewWidth,
 		'height': viewHeight - bTop - 110,
 		'overflow': 'scroll',
 		'position': 'relative'
@@ -1992,7 +2008,7 @@ iTable.prototype.updateTop = function() {
 	}
 
 }
-
+//拖拽放宽列
 iTable.prototype.largeCol=function(){
      var container=this.container;
      var that=this;
@@ -2001,6 +2017,7 @@ iTable.prototype.largeCol=function(){
      $('.titleTable tr td').each(function(event){
      	
      	$(this).off('mousedown').on('mousedown',function(event){
+     		 
      	   var td=$(this);
      	   var index=$(this).index();
      	   var sline=$('<div class="sline"></div>');
@@ -2009,9 +2026,9 @@ iTable.prototype.largeCol=function(){
      	   var w=$(this).width();
      	   var x=event.clientX-exW;
      	   var newWidth;
-     	   if(x-this.offsetLeft+8<w){
-     	   	return;
-     	   }
+//   	   if(x-this.offsetLeft+8<w){
+//   	   	return;
+//   	   }
      	   
      	   sline.css({
      	   	'left':x,   
@@ -2020,7 +2037,7 @@ iTable.prototype.largeCol=function(){
      	   
      	   $(this).append(sline);
      	   
-     	   $('.titleTable').mousemove(function(event){
+     	   $('body').mousemove(function(event){
      	     var allH=$('.dataTable').outerHeight();
      	     var l=event.clientX-exW;
      	     var move=l-x;
@@ -2029,26 +2046,16 @@ iTable.prototype.largeCol=function(){
      	   	 	'left':l    	   
      	     });
 
-     	     td.css('min-width',w+move);
+     	     $('.dataTable colgroup col').eq(index).css('width',w+move);
+     	     $('.titleTable colgroup col').eq(index).css('width',w+move);
              newWidth=w+move;
      	     $(container).append(lline);
      	   
      	   });
      	   
      	   
-     	   $('.titleTable').mouseup(function(event){
-             
-             for(var i=0;i<that.rowCount;i++){
-             	for(var j=0;j<that.cellCount;j++){
-             		if($('td[cols=' + (index+1) + '][rows=' + i + ']').length>0){
-             			$('td[cols=' + (index+1) + '][rows=' + i + ']').css('min-width',newWidth);
-             			$('td[cols=' + (index+1) + '][rows=' + i + ']').css('max-width',newWidth);
-             			
-             		}
-             	}
-             }
-             
-     	     $('.titleTable').off('mousemove');
+     	   $('body').mouseup(function(event){           
+     	     $('body').off('mousemove');
      	     $(lline).remove();
      	     $(sline).remove();
      	    });
@@ -2057,7 +2064,65 @@ iTable.prototype.largeCol=function(){
      });
     
 }
- 
+//拖拽放宽行
+iTable.prototype.largeRow=function(){
+     var container=this.container;
+     var that=this;
+     var event=window.event || arguments[0];
+     var exW=$('.yOrder').outerHeight();
+     $('.leftTable tr td').each(function(event){
+     	
+     	$(this).off('mousedown').on('mousedown',function(event){
+     		 
+     	   var td=$(this);
+     	   var index=$(this).parent().index();
+     	   console.log(index);
+     	   var sline=$('<div class="sline"></div>');
+     	   var lline=$('<div class="lline"></div>');
+     	   var h=$(this).height();
+     	   var w=$(this).width();
+     	   var y=event.clientY-exW;
+     	   var newWidth;
+//   	   if(x-this.offsetLeft+8<w){
+//   	   	return;
+//   	   }
+     	   
+     	   sline.css({
+     	   	'left':y,   
+     	   	'height':h    	   	
+     	   });
+     	   
+     	   $(this).append(sline);
+     	   
+     	   $('body').mousemove(function(event){
+     	     var allH=$('.dataTable').outerWidth();
+     	     var l=event.clientY-exW;
+     	     var move=l-y;
+     	     lline.css({    	   	 	
+     	   	 	'height':allH,
+     	   	 	'left':l    	   
+     	     });
+
+     	     $('.dataTable tr th').eq(index).css('height',w+move);
+     	     $('.leftTable td').eq(index).css('height',w+move);
+             newWidth=w+move;
+     	     $(container).append(lline);
+     	   
+     	   });
+     	   
+     	   
+     	   $('body').mouseup(function(event){           
+     	     $('body').off('mousemove');
+     	     $(lline).remove();
+     	     $(sline).remove();
+     	    });
+        });
+        
+     });
+    
+}
+
+
  
 //创建公式输入框
 iTable.prototype.fillBlank = function() {
@@ -2734,3 +2799,4 @@ var t = new iTable(box, settings, tabs);
 t.init();
 t._try();
 t.largeCol();
+t.largeRow();
