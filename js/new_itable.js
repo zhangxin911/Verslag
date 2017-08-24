@@ -176,7 +176,7 @@ iTable.prototype.frameSelect = function() {
 			var stop = $(this).scrollTop();
 			if(isSelect) {
 				if(selDiv.css('display') == "none") {
-					selDiv.css('display', 'none');
+					selDiv.css('display', 'block');
 				}
 				_x = (evt.x || evt.clientX);
 				_y = (evt.y || evt.clientY);
@@ -921,7 +921,7 @@ iTable.prototype.lightCoor = function(obj) {
 			$('.leftTable').find('tr').eq(i).find('td').addClass('lCoo');
 		}
 		for(var j = cols; j < cols + cSpan + 1; j++) {
-			$('.titleTable tr').find('td').eq(j).addClass('lCoo');
+			$('.titleTable tr').find('td').eq(j-1).addClass('lCoo');
 		}
 
 	}
