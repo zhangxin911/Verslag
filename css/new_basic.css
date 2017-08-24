@@ -55,20 +55,23 @@
 		border: 1px solid #DDDDDD;
 		background: #FFFFFF;
 	}
-	
+	.dataTable{
+		width:0;
+		table-layout: fixed;
+	}
 	.dataTable tr td {
-		height: 30px;
+		height: 20px;
 		/*width: 100px;*/
 		border: 1px solid #AAAAAA;
-		min-width: 100px;
-		max-width: 100px;
+		/*min-width: 90px;
+		max-width: 90px;*/
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
 	
 	.leftTable td {
-		height: 30px;
+		height: 20px;
 		width: 63px;
 		border: 1px solid #AAAAAA;
 		/*border-left:1px solid #AAAAAA;
@@ -80,10 +83,18 @@
 	}
 	
 	.titleTable td {
-		height: 30px;
-		width: 100px;
-		min-width: 100px;
+		height: 20px;
+		/*width: 100px;*/
 		border: 1px solid #AAAAAA;
+		/*min-width: 90px;
+		max-width: 90px;*/
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	.titleTable{
+		width:0;
+		table-layout: fixed;
 	}
 	
 	.disbox {

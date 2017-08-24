@@ -17,12 +17,18 @@ iTable.prototype.createContent = function(tid) {
 	myContainer.append(tb);
 
 	for(var i = 0; i < this.rowCount; i++) {
-		var tr = this.createTr();		
+		var tr = this.createTr();
+		var colg=$('<colgroup></colgroup>');
 		for(var j = 0; j < this.cellCount; j++) {
-			var td = this.createTd('', '');
-
+			var td = this.createTd('','');
+            var col=$('<col style="width:100px">');
+            colg.append(col);
+            if(i==0){
+			$("#iTable" + tId).append(colg); 
+		    }
 			tr.append(td);
 		}
+		
         $("#iTable" + tId).append(tr);  
 	}
 	this.setIndex();
@@ -51,10 +57,15 @@ iTable.prototype.createXaxis = function() {
 	xAxis.append(xTable);
 	for(var i = 0; i < 1; i++) {
 		var tr = $("<tr></tr>");
+		var colg=$('<colgroup></colgroup>');
 		for(var j = 0; j < this.cellCount; j++) {
 			var td = $("<td>" + IntToChr(j) + "</td>");
-
-			td.appendTo(tr);
+             var col=$('<col style="width:100px">');
+             colg.append(col);
+            if(i==0){
+			xTable.append(colg); 
+		    }
+			tr.append(td);
 		}
         xTable.append(tr); 
 	}
@@ -68,7 +79,7 @@ iTable.prototype.createYaxis = function() {
 	yAxis.append(yTable);
 	for(var i = 0; i < this.rowCount; i++) {
 		var tr = $("<tr></tr>");
-		
+		var colg=$('<colgroup></colgroup>'); 
 		for(var j = 0; j < 1; j++) {
 			var th = $("<td>" + (i + 1) + "</td>");
 			th.appendTo(tr);
