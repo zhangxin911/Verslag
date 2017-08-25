@@ -931,7 +931,7 @@ iTable.prototype.lightCoor = function(obj) {
 }
 
 iTable.prototype._try=function(){
-	console.log('1');
+	 
 }
 
 function getStrLength(str) {
@@ -2511,7 +2511,7 @@ iTable.prototype.iDrag=function(obj){
 	 obj.on('mousedown',function(event){
 	 	 var disX = event.clientX - this.offsetLeft;
          var disY = event.clientY - this.offsetTop;
-	 	  console.log(disX,disY);
+	 	 
 	 	 obj.on('mousemove',function(event){   
 	 	 	obj.css({
 	 	 		'left':event.clientX - disX,
