@@ -413,3 +413,11 @@
 		z-index: 100;
 		top: 0;
 	}
+	.rline{
+		height: 1px;
+		border-left: 1px dashed #000000;
+		position: absolute;
+		display: block;
+		z-index: 100;
+		top: 0;
+	}

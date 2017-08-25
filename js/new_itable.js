@@ -2032,7 +2032,7 @@ iTable.prototype.largeCol=function(){
      	   
      	   sline.css({
      	   	'left':x,   
-     	   	'height':h    	   	
+     	   	'height':h
      	   });
      	   
      	   $(this).append(sline);
@@ -2043,7 +2043,7 @@ iTable.prototype.largeCol=function(){
      	     var move=l-x;
      	     lline.css({    	   	 	
      	   	 	'height':allH,
-     	   	 	'left':l    	   
+     	   	 	'left':event.clientX      	   
      	     });
      	     
              if(w+move<20){
@@ -2059,7 +2059,7 @@ iTable.prototype.largeCol=function(){
      	   
      	   $('body').mouseup(function(event){           
      	     $('body').off('mousemove');
-     	     $(lline).remove();
+     	    $(lline).remove();
      	     $(sline).remove();
      	    });
         });
@@ -2072,45 +2072,45 @@ iTable.prototype.largeRow=function(){
      var container=this.container;
      var that=this;
      var event=window.event || arguments[0];
-     var exW=$('.yOrder').outerHeight();
+     var exH=$('.yOrder').outerHeight();
      $('.leftTable tr td').each(function(event){
      	
      	$(this).off('mousedown').on('mousedown',function(event){
      		 
      	   var td=$(this);
      	   var index=$(this).parent().index();
-     	   console.log(index);
+     	    
      	   var sline=$('<div class="sline"></div>');
-     	   var lline=$('<div class="lline"></div>');
+     	   var lline=$('<div class="rline"></div>');
      	   var h=$(this).height();
      	   var w=$(this).width();
-     	   var y=event.clientY-exW;
+     	   var y=event.clientY-exH;
      	   var newWidth;
-//   	   if(x-this.offsetLeft+8<w){
-//   	   	return;
-//   	   }
+ 
      	   
      	   sline.css({
-     	   	'left':y,   
-     	   	'height':h    	   	
+     	   	'top':y,   
+     	   	'height':1,
+     	   	'float':'none',
+     	   	'width':w
      	   });
      	   
      	   $(this).append(sline);
      	   
      	   $('body').mousemove(function(event){
-     	     var allH=$('.dataTable').outerWidth();
-     	     var l=event.clientY-exW;
+     	     var allW=$('.dataTable').outerWidth();
+     	     var l=event.clientY-exH;
      	     var move=l-y;
      	     lline.css({    	   	 	
-     	   	 	'height':allH,
-     	   	 	'left':l    	   
+     	   	 	'width':allW,
+     	   	 	'top':event.clientY    	   
      	     });
-             if(w+move<20){
+             if(h+move<20){
      	   	    return;
      	     }
-     	     $('.dataTable tr th').eq(index).css('height',w+move);
-     	     $('.leftTable td').eq(index).css('height',w+move);
-             newWidth=w+move;
+     	     $('.dataTable tr th').eq(index).css('height',h+move+1);
+     	     $('.leftTable td').eq(index).css('height',h+move);
+             newWidth=h+move;
      	     $(container).append(lline);
      	   
      	   });
