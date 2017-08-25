@@ -1,0 +1,8 @@
+.itModal-close{
+	float:right;
+	padding:4px;
+}
+.itModal-title{
+	width:100%;
+	overflow:hidden; 
+}

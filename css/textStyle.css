@@ -1,0 +1,403 @@
+/* 对齐  */
+	
+	.f_align {
+		width: 28px;
+		height: 28px;
+		display: inline-block;
+		text-align: center;
+		line-height: 28px;
+		background: url(../img/calign.png) no-repeat center;
+	}
+	
+	.falign_left {
+		text-align: left;
+	}
+	
+	.falign_center {
+		text-align: center;
+	}
+	
+	.falign_right {
+		text-align: right;
+	}
+	
+	.ffalign_left {
+		width: 16px;
+		height: 16px;
+		background: url(../img/lalign.png) no-repeat;
+		display: block;
+	}
+	
+	.ffalign_right {
+		width: 16px;
+		height: 16px;
+		background: url(../img/ralign.png) no-repeat;
+		display: block;
+	}
+	
+	.ffalign_center {
+		width: 16px;
+		height: 16px;
+		background: url(../img/calign.png) no-repeat;
+		display: block;
+	}
+
+/** 字体颜色 **/
+	
+	.d_fcolor {
+		width: 28px;
+		height: 28px;
+		display: inline-block;
+		text-align: center;
+		line-height: 28px;
+		background: url(../img/fcolor.png) no-repeat center;
+	}
+	
+	.fbold {
+		width: 28px;
+		height: 24px;
+		display: inline-block;
+		text-align: center;
+		line-height: 24px;
+		background: url(../img/fbold.png) no-repeat center;
+		cursor: pointer;
+	}
+	
+	.fitalic {
+		width: 28px;
+		height: 24px;
+		display: inline-block;
+		text-align: center;
+		line-height: 24px;
+		background: url(../img/fitalic.png) no-repeat center;
+	}
+	
+	.foverline {
+		width: 28px;
+		height: 24px;
+		display: inline-block;
+		text-align: center;
+		line-height: 24px;
+		background: url(../img/overline.png) no-repeat center;
+	}
+	
+	.fcolor {
+		width: 28px;
+		height: 28px;
+		display: inline-block;
+		text-align: center;
+		line-height: 28px;
+		background: url(../img/fcolor.png) no-repeat center;
+	}
+	
+	.fborder {
+		width: 28px;
+		height: 28px;
+		display: inline-block;
+		text-align: center;
+		line-height: 28px;
+		background: url(../img/fborder.png) no-repeat center;
+	}
+	
+	.ffill {
+		width: 28px;
+		height: 28px;
+		display: inline-block;
+		text-align: center;
+		line-height: 28px;
+		background: url(../img/ffillcolor.png) no-repeat center;
+	}
+	/*  字体类型   font_ */
+	
+	.font_Black {
+		font-family: 黑体;
+	}
+	
+	.font_Mirco {
+		font-family: 微软雅黑;
+	}
+	
+	.font_Song {
+		font-family: 宋体;
+	}
+	
+	.font_Kai {
+		font-family: "楷体";
+	}
+	
+	.font_Arial {
+		font-family: arial;
+	}
+	
+	.font_Verdana {
+		font-family: verdana;
+	}
+	
+	.font_Impact {
+		font-family: impact;
+	}
+	/*  字体大小   fsize_ */
+	
+	.fsize_10 {
+		font-size: 10px;
+	}
+	
+	.fsize_12 {
+		font-size: 12px;
+	}
+	
+	.fsize_14 {
+		font-size: 14px;
+	}
+	
+	.fsize_16 {
+		font-size: 16px;
+	}
+	
+	.fsize_18 {
+		font-size: 18px;
+	}
+	
+	.fsize_20 {
+		font-size: 20px;
+	}
+	
+	.ffbold {
+		font-weight: bold;
+	}
+	
+	.ffitalic {
+		font-style: italic;
+	}
+	
+	.ffoverline {
+		text-decoration: line-through;
+	}
+	.fc_black {
+		color: #000000;
+	}
+	
+	.ffc_black {
+		width: 16px;
+		height: 16px;
+		background-color: #000000;
+	}
+	
+	.fc_grey {
+		color: #888888;
+	}
+	
+	.ffc_grey {
+		width: 16px;
+		height: 16px;
+		background-color: #888888;
+	}
+	
+	.fc_white {
+		color: #FFFFFF;
+	}
+	
+	.ffc_white {
+		width: 16px;
+		height: 16px;
+		background-color: #FFFFFF;
+	}
+	
+	.fc_red {
+		color: red;
+	}
+	
+	.ffc_red {
+		width: 16px;
+		height: 16px;
+		background-color: red;
+	}
+	
+	.fc_yellow {
+		color: yellow;
+	}
+	
+	.ffc_yellow {
+		width: 16px;
+		height: 16px;
+		background-color: yellow;
+	}
+	
+	.fc_orange {
+		color: orange;
+	}
+	
+	.ffc_orange {
+		width: 16px;
+		height: 16px;
+		background-color: orange;
+	}
+	
+	.fc_green {
+		color: #7fff00;
+	}
+	
+	.ffc_green {
+		width: 16px;
+		height: 16px;
+		background-color: #7fff00;
+	}
+	
+	.fc_aqua {
+		color: #00ffff;
+	}
+	
+	.ffc_aqua {
+		width: 16px;
+		height: 16px;
+		background-color: #00ffff;
+	}
+	
+	.fc_blue {
+		color: blue;
+	}
+	
+	.ffc_blue {
+		width: 16px;
+		height: 16px;
+		background-color: blue;
+	}
+	
+	.fc_purple {
+		color: #9400d3
+	}
+	
+	.ffc_purple {
+		width: 16px;
+		height: 16px;
+		background-color: #9400d3;
+	}
+	/*bg*/
+	
+	.d_fill {
+		width: 28px;
+		height: 28px;
+		display: inline-block;
+		text-align: center;
+		line-height: 28px;
+		background: url(../img/ffillcolor.png) no-repeat center;
+	}
+	
+	.ffill {
+		width: 28px;
+		height: 28px;
+		display: inline-block;
+		text-align: center;
+		line-height: 28px;
+		background: url(../img/ffillcolor.png) no-repeat center;
+	}
+	
+	.ffill_black {
+		background-color: #000000;
+	}
+	
+	.fill_black {
+		width: 16px;
+		height: 16px;
+		background-color: #000000;
+		display: block;
+	}
+	
+	.ffill_grey {
+		background-color: #888888;
+	}
+	
+	.fill_grey {
+		width: 16px;
+		height: 16px;
+		background-color: #888888;
+		display: block;
+	}
+	
+	.ffill_white {
+		background-color: #FFFFFF;
+	}
+	
+	.fill_white {
+		width: 16px;
+		height: 16px;
+		background-color: #FFFFFF;
+		display: block;
+	}
+	
+	.ffill_red {
+		background-color: red;
+	}
+	
+	.fill_red {
+		width: 16px;
+		height: 16px;
+		background-color: red;
+		display: block;
+	}
+	
+	.ffill_yellow {
+		background-color: yellow;
+	}
+	
+	.fill_yellow {
+		width: 16px;
+		height: 16px;
+		background-color: yellow;
+		display: block;
+	}
+	
+	.ffill_orange {
+		background-color: orange;
+	}
+	
+	.fill_orange {
+		width: 16px;
+		height: 16px;
+		background-color: orange;
+		display: block;
+	}
+	
+	.ffill_green {
+		background-color: #7fff00;
+	}
+	
+	.fill_green {
+		width: 16px;
+		height: 16px;
+		background-color: #7fff00;
+		display: block;
+	}
+	
+	.ffill_aqua {
+		background-color: #00ffff;
+	}
+	
+	.fill_aqua {
+		width: 16px;
+		height: 16px;
+		background-color: #00ffff;
+		display: block;
+	}
+	
+	.ffill_blue {
+		background-color: blue;
+	}
+	
+	.fill_blue {
+		width: 16px;
+		height: 16px;
+		background-color: blue;
+		display: block;
+	}
+	
+	.ffill_purple {
+		background-color: #9400d3
+	}
+	
+	.fill_purple {
+		width: 16px;
+		height: 16px;
+		background-color: #9400d3;
+		display: block;
+	}

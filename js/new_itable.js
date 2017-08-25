@@ -785,7 +785,7 @@ iTable.prototype.setCss = function() {
 	tBody.css({
 		'margin-left': 4,
 		'margin-top': bTop + 70,
-		'width': viewWidth,
+		'width': viewWidth-4,
 		'height': viewHeight - bTop - 110,
 		'overflow': 'scroll',
 		'position': 'relative'
@@ -795,8 +795,10 @@ iTable.prototype.setCss = function() {
 	$(window).resize(function() {
 		var viewWidth = $(window).width();
 		var viewHeight = $(window).height();
-		that.width(viewWidth - bLeft);
+		that.width(viewWidth-4);
 		that.height(viewHeight - bTop - 113);
+		
+		
 	});
 
 }
@@ -2477,6 +2479,49 @@ iTable.prototype.getValue = function(arr) {
 	return value;
 }
 
+iTable.prototype.modal=function(_style,_content){
+	var modalBox=$('<div class="itModal"></div>');
+	var mTitle=_style.title;
+	var closeBtn=$('<a class="itModal-close">x</a>');
+	var modalTitle=$('<div class="itModal-title">'+mTitle+'</div>');
+	modalBox.css({
+		'width':parseInt(_style.width),
+		'height':parseInt(_style.width),
+		'position':'absolute',
+		'top':'100px',
+		'left':'500px',
+		'background':'red',
+//		'margin-left':-parseInt(_style.width)/2,
+//		'margin-top':-parseInt(_style.width)/2
+	});
+	modalTitle.append(closeBtn);
+	modalBox.append(modalTitle);
+	$('body').append(modalBox);
+	//modalBox.on('mousedown',this.iDrag(event));
+	this.iDrag(modalBox);
+	 
+	
+}
+
+iTable.prototype.iDrag=function(obj){
+	 var event=window.event || arguments[0];
+	 obj.on('mousedown',function(event){
+	 	 var disX = event.clientX - this.offsetLeft;
+         var disY = event.clientY - this.offsetTop;
+	 	  console.log(disX,disY);
+	 	 obj.on('mousemove',function(event){   
+	 	 	obj.css({
+	 	 		'left':event.clientX - disX,
+	 	 		'top':event.clientY - disY
+	 	 	});
+	 	 });
+	 	 
+	 });
+	 obj.on('mouseup',function(){
+	 	obj.off('mousemove');
+	 });
+}
+
 //高亮单元格
 function lightTd(tmp) {
 
@@ -2800,3 +2845,8 @@ t.init();
 t._try();
 t.largeCol();
 t.largeRow();
+//t.modal({
+//	width:'300px',
+//	height:'200px',
+//	title:'这是标题',
+//});
