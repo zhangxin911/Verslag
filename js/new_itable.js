@@ -141,7 +141,7 @@ iTable.prototype.frameSelect = function() {
 		var sleft = parseInt($(this).scrollLeft());
 		var stop = parseInt($(this).scrollTop());
 
-		var oX = ev.clientX - disWidth + sleft;
+		var oX = ev.clientX  + sleft;
 		var oY = ev.clientY - disHeight + stop;
 
 		var selDiv = $('<div class="mapdiv"></div>');
@@ -175,13 +175,13 @@ iTable.prototype.frameSelect = function() {
 			var sleft = $(this).scrollLeft();
 			var stop = $(this).scrollTop();
 			if(isSelect) {
-				if(selDiv.css('display') == "none") {
-					selDiv.css('display', 'block');
-				}
+//				if(selDiv.css('display') == "none") {
+//					selDiv.css('display', 'none');
+//				}
 				_x = (evt.x || evt.clientX);
 				_y = (evt.y || evt.clientY);
 
-				_x = _x + sleft - disWidth;
+				_x = _x + sleft ;
 				_y = _y + stop - disHeight;
 
 				selDiv.css({
@@ -998,7 +998,7 @@ iTable.prototype.fontFamily = function() {
 	var sel_a = $(select).find('ul li a');
 	var className, curClass;
 	var selThem;
-
+   //  $.cookie('fontFamily','font_Black',{ expires: 7 });
 	sel_a.on('click', function() {
 
 		className = $(this).attr('class');
@@ -1028,7 +1028,7 @@ iTable.prototype.fontFamily = function() {
 	});
 	sel_a.mouseout(function() {
 		$(this).css({
-			'background': '#FFFFFF'
+			'background':'#FFFFFF'
 		});
 	});
 
@@ -2028,9 +2028,7 @@ iTable.prototype.largeCol=function(){
      	   var w=$(this).width();
      	   var x=event.clientX-exW;
      	   var newWidth;
-//   	   if(x-this.offsetLeft+8<w){
-//   	   	return;
-//   	   }
+     	   
      	   
      	   sline.css({
      	   	'left':x,   
@@ -2047,7 +2045,10 @@ iTable.prototype.largeCol=function(){
      	   	 	'height':allH,
      	   	 	'left':l    	   
      	     });
-
+     	     
+             if(w+move<20){
+     	   	    return;
+     	     } 
      	     $('.dataTable colgroup col').eq(index).css('width',w+move);
      	     $('.titleTable colgroup col').eq(index).css('width',w+move);
              newWidth=w+move;
@@ -2104,7 +2105,9 @@ iTable.prototype.largeRow=function(){
      	   	 	'height':allH,
      	   	 	'left':l    	   
      	     });
-
+             if(w+move<20){
+     	   	    return;
+     	     }
      	     $('.dataTable tr th').eq(index).css('height',w+move);
      	     $('.leftTable td').eq(index).css('height',w+move);
              newWidth=w+move;
