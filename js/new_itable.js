@@ -985,8 +985,9 @@ iTable.prototype.createHeader = function() {
 
 //字体类型
 iTable.prototype.fontFamily = function() {
-	var select = this.createSelection('fontFamily', this.settings.fontFamily);
-	var sel_a = $(select).find('ul li a');
+	var menu = this.createSelection('fontFamily', this.settings.fontFamily);
+	var sel_a = $(menu).find('ul li a');
+	$(menu).find('#fontFamily').attr('defaultClass',sel_a.eq(0).attr('class'));
 	var className, curClass;
 	var selThem;
 	sel_a.on('click', function() {
@@ -1025,8 +1026,9 @@ iTable.prototype.fontFamily = function() {
 }
 //字体大小
 iTable.prototype.fontSize = function() {
-	var select = this.createSelection('fontSize', this.settings.fontSize);
-	var sel_a = $(select).find('ul li a');
+	var menu = this.createSelection('fontSize', this.settings.fontSize);
+	var sel_a = $(menu).find('ul li a');
+	$(menu).find('#fontFamily').attr('defaultClass',sel_a.eq(0).attr('class'));
 	var className, curClass;
 	var selThem;
 	sel_a.on('click', function() {
@@ -1736,6 +1738,7 @@ iTable.prototype.createSelection = function(id, menus) {
 	for(var index in menus) {
 		arr.push(index);
 		selectHead.text(arr[0]);
+		 
 		selectLi = $('<li><a class="' + menus[index] + '">' + index + '</a></li>');
 		selectUl.append(selectLi);
 	}
@@ -1749,7 +1752,8 @@ iTable.prototype.createSelection = function(id, menus) {
 	});
 
 	selectUl.find('li a').on('click', function() {
-		$(selectHead[0]).text($(this).text()); 
+		$(selectHead[0]).text($(this).text());
+		$(selectHead[0]).attr('curClass',$(this).attr('class')); 
 	});
 	return selectionBox;
 }
@@ -2824,7 +2828,7 @@ var tabs = {
 	fontItalic: true,
 	fontOverline: true,
 	fontBgcolor: true,
-	fontFamily: true,
+	 
 	mergeTd: true,
 	splitTd: true,
 	textAlign: true,
