@@ -296,8 +296,8 @@ function typing(event) {
 		}
 		tdInput.focus();
 
-		var nowX = parseInt($(sNode).attr('cols')) - 1;
-		var nowY = parseInt($(sNode).attr('rows')) - 1;
+		var nowX = parseInt($(sNode).attr('cols')) ;
+		var nowY = parseInt($(sNode).attr('rows')) ;
 
 		var colAdd = parseInt($(sNode).attr('colspan')) - 1 || 0;
 		var rowAdd = parseInt($(sNode).attr('rowspan')) - 1 || 0;
@@ -309,8 +309,8 @@ function typing(event) {
 		if(event.data.time === 1) {
 			//获取第一次点击的单元格
 			event.data.lastTd = sNode;
-			event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
-			event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
+			event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) ;
+			event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) ;
 		}
 
 		//↓
@@ -332,8 +332,8 @@ function typing(event) {
 					if(!$(sNode).attr('colspan') && !$(sNode).attr('rowspan')) {
 						//区分跨行列时，单元格x坐标不同情况
 						event.data.lastTd = sNode;
-						event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
-						event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
+						event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) ;
+						event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) ;
 
 					}
 
@@ -344,39 +344,46 @@ function typing(event) {
 			switch(lastKey) {
 				case '39':
 					event.data.lastTd = sNode;
-					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
-					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
+					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) ;
+					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) ;
 					break;
 				case '37':
 					event.data.lastTd = sNode;
-					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
-					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
+					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) ;
+					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) ;
 					break;
 				case '38':
 					event.data.lastTd = sNode;
-					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
-					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
+					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) ;
+					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) ;
 					break;
 			}
 			var nextX = event.data.fixX;
 			var nextY = nowY + 1;
-			if($("[pos='" + nextX + "-" + nextY + "']").length > 0) {
+			
+//			if($("[pos='" + nextX + "-" + nextY + "']").length > 0) {
+//	$('td[cols=' + j + '][rows=' + i + ']')
+			if($('td[cols='+nextX+'][rows='+nextY+']').length>0){
 				$(sNode).removeClass('ui-selected');
-				$("[pos='" + nextX + "-" + nextY + "']").addClass('ui-selected');
+//				$("[pos='" + nextX + "-" + nextY + "']").addClass('ui-selected');
+                $('td[cols='+nextX+'][rows='+nextY+']').addClass('ui-selected');
 			} else {
 				var _nowY = nowY + 1;
 				var _nowX = nowX + 1;
 
 				while(_nowY >= 0) {
 					while(_nowX >= 0) {
-						var nextRowspan = parseInt($("[pos='" + _nowX + "-" + _nowY + "']").attr('rowspan'));
-						var nextColspan = parseInt($("[pos='" + _nowX + "-" + _nowY + "']").attr('colspan'));
-
+//						var nextRowspan = parseInt($("[pos='" + _nowX + "-" + _nowY + "']").attr('rowspan'));
+//						var nextColspan = parseInt($("[pos='" + _nowX + "-" + _nowY + "']").attr('colspan'));
+                        var nextRowspan=parseInt($('td[cols='+_nowX+'][rows='+_nowY+']').attr('rowspan'));
+                        var nextColspan=parseInt($('td[cols='+_nowX+'][rows='+_nowY+']').attr('colspan'));
+                        
+                        
 						$(sNode).removeClass('ui-selected');
 						//下一个单元格行列不合并 
 						if(!nextRowspan && !nextColspan) {
-							$("[pos='" + nextX + "-" + nextY + "']").addClass('ui-selected');
-
+//							$("[pos='" + nextX + "-" + nextY + "']").addClass('ui-selected');
+                            $('td[cols='+_nowX+'][rows='+_nowY+']').addClass('ui-selected'); 
 						}
 						//下一个单元格只列合并 
 						if(!nextRowspan && nextColspan) {
