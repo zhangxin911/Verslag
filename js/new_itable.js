@@ -55,7 +55,6 @@ iTable.prototype.createTd = function(className, tdValue) {
 	return td;
 }
 iTable.prototype.createXaxis = function() {
-
 	var xAxis = $("<div class='xOrder'></div>");
 	xAxis.empty();
 	var xTable = $("<table class='titleTable'></table>");
@@ -135,17 +134,13 @@ iTable.prototype.frameSelect = function() {
 
 	$(this.container).on('mousedown', function() {
 		var fileNodes = $('.dataTable tr td');
-
 		var isSelect = true;
 		var ev = window.event || arguments[0];
 		var sleft = parseInt($(this).scrollLeft());
 		var stop = parseInt($(this).scrollTop());
-
 		var oX = ev.clientX  + sleft;
 		var oY = ev.clientY - disHeight + stop;
-
 		var selDiv = $('<div class="mapdiv"></div>');
-
 		selDiv.css({
 			'position': 'absolute',
 			'width': '0px',
@@ -231,8 +226,9 @@ iTable.prototype.frameSelect = function() {
 
 				for(var i = xMin; i < (xMax + 1); i++) {
 					for(var j = yMin; j < (yMax + 1); j++) {
-						$("[pos='" + i + "-" + j + "']").addClass('ui-selected');
-
+						//$("[pos='" + i + "-" + j + "']").addClass('ui-selected');
+						//console.log($("[pos='" + i + "-" + j + "']"),$('td[cols=' + (i-1)+ '][rows=' +(j-1) + ']'));
+                       $('td[cols=' + (i+1)+ '][rows=' +(j+1) + ']').addClass('ui-selected');
 					}
 				}
 
@@ -2528,7 +2524,8 @@ function lightTd(tmp) {
 	if(posY == null || posX == null || posY.length == 0 || String(posY).length == 0) {
 		return;
 	}
-	var lTd = $("[pos='" + posX + "-" + posY + "']");
+//	var lTd = $("[pos='" + posX + "-" + posY + "']");
+	var lTd = $('td[cols=' + (posX+1)+ '][rows=' +(posY+1) + ']');
 	var width = lTd[0].offsetWidth,
 		height = lTd[0].offsetHeight;
 	var left = lTd[0].offsetLeft,
