@@ -30,12 +30,9 @@ iTable.prototype.createContent = function(tid) {
             	 var col=$('<col style="width:100px">');
             }
             colg.append(col);
-            
-//          tr.append(th);
             if(i==0){
 			$("#iTable" + tId).append(colg); 
 		    }
-            
 			tr.append(td);
 		}
 		
@@ -116,8 +113,8 @@ iTable.prototype.createTip = function() {
 		'left': '0',
 		'width': bLeft,
 		'height': bTop,
-		'border-right': '1px solid #AAAAAA',
-		'border-bottom': '1px solid #AAAAAA',
+		'border-right': '1px solid #dddddd',
+		'border-bottom': '1px solid #dddddd',
 		'margin-top': '70px'
 	});
 //	content.insertBefore(this.container);
@@ -1275,10 +1272,11 @@ iTable.prototype.insertCol = function() {
 				}
 			}
 			that.cellCount = that.cellCount + xMax - xMin + 1;
-
+			that.updateTop(index);
 		} else {
 			var xIndex = parseInt(sNode.attr('cols'));
 			var yIndex = parseInt(sNode.attr('rows'));
+
 			for(var i = 0; i < that.rowCount + 1; i++) {
 				var time = 0;
 
@@ -1322,11 +1320,12 @@ iTable.prototype.insertCol = function() {
 				}
 			}
 			that.cellCount++;
+			that.updateTop(xIndex);
 		}
 		that.setIndex();
 		that.fillTd();
 		that.keyCursor();
-		that.updateTop();
+		//that.updateTop();
 	});
 
 }
@@ -1357,7 +1356,11 @@ iTable.prototype.insertRow = function() {
 			for(var _y = yMin; _y < yMax + 1; _y++) {
 				var tr = $('<tr></tr>');
 				for(var _x = 0; _x < that.cellCount + 1; _x++) {
+					var th=$('<th></th>');
 					if($('td[cols=' + _x + '][rows=' + yMin + ']').length > 0) {
+						if(_x==0){
+							tr.append(th);
+						}
 						tr.append('<td style="background:orange"></td>');
 						$('td[cols=' + _x + '][rows=' + yMin + ']').parent().before(tr);
 					} else {
@@ -1373,10 +1376,15 @@ iTable.prototype.insertRow = function() {
 			for(var i = yIndex; i > -1; i--) {
 				var tr = $('<tr></tr>');
 
-				for(var j = 0; j < that.cellCount + 1; j++) {
+				for(var j = 0; j < that.cellCount + 2; j++) {
 					var rows = $('td[cols=' + j + '][rows=' + i + ']').attr('rows');
 
 					if(rows == yIndex) {
+						//console.log(rows,j);
+						if(j==2){
+							var th=$('<th></th>');
+							tr.append(th);
+						}
 						var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
 						if(rspan >= 2) {
 							$('td[cols=' + j + '][rows=' + i + ']').attr('rowspan', rspan + 1);
@@ -1402,12 +1410,13 @@ iTable.prototype.insertRow = function() {
 
 			}
 			that.rowCount++;
+			that.updateLeft(yIndex);
 		}
 
 		that.setIndex();
 		that.fillTd();
 		that.keyCursor();
-		that.updateLeft();
+		//that.updateLeft();
 	});
 
 }
@@ -1417,7 +1426,11 @@ iTable.prototype.deleteCol = function() {
 	var sel_a = $(simMenu).children(0);
 
 	var that = this;
+
 	sel_a.on('click', function() {
+		var xArr = [],
+			yArr = [];
+		var xMax, xMin, yMax, yMin;
 		var sNode = $('.ui-selected');
 		if(sNode.length >= 2) {
              
@@ -1431,14 +1444,8 @@ iTable.prototype.deleteCol = function() {
 				xArr.push(cols);
 				yArr.push(rows);
 				xMax = xArr.max(), xMin = xArr.min(), yMax = yArr.max(), yMin = yArr.min();
-
 			}
-             
-             
-             
-             
-             
-             
+
 		} else {
 			var index = parseInt(sNode.attr('cols'));
 			for(var i = 0; i < that.rowCount + 1; i++) {
@@ -1470,12 +1477,12 @@ iTable.prototype.deleteCol = function() {
 				}
 			}
 			that.cellCount--;
-
+			that.updateLeft(index);
 		}
 		that.setIndex();
 		that.fillTd();
 		that.keyCursor();
-		that.updateLeft();
+
 	});
 
 }
@@ -1518,11 +1525,12 @@ iTable.prototype.deleteRow = function() {
 
 			}
 			that.rowCount--;
+			that.updateLeft(index);
 		}
 		that.setIndex();
 		that.fillTd();
 		that.keyCursor();
-		that.updateLeft();
+
 	});
 
 }
@@ -1972,36 +1980,48 @@ iTable.prototype.setIndex = function() {
 }
 
 //y轴更新
-iTable.prototype.updateLeft = function() {
-	var trNum = this.rowCount;
-	$('.leftTable').empty();
-	for(var i = 0; i < this.rowCount; i++) {
-		var tr = $("<tr></tr>");
-		tr.appendTo($(".leftTable"));
-		for(var j = 0; j < 1; j++) {
-			var th = $("<td>" + (i + 1) + "</td>");
-			th.appendTo(tr);
-		}
-
+iTable.prototype.updateLeft = function(index) {
+	//var trNum = this.rowCount;
+	//$('.leftTable').empty();
+	//for(var i = 0; i < this.rowCount; i++) {
+	//	var tr = $("<tr></tr>");
+	//	tr.appendTo($(".leftTable"));
+	//	for(var j = 0; j < 1; j++) {
+	//		var th = $("<td>" + (i + 1) + "</td>");
+	//		th.appendTo(tr);
+	//	}
+    //
+	//}
+	$('.titleTable tbody tr').eq(index).find('td').append('<td></td>');
+	for(var j = index; j < this.rowCount; j++) {
+		var td = $("<td>" + IntToChr(j) + "</td>");
+		$('.titleTable tbody tr').eq(j).find('td').text(IntToChr(j));
 	}
 
 }
 
 //x轴更新
-iTable.prototype.updateTop = function() {
+iTable.prototype.updateTop = function(index) {
 	var that = this;
-	$('.titleTable').empty();
-
-	for(var i = 0; i < 1; i++) {
-		var tr = $("<tr></tr>");
-		tr.appendTo($(".titleTable"));
-
-		for(var j = 0; j < this.cellCount; j++) {
-			var td = $("<td>" + IntToChr(j) + "</td>");
-			td.appendTo(tr);
-		}
-
+	//$('.titleTable').empty();
+    $('.titleTable colgroup').find('col').eq(index).after('<col style="width:100px">');
+	$('.titleTable tbody tr').find('td').eq(index).after('<td></td>');
+	for(var j = index; j < this.cellCount-1; j++) {
+		var td = $("<td>" + IntToChr(j) + "</td>");
+		$('.titleTable tbody tr').find('td').eq(j).text(IntToChr(j));
 	}
+
+	//for(var i = 0; i < 1; i++) {
+	//	var tr = $("<tr></tr>");
+	//	tr.appendTo($(".titleTable"));
+    //
+	//	for(var j = 0; j < this.cellCount; j++) {
+	//		var td = $("<td>" + IntToChr(j) + "</td>");
+	//		td.appendTo(tr);
+	//	}
+    //
+	//}
+
 
 }
 //拖拽放宽列
