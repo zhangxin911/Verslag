@@ -1,4 +1,4 @@
-"use strict"
+"use strict" //严格模式
 
 function iTable(tContainer, tSettings, tabs) {
 	this.rowCount = tSettings.rowCount;
@@ -289,11 +289,15 @@ function typing(event) {
 		}
 		var that = $(this);
 		var tdText = $('.ui-selected').text();
+		var tdWidth = $('.ui-selected').width();
+		var tdHeight = $('.ui-selected').height();
 
-		var tdInput = $("<input type='text'  id='tdInput' class='tdInput'  value='" + tdText + "'></input>");
+		var tdInput = $("<input type='text'  id='tdInput' class='tdInput'  value='" + tdText + "'>");
 		if(!$('.ui-selected input').length) {
 			$('.ui-selected').html(tdInput);
 		}
+		tdInput.width(tdWidth - 2);
+		tdInput.height(tdHeight - 2);
 		tdInput.focus();
 
 		var nowX = parseInt($(sNode).attr('cols')) ;
@@ -334,11 +338,8 @@ function typing(event) {
 						event.data.lastTd = sNode;
 						event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) ;
 						event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) ;
-
 					}
-
 				}
-
 			}
 			var lastKey = String(event.data.keyCode);
 			switch(lastKey) {
@@ -361,44 +362,45 @@ function typing(event) {
 			var nextX = event.data.fixX;
 			var nextY = nowY + 1;
 			
-//			if($("[pos='" + nextX + "-" + nextY + "']").length > 0) {
-//	$('td[cols=' + j + '][rows=' + i + ']')
+
 			if($('td[cols='+nextX+'][rows='+nextY+']').length>0){
 				$(sNode).removeClass('ui-selected');
-//				$("[pos='" + nextX + "-" + nextY + "']").addClass('ui-selected');
                 $('td[cols='+nextX+'][rows='+nextY+']').addClass('ui-selected');
 			} else {
-				var _nowY = nowY + 1;
+				var _nowY = nowY+1;
 				var _nowX = nowX + 1;
 
 				while(_nowY >= 0) {
 					while(_nowX >= 0) {
-//						var nextRowspan = parseInt($("[pos='" + _nowX + "-" + _nowY + "']").attr('rowspan'));
-//						var nextColspan = parseInt($("[pos='" + _nowX + "-" + _nowY + "']").attr('colspan'));
                         var nextRowspan=parseInt($('td[cols='+_nowX+'][rows='+_nowY+']').attr('rowspan'));
                         var nextColspan=parseInt($('td[cols='+_nowX+'][rows='+_nowY+']').attr('colspan'));
-                        
-                        
 						$(sNode).removeClass('ui-selected');
+
+
 						//下一个单元格行列不合并 
 						if(!nextRowspan && !nextColspan) {
 //							$("[pos='" + nextX + "-" + nextY + "']").addClass('ui-selected');
-                            $('td[cols='+_nowX+'][rows='+_nowY+']').addClass('ui-selected'); 
+
+							$('td[cols='+nextX+'][rows='+nextY+']').addClass('ui-selected');
+
 						}
 						//下一个单元格只列合并 
 						if(!nextRowspan && nextColspan) {
 
-							$("[pos='" + _nowX + "-" + nextY + "']").addClass('ui-selected');
+							//$("[pos='" + _nowX + "-" + nextY + "']").addClass('ui-selected');
+							$('td[cols='+_nowX+'][rows='+nextY+']').addClass('ui-selected');
 						}
 						//下一个单元格只行合并 
 						if(nextRowspan && !nextColspan) {
 
-							$("[pos='" + _nowX + "-" + nextY + "']").addClass('ui-selected');
+						//	$("[pos='" + _nowX + "-" + nextY + "']").addClass('ui-selected');
+							$('td[cols='+_nowX+'][rows='+nextY+']').addClass('ui-selected');
 						}
 						//下一个单元格行列合并 
 						if(nextRowspan && nextColspan) {
 
-							$("[pos='" + _nowX + "-" + _nowY + "']").addClass('ui-selected');
+					//		$("[pos='" + _nowX + "-" + _nowY + "']").addClass('ui-selected');
+							$('td[cols='+_nowX+'][rows='+_nowY+']').addClass('ui-selected');
 						}
 
 						_nowX--;
@@ -417,7 +419,6 @@ function typing(event) {
 			if(event.target == $('body')[0]) {
 				tdInput.remove();
 			}
-
 			if(event.target != $('body')[0]) {
 				$('.ui-selected').html($(event.target).val());
 				$(event.target).blur(function() {
@@ -431,11 +432,9 @@ function typing(event) {
 					if(!$(sNode).attr('colspan') && !$(sNode).attr('rowspan')) {
 						//区分跨行列时，单元格x坐标不同情况
 						event.data.lastTd = sNode;
-						event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
-						event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
-
+						event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) ;
+						event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) ;
 					}
-
 				}
 
 			}
@@ -444,62 +443,66 @@ function typing(event) {
 			switch(lastKey) {
 				case '13':
 					event.data.lastTd = sNode;
-					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
-					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
+					event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+					event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 
 					break;
 				case '40':
 					event.data.lastTd = sNode;
-					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
-					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
+					event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+					event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 
 					break;
 				case '37':
 					event.data.lastTd = sNode;
-					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
-					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
+					event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+					event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 
 					break;
 				case '38':
 					event.data.lastTd = sNode;
-					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
-					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
+					event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+					event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 					break;
 			}
 			var nextX = nowX + 1;
 			var nextY = event.data.fixY;
-			if($("[pos='" + nextX + "-" + nextY + "']").length > 0) {
+			if($('td[cols='+nextX+'][rows='+nextY+']').length>0) {
 				$(sNode).removeClass('ui-selected');
-				$("[pos='" + nextX + "-" + nextY + "']").addClass('ui-selected');
+				$('td[cols='+nextX+'][rows='+nextY+']').addClass('ui-selected');
 			} else {
 				var _nowY = nowY + 1;
 				var _nowX = nowX + 1;
 
 				while(_nowX >= 0) {
 					while(_nowY >= 0) {
-						var nextRowspan = parseInt($("[pos='" + _nowX + "-" + _nowY + "']").attr('rowspan'));
-						var nextColspan = parseInt($("[pos='" + _nowX + "-" + _nowY + "']").attr('colspan'));
+						var nextRowspan = parseInt($('td[cols='+_nowX+'][rows='+_nowY+']').attr('rowspan'));
+						var nextColspan = parseInt($('td[cols='+_nowX+'][rows='+_nowY+']').attr('colspan'));
 
 						$(sNode).removeClass('ui-selected');
 						//下一个单元格行列不合并 
 						if(!nextRowspan && !nextColspan) {
-							$("[pos='" + nextX + "-" + nextY + "']").addClass('ui-selected');
+							//$("[pos='" + nextX + "-" + nextY + "']").addClass('ui-selected');
+							$('td[cols='+nextX+'][rows='+nextY+']').addClass('ui-selected');
 
 						}
 						//下一个单元格只行合并 
 						if(!nextRowspan && nextColspan) {
 
-							$("[pos='" + _nowX + "-" + nextY + "']").addClass('ui-selected');
+						//	$("[pos='" + _nowX + "-" + nextY + "']").addClass('ui-selected');
+							$('td[cols='+_nowX+'][rows='+nextY+']').addClass('ui-selected');
 						}
 						//下一个单元格只列合并 
 						if(nextRowspan && !nextColspan) {
 
-							$("[pos='" + nextX + "-" + _nowY + "']").addClass('ui-selected');
+						//	$("[pos='" + nextX + "-" + _nowY + "']").addClass('ui-selected');
+							$('td[cols='+nextX+'][rows='+_nowY+']').addClass('ui-selected');
 						}
 						//下一个单元格行列合并 
 						if(nextRowspan && nextColspan) {
 
-							$("[pos='" + _nowX + "-" + _nowY + "']").addClass('ui-selected');
+						//	$("[pos='" + _nowX + "-" + _nowY + "']").addClass('ui-selected');
+							$('td[cols='+_nowX+'][rows='+_nowY+']').addClass('ui-selected');
 						}
 
 						_nowY--;
@@ -511,7 +514,6 @@ function typing(event) {
 			event.data.keyCode = event.keyCode;
 			callZ.lightCoor($('.ui-selected'));
 		}
-
 		//←
 		if(event.keyCode == '37') {
 			var r1 = 0,
@@ -534,8 +536,8 @@ function typing(event) {
 					if(!$(sNode).attr('colspan') && !$(sNode).attr('rowspan')) {
 						//区分跨行列时，单元格x坐标不同情况
 						event.data.lastTd = sNode;
-						event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
-						event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
+						event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+						event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 
 					}
 
@@ -547,32 +549,32 @@ function typing(event) {
 			switch(lastKey) {
 				case '13':
 					event.data.lastTd = sNode;
-					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
-					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
-
+					event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+					event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 					break;
 				case '40':
 					event.data.lastTd = sNode;
-					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
-					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
-
+					event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+					event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 					break;
 				case '38':
 					event.data.lastTd = sNode;
-					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
-					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
+					event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+					event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 					break;
 				case '39':
 					event.data.lastTd = sNode;
-					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
-					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
+					event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+					event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 					break;
 			}
+
 			var nextX = parseInt(nowX - 1);
 			var nextY = parseInt(event.data.fixY);
-			if($("[pos='" + nextX + "-" + nextY + "']").length > 0) {
+
+			if($('td[cols='+nextX+'][rows='+nextY+']').length>0) {
 				$(sNode).removeClass('ui-selected');
-				$("[pos='" + nextX + "-" + nextY + "']").addClass('ui-selected');
+				$('td[cols='+nextX+'][rows='+nextY+']').addClass('ui-selected');
 			} else {
 				var _nowY = nowY;
 				var _nowX = nowX;
@@ -580,39 +582,39 @@ function typing(event) {
 				while(_nowY >= 0) {
 					_nowX = nowX;
 					while(_nowX >= 0) {
-						var nextRowspan = parseInt($("[pos='" + _nowX + "-" + _nowY + "']").attr('rowspan'));
-						var nextColspan = parseInt($("[pos='" + _nowX + "-" + _nowY + "']").attr('colspan'));
+						var nextRowspan = parseInt($('td[cols='+_nowX+'][rows='+_nowY+']').attr('rowspan'));
+						var nextColspan = parseInt($('td[cols='+_nowX+'][rows='+_nowY+']').attr('colspan'));
 						var lastColspan = parseInt($(sNode).attr('colspan')) - 1;
 						var lastRowspan = parseInt($(sNode).attr('rowspan')) - 1;
 						$(sNode).removeClass('ui-selected');
 						//下一个单元格行列不合并 
 						if(!nextRowspan && !nextColspan) {
-							$("[pos='" + (nextX - lastColspan) + "-" + nextY + "']").addClass('ui-selected');
-
+						//	$("[pos='" + (nextX - lastColspan) + "-" + nextY + "']").addClass('ui-selected');
+							$('td[cols='+(nextX - lastColspan)+'][rows='+nextY +']').addClass('ui-selected');
 						}
 						//下一个单元格只列合并 
 						if(!nextRowspan && nextColspan) {
-							if($("[pos='" + (_nowX - nextColspan + 1) + "-" + nextY + "']").length > 0) {
+							if($('td[cols='+(nextX - nextColspan + 1)+'][rows='+nextY +']').length > 0) {
 								r1++;
-								(r1 == 1) && ($("[pos='" + (nextX - nextColspan + 1) + "-" + nextY + "']").addClass('ui-selected'));
-
+							//	(r1 == 1) && ($("[pos='" + (nextX - nextColspan + 1) + "-" + nextY + "']").addClass('ui-selected'));
+								(r1 == 1) && ($('td[cols='+(nextX - nextColspan + 1)+'][rows='+nextY +']').addClass('ui-selected'));
 							}
 
 						}
 						//下一个单元格只行合并 
 						if(nextRowspan && !nextColspan) {
-							if($("[pos='" + nextX + "-" + _nowY + "']").length > 0) {
+							if($('td[cols='+nextX+'][rows='+_nowY +']').length > 0) {
 								r2++;
-								(r2 == 1) && ($("[pos='" + nextX + "-" + _nowY + "']").addClass('ui-selected'));
-
+								//(r2 == 1) && ($("[pos='" + nextX + "-" + _nowY + "']").addClass('ui-selected'));
+								(r2 == 1) && ($('td[cols='+nextX+'][rows='+_nowY +']').addClass('ui-selected'));
 							}
 						}
 						//下一个单元格行列合并 
 						if(nextRowspan && nextColspan) {
-							if($("[pos='" + _nowX + "-" + _nowY + "']").length > 0) {
+							if($('td[cols='+_nowX+'][rows='+_nowY +']').length > 0) {
 								r3++;
-								(r3 == 1) && ($("[pos='" + _nowX + "-" + _nowY + "']").addClass('ui-selected'));
-
+							//	(r3 == 1) && ($("[pos='" + _nowX + "-" + _nowY + "']").addClass('ui-selected'));
+								(r3 == 1) && ($('td[cols='+_nowX+'][rows='+_nowY +']').addClass('ui-selected'));
 							}
 						}
 
@@ -648,8 +650,8 @@ function typing(event) {
 					if(!$(sNode).attr('colspan') && !$(sNode).attr('rowspan')) {
 						//区分跨行列时，单元格x坐标不同情况
 						event.data.lastTd = sNode;
-						event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
-						event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
+						event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) ;
+						event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) ;
 
 					}
 
@@ -661,32 +663,32 @@ function typing(event) {
 			switch(lastKey) {
 				case '13':
 					event.data.lastTd = sNode;
-					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
-					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
+					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) ;
+					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) ;
 
 					break;
 				case '40':
 					event.data.lastTd = sNode;
-					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
-					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
+					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) ;
+					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) ;
 
 					break;
 				case '37':
 					event.data.lastTd = sNode;
-					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
-					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
+					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) ;
+					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) ;
 					break;
 				case '39':
 					event.data.lastTd = sNode;
-					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) - 1;
-					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) - 1;
+					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) ;
+					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) ;
 					break;
 			}
 			var nextX = event.data.fixX;
 			var nextY = nowY - 1;
-			if($("[pos='" + nextX + "-" + nextY + "']").length > 0) {
+			if($('td[cols='+nextX+'][rows='+nextY+']').length>0) {
 				$(sNode).removeClass('ui-selected');
-				$("[pos='" + nextX + "-" + nextY + "']").addClass('ui-selected');
+				$('td[cols='+nextX+'][rows='+nextY+']').addClass('ui-selected');
 			} else {
 				var _nowY = nowY;
 				var _nowX = nowX;
@@ -694,39 +696,39 @@ function typing(event) {
 				while(_nowX >= 0) {
 					_nowY = nowY;
 					while(_nowY >= 0) {
-						var nextRowspan = parseInt($("[pos='" + _nowX + "-" + _nowY + "']").attr('rowspan'));
-						var nextColspan = parseInt($("[pos='" + _nowX + "-" + _nowY + "']").attr('colspan'));
+						var nextRowspan = parseInt($('td[cols='+_nowX+'][rows='+_nowY+']').attr('rowspan'));
+						var nextColspan = parseInt($('td[cols='+_nowX+'][rows='+_nowY+']').attr('colspan'));
 						var lastColspan = parseInt($(sNode).attr('colspan')) - 1;
 						var lastRowspan = parseInt($(sNode).attr('rowspan')) - 1;
 						$(sNode).removeClass('ui-selected');
 						//下一个单元格行列不合并 
 						if(!nextRowspan && !nextColspan) {
-							$("[pos='" + nextX + "-" + (nextY - lastRowspan) + "']").addClass('ui-selected');
-
+						//	$("[pos='" + nextX + "-" + (nextY - lastRowspan) + "']").addClass('ui-selected');
+							$('td[cols='+nextX+'][rows='+(nextY - lastRowspan)+']').addClass('ui-selected');
 						}
 						//下一个单元格只列合并 
 						if(!nextRowspan && nextColspan) {
-							if($("[pos='" + _nowX + "-" + nextY + "']").length > 0) {
+							if($('td[cols='+_nowX+'][rows='+nextY+']').length > 0) {
 								u1++;
-								(u1 == 1) && ($("[pos='" + _nowX + "-" + nextY + "']").addClass('ui-selected'));
-
+								(u1 == 1) && ($('td[cols='+_nowX+'][rows='+nextY+']').addClass('ui-selected'));
 							}
 
 						}
 						//下一个单元格只行合并 
 						if(nextRowspan && !nextColspan) {
-							if($("[pos='" + nextX + "-" + _nowY + "']").length > 0) {
-								u2++;
-								(u2 == 1) && ($("[pos='" + nextX + "-" + _nowY + "']").addClass('ui-selected'));
 
+							if($('td[cols='+nextX+'][rows='+_nowY+']').length > 0) {
+								u2++;
+								(u2 == 1) && ($('td[cols='+nextX+'][rows='+_nowY+']').addClass('ui-selected'));
 							}
 
 						}
 						//下一个单元格行列合并 
 						if(nextRowspan && nextColspan) {
-							if($("[pos='" + _nowX + "-" + _nowY + "']").length > 0) {
+
+							if($('td[cols='+_nowX+'][rows='+_nowY+']').length > 0) {
 								u3++;
-								(u3 == 1) && ($("[pos='" + _nowX + "-" + _nowY + "']").addClass('ui-selected'));
+								(u3 == 1) && ($('td[cols='+_nowX+'][rows='+_nowY+']').addClass('ui-selected'));
 
 							}
 						}
@@ -826,13 +828,11 @@ iTable.prototype.fillTd = function(tid) {
 			var tdWidth = $(this).width();
 			var tdHeight = $(this).height();
 			var tdText = $(this).text();
-			var tdInput = $("<input type='text'  id='tdInput' class='tdInput'  value='" + tdText + "'></input>");
+			var tdInput = $("<input type='text'  id='tdInput' class='tdInput'  value='" + tdText + "'>");
 			tdInput.width(tdWidth - 2);
 			tdInput.height(tdHeight - 2);
-
 			$(this).html(tdInput);
 			set_text_value_position(tdInput, -1);
-
 			$('.tdInput').keyup(function() {
 				$('#ip_fx').val($(this).val());
 			});
@@ -1227,7 +1227,7 @@ iTable.prototype.express = function() {
 
 //列插入
 iTable.prototype.insertCol = function() {
-	var simMenu = this.createSimpleMenu('', '插入列');
+	var simMenu = this.createSimpleMenu('editRowCol', '插入列');
 	var sel_a = $(simMenu).children(0);
 
 	var that = this;
@@ -1332,7 +1332,7 @@ iTable.prototype.insertCol = function() {
 }
 //行插入
 iTable.prototype.insertRow = function() {
-	var simMenu = this.createSimpleMenu('', '插入行');
+	var simMenu = this.createSimpleMenu('editRowCol', '插入行');
 	var sel_a = $(simMenu).children(0);
 
 	var that = this;
@@ -1413,7 +1413,7 @@ iTable.prototype.insertRow = function() {
 }
 //列删除
 iTable.prototype.deleteCol = function() {
-	var simMenu = this.createSimpleMenu('', '删除列');
+	var simMenu = this.createSimpleMenu('editRowCol', '删除列');
 	var sel_a = $(simMenu).children(0);
 
 	var that = this;
@@ -1482,7 +1482,7 @@ iTable.prototype.deleteCol = function() {
 
 //行删除
 iTable.prototype.deleteRow = function() {
-	var simMenu = this.createSimpleMenu('', '删除行');
+	var simMenu = this.createSimpleMenu('editRowCol', '删除行');
 	var sel_a = $(simMenu).children(0);
 
 	var that = this;
@@ -1855,7 +1855,7 @@ iTable.prototype.sheetWork = function() {
 		var tdHeight = that.height();
 		var tdText = that.text();
 
-		var stInput = $("<input type='text' class='stInput'  value='" + tdText + "'></input>");
+		var stInput = $("<input type='text' class='stInput'  value='" + tdText + "'>");
 
 		stInput.width(tdWidth - 2);
 		stInput.height(tdHeight - 2);
@@ -1965,7 +1965,7 @@ iTable.prototype.setIndex = function() {
 			var coo = cellStrArray[j];
 			cell.setAttribute('rows', i + 1);
 			cell.setAttribute('cols', col + 1);
-			cell.setAttribute('pos', col + '-' + i);
+		//	cell.setAttribute('pos', col + '-' + i);
 		}
 	}
 
