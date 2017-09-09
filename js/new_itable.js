@@ -1398,7 +1398,7 @@ iTable.prototype.insertRow = function() {
 							var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
 							var cspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
 							if(rspan >= 2) {
-								if(!(j <= xIndex && (cspan + j) >= xIndex)) {
+								if(parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rows'))+parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan'))-1>=yIndex){
 									$('td[cols=' + j + '][rows=' + i + ']').attr('rowspan', rspan + 1);
 								}
 
@@ -1499,6 +1499,8 @@ iTable.prototype.deleteRow = function() {
 
 		} else {
 			var index = parseInt(sNode.attr('rows'));
+			 var yIndex = parseInt(sNode.attr('rows'));
+            // var xIndex = parseInt($(obj).attr('cols'));
 			for(var i = index; i > -1; i--) {
 				//var tr=$('<tr></tr>');
 				//var time = 0;
@@ -1515,8 +1517,11 @@ iTable.prototype.deleteRow = function() {
 					} else {
 						if($('td[cols=' + j + '][rows=' + i + ']').length > 0) {
 							var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
-							if(rspan >= 2) {
-								$('td[cols=' + j + '][rows=' + i + ']').attr('rowspan', rspan - 1);
+							if(rspan >= 2){
+								 if(parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rows'))+parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan'))-1>=yIndex){
+								 	$('td[cols=' + j + '][rows=' + i + ']').attr('rowspan', rspan - 1);
+								}
+								
 							}
 
 						}
