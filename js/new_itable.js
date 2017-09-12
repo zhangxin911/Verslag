@@ -18,25 +18,25 @@ iTable.prototype.createContent = function(tid) {
 
 	for(var i = 0; i < this.rowCount; i++) {
 		var tr = this.createTr();
-		var th=$('<th></th>');
-		var colg=$('<colgroup></colgroup>');
+		var th = $('<th></th>');
+		var colg = $('<colgroup></colgroup>');
 		tr.append(th);
-		for(var j = 0; j < this.cellCount+1; j++) {
-			var td = this.createTd('','');
-           
-            if(j==0){
-            	var col=$('<col style="width:63px">');
-            }else{
-            	 var col=$('<col style="width:100px">');
-            }
-            colg.append(col);
-            if(i==0){
-			$("#iTable" + tId).append(colg); 
-		    }
+		for(var j = 0; j < this.cellCount + 1; j++) {
+			var td = this.createTd('', '');
+
+			if(j == 0) {
+				var col = $('<col style="width:63px">');
+			} else {
+				var col = $('<col style="width:100px">');
+			}
+			colg.append(col);
+			if(i == 0) {
+				$("#iTable" + tId).append(colg);
+			}
 			tr.append(td);
 		}
-		
-        $("#iTable" + tId).append(tr);  
+
+		$("#iTable" + tId).append(tr);
 	}
 	this.setIndex();
 
@@ -57,29 +57,29 @@ iTable.prototype.createXaxis = function() {
 	var xTable = $("<table class='titleTable'></table>");
 	var curT = this.getCurTable();
 	var firTds = curT.find('tr:first td');
-    var th=$('<th></th>');
+	var th = $('<th></th>');
 	xAxis.insertBefore(this.container);
 	xAxis.append(xTable);
 	var tr = $("<tr></tr>");
 	tr.append(th);
 	for(var i = 0; i < 1; i++) {
-		
-		var colg=$('<colgroup></colgroup>');
-		for(var j = 0; j < this.cellCount+1; j++) {
+
+		var colg = $('<colgroup></colgroup>');
+		for(var j = 0; j < this.cellCount + 1; j++) {
 			var td = $("<td>" + IntToChr(j) + "</td>");
-			if(j==0){
-				var col=$('<col style="width:63px">');
-			}else{
-				var col=$('<col style="width:100px">'); 
+			if(j == 0) {
+				var col = $('<col style="width:63px">');
+			} else {
+				var col = $('<col style="width:100px">');
 			}
-            
-             colg.append(col);
-            if(i==0){
-			xTable.append(colg); 
-		    }
+
+			colg.append(col);
+			if(i == 0) {
+				xTable.append(colg);
+			}
 			tr.append(td);
 		}
-        xTable.append(tr); 
+		xTable.append(tr);
 	}
 
 }
@@ -91,12 +91,12 @@ iTable.prototype.createYaxis = function() {
 	yAxis.append(yTable);
 	for(var i = 0; i < this.rowCount; i++) {
 		var tr = $("<tr></tr>");
-		var colg=$('<colgroup></colgroup>'); 
+		var colg = $('<colgroup></colgroup>');
 		for(var j = 0; j < 1; j++) {
 			var th = $("<td>" + (i + 1) + "</td>");
 			th.appendTo(tr);
 		}
-        yTable.append(tr);
+		yTable.append(tr);
 	}
 }
 iTable.prototype.createTip = function() {
@@ -117,8 +117,8 @@ iTable.prototype.createTip = function() {
 		'border-bottom': '1px solid #dddddd',
 		'margin-top': '70px'
 	});
-//	content.insertBefore(this.container);
-    $(this.container).append(content);
+	//	content.insertBefore(this.container);
+	$(this.container).append(content);
 }
 
 iTable.prototype.frameSelect = function() {
@@ -135,7 +135,7 @@ iTable.prototype.frameSelect = function() {
 		var ev = window.event || arguments[0];
 		var sleft = parseInt($(this).scrollLeft());
 		var stop = parseInt($(this).scrollTop());
-		var oX = ev.clientX  + sleft;
+		var oX = ev.clientX + sleft;
 		var oY = ev.clientY - disHeight + stop;
 		var selDiv = $('<div class="mapdiv"></div>');
 		selDiv.css({
@@ -156,7 +156,7 @@ iTable.prototype.frameSelect = function() {
 		});
 
 		$(this).append(selDiv);
-
+		$('.wBorder').remove();
 		var _x = null;
 		var _y = null;
 		var mergeArr = [];
@@ -167,13 +167,13 @@ iTable.prototype.frameSelect = function() {
 			var sleft = $(this).scrollLeft();
 			var stop = $(this).scrollTop();
 			if(isSelect) {
-//				if(selDiv.css('display') == "none") {
-//					selDiv.css('display', 'none');
-//				}
+				//				if(selDiv.css('display') == "none") {
+				//					selDiv.css('display', 'none');
+				//				}
 				_x = (evt.x || evt.clientX);
 				_y = (evt.y || evt.clientY);
 
-				_x = _x + sleft ;
+				_x = _x + sleft;
 				_y = _y + stop - disHeight;
 
 				selDiv.css({
@@ -214,7 +214,13 @@ iTable.prototype.frameSelect = function() {
 							xMin = xArr.min(),
 							yMax = yArr.max(),
 							yMin = yArr.min();
+						var top = $(fileNodes[i])[0].offsetTop,
+							left = $(fileNodes[i])[0].offsetLeft,
+							width = $(fileNodes[i])[0].offsetWidth,
+							height = $(fileNodes[i])[0].offsetHeight;
+
 						$(fileNodes[i]).addClass('ui-selected');
+						//that.wBorderSelect($('.ui-selected'));  
 
 					} else {
 						$(fileNodes[i]).removeClass('ui-selected');
@@ -224,11 +230,13 @@ iTable.prototype.frameSelect = function() {
 				for(var i = xMin; i < (xMax + 1); i++) {
 					for(var j = yMin; j < (yMax + 1); j++) {
 						//$("[pos='" + i + "-" + j + "']").addClass('ui-selected');
-						//console.log($("[pos='" + i + "-" + j + "']"),$('td[cols=' + (i-1)+ '][rows=' +(j-1) + ']'));
-                       $('td[cols=' + (i+1)+ '][rows=' +(j+1) + ']').addClass('ui-selected');
+						if($('td[cols=' + (i + 1) + '][rows=' + (j + 1) + ']').length > 0) {
+							$('td[cols=' + (i + 1) + '][rows=' + (j + 1) + ']').addClass('ui-selected');
+						}
+
 					}
 				}
-
+				that.wBorderSelect($('.ui-selected'));
 				that.lightCoor($('.ui-selected'));
 			}
 
@@ -297,8 +305,8 @@ function typing(event) {
 		tdInput.height(tdHeight - 2);
 		tdInput.focus();
 
-		var nowX = parseInt($(sNode).attr('cols')) ;
-		var nowY = parseInt($(sNode).attr('rows')) ;
+		var nowX = parseInt($(sNode).attr('cols'));
+		var nowY = parseInt($(sNode).attr('rows'));
 
 		var colAdd = parseInt($(sNode).attr('colspan')) - 1 || 0;
 		var rowAdd = parseInt($(sNode).attr('rowspan')) - 1 || 0;
@@ -310,8 +318,8 @@ function typing(event) {
 		if(event.data.time === 1) {
 			//获取第一次点击的单元格
 			event.data.lastTd = sNode;
-			event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) ;
-			event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) ;
+			event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+			event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 		}
 
 		//↓
@@ -333,8 +341,8 @@ function typing(event) {
 					if(!$(sNode).attr('colspan') && !$(sNode).attr('rowspan')) {
 						//区分跨行列时，单元格x坐标不同情况
 						event.data.lastTd = sNode;
-						event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) ;
-						event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) ;
+						event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+						event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 					}
 				}
 			}
@@ -342,62 +350,60 @@ function typing(event) {
 			switch(lastKey) {
 				case '39':
 					event.data.lastTd = sNode;
-					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) ;
-					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) ;
+					event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+					event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 					break;
 				case '37':
 					event.data.lastTd = sNode;
-					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) ;
-					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) ;
+					event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+					event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 					break;
 				case '38':
 					event.data.lastTd = sNode;
-					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) ;
-					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) ;
+					event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+					event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 					break;
 			}
 			var nextX = event.data.fixX;
 			var nextY = nowY + 1;
-			
 
-			if($('td[cols='+nextX+'][rows='+nextY+']').length>0){
+			if($('td[cols=' + nextX + '][rows=' + nextY + ']').length > 0) {
 				$(sNode).removeClass('ui-selected');
-                $('td[cols='+nextX+'][rows='+nextY+']').addClass('ui-selected');
+				$('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('ui-selected');
 			} else {
-				var _nowY = nowY+1;
+				var _nowY = nowY + 1;
 				var _nowX = nowX + 1;
 
 				while(_nowY >= 0) {
 					while(_nowX >= 0) {
-                        var nextRowspan=parseInt($('td[cols='+_nowX+'][rows='+_nowY+']').attr('rowspan'));
-                        var nextColspan=parseInt($('td[cols='+_nowX+'][rows='+_nowY+']').attr('colspan'));
+						var nextRowspan = parseInt($('td[cols=' + _nowX + '][rows=' + _nowY + ']').attr('rowspan'));
+						var nextColspan = parseInt($('td[cols=' + _nowX + '][rows=' + _nowY + ']').attr('colspan'));
 						$(sNode).removeClass('ui-selected');
-
 
 						//下一个单元格行列不合并 
 						if(!nextRowspan && !nextColspan) {
-//							$("[pos='" + nextX + "-" + nextY + "']").addClass('ui-selected');
+							//							$("[pos='" + nextX + "-" + nextY + "']").addClass('ui-selected');
 
-							$('td[cols='+nextX+'][rows='+nextY+']').addClass('ui-selected');
+							$('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('ui-selected');
 
 						}
 						//下一个单元格只列合并 
 						if(!nextRowspan && nextColspan) {
 
 							//$("[pos='" + _nowX + "-" + nextY + "']").addClass('ui-selected');
-							$('td[cols='+_nowX+'][rows='+nextY+']').addClass('ui-selected');
+							$('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('ui-selected');
 						}
 						//下一个单元格只行合并 
 						if(nextRowspan && !nextColspan) {
 
-						//	$("[pos='" + _nowX + "-" + nextY + "']").addClass('ui-selected');
-							$('td[cols='+_nowX+'][rows='+nextY+']').addClass('ui-selected');
+							//	$("[pos='" + _nowX + "-" + nextY + "']").addClass('ui-selected');
+							$('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('ui-selected');
 						}
 						//下一个单元格行列合并 
 						if(nextRowspan && nextColspan) {
 
-					//		$("[pos='" + _nowX + "-" + _nowY + "']").addClass('ui-selected');
-							$('td[cols='+_nowX+'][rows='+_nowY+']').addClass('ui-selected');
+							//		$("[pos='" + _nowX + "-" + _nowY + "']").addClass('ui-selected');
+							$('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('ui-selected');
 						}
 
 						_nowX--;
@@ -429,8 +435,8 @@ function typing(event) {
 					if(!$(sNode).attr('colspan') && !$(sNode).attr('rowspan')) {
 						//区分跨行列时，单元格x坐标不同情况
 						event.data.lastTd = sNode;
-						event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) ;
-						event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) ;
+						event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+						event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 					}
 				}
 
@@ -464,42 +470,42 @@ function typing(event) {
 			}
 			var nextX = nowX + 1;
 			var nextY = event.data.fixY;
-			if($('td[cols='+nextX+'][rows='+nextY+']').length>0) {
+			if($('td[cols=' + nextX + '][rows=' + nextY + ']').length > 0) {
 				$(sNode).removeClass('ui-selected');
-				$('td[cols='+nextX+'][rows='+nextY+']').addClass('ui-selected');
+				$('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('ui-selected');
 			} else {
 				var _nowY = nowY + 1;
 				var _nowX = nowX + 1;
 
 				while(_nowX >= 0) {
 					while(_nowY >= 0) {
-						var nextRowspan = parseInt($('td[cols='+_nowX+'][rows='+_nowY+']').attr('rowspan'));
-						var nextColspan = parseInt($('td[cols='+_nowX+'][rows='+_nowY+']').attr('colspan'));
+						var nextRowspan = parseInt($('td[cols=' + _nowX + '][rows=' + _nowY + ']').attr('rowspan'));
+						var nextColspan = parseInt($('td[cols=' + _nowX + '][rows=' + _nowY + ']').attr('colspan'));
 
 						$(sNode).removeClass('ui-selected');
 						//下一个单元格行列不合并 
 						if(!nextRowspan && !nextColspan) {
 							//$("[pos='" + nextX + "-" + nextY + "']").addClass('ui-selected');
-							$('td[cols='+nextX+'][rows='+nextY+']').addClass('ui-selected');
+							$('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('ui-selected');
 
 						}
 						//下一个单元格只行合并 
 						if(!nextRowspan && nextColspan) {
 
-						//	$("[pos='" + _nowX + "-" + nextY + "']").addClass('ui-selected');
-							$('td[cols='+_nowX+'][rows='+nextY+']').addClass('ui-selected');
+							//	$("[pos='" + _nowX + "-" + nextY + "']").addClass('ui-selected');
+							$('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('ui-selected');
 						}
 						//下一个单元格只列合并 
 						if(nextRowspan && !nextColspan) {
 
-						//	$("[pos='" + nextX + "-" + _nowY + "']").addClass('ui-selected');
-							$('td[cols='+nextX+'][rows='+_nowY+']').addClass('ui-selected');
+							//	$("[pos='" + nextX + "-" + _nowY + "']").addClass('ui-selected');
+							$('td[cols=' + nextX + '][rows=' + _nowY + ']').addClass('ui-selected');
 						}
 						//下一个单元格行列合并 
 						if(nextRowspan && nextColspan) {
 
-						//	$("[pos='" + _nowX + "-" + _nowY + "']").addClass('ui-selected');
-							$('td[cols='+_nowX+'][rows='+_nowY+']').addClass('ui-selected');
+							//	$("[pos='" + _nowX + "-" + _nowY + "']").addClass('ui-selected');
+							$('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('ui-selected');
 						}
 
 						_nowY--;
@@ -569,9 +575,9 @@ function typing(event) {
 			var nextX = parseInt(nowX - 1);
 			var nextY = parseInt(event.data.fixY);
 
-			if($('td[cols='+nextX+'][rows='+nextY+']').length>0) {
+			if($('td[cols=' + nextX + '][rows=' + nextY + ']').length > 0) {
 				$(sNode).removeClass('ui-selected');
-				$('td[cols='+nextX+'][rows='+nextY+']').addClass('ui-selected');
+				$('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('ui-selected');
 			} else {
 				var _nowY = nowY;
 				var _nowX = nowX;
@@ -579,39 +585,39 @@ function typing(event) {
 				while(_nowY >= 0) {
 					_nowX = nowX;
 					while(_nowX >= 0) {
-						var nextRowspan = parseInt($('td[cols='+_nowX+'][rows='+_nowY+']').attr('rowspan'));
-						var nextColspan = parseInt($('td[cols='+_nowX+'][rows='+_nowY+']').attr('colspan'));
+						var nextRowspan = parseInt($('td[cols=' + _nowX + '][rows=' + _nowY + ']').attr('rowspan'));
+						var nextColspan = parseInt($('td[cols=' + _nowX + '][rows=' + _nowY + ']').attr('colspan'));
 						var lastColspan = parseInt($(sNode).attr('colspan')) - 1;
 						var lastRowspan = parseInt($(sNode).attr('rowspan')) - 1;
 						$(sNode).removeClass('ui-selected');
 						//下一个单元格行列不合并 
 						if(!nextRowspan && !nextColspan) {
-						//	$("[pos='" + (nextX - lastColspan) + "-" + nextY + "']").addClass('ui-selected');
-							$('td[cols='+(nextX - lastColspan)+'][rows='+nextY +']').addClass('ui-selected');
+							//	$("[pos='" + (nextX - lastColspan) + "-" + nextY + "']").addClass('ui-selected');
+							$('td[cols=' + (nextX - lastColspan) + '][rows=' + nextY + ']').addClass('ui-selected');
 						}
 						//下一个单元格只列合并 
 						if(!nextRowspan && nextColspan) {
-							if($('td[cols='+(nextX - nextColspan + 1)+'][rows='+nextY +']').length > 0) {
+							if($('td[cols=' + (nextX - nextColspan + 1) + '][rows=' + nextY + ']').length > 0) {
 								r1++;
-							//	(r1 == 1) && ($("[pos='" + (nextX - nextColspan + 1) + "-" + nextY + "']").addClass('ui-selected'));
-								(r1 == 1) && ($('td[cols='+(nextX - nextColspan + 1)+'][rows='+nextY +']').addClass('ui-selected'));
+								//	(r1 == 1) && ($("[pos='" + (nextX - nextColspan + 1) + "-" + nextY + "']").addClass('ui-selected'));
+								(r1 == 1) && ($('td[cols=' + (nextX - nextColspan + 1) + '][rows=' + nextY + ']').addClass('ui-selected'));
 							}
 
 						}
 						//下一个单元格只行合并 
 						if(nextRowspan && !nextColspan) {
-							if($('td[cols='+nextX+'][rows='+_nowY +']').length > 0) {
+							if($('td[cols=' + nextX + '][rows=' + _nowY + ']').length > 0) {
 								r2++;
 								//(r2 == 1) && ($("[pos='" + nextX + "-" + _nowY + "']").addClass('ui-selected'));
-								(r2 == 1) && ($('td[cols='+nextX+'][rows='+_nowY +']').addClass('ui-selected'));
+								(r2 == 1) && ($('td[cols=' + nextX + '][rows=' + _nowY + ']').addClass('ui-selected'));
 							}
 						}
 						//下一个单元格行列合并 
 						if(nextRowspan && nextColspan) {
-							if($('td[cols='+_nowX+'][rows='+_nowY +']').length > 0) {
+							if($('td[cols=' + _nowX + '][rows=' + _nowY + ']').length > 0) {
 								r3++;
-							//	(r3 == 1) && ($("[pos='" + _nowX + "-" + _nowY + "']").addClass('ui-selected'));
-								(r3 == 1) && ($('td[cols='+_nowX+'][rows='+_nowY +']').addClass('ui-selected'));
+								//	(r3 == 1) && ($("[pos='" + _nowX + "-" + _nowY + "']").addClass('ui-selected'));
+								(r3 == 1) && ($('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('ui-selected'));
 							}
 						}
 
@@ -647,8 +653,8 @@ function typing(event) {
 					if(!$(sNode).attr('colspan') && !$(sNode).attr('rowspan')) {
 						//区分跨行列时，单元格x坐标不同情况
 						event.data.lastTd = sNode;
-						event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) ;
-						event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) ;
+						event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+						event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 
 					}
 
@@ -660,32 +666,32 @@ function typing(event) {
 			switch(lastKey) {
 				case '13':
 					event.data.lastTd = sNode;
-					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) ;
-					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) ;
+					event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+					event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 
 					break;
 				case '40':
 					event.data.lastTd = sNode;
-					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) ;
-					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) ;
+					event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+					event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 
 					break;
 				case '37':
 					event.data.lastTd = sNode;
-					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) ;
-					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) ;
+					event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+					event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 					break;
 				case '39':
 					event.data.lastTd = sNode;
-					event.data.fixX = parseInt($(event.data.lastTd).attr('cols')) ;
-					event.data.fixY = parseInt($(event.data.lastTd).attr('rows')) ;
+					event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+					event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 					break;
 			}
 			var nextX = event.data.fixX;
 			var nextY = nowY - 1;
-			if($('td[cols='+nextX+'][rows='+nextY+']').length>0) {
+			if($('td[cols=' + nextX + '][rows=' + nextY + ']').length > 0) {
 				$(sNode).removeClass('ui-selected');
-				$('td[cols='+nextX+'][rows='+nextY+']').addClass('ui-selected');
+				$('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('ui-selected');
 			} else {
 				var _nowY = nowY;
 				var _nowX = nowX;
@@ -693,39 +699,39 @@ function typing(event) {
 				while(_nowX >= 0) {
 					_nowY = nowY;
 					while(_nowY >= 0) {
-						var nextRowspan = parseInt($('td[cols='+_nowX+'][rows='+_nowY+']').attr('rowspan'));
-						var nextColspan = parseInt($('td[cols='+_nowX+'][rows='+_nowY+']').attr('colspan'));
+						var nextRowspan = parseInt($('td[cols=' + _nowX + '][rows=' + _nowY + ']').attr('rowspan'));
+						var nextColspan = parseInt($('td[cols=' + _nowX + '][rows=' + _nowY + ']').attr('colspan'));
 						var lastColspan = parseInt($(sNode).attr('colspan')) - 1;
 						var lastRowspan = parseInt($(sNode).attr('rowspan')) - 1;
 						$(sNode).removeClass('ui-selected');
 						//下一个单元格行列不合并 
 						if(!nextRowspan && !nextColspan) {
-						//	$("[pos='" + nextX + "-" + (nextY - lastRowspan) + "']").addClass('ui-selected');
-							$('td[cols='+nextX+'][rows='+(nextY - lastRowspan)+']').addClass('ui-selected');
+							//	$("[pos='" + nextX + "-" + (nextY - lastRowspan) + "']").addClass('ui-selected');
+							$('td[cols=' + nextX + '][rows=' + (nextY - lastRowspan) + ']').addClass('ui-selected');
 						}
 						//下一个单元格只列合并 
 						if(!nextRowspan && nextColspan) {
-							if($('td[cols='+_nowX+'][rows='+nextY+']').length > 0) {
+							if($('td[cols=' + _nowX + '][rows=' + nextY + ']').length > 0) {
 								u1++;
-								(u1 == 1) && ($('td[cols='+_nowX+'][rows='+nextY+']').addClass('ui-selected'));
+								(u1 == 1) && ($('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('ui-selected'));
 							}
 
 						}
 						//下一个单元格只行合并 
 						if(nextRowspan && !nextColspan) {
 
-							if($('td[cols='+nextX+'][rows='+_nowY+']').length > 0) {
+							if($('td[cols=' + nextX + '][rows=' + _nowY + ']').length > 0) {
 								u2++;
-								(u2 == 1) && ($('td[cols='+nextX+'][rows='+_nowY+']').addClass('ui-selected'));
+								(u2 == 1) && ($('td[cols=' + nextX + '][rows=' + _nowY + ']').addClass('ui-selected'));
 							}
 
 						}
 						//下一个单元格行列合并 
 						if(nextRowspan && nextColspan) {
 
-							if($('td[cols='+_nowX+'][rows='+_nowY+']').length > 0) {
+							if($('td[cols=' + _nowX + '][rows=' + _nowY + ']').length > 0) {
 								u3++;
-								(u3 == 1) && ($('td[cols='+_nowX+'][rows='+_nowY+']').addClass('ui-selected'));
+								(u3 == 1) && ($('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('ui-selected'));
 
 							}
 						}
@@ -787,7 +793,7 @@ iTable.prototype.setCss = function() {
 	tBody.css({
 		'margin-left': 4,
 		'margin-top': bTop + 70,
-		'width': viewWidth-4,
+		'width': viewWidth - 4,
 		'height': viewHeight - bTop - 110,
 		'overflow': 'scroll',
 		'position': 'relative'
@@ -797,10 +803,9 @@ iTable.prototype.setCss = function() {
 	$(window).resize(function() {
 		var viewWidth = $(window).width();
 		var viewHeight = $(window).height();
-		that.width(viewWidth-4);
+		that.width(viewWidth - 4);
 		that.height(viewHeight - bTop - 113);
-		
-		
+
 	});
 
 }
@@ -863,7 +868,14 @@ iTable.prototype.fillTd = function(tid) {
 
 			var tr = $(this).parent();
 			$('.ui-selected').removeClass('ui-selected');
+			$('.wBorder').remove();
 			$(this).addClass('ui-selected');
+			var width = $(this)[0].offsetWidth,
+				height = $(this)[0].offsetHeight;
+			var left = $(this)[0].offsetLeft,
+				top = $(this)[0].offsetTop;
+			that.wBorder(top, left, width, height);
+			//t.createMask(left, top, width, height,'',''); 
 			var xCoo = Number($(this).attr('cols')) - 1,
 				yCoo = Number($(this).attr('rows')) - 1;
 			if($('.disbox').length > 0) {
@@ -898,6 +910,162 @@ iTable.prototype.fillTd = function(tid) {
 	});
 }
 
+iTable.prototype.wBorderSelect = function(obj) {
+
+	var topArr = [],
+		leftArr = [];
+	var colsArr = [],
+		rowsArr = [];
+	var topMin, leftMin, totalWidth = 0,
+		totalHeight = 0;
+	for(var i = 0; i < obj.length; i++) {
+		var top = obj[i].offsetTop,
+			left = obj[i].offsetLeft,
+			width = obj[i].offsetWidth,
+			height = obj[i].offsetHeight;
+		if(top < _.min(topArr)) {
+			if($('.wsBorder').length>0){
+				$('.wsBorder').remove();
+			}			
+		}
+		if(left < _.min(leftArr)) {
+			if($('.wsBorder').length>0){
+				$('.wsBorder').remove();
+			}
+		}
+		topArr.push(top);
+		leftArr.push(left);
+		var col = parseInt($(obj[i]).attr('cols')) + parseInt($(obj[i]).attr('colspan'));
+		topMin = _.min(topArr), leftMin = _.min(leftArr);
+		if(top == _.min(topArr)) {
+			totalWidth += width;
+		}
+		if(left == _.min(leftArr)) {
+			totalHeight += height;
+		}
+		var wsBorder = $('<div class="wsBorder"></div>');
+		wsBorder.css({
+			'width': totalWidth,
+			'height': height + 6,
+			'top': topMin,
+			'left': leftMin
+		});
+		var topsB = $('<div></div>');
+		topsB.css({
+			'width': totalWidth,
+			'height': '2px',
+			'position': 'absolute',
+			'left': leftMin,
+			'top': topMin,
+			'background': 'rgb(82, 146, 247)'
+		});
+		var bottomsB = $('<div></div>');
+		bottomsB.css({
+			'width': totalWidth,
+			'height': '2px',
+			'position': 'absolute',
+			'left': leftMin,
+			'top': topMin + totalHeight,
+			'background': 'rgb(82, 146, 247)'
+		});
+		var leftB = $('<div></div>');
+		leftB.css({
+			'width': '2px',
+			'height': totalHeight,
+			'position': 'absolute',
+			'left': leftMin,
+			'top': topMin,
+			'background': 'rgb(82, 146, 247)'
+		});
+		var rightB = $('<div></div>');
+		rightB.css({
+			'width': '2px',
+			'height': totalHeight,
+			'position': 'absolute',
+			'left': leftMin + totalWidth,
+			'top': topMin,
+			'background': 'rgb(82, 146, 247)'
+		});
+		var corner = $('<div class="scorner"></div>');
+	    corner.css({
+		'top': topMin + totalHeight - 2,
+		'left': leftMin + totalWidth - 2,
+
+	    });
+	}
+//	if(wsBorder.length > 0) {
+		wsBorder.append(topsB);
+		wsBorder.append(bottomsB);
+		wsBorder.append(leftB);
+		wsBorder.append(rightB);
+		wsBorder.append(corner);
+		this.container.append(wsBorder);
+//	}
+
+}
+
+iTable.prototype.wBorder = function(top, left, width, height) {
+	if($('.wsBorder').length>0){
+		$('.wsBorder').remove();
+	}	
+	var wBorder = $('<div class="wBorder"></div>');
+	wBorder.css({
+		'width': width,
+		'height': height + 6,
+		'top': left,
+		'left': top
+	});
+	var topB = $('<div></div>');
+	topB.css({
+		'width': width,
+		'height': '2px',
+		'position': 'absolute',
+		'left': left,
+		'top': top,
+		'background': 'rgb(82, 146, 247)'
+	});
+	wBorder.append(topB);
+	var leftB = $('<div></div>');
+	leftB.css({
+		'width': '2px',
+		'height': height,
+		'position': 'absolute',
+		'left': left,
+		'top': top,
+		'background': 'rgb(82, 146, 247)'
+	});
+	wBorder.append(leftB);
+	var rightB = $('<div></div>');
+	rightB.css({
+		'width': '2px',
+		'height': height,
+		'position': 'absolute',
+		'left': parseInt(left + width),
+		'top': top,
+		'background': 'rgb(82, 146, 247)'
+	});
+	wBorder.append(rightB);
+	var bottomB = $('<div></div>');
+	bottomB.css({
+		'width': width,
+		'height': '2px',
+		'position': 'absolute',
+		'left': left,
+		'top': top + height,
+		'background': 'rgb(82, 146, 247)'
+	});
+	var corner = $('<div class="corner"></div>');
+	corner.css({
+		'top': top + height - 2,
+		'left': left + width - 2,
+
+	});
+	wBorder.append(corner);
+	wBorder.append(bottomB);
+	this.container.append(wBorder);
+
+}
+
 iTable.prototype.lightCoor = function(obj) {
 
 	var target = obj;
@@ -914,15 +1082,15 @@ iTable.prototype.lightCoor = function(obj) {
 			$('.leftTable').find('tr').eq(i).find('td').addClass('lCoo');
 		}
 		for(var j = cols; j < cols + cSpan + 1; j++) {
-			$('.titleTable tr').find('td').eq(j-1).addClass('lCoo');
+			$('.titleTable tr').find('td').eq(j - 1).addClass('lCoo');
 		}
 
 	}
 
 }
 
-iTable.prototype._try=function(){
-	 
+iTable.prototype._try = function() {
+
 }
 
 function getStrLength(str) {
@@ -987,7 +1155,7 @@ iTable.prototype.createHeader = function() {
 iTable.prototype.fontFamily = function() {
 	var menu = this.createSelection('fontFamily', this.settings.fontFamily);
 	var sel_a = $(menu).find('ul li a');
-	$(menu).find('#fontFamily').attr('defaultClass',sel_a.eq(0).attr('class'));
+	$(menu).find('#fontFamily').attr('defaultClass', sel_a.eq(0).attr('class'));
 	var className, curClass;
 	var selThem;
 	sel_a.on('click', function() {
@@ -1019,7 +1187,7 @@ iTable.prototype.fontFamily = function() {
 	});
 	sel_a.mouseout(function() {
 		$(this).css({
-			'background':'#FFFFFF'
+			'background': '#FFFFFF'
 		});
 	});
 
@@ -1028,7 +1196,7 @@ iTable.prototype.fontFamily = function() {
 iTable.prototype.fontSize = function() {
 	var menu = this.createSelection('fontSize', this.settings.fontSize);
 	var sel_a = $(menu).find('ul li a');
-	$(menu).find('#fontFamily').attr('defaultClass',sel_a.eq(0).attr('class'));
+	$(menu).find('#fontFamily').attr('defaultClass', sel_a.eq(0).attr('class'));
 	var className, curClass;
 	var selThem;
 	sel_a.on('click', function() {
@@ -1201,30 +1369,16 @@ iTable.prototype.textAlign = function() {
 iTable.prototype.express = function() {
 	var select = this.createSelection('express', this.settings.express);
 	var sel_a = $(select).find('ul li a');
-	var className, curClass;
-	var selThem;
 	var that = this;
 	sel_a.on('click', function() {
 		var ways = $(this).attr('class').replace('fx_', '');
 		that.formula(ways);
 	});
-
-	sel_a.mouseover(function() {
-		$(this).css({
-			'background': '#ECECEC'
-		});
-
-	});
-	sel_a.mouseout(function() {
-		$(this).css({
-			'background': '#FFFFFF'
-		});
-	});
 }
 
 //列插入
 iTable.prototype.insertCol = function() {
-	var simMenu = this.createSimpleMenu('editRowCol', '插入列');
+	var simMenu = this.createSimpleMenu('editRowCol insertCol', '');
 	var sel_a = $(simMenu).children(0);
 
 	var that = this;
@@ -1280,7 +1434,7 @@ iTable.prototype.insertCol = function() {
 			for(var i = 0; i < that.rowCount + 1; i++) {
 				var time = 0;
 
-				for(var j = xIndex; j > -1; j--) { 
+				for(var j = xIndex; j > -1; j--) {
 					var cols = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('cols'));
 
 					if(cols == xIndex) {
@@ -1288,7 +1442,7 @@ iTable.prototype.insertCol = function() {
 						var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
 						if(cspan >= 2) {
 							$('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cspan + 1);
-							 
+
 						} else {
 							if(rspan > 1) {
 								for(var r = i; r < i + rspan; r++) {
@@ -1301,7 +1455,7 @@ iTable.prototype.insertCol = function() {
 
 						}
 					} else {
-						if($('td[cols=' + j + '][rows=' + i + ']').length > 0) {							
+						if($('td[cols=' + j + '][rows=' + i + ']').length > 0) {
 							time++;
 							if(time == 1) {
 								var cspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
@@ -1314,7 +1468,7 @@ iTable.prototype.insertCol = function() {
 
 								}
 							}
-						} 
+						}
 
 					}
 				}
@@ -1331,7 +1485,7 @@ iTable.prototype.insertCol = function() {
 }
 //行插入
 iTable.prototype.insertRow = function() {
-	var simMenu = this.createSimpleMenu('editRowCol', '插入行');
+	var simMenu = this.createSimpleMenu('editRowCol insertRow', '');
 	var sel_a = $(simMenu).children(0);
 
 	var that = this;
@@ -1356,9 +1510,9 @@ iTable.prototype.insertRow = function() {
 			for(var _y = yMin; _y < yMax + 1; _y++) {
 				var tr = $('<tr></tr>');
 				for(var _x = 0; _x < that.cellCount + 1; _x++) {
-					var th=$('<th></th>');
+					var th = $('<th></th>');
 					if($('td[cols=' + _x + '][rows=' + yMin + ']').length > 0) {
-						if(_x==0){
+						if(_x == 0) {
 							tr.append(th);
 						}
 						tr.append('<td style="background:orange"></td>');
@@ -1381,8 +1535,8 @@ iTable.prototype.insertRow = function() {
 
 					if(rows == yIndex) {
 						//console.log(rows,j);
-						if(j==2){
-							var th=$('<th></th>');
+						if(j == 2) {
+							var th = $('<th></th>');
 							tr.append(th);
 						}
 						var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
@@ -1398,7 +1552,7 @@ iTable.prototype.insertRow = function() {
 							var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
 							var cspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
 							if(rspan >= 2) {
-								if(parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rows'))+parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan'))-1>=yIndex){
+								if(parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rows')) + parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) - 1 >= yIndex) {
 									$('td[cols=' + j + '][rows=' + i + ']').attr('rowspan', rspan + 1);
 								}
 
@@ -1422,7 +1576,7 @@ iTable.prototype.insertRow = function() {
 }
 //列删除
 iTable.prototype.deleteCol = function() {
-	var simMenu = this.createSimpleMenu('editRowCol', '删除列');
+	var simMenu = this.createSimpleMenu('editRowCol delCol', '');
 	var sel_a = $(simMenu).children(0);
 
 	var that = this;
@@ -1433,8 +1587,8 @@ iTable.prototype.deleteCol = function() {
 		var xMax, xMin, yMax, yMin;
 		var sNode = $('.ui-selected');
 		if(sNode.length >= 2) {
-             
-             	for(var i = 0; i < sNode.length; i++) {
+
+			for(var i = 0; i < sNode.length; i++) {
 				var cols = parseInt(sNode.eq(i).attr('cols'));
 				var rows = parseInt(sNode.eq(i).attr('rows'));
 				var cAdd = parseInt(sNode.eq(i).attr('colspan')) || 1;
@@ -1489,7 +1643,7 @@ iTable.prototype.deleteCol = function() {
 
 //行删除
 iTable.prototype.deleteRow = function() {
-	var simMenu = this.createSimpleMenu('editRowCol', '删除行');
+	var simMenu = this.createSimpleMenu('editRowCol delRow', '');
 	var sel_a = $(simMenu).children(0);
 
 	var that = this;
@@ -1499,8 +1653,8 @@ iTable.prototype.deleteRow = function() {
 
 		} else {
 			var index = parseInt(sNode.attr('rows'));
-			 var yIndex = parseInt(sNode.attr('rows'));
-            // var xIndex = parseInt($(obj).attr('cols'));
+			var yIndex = parseInt(sNode.attr('rows'));
+			// var xIndex = parseInt($(obj).attr('cols'));
 			for(var i = index; i > -1; i--) {
 				//var tr=$('<tr></tr>');
 				//var time = 0;
@@ -1517,11 +1671,11 @@ iTable.prototype.deleteRow = function() {
 					} else {
 						if($('td[cols=' + j + '][rows=' + i + ']').length > 0) {
 							var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
-							if(rspan >= 2){
-								 if(parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rows'))+parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan'))-1>=yIndex){
-								 	$('td[cols=' + j + '][rows=' + i + ']').attr('rowspan', rspan - 1);
+							if(rspan >= 2) {
+								if(parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rows')) + parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) - 1 >= yIndex) {
+									$('td[cols=' + j + '][rows=' + i + ']').attr('rowspan', rspan - 1);
 								}
-								
+
 							}
 
 						}
@@ -1754,7 +1908,6 @@ iTable.prototype.createSelection = function(id, menus) {
 	for(var index in menus) {
 		arr.push(index);
 		selectHead.text(arr[0]);
-		 
 		selectLi = $('<li><a class="' + menus[index] + '">' + index + '</a></li>');
 		selectUl.append(selectLi);
 	}
@@ -1769,7 +1922,7 @@ iTable.prototype.createSelection = function(id, menus) {
 
 	selectUl.find('li a').on('click', function() {
 		$(selectHead[0]).text($(this).text());
-		$(selectHead[0]).attr('curClass',$(this).attr('class')); 
+		$(selectHead[0]).attr('curClass', $(this).attr('class'));
 	});
 	return selectionBox;
 }
@@ -1978,7 +2131,7 @@ iTable.prototype.setIndex = function() {
 			var coo = cellStrArray[j];
 			cell.setAttribute('rows', i + 1);
 			cell.setAttribute('cols', col + 1);
-		//	cell.setAttribute('pos', col + '-' + i);
+			//	cell.setAttribute('pos', col + '-' + i);
 		}
 	}
 
@@ -1995,7 +2148,7 @@ iTable.prototype.updateLeft = function(index) {
 	//		var th = $("<td>" + (i + 1) + "</td>");
 	//		th.appendTo(tr);
 	//	}
-    //
+	//
 	//}
 	$('.titleTable tbody tr').eq(index).find('td').append('<td></td>');
 	for(var j = index; j < this.rowCount; j++) {
@@ -2009,9 +2162,9 @@ iTable.prototype.updateLeft = function(index) {
 iTable.prototype.updateTop = function(index) {
 	var that = this;
 	//$('.titleTable').empty();
-    $('.titleTable colgroup').find('col').eq(index).after('<col style="width:100px">');
+	$('.titleTable colgroup').find('col').eq(index).after('<col style="width:100px">');
 	$('.titleTable tbody tr').find('td').eq(index).after('<td></td>');
-	for(var j = index; j < this.cellCount-1; j++) {
+	for(var j = index; j < this.cellCount - 1; j++) {
 		var td = $("<td>" + IntToChr(j) + "</td>");
 		$('.titleTable tbody tr').find('td').eq(j).text(IntToChr(j));
 	}
@@ -2019,139 +2172,128 @@ iTable.prototype.updateTop = function(index) {
 	//for(var i = 0; i < 1; i++) {
 	//	var tr = $("<tr></tr>");
 	//	tr.appendTo($(".titleTable"));
-    //
+	//
 	//	for(var j = 0; j < this.cellCount; j++) {
 	//		var td = $("<td>" + IntToChr(j) + "</td>");
 	//		td.appendTo(tr);
 	//	}
-    //
+	//
 	//}
-
 
 }
 //拖拽放宽列
-iTable.prototype.largeCol=function(){
-     var container=this.container;
-     var that=this;
-     var event=window.event || arguments[0];
-     var exW=$('.yOrder').outerWidth();
-     $('.titleTable tr td').each(function(event){
-     	
-     	$(this).off('mousedown').on('mousedown',function(event){
-     		 
-     	   var td=$(this);
-     	   var index=$(this).index();
-     	   var sline=$('<div class="sline"></div>');
-     	   var lline=$('<div class="lline"></div>');
-     	   var h=$(this).height();
-     	   var w=$(this).width();
-     	   var x=event.clientX-exW;
-     	  
-     	   
-     	   sline.css({
-     	   	'left':x,   
-     	   	'height':h
-     	   });
-     	   
-     	   $(this).append(sline);
-     	   
-     	   $('body').mousemove(function(event){
-     	     var allH=$('.dataTable').outerHeight();
-     	     var l=event.clientX-exW;
-     	     var move=l-x;
-     	     
-     	     
-             if(w+move<20){
-     	   	    return;
-     	     }else{
-     	     	lline.css({    	   	 	
-     	   	 	'height':allH,
-     	   	 	'left':event.clientX      	   
-     	        });
-     	        $('.dataTable colgroup col').eq(index).css('width',w+move);
-     	        $('.titleTable colgroup col').eq(index).css('width',w+move);
-     	         $(container).append(lline);
-     	     }
-     	     
-             
-     	    
-     	   
-     	   });
-     	   
-     	   
-     	   $('body').mouseup(function(event){           
-     	     $('body').off('mousemove');
-     	     $(lline).remove();
-     	     $(sline).remove();
-     	    });
-        });
-        
-     });
-    
+iTable.prototype.largeCol = function() {
+	var container = this.container;
+	var that = this;
+	var event = window.event || arguments[0];
+	var exW = $('.yOrder').outerWidth();
+	$('.titleTable tr td').each(function(event) {
+
+		$(this).off('mousedown').on('mousedown', function(event) {
+
+			var td = $(this);
+			var index = $(this).index();
+			var sline = $('<div class="sline"></div>');
+			var lline = $('<div class="lline"></div>');
+			var h = $(this).height();
+			var w = $(this).width();
+			var x = event.clientX - exW;
+
+			sline.css({
+				'left': x,
+				'height': h
+			});
+
+			$(this).append(sline);
+
+			$('body').mousemove(function(event) {
+				var allH = $('.dataTable').outerHeight();
+				var l = event.clientX - exW;
+				var move = l - x;
+
+				if(w + move < 20) {
+					return;
+				} else {
+					lline.css({
+						'height': allH,
+						'left': event.clientX
+					});
+					$('.dataTable colgroup col').eq(index).css('width', w + move);
+					$('.titleTable colgroup col').eq(index).css('width', w + move);
+					$(container).append(lline);
+				}
+
+			});
+
+			$('body').mouseup(function(event) {
+				$('body').off('mousemove');
+				$(lline).remove();
+				$(sline).remove();
+			});
+		});
+
+	});
+
 }
 //拖拽放宽行
-iTable.prototype.largeRow=function(){
-     var container=this.container;
-     var that=this;
-     var event=window.event || arguments[0];
-     var exH=$('.yOrder').outerHeight();
-     $('.leftTable tr td').each(function(event){
-     	
-     	$(this).off('mousedown').on('mousedown',function(event){
-     		 
-     	   var td=$(this);
-     	   var index=$(this).parent().index();
-     	    
-     	   var sline=$('<div class="sline"></div>');
-     	   var lline=$('<div class="rline"></div>');
-     	   var h=$(this).height();
-     	   var w=$(this).width();
-     	   var y=event.clientY-exH;
-     	   
-     	   
-     	   sline.css({
-     	   	'top':y,   
-     	   	'height':1,
-     	   	'float':'none',
-     	   	'width':w
-     	   });
-     	   
-     	   $(this).append(sline);
-     	   
-     	   $('body').mousemove(function(event){
-     	     var allW=$('.dataTable').outerWidth();
-     	     var l=event.clientY-exH;
-     	     var move=l-y;
-     	     
-             if(h+move<20){
-     	   	    return;
-     	     }else{
-     	     	lline.css({    	   	 	
-     	   	 	'width':allW,
-     	   	 	'top':event.clientY    	   
-     	        });
-     	     
-     	        $('.dataTable tr th').eq(index).css('height',h+move+1);
-     	        $('.leftTable td').eq(index).css('height',h+move);            
-     	        $(container).append(lline);
-     	     }
-     	        	   
-     	   });
-     	   
-     	   
-     	   $('body').mouseup(function(event){           
-     	     $('body').off('mousemove');
-     	     $(lline).remove();
-     	     $(sline).remove();
-     	    });
-        });
-        
-     });
-    
+iTable.prototype.largeRow = function() {
+	var container = this.container;
+	var that = this;
+	var event = window.event || arguments[0];
+	var exH = $('.yOrder').outerHeight();
+	$('.leftTable tr td').each(function(event) {
+
+		$(this).off('mousedown').on('mousedown', function(event) {
+
+			var td = $(this);
+			var index = $(this).parent().index();
+
+			var sline = $('<div class="sline"></div>');
+			var lline = $('<div class="rline"></div>');
+			var h = $(this).height();
+			var w = $(this).width();
+			var y = event.clientY - exH;
+
+			sline.css({
+				'top': y,
+				'height': 1,
+				'float': 'none',
+				'width': w
+			});
+
+			$(this).append(sline);
+
+			$('body').mousemove(function(event) {
+				var allW = $('.dataTable').outerWidth();
+				var l = event.clientY - exH;
+				var move = l - y;
+
+				if(h + move < 20) {
+					return;
+				} else {
+					lline.css({
+						'width': allW,
+						'top': event.clientY
+					});
+
+					$('.dataTable tr th').eq(index).css('height', h + move + 1);
+					$('.leftTable td').eq(index).css('height', h + move);
+					$(container).append(lline);
+				}
+
+			});
+
+			$('body').mouseup(function(event) {
+				$('body').off('mousemove');
+				$(lline).remove();
+				$(sline).remove();
+			});
+		});
+
+	});
+
 }
 
-
- 
 //创建公式输入框
 iTable.prototype.fillBlank = function() {
 	var fxBox = $('<div class="fx"></div>');
@@ -2488,60 +2630,130 @@ iTable.prototype.tdTofx = function(obj) {
 iTable.prototype.getValue = function(arr) {
 	arr = arr.toString();
 
-	var xCoo = arr.replace(/[a-zA-Z]*/, ' '),yCoo = arr.replace(/[1-9]\d*/, ' ');
+	var xCoo = arr.replace(/[a-zA-Z]*/, ' '),
+		yCoo = arr.replace(/[1-9]\d*/, ' ');
 	yCoo = yCoo.charCodeAt(0) - 96;
-	xCoo--,yCoo--;
+	xCoo--, yCoo--;
 	var value;
 	var text = Number($('td[cols=' + xCoo + '][rows=' + yCoo + ']').text());
 	if(typeof(text) != 'number') {
 		value = 0;
 	} else {
-		(!!text)?value = Number(text):value = 0;
+		(!!text) ? value = Number(text): value = 0;
 	}
 	return value;
 }
 
-iTable.prototype.modal=function(_style,_content){
-	var modalBox=$('<div class="itModal"></div>');
-	var mTitle=_style.title;
-	var closeBtn=$('<a class="itModal-close">x</a>');
-	var modalTitle=$('<div class="itModal-title">'+mTitle+'</div>');
+iTable.prototype.modal = function(_style, _content) {
+	var modalBox = $('<div class="itModal"></div>');
+	var mTitle = _style.title;
+	var closeBtn = $('<a class="itModal-close">x</a>');
+	var modalTitle = $('<div class="itModal-title">' + mTitle + '</div>');
 	modalBox.css({
-		'width':parseInt(_style.width),
-		'height':parseInt(_style.width),
-		'position':'absolute',
-		'top':'100px',
-		'left':'500px',
-		'background':'red',
-//		'margin-left':-parseInt(_style.width)/2,
-//		'margin-top':-parseInt(_style.width)/2
+		'width': parseInt(_style.width),
+		'height': parseInt(_style.width),
+		'position': 'absolute',
+		'top': '100px',
+		'left': '500px',
+		'background': 'red',
+		//		'margin-left':-parseInt(_style.width)/2,
+		//		'margin-top':-parseInt(_style.width)/2
 	});
 	modalTitle.append(closeBtn);
 	modalBox.append(modalTitle);
 	$('body').append(modalBox);
 	//modalBox.on('mousedown',this.iDrag(event));
 	this.iDrag(modalBox);
-	 
-	
+
 }
 
-iTable.prototype.iDrag=function(obj){
-	 var event=window.event || arguments[0];
-	 obj.on('mousedown',function(event){
-	 	 var disX = event.clientX - this.offsetLeft;
-         var disY = event.clientY - this.offsetTop;
-	 	 
-	 	 obj.on('mousemove',function(event){   
-	 	 	obj.css({
-	 	 		'left':event.clientX - disX,
-	 	 		'top':event.clientY - disY
-	 	 	});
-	 	 });
-	 	 
-	 });
-	 obj.on('mouseup',function(){
-	 	obj.off('mousemove');
-	 });
+iTable.prototype.leftBar = function() {
+	var box = $('<div class="leftbar"></div>');
+	var span = $('<span class="ltoggle tl"></span>');
+
+	box.append(span);
+	$('body').append(box);
+	span.on('click', function() {
+		var l = parseInt($('.leftbar').css('left'));
+		if(l < 0) {
+			$('.leftbar').stop().animate({
+				left: "0px"
+			});
+			$('.ltoggle').removeClass('tr').addClass('tl')
+		} else {
+			$('.leftbar').stop().animate({
+				left: "-400px"
+			});
+			$('.ltoggle').removeClass('tl').addClass('tr')
+		}
+
+	});
+	this.leftBarHandle();
+	//callback();
+}
+iTable.prototype.leftBarHandle = function(callback) {
+	if(callback) {
+		callback();
+	}
+}
+iTable.prototype.charts = function() {
+	var menu = this.createSimpleMenu('charts');
+	this.chartsHandler();
+}
+
+iTable.prototype.chartsHandler = function(callback) {
+	if(callback) {
+		callback();
+	}
+}
+
+iTable.prototype.dataSource = function() {
+	var menu = this.createSimpleMenu('dataSource');
+	this.dataSourceHandler();
+}
+iTable.prototype.dataSourceHandler = function(callback) {
+	if(callback) {
+		callback();
+	}
+}
+
+iTable.prototype.dataSet = function() {
+	var menu = this.createSimpleMenu('dataSet');
+	this.dataSetHandler();
+}
+iTable.prototype.dataSetHandler = function(callback) {
+	if(callback) {
+		callback();
+	}
+}
+
+iTable.prototype.dataSearch = function() {
+	var menu = this.createSimpleMenu('dataSearch');
+	this.dataSetHandler();
+}
+iTable.prototype.dataSearchHandler = function(callback) {
+	if(callback) {
+		callback();
+	}
+}
+
+iTable.prototype.iDrag = function(obj) {
+	var event = window.event || arguments[0];
+	obj.on('mousedown', function(event) {
+		var disX = event.clientX - this.offsetLeft;
+		var disY = event.clientY - this.offsetTop;
+
+		obj.on('mousemove', function(event) {
+			obj.css({
+				'left': event.clientX - disX,
+				'top': event.clientY - disY
+			});
+		});
+
+	});
+	obj.on('mouseup', function() {
+		obj.off('mousemove');
+	});
 }
 
 //高亮单元格
@@ -2556,8 +2768,8 @@ function lightTd(tmp) {
 	if(posY == null || posX == null || posY.length == 0 || String(posY).length == 0) {
 		return;
 	}
-//	var lTd = $("[pos='" + posX + "-" + posY + "']");
-	var lTd = $('td[cols=' + (posX+1)+ '][rows=' +(posY+1) + ']');
+	//	var lTd = $("[pos='" + posX + "-" + posY + "']");
+	var lTd = $('td[cols=' + (posX + 1) + '][rows=' + (posY + 1) + ']');
 	var width = lTd[0].offsetWidth,
 		height = lTd[0].offsetHeight;
 	var left = lTd[0].offsetLeft,
@@ -2623,6 +2835,7 @@ function set_text_value_position(obj, spos) {
 		rng.select();
 	}
 }
+
 //取消冒泡
 function stopPropagation(e) {
 	var e = window.event || arguments[0];
@@ -2718,6 +2931,13 @@ iTable.prototype.init = function() {
 	this.rMenus();
 	this.frameSelect();
 	this.keyCursor();
+	this.leftBar();
+	this.charts();
+	this.dataSource();
+	this.dataSet();
+	this.dataSearch();
+	this.largeCol();
+	this.largeRow();
 }
 
 var settings = {
@@ -2728,7 +2948,6 @@ var settings = {
 		'宋体': 'font_Song',
 		'楷体': 'font_Kai',
 		'微软雅黑': 'font_Mirco'
-
 	},
 	fontSize: {
 		'10': 'fsize_10',
@@ -2838,14 +3057,12 @@ var settings = {
 		}
 	},
 	express: {
-		'求和': 'fx_sum',
-		'平均': 'fx_avg',
-		'计数': 'fx_count',
-		'最大': 'fx_max',
-		'最小': 'fx_min'
-
+		'sum': 'fx_sum',
+		'avg': 'fx_avg',
+		'count': 'fx_count',
+		'max': 'fx_max',
+		'min': 'fx_min'
 	}
-
 }
 
 var box = $('.box');
@@ -2857,7 +3074,7 @@ var tabs = {
 	fontItalic: true,
 	fontOverline: true,
 	fontBgcolor: true,
-	 
+
 	mergeTd: true,
 	splitTd: true,
 	textAlign: true,
@@ -2866,10 +3083,12 @@ var t = new iTable(box, settings, tabs);
 
 t.init();
 t._try();
-t.largeCol();
-t.largeRow();
+
 //t.modal({
 //	width:'300px',
 //	height:'200px',
 //	title:'这是标题',
 //});
+t.leftBarHandle(function() {
+	console.log('do sth');
+});

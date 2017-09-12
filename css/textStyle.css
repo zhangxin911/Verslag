@@ -6,7 +6,7 @@
 		display: inline-block;
 		text-align: center;
 		line-height: 28px;
-		background: url(../img/calign.png) no-repeat center;
+		background: url(../images/img/calign.png) no-repeat center;
 	}
 	
 	.falign_left {
@@ -24,21 +24,21 @@
 	.ffalign_left {
 		width: 16px;
 		height: 16px;
-		background: url(../img/lalign.png) no-repeat;
+		background: url(../images/img/lalign.png) no-repeat;
 		display: block;
 	}
 	
 	.ffalign_right {
 		width: 16px;
 		height: 16px;
-		background: url(../img/ralign.png) no-repeat;
+		background: url(../images/img/ralign.png) no-repeat;
 		display: block;
 	}
 	
 	.ffalign_center {
 		width: 16px;
 		height: 16px;
-		background: url(../img/calign.png) no-repeat;
+		background: url(../images/img/calign.png) no-repeat;
 		display: block;
 	}
 
@@ -50,7 +50,7 @@
 		display: inline-block;
 		text-align: center;
 		line-height: 28px;
-		background: url(../img/fcolor.png) no-repeat center;
+		background: url(../images/img/fcolor.png) no-repeat center;
 	}
 	
 	.fbold {
@@ -59,7 +59,7 @@
 		display: inline-block;
 		text-align: center;
 		line-height: 24px;
-		background: url(../img/fbold.png) no-repeat center;
+		background: url(../images/img/fbold.png) no-repeat center;
 		cursor: pointer;
 	}
 	
@@ -69,7 +69,7 @@
 		display: inline-block;
 		text-align: center;
 		line-height: 24px;
-		background: url(../img/fitalic.png) no-repeat center;
+		background: url(../images/img/fitalic.png) no-repeat center;
 	}
 	
 	.foverline {
@@ -78,7 +78,7 @@
 		display: inline-block;
 		text-align: center;
 		line-height: 24px;
-		background: url(../img/overline.png) no-repeat center;
+		background: url(../images/img/overline.png) no-repeat center;
 	}
 	
 	.fcolor {
@@ -87,7 +87,7 @@
 		display: inline-block;
 		text-align: center;
 		line-height: 28px;
-		background: url(../img/fcolor.png) no-repeat center;
+		background: url(../images/img/fcolor.png) no-repeat center;
 	}
 	
 	.fborder {
@@ -96,7 +96,7 @@
 		display: inline-block;
 		text-align: center;
 		line-height: 28px;
-		background: url(../img/fborder.png) no-repeat center;
+		background: url(../images/img/fborder.png) no-repeat center;
 	}
 	
 	.ffill {
@@ -105,7 +105,7 @@
 		display: inline-block;
 		text-align: center;
 		line-height: 28px;
-		background: url(../img/ffillcolor.png) no-repeat center;
+		background: url(../images/img/ffillcolor.png) no-repeat center;
 	}
 	/*  字体类型   font_ */
 	
@@ -280,7 +280,7 @@
 		display: inline-block;
 		text-align: center;
 		line-height: 28px;
-		background: url(../img/ffillcolor.png) no-repeat center;
+		background: url(../images/img/ffillcolor.png) no-repeat center;
 	}
 	
 	.ffill {
@@ -289,7 +289,7 @@
 		display: inline-block;
 		text-align: center;
 		line-height: 28px;
-		background: url(../img/ffillcolor.png) no-repeat center;
+		background: url(../images/img/ffillcolor.png) no-repeat center;
 	}
 	
 	.ffill_black {
