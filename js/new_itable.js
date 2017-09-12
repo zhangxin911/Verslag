@@ -122,14 +122,20 @@ iTable.prototype.createTip = function() {
 }
 
 iTable.prototype.frameSelect = function() {
-	var that = this;
-	var cWidth = parseInt($(this.container).width());
-	var cHeight = parseInt($(this.container).height());
-
-	var disWidth = parseInt($('.yOrder').outerWidth());
-	var disHeight = parseInt($('.xOrder').outerHeight()) + parseInt($('.header').outerHeight());
-
-	$(this.container).on('mousedown', function() {
+//	var that = this;
+//	var cWidth = parseInt($(this.container).width());
+//	var cHeight = parseInt($(this.container).height());
+//
+//	var disWidth = parseInt($('.yOrder').outerWidth());
+//	var disHeight = parseInt($('.xOrder').outerHeight()) + parseInt($('.header').outerHeight());
+	$(this.container).on('mousedown', areaChoose);
+}
+function areaChoose(){
+	    var cWidth = parseInt($(this.container).width());
+	    var cHeight = parseInt($(this.container).height());
+	    var disWidth = parseInt($('.yOrder').outerWidth());
+	    var disHeight = parseInt($('.xOrder').outerHeight()) + parseInt($('.header').outerHeight());
+	    var that=t;
 		var fileNodes = $('.dataTable tr td');
 		var isSelect = true;
 		var ev = window.event || arguments[0];
@@ -247,9 +253,9 @@ iTable.prototype.frameSelect = function() {
 			selDiv && selDiv.remove();
 		});
 
-	});
-
+	
 }
+
 Array.prototype.min = function() {
 	var min = this[0];
 	var len = this.length;
@@ -406,7 +412,7 @@ function typing(event) {
 						//下一个单元格行列合并 
 						if(nextRowspan && nextColspan) {
 
-							//		$("[pos='" + _nowX + "-" + _nowY + "']").addClass('picked');
+							// $("[pos='" + _nowX + "-" + _nowY + "']").addClass('picked');
 							$('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked');
 							callZ.wBorder($('.picked'));
 						}
@@ -1036,6 +1042,7 @@ iTable.prototype.wBorderSelect = function(obj) {
 }
 
 iTable.prototype.wBorder = function(obj) {
+	var that=this;
 	if($('.wsBorder').length>0){
 		$('.wsBorder').remove();
 	}
@@ -1100,21 +1107,108 @@ iTable.prototype.wBorder = function(obj) {
 		'left': left + width - 2,
 
 	});
-	wBorder.append(corner);
 	wBorder.append(bottomB);
+	wBorder.append(corner);
+	
 	this.container.append(wBorder);
 	}
 	
 	
 	corner.on('mouseenter',function(){
 		$(this).css('cursor','crosshair');
-//		$('body').on('mousedown',function(){
-//			
-//		})
-//      $('.dataTable tr td').off('click');
+		 
+		$(this).on('mousedown',function(){
+			$(that.container).off('mousedown');
+//			$('body').off('mousedown').on('mousedown',function(){
+//			   
+//		    });
+             var cWidth = parseInt($(this.container).width());
+	    var cHeight = parseInt($(this.container).height());
+	    var disWidth = parseInt($('.yOrder').outerWidth());
+	    var disHeight = parseInt($('.xOrder').outerHeight()) + parseInt($('.header').outerHeight());
+            var fileNodes = $('.dataTable tr td');
+		    var isSelect = true;
+		    var ev = window.event || arguments[0];
+		    var sleft = parseInt($(this).scrollLeft());
+		    var stop = parseInt($(this).scrollTop());
+		    var oX = ev.clientX + sleft;
+		    var oY = ev.clientY - disHeight + stop;
+		    $('.dataTable tr td').off('click');
+		    var _x = null;
+		var _y = null;
+		var selDiv = $('<div class="mapdiv"></div>');
+		selDiv.css({
+			'position': 'absolute',
+			'width': '0px',
+			'height': '0px',
+			'font-size': '0px',
+			'margin': '0px',
+			'padding': '0px',
+			'border': '1px solid #1ab394',
+			'background-color': '#4acfb4',
+			'z-index': '1000',
+			'filter': 'alpha(opacity:60)',
+			'opacity': '0.6',
+			'display': 'none',
+			'left': oX,
+			'top': oY
+		});
+
+		$(that.container).append(selDiv);
+		    $(that.container).on('mousemove',function(){
+		        var evt = window.event || arguments[0];
+			var xArr = [],
+				yArr = [];
+			var sleft = $(this).scrollLeft();
+			var stop = $(this).scrollTop();
+		       	if(selDiv.css('display') == "none") {
+					selDiv.css('display', '');
+				}
+				_x = (evt.x || evt.clientX);
+				_y = (evt.y || evt.clientY);
+
+				_x = _x + sleft;
+				_y = _y + stop - disHeight;
+
+				selDiv.css({
+					'left': Math.min(_x, oX),
+					'top': Math.min(_y, oY),
+					'width': Math.abs(_x - oX),
+					'height': Math.abs(_y - oY)
+				});
+				
+				 if($('.wBorder').length>0){
+				 	
+				 	if( Math.abs(_y - oY)>10){
+				 		console.log(Math.abs(_y - oY));
+				 		$('.wBorder').find('div').eq(1).css('height',Math.abs(_y - oY));
+				 		$('.wBorder').find('div').eq(2).css('height',Math.abs(_y - oY));
+				 		
+				 		//var moveH=Math.abs(_y - oY)-parseInt($('.wBorder').find('div').eq(3).css('top'))-parseInt($('.wBorder').find('div').eq(3).css('height'));
+				 		var moveH=Math.abs(_y - oY)-parseInt($('.wBorder').find('div').eq(3).css('top'))+parseInt($('.wBorder').find('div').eq(1).css('height'));
+				 		$('.wBorder').find('div').eq(3).css('top',moveH);
+				 		$('.wBorder').find('.corner').css('top',moveH);
+				 	}else{
+				 		return;
+				 	}
+				 	
+				 	
+				 }
+				 
+				 
+		    });
+		    $(document).off('mouseup').on('mouseup', function() {
+			    $(that.container).off('mousemove');
+			    //$('.mapdiv').remove();
+		    });
+		});
+        
+      
 	});
 
 }
+
+
 
 iTable.prototype.lightCoor = function(obj) {
 
@@ -2473,7 +2567,7 @@ iTable.prototype.rMenus = function() {
 		return false;
 	});
 
-	$('.dataTable').find('tr td').each(function() {
+	$('.dataTable').find('tr td').each(function() { 
 		$(this).contextmenu(function() {
 			var arr = $('.picked');
 			var obj = this;
