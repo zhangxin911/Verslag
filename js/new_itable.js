@@ -122,138 +122,138 @@ iTable.prototype.createTip = function() {
 }
 
 iTable.prototype.frameSelect = function() {
-//	var that = this;
-//	var cWidth = parseInt($(this.container).width());
-//	var cHeight = parseInt($(this.container).height());
-//
-//	var disWidth = parseInt($('.yOrder').outerWidth());
-//	var disHeight = parseInt($('.xOrder').outerHeight()) + parseInt($('.header').outerHeight());
+	//	var that = this;
+	//	var cWidth = parseInt($(this.container).width());
+	//	var cHeight = parseInt($(this.container).height());
+	//
+	//	var disWidth = parseInt($('.yOrder').outerWidth());
+	//	var disHeight = parseInt($('.xOrder').outerHeight()) + parseInt($('.header').outerHeight());
 	$(this.container).on('mousedown', areaChoose);
 }
-function areaChoose(){
-	    var cWidth = parseInt($(this.container).width());
-	    var cHeight = parseInt($(this.container).height());
-	    var disWidth = parseInt($('.yOrder').outerWidth());
-	    var disHeight = parseInt($('.xOrder').outerHeight()) + parseInt($('.header').outerHeight());
-	    var that=t;
-		var fileNodes = $('.dataTable tr td');
-		var isSelect = true;
-		var ev = window.event || arguments[0];
-		var sleft = parseInt($(this).scrollLeft());
-		var stop = parseInt($(this).scrollTop());
-		var oX = ev.clientX + sleft;
-		var oY = ev.clientY - disHeight + stop;
-		var selDiv = $('<div class="mapdiv"></div>');
-		selDiv.css({
-			'position': 'absolute',
-			'width': '0px',
-			'height': '0px',
-			'font-size': '0px',
-			'margin': '0px',
-			'padding': '0px',
-			'border': '1px solid #1ab394',
-			'background-color': '#4acfb4',
-			'z-index': '1000',
-			'filter': 'alpha(opacity:60)',
-			'opacity': '0.6',
-			'display': 'none',
-			'left': oX,
-			'top': oY
-		});
 
-		$(this).append(selDiv);
-		$('.wBorder').remove();
-		var _x = null;
-		var _y = null;
-		var mergeArr = [];
-		$(that.container).on('mousemove', function() {
-			var evt = window.event || arguments[0];
-			var xArr = [],
-				yArr = [];
-			var sleft = $(this).scrollLeft();
-			var stop = $(this).scrollTop();
-			if(isSelect) {
-				//				if(selDiv.css('display') == "none") {
-				//					selDiv.css('display', 'none');
-				//				}
-				_x = (evt.x || evt.clientX);
-				_y = (evt.y || evt.clientY);
+function areaChoose() {
+	var cWidth = parseInt($(this.container).width());
+	var cHeight = parseInt($(this.container).height());
+	var disWidth = parseInt($('.yOrder').outerWidth());
+	var disHeight = parseInt($('.xOrder').outerHeight()) + parseInt($('.header').outerHeight());
+	var that = t;
+	var fileNodes = $('.dataTable tr td');
+	var isSelect = true;
+	var ev = window.event || arguments[0];
+	var sleft = parseInt($(this).scrollLeft());
+	var stop = parseInt($(this).scrollTop());
+	var oX = ev.clientX + sleft;
+	var oY = ev.clientY - disHeight + stop;
+	var selDiv = $('<div class="mapdiv"></div>');
+	selDiv.css({
+		'position': 'absolute',
+		'width': '0px',
+		'height': '0px',
+		'font-size': '0px',
+		'margin': '0px',
+		'padding': '0px',
+		'border': '1px solid #1ab394',
+		'background-color': '#4acfb4',
+		'z-index': '1000',
+		'filter': 'alpha(opacity:60)',
+		'opacity': '0.6',
+		'display': 'none',
+		'left': oX,
+		'top': oY
+	});
 
-				_x = _x + sleft;
-				_y = _y + stop - disHeight;
+	$(this).append(selDiv);
+	$('.wBorder').remove();
+	var _x = null;
+	var _y = null;
+	var mergeArr = [];
+	$(that.container).on('mousemove', function() {
+		var evt = window.event || arguments[0];
+		var xArr = [],
+			yArr = [];
+		var sleft = $(this).scrollLeft();
+		var stop = $(this).scrollTop();
+		if(isSelect) {
+			//				if(selDiv.css('display') == "none") {
+			//					selDiv.css('display', 'none');
+			//				}
+			_x = (evt.x || evt.clientX);
+			_y = (evt.y || evt.clientY);
 
-				selDiv.css({
-					'left': Math.min(_x, oX),
-					'top': Math.min(_y, oY),
-					'width': Math.abs(_x - oX),
-					'height': Math.abs(_y - oY)
-				});
-				if(_x + 86 >= cWidth) {
-					sleft += 100;
-					$(that.container).scrollLeft(sleft);
+			_x = _x + sleft;
+			_y = _y + stop - disHeight;
+
+			selDiv.css({
+				'left': Math.min(_x, oX),
+				'top': Math.min(_y, oY),
+				'width': Math.abs(_x - oX),
+				'height': Math.abs(_y - oY)
+			});
+			if(_x + 86 >= cWidth) {
+				sleft += 100;
+				$(that.container).scrollLeft(sleft);
+			} else {
+				sleft -= 100;
+				$(that.container).scrollLeft(sleft);
+			}
+			var _l = parseInt(selDiv.css('left'));
+			var _t = parseInt(selDiv.css('top'));
+			var _w = selDiv.width(),
+				_h = selDiv.height();
+
+			for(var i = 0; i < fileNodes.length; i++) {
+
+				var sl = fileNodes[i].offsetWidth + fileNodes[i].offsetLeft;
+				var st = fileNodes[i].offsetHeight + fileNodes[i].offsetTop;
+				if(sl > _l && st > _t && fileNodes[i].offsetLeft < _l + _w && fileNodes[i].offsetTop < _t + _h) {
+
+					var nCols = parseInt($(fileNodes[i]).attr('cols')) - 1;
+					var nRows = parseInt($(fileNodes[i]).attr('rows')) - 1;
+					var nCspan = parseInt($(fileNodes[i]).attr('colspan')) - 1 || 0;
+					var nRspan = parseInt($(fileNodes[i]).attr('rowspan')) - 1 || 0;
+					var expectX = nCols + nCspan;
+					var expectY = nRows + nRspan;
+					xArr.push(nCols);
+					yArr.push(nRows);
+					xArr.push(expectX);
+					yArr.push(expectY);
+					var xMax = xArr.max(),
+						xMin = xArr.min(),
+						yMax = yArr.max(),
+						yMin = yArr.min();
+					var top = $(fileNodes[i])[0].offsetTop,
+						left = $(fileNodes[i])[0].offsetLeft,
+						width = $(fileNodes[i])[0].offsetWidth,
+						height = $(fileNodes[i])[0].offsetHeight;
+
+					$(fileNodes[i]).addClass('picked');
+					//that.wBorderSelect($('.picked'));  
+
 				} else {
-					sleft -= 100;
-					$(that.container).scrollLeft(sleft);
+					$(fileNodes[i]).removeClass('picked');
 				}
-				var _l = parseInt(selDiv.css('left'));
-				var _t = parseInt(selDiv.css('top'));
-				var _w = selDiv.width(),
-					_h = selDiv.height();
-
-				for(var i = 0; i < fileNodes.length; i++) {
-
-					var sl = fileNodes[i].offsetWidth + fileNodes[i].offsetLeft;
-					var st = fileNodes[i].offsetHeight + fileNodes[i].offsetTop;
-					if(sl > _l && st > _t && fileNodes[i].offsetLeft < _l + _w && fileNodes[i].offsetTop < _t + _h) {
-
-						var nCols = parseInt($(fileNodes[i]).attr('cols')) - 1;
-						var nRows = parseInt($(fileNodes[i]).attr('rows')) - 1;
-						var nCspan = parseInt($(fileNodes[i]).attr('colspan')) - 1 || 0;
-						var nRspan = parseInt($(fileNodes[i]).attr('rowspan')) - 1 || 0;
-						var expectX = nCols + nCspan;
-						var expectY = nRows + nRspan;
-						xArr.push(nCols);
-						yArr.push(nRows);
-						xArr.push(expectX);
-						yArr.push(expectY);
-						var xMax = xArr.max(),
-							xMin = xArr.min(),
-							yMax = yArr.max(),
-							yMin = yArr.min();
-						var top = $(fileNodes[i])[0].offsetTop,
-							left = $(fileNodes[i])[0].offsetLeft,
-							width = $(fileNodes[i])[0].offsetWidth,
-							height = $(fileNodes[i])[0].offsetHeight;
-
-						$(fileNodes[i]).addClass('picked');
-						//that.wBorderSelect($('.picked'));  
-
-					} else {
-						$(fileNodes[i]).removeClass('picked');
-					}
-				}
-
-				for(var i = xMin; i < (xMax + 1); i++) {
-					for(var j = yMin; j < (yMax + 1); j++) {
-						//$("[pos='" + i + "-" + j + "']").addClass('picked');
-						if($('td[cols=' + (i + 1) + '][rows=' + (j + 1) + ']').length > 0) {
-							$('td[cols=' + (i + 1) + '][rows=' + (j + 1) + ']').addClass('picked');
-						}
-
-					}
-				}
-				that.wBorderSelect($('.picked'));
-				that.lightCoor($('.picked'));
 			}
 
-		});
+			for(var i = xMin; i < (xMax + 1); i++) {
+				for(var j = yMin; j < (yMax + 1); j++) {
+					//$("[pos='" + i + "-" + j + "']").addClass('picked');
+					if($('td[cols=' + (i + 1) + '][rows=' + (j + 1) + ']').length > 0) {
+						$('td[cols=' + (i + 1) + '][rows=' + (j + 1) + ']').addClass('picked');
+					}
 
-		$(document).off('mouseup').on('mouseup', function() {
-			isSelect = false;
-			selDiv && selDiv.remove();
-		});
+				}
+			}
+			that.wBorderSelect($('.picked'));
+			that.lightCoor($('.picked'));
+		}
 
-	
+	});
+
+	$(document).off('mouseup').on('mouseup', function() {
+		isSelect = false;
+		selDiv && selDiv.remove();
+	});
+
 }
 
 Array.prototype.min = function() {
@@ -392,7 +392,7 @@ function typing(event) {
 							//							$("[pos='" + nextX + "-" + nextY + "']").addClass('picked');
 
 							$('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('picked');
-							 callZ.wBorder($('.picked'));
+							callZ.wBorder($('.picked'));
 
 						}
 						//下一个单元格只列合并 
@@ -400,14 +400,14 @@ function typing(event) {
 
 							//$("[pos='" + _nowX + "-" + nextY + "']").addClass('picked');
 							$('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('picked');
-							 callZ.wBorder($('.picked'));
+							callZ.wBorder($('.picked'));
 						}
 						//下一个单元格只行合并 
 						if(nextRowspan && !nextColspan) {
 
 							//	$("[pos='" + _nowX + "-" + nextY + "']").addClass('picked');
 							$('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('picked');
-							 callZ.wBorder($('.picked'));
+							callZ.wBorder($('.picked'));
 						}
 						//下一个单元格行列合并 
 						if(nextRowspan && nextColspan) {
@@ -485,7 +485,7 @@ function typing(event) {
 				$(sNode).removeClass('picked');
 				$('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('picked');
 				callZ.wBorder($('td[cols=' + nextX + '][rows=' + nextY + ']'));
-				
+
 			} else {
 				var _nowY = nowY + 1;
 				var _nowX = nowX + 1;
@@ -500,28 +500,28 @@ function typing(event) {
 						if(!nextRowspan && !nextColspan) {
 							//$("[pos='" + nextX + "-" + nextY + "']").addClass('picked');
 							$('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('picked');
-                            callZ.wBorder($('.picked'));
+							callZ.wBorder($('.picked'));
 						}
 						//下一个单元格只行合并 
 						if(!nextRowspan && nextColspan) {
 
 							//	$("[pos='" + _nowX + "-" + nextY + "']").addClass('picked');
 							$('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('picked');
-							 callZ.wBorder($('.picked'));
+							callZ.wBorder($('.picked'));
 						}
 						//下一个单元格只列合并 
 						if(nextRowspan && !nextColspan) {
 
 							//	$("[pos='" + nextX + "-" + _nowY + "']").addClass('picked');
 							$('td[cols=' + nextX + '][rows=' + _nowY + ']').addClass('picked');
-							 callZ.wBorder($('.picked'));
+							callZ.wBorder($('.picked'));
 						}
 						//下一个单元格行列合并 
 						if(nextRowspan && nextColspan) {
 
 							//	$("[pos='" + _nowX + "-" + _nowY + "']").addClass('picked');
 							$('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked');
-							 callZ.wBorder($('.picked'));
+							callZ.wBorder($('.picked'));
 						}
 
 						_nowY--;
@@ -617,11 +617,11 @@ function typing(event) {
 						if(!nextRowspan && nextColspan) {
 							if($('td[cols=' + (nextX - nextColspan + 1) + '][rows=' + nextY + ']').length > 0) {
 								r1++;
-								if(r1 == 1){
-								$('td[cols=' + (nextX - nextColspan + 1) + '][rows=' + nextY + ']').addClass('picked');
-								  callZ.wBorder($('.picked'));
+								if(r1 == 1) {
+									$('td[cols=' + (nextX - nextColspan + 1) + '][rows=' + nextY + ']').addClass('picked');
+									callZ.wBorder($('.picked'));
 								}
-								 
+
 							}
 
 						}
@@ -629,9 +629,9 @@ function typing(event) {
 						if(nextRowspan && !nextColspan) {
 							if($('td[cols=' + nextX + '][rows=' + _nowY + ']').length > 0) {
 								r2++;
-								if(r2 == 1){
+								if(r2 == 1) {
 									$('td[cols=' + nextX + '][rows=' + _nowY + ']').addClass('picked');
-									 callZ.wBorder($('.picked'));
+									callZ.wBorder($('.picked'));
 								}
 								//(r2 == 1) && ($('td[cols=' + nextX + '][rows=' + _nowY + ']').addClass('picked'));
 							}
@@ -640,9 +640,9 @@ function typing(event) {
 						if(nextRowspan && nextColspan) {
 							if($('td[cols=' + _nowX + '][rows=' + _nowY + ']').length > 0) {
 								r3++;
-								if(r3==1){
+								if(r3 == 1) {
 									$('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked');
-									 callZ.wBorder($('.picked'));
+									callZ.wBorder($('.picked'));
 								}
 								//(r3 == 1) && ($('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked'));
 							}
@@ -734,7 +734,7 @@ function typing(event) {
 						$(sNode).removeClass('picked');
 						//下一个单元格行列不合并 
 						if(!nextRowspan && !nextColspan) {
-							
+
 							$('td[cols=' + nextX + '][rows=' + (nextY - lastRowspan) + ']').addClass('picked');
 							callZ.wBorder($('.picked'));
 						}
@@ -742,12 +742,12 @@ function typing(event) {
 						if(!nextRowspan && nextColspan) {
 							if($('td[cols=' + _nowX + '][rows=' + nextY + ']').length > 0) {
 								u1++;
-								if(u1==1){
+								if(u1 == 1) {
 									$('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('picked');
 									callZ.wBorder($('.picked'));
 								}
 								//(u1 == 1) && ($('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('picked'));
-								
+
 							}
 
 						}
@@ -756,7 +756,7 @@ function typing(event) {
 
 							if($('td[cols=' + nextX + '][rows=' + _nowY + ']').length > 0) {
 								u2++;
-								if(u2==1){
+								if(u2 == 1) {
 									$('td[cols=' + nextX + '][rows=' + _nowY + ']').addClass('picked');
 									callZ.wBorder($('.picked'));
 								}
@@ -769,7 +769,7 @@ function typing(event) {
 
 							if($('td[cols=' + _nowX + '][rows=' + _nowY + ']').length > 0) {
 								u3++;
-								if(u3==1){
+								if(u3 == 1) {
 									$('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked');
 									callZ.wBorder($('.picked'));
 								}
@@ -912,7 +912,7 @@ iTable.prototype.fillTd = function(tid) {
 			$('.picked').removeClass('picked');
 			$('.wBorder').remove();
 			$(this).addClass('picked');
-			
+
 			that.wBorder($(this));
 			//t.createMask(left, top, width, height,'',''); 
 			var xCoo = Number($(this).attr('cols')) - 1,
@@ -961,12 +961,12 @@ iTable.prototype.wBorderSelect = function(obj) {
 			width = obj[i].offsetWidth,
 			height = obj[i].offsetHeight;
 		if(top < _.min(topArr)) {
-			if($('.wsBorder').length>0){
+			if($('.wsBorder').length > 0) {
 				$('.wsBorder').remove();
-			}			
+			}
 		}
 		if(left < _.min(leftArr)) {
-			if($('.wsBorder').length>0){
+			if($('.wsBorder').length > 0) {
 				$('.wsBorder').remove();
 			}
 		}
@@ -1024,224 +1024,296 @@ iTable.prototype.wBorderSelect = function(obj) {
 			'background': 'rgb(82, 146, 247)'
 		});
 		var corner = $('<div class="scorner"></div>');
-	    corner.css({
-		'top': topMin + totalHeight - 2,
-		'left': leftMin + totalWidth - 2,
+		corner.css({
+			'top': topMin + totalHeight - 2,
+			'left': leftMin + totalWidth - 2,
 
-	    });
+		});
 	}
-//	if(wsBorder.length > 0) {
-		wsBorder.append(topsB);
-		wsBorder.append(bottomsB);
-		wsBorder.append(leftB);
-		wsBorder.append(rightB);
-		wsBorder.append(corner);
-		this.container.append(wsBorder);
-//	}
+	//	if(wsBorder.length > 0) {
+	wsBorder.append(topsB);
+	wsBorder.append(bottomsB);
+	wsBorder.append(leftB);
+	wsBorder.append(rightB);
+	wsBorder.append(corner);
+	this.container.append(wsBorder);
+	//	}
 
 }
 
 iTable.prototype.wBorder = function(obj) {
-	var that=this;
-	if($('.wsBorder').length>0){
+	var that = this;
+	if($('.wsBorder').length > 0) {
 		$('.wsBorder').remove();
 	}
-	if($('.wBorder').length>0){
+	if($('.wBorder').length > 0) {
 		$('.wBorder').remove();
 	}
-	if($(obj).length>0){
-		var width = $(obj)[0].offsetWidth,
-		height = $(obj)[0].offsetHeight;
-	var left = $(obj)[0].offsetLeft,
-		top = $(obj)[0].offsetTop;
-	 
-	var wBorder = $('<div class="wBorder"></div>');
-	wBorder.css({
-		'width': width,
-		'height': height + 6,
-		'top': top,
-		'left': left
-	});
-	var topB = $('<div></div>');
-	topB.css({
-		'width': width,
-		'height': '2px',
-		'position': 'absolute',
-		'left': left,
-		'top': top,
-		'background': 'rgb(82, 146, 247)'
-	});
-	wBorder.append(topB);
-	var leftB = $('<div></div>');
-	leftB.css({
-		'width': '2px',
-		'height': height,
-		'position': 'absolute',
-		'left': left,
-		'top': top,
-		'background': 'rgb(82, 146, 247)'
-	});
-	wBorder.append(leftB);
-	var rightB = $('<div></div>');
-	rightB.css({
-		'width': '2px',
-		'height': height,
-		'position': 'absolute',
-		'left': parseInt(left + width),
-		'top': top,
-		'background': 'rgb(82, 146, 247)'
-	});
-	wBorder.append(rightB);
-	var bottomB = $('<div></div>');
-	bottomB.css({
-		'width': width,
-		'height': '2px',
-		'position': 'absolute',
-		'left': left,
-		'top': top + height,
-		'background': 'rgb(82, 146, 247)'
-	});
-	var corner = $('<div class="corner"></div>');
-	corner.css({
-		'top': top + height - 2,
-		'left': left + width - 2,
-
-	});
-	wBorder.append(bottomB);
-	wBorder.append(corner);
-	
-	this.container.append(wBorder);
+	if($('.wrBorder').length > 0) {
+		$('.wrBorder').remove();
 	}
-	
-	var oHeight=parseInt($('.wBorder').find('div').eq(1).css('height'));
-	corner.on('mouseenter',function(){
-		$(this).css('cursor','crosshair');
-		 
-		$(this).on('mousedown',function(){
-			$(that.container).off('mousedown');
-//			$('body').off('mousedown').on('mousedown',function(){
-//			   
-//		    });
-        var cWidth = parseInt($(this.container).width());
-	    var cHeight = parseInt($(this.container).height());
-	    var disWidth = parseInt($('.yOrder').outerWidth());
-	    var disHeight = parseInt($('.xOrder').outerHeight()) + parseInt($('.header').outerHeight());
-            var fileNodes = $('.dataTable tr td');
-		    var isSelect = true;
-		    var ev = window.event || arguments[0];
-		    var sleft = parseInt($(this).scrollLeft());
-		    var stop = parseInt($(this).scrollTop());
-		    var oX = ev.clientX + sleft;
-		    var oY = ev.clientY - disHeight + stop;
-		    $('.dataTable tr td').off('click');
-		    var _x = null;
-		var _y = null;
-		var selDiv = $('<div class="mapdiv"></div>');
-		selDiv.css({
+
+	if($(obj).length > 0) {
+		var width = $(obj)[0].offsetWidth,
+			height = $(obj)[0].offsetHeight;
+		var left = $(obj)[0].offsetLeft,
+			top = $(obj)[0].offsetTop;
+
+		var wBorder = $('<div class="wBorder"></div>');
+		wBorder.css({
+			'width': width,
+			'height': height + 6,
+			'top': 0,
+			'left': 0
+		});
+		var topB = $('<div></div>');
+		topB.css({
+			'width': width,
+			'height': '2px',
 			'position': 'absolute',
-			'width': '0px',
-			'height': '0px',
-			'font-size': '0px',
-			'margin': '0px',
-			'padding': '0px',
-			'border': '1px solid #1ab394',
-			'background-color': '#4acfb4',
-			'z-index': '1000',
-			'filter': 'alpha(opacity:60)',
-			'opacity': '0.6',
-			'display': 'none',
-			'left': oX,
-			'top': oY
+			'left': left,
+			'top': top,
+			'background': 'rgb(82, 146, 247)'
+		});
+		wBorder.append(topB);
+		var leftB = $('<div></div>');
+		leftB.css({
+			'width': '2px',
+			'height': height,
+			'position': 'absolute',
+			'left': left,
+			'top': top,
+			'background': 'rgb(82, 146, 247)'
+		});
+		wBorder.append(leftB);
+		var rightB = $('<div></div>');
+		rightB.css({
+			'width': '2px',
+			'height': height,
+			'position': 'absolute',
+			'left': parseInt(left + width),
+			'top': top,
+			'background': 'rgb(82, 146, 247)'
+		});
+		wBorder.append(rightB);
+		var bottomB = $('<div></div>');
+		bottomB.css({
+			'width': width,
+			'height': '2px',
+			'position': 'absolute',
+			'left': left,
+			'top': top + height,
+			'background': 'rgb(82, 146, 247)'
+		});
+		var corner = $('<div class="corner"></div>');
+		corner.css({
+			'top': top + height - 2,
+			'left': left + width - 2,
+
 		});
 
-		$(that.container).append(selDiv);
-		    $(that.container).on('mousemove',function(){
-		        var evt = window.event || arguments[0];
-			var xArr = [],
-				yArr = [];
-			var sleft = $(this).scrollLeft();
-			var stop = $(this).scrollTop();
-		       	if(selDiv.css('display') == "none") {
-					selDiv.css('display', '');
-				}
+		//红色
+		var wrBorder = $('<div class="wrBorder"></div>');
+		wrBorder.css({
+			'width': width,
+			'height': height + 6,
+			'top': 0,
+			'left': 0
+		});
+		var toprB = $('<div></div>');
+		toprB.css({
+			'width': width,
+			'height': '2px',
+			'position': 'absolute',
+			'left': left,
+			'top': top,
+			'background': 'red'
+		});
+		wrBorder.append(toprB);
+		var leftrB = $('<div></div>');
+		leftrB.css({
+			'width': '2px',
+			'height': height,
+			'position': 'absolute',
+			'left': left,
+			'top': top,
+			'background': 'red'
+		});
+		wrBorder.append(leftrB);
+		var rightrB = $('<div></div>');
+		rightrB.css({
+			'width': '2px',
+			'height': height,
+			'position': 'absolute',
+			'left': parseInt(left + width),
+			'top': top,
+			'background': 'red'
+		});
+		wrBorder.append(rightrB);
+		var bottomrB = $('<div></div>');
+		bottomrB.css({
+			'width': width,
+			'height': '2px',
+			'position': 'absolute',
+			'left': left,
+			'top': top + height,
+			'background': 'red'
+		});
+		wrBorder.append(bottomrB);
+
+		//
+		wBorder.append(bottomB);
+		wBorder.append(corner);
+
+		this.container.append(wBorder);
+
+		this.container.append(wrBorder);
+	}
+
+	var oHeight = parseInt($('.wBorder').find('div').eq(1).css('height'));
+	corner.on('mouseenter', function() {
+		$(this).css('cursor', 'crosshair');
+        
+		$(this).on('mousedown', function() {
+			$(that.container).off('mousedown');
+			//			$('body').off('mousedown').on('mousedown',function(){
+			//			   
+			//		    });
+			var cWidth = parseInt($(this.container).width());
+			var cHeight = parseInt($(this.container).height());
+			var disWidth = parseInt($('.yOrder').outerWidth());
+			var disHeight = parseInt($('.xOrder').outerHeight()) + parseInt($('.header').outerHeight());
+			var fileNodes = $('.dataTable tr td');
+			var isSelect = true;
+			var ev = window.event || arguments[0];
+			var sleft = parseInt($(this).scrollLeft());
+			var stop = parseInt($(this).scrollTop());
+			var oX = ev.clientX + sleft;
+			var oY = ev.clientY - disHeight + stop;
+			$('.dataTable tr td').off('click');
+			var _x = null;
+			var _y = null;
+			var _text=$('.picked').text(); 
+             
+			//$(that.container).append(selDiv);
+			$(that.container).on('mousemove', function() {
+
+				var evt = window.event || arguments[0];
+				var xArr = [],
+					yArr = [];
+				var sleft = $(this).scrollLeft();
+				var stop = $(this).scrollTop();
+				 
 				_x = (evt.x || evt.clientX);
 				_y = (evt.y || evt.clientY);
 
 				_x = _x + sleft;
 				_y = _y + stop - disHeight;
 
-				selDiv.css({
-					'left': Math.min(_x, oX)-100,
-					'top': Math.min(_y, oY),
-					'width': Math.abs(_x - oX),
-					'height': Math.abs(_y - oY)
-				});
-				
-				 if($('.wBorder').length>0){
-				 	
-				 	if( Math.abs(_y - oY)>10){
-				 		//console.log(Math.abs(_y - oY));
-				 		
-				 		var tdH=0;
-				 		var moveH=Math.abs(_y - oY)+Math.min(_y, oY)-oHeight-2;
-				 		var t1=parseInt($('.wBorder').find('div').eq(0).css('top'));
-				 		//console.log(moveH);
-				 		
-				 		if(t1>moveH){
-				 			 $('.dataTable tr td').each(function(){
-				 			  
-				 			  if($(this)[0].offsetTop<=moveH&&$(this)[0].offsetTop+46>=Math.min(_y, oY)&&$(this)[0].offsetLeft>=parseInt($('.wBorder').find('div').eq(1).css('left'))&&$(this)[0].offsetLeft<=parseInt($('.wBorder').find('div').eq(1).css('left'))+96){
-				 			  	
-				 			  	tdH+=parseInt($(this)[0].offsetHeight);
-				 			  	$('.wBorder').find('div').eq(1).css('height',tdH);
-				 		        $('.wBorder').find('div').eq(2).css('height',tdH);
-				 		        var m=parseInt($('.wBorder').find('div').eq(1).css('top'))+parseInt($('.wBorder').find('div').eq(1).css('height'));
-				 			  	$('.wBorder').find('div').eq(3).css('top',m-2);
-				 		        $('.wBorder').find('.corner').css('top',m-2);
-				 			  }
-				 			 //  console.log($(this)[0].offsetTop);
-				 		   });
-				 		}else{
-				 			$('.dataTable tr td').each(function(){
-				 			  
-				 			  if($(this)[0].offsetTop<=moveH&&$(this)[0].offsetTop+46>=Math.min(_y, oY)&&$(this)[0].offsetLeft>=parseInt($('.wBorder').find('div').eq(1).css('left'))&&$(this)[0].offsetLeft<=parseInt($('.wBorder').find('div').eq(1).css('left'))+96){
-				 			  	
-				 			  	tdH+=parseInt($(this)[0].offsetHeight);
-				 			  	$('.wBorder').find('div').eq(1).css('height',tdH);
-				 		        $('.wBorder').find('div').eq(2).css('height',tdH);
-				 		        var m=parseInt($('.wBorder').find('div').eq(1).css('top'))+parseInt($('.wBorder').find('div').eq(1).css('height'));
-				 			  	$('.wBorder').find('div').eq(3).css('top',m-2);
-				 		        $('.wBorder').find('.corner').css('top',m-2);
-				 			  }
-				 			 //  console.log($(this)[0].offsetTop);
-				 		   });
-				 			
-				 		}
-				 		
-				 		
-				 		
-				 	}else{
-				 		return;
-				 	}
-				 	
-				 	
-				 }
+//				selDiv.css({
+//					'left': Math.min(_x, oX) - 100,
+//					'top': Math.min(_y, oY),
+//					'width': Math.abs(_x - oX),
+//					'height': Math.abs(_y - oY)
+//				});
+
+				if($('.wBorder').length > 0) {
+
+					if(Math.abs(_y - oY) > 10) {
+						//console.log(Math.abs(_y - oY));
+
+						var tdH = 0;
+						var moveH = Math.abs(_y - oY) + Math.min(_y, oY) - oHeight - 2;
+						var t1 = parseInt($('.wBorder').find('div').eq(0).css('top'));
+						var t3 = parseInt($('.wBorder').find('div').eq(3).css('top'));
+						var h2 = parseInt($('.wBorder').find('div').eq(1).css('height'));
+						//console.log(moveH);
+						var topA = [],
+							topB = [];
+						
+						
+						if(t1 >= moveH) {
+							$('.dataTable tr td').each(function() {
+                                
+								if($(this)[0].offsetTop <= moveH && $(this)[0].offsetTop + 46 >= Math.min(_y, oY) && $(this)[0].offsetLeft >= parseInt($('.wBorder').find('div').eq(1).css('left')) && $(this)[0].offsetLeft <= parseInt($('.wBorder').find('div').eq(1).css('left')) + 96) {
+									//				 		 	  	
+									 
+									tdH += parseInt($(this)[0].offsetHeight);
+
+									topA.push($(this)[0].offsetTop);
+									$('.wrBorder').find('div').eq(1).css('height', tdH);
+									$('.wrBorder').find('div').eq(2).css('height', tdH);
+
+									$('.wrBorder').find('div').eq(0).css('top', t3);
+									$('.wrBorder').find('div').eq(1).css('top', _.first(_.uniq(topA)) + h2);
+									$('.wrBorder').find('div').eq(2).css('top', _.first(_.uniq(topA)) + h2);
+									$('.wrBorder').find('div').eq(3).css('top', _.first(_.uniq(topA)) + h2);
+									$('.wBorder').find('.corner').css('top', $('.wrBorder').find('div').eq(0).css('top'));
+                                    
+								}
+
+							});
+						} else {
+							$('.dataTable tr td').each(function() {
+
+								if($(this)[0].offsetTop <= moveH && $(this)[0].offsetTop + 46 >= Math.min(_y, oY) && $(this)[0].offsetLeft >= parseInt($('.wBorder').find('div').eq(1).css('left')) && $(this)[0].offsetLeft <= parseInt($('.wBorder').find('div').eq(1).css('left')) + 96) {
+
+									tdH += parseInt($(this)[0].offsetHeight);
+									topB.push($(this)[0].offsetTop);
+									$('.wrBorder').find('div').eq(1).css('height', tdH);
+									$('.wrBorder').find('div').eq(2).css('height', tdH);
+									$('.wrBorder').find('div').eq(0).css('top', $('.wBorder').find('div').eq(1).css('top'));
+									$('.wrBorder').find('div').eq(1).css('top', $('.wBorder').find('div').eq(1).css('top'));
+									$('.wrBorder').find('div').eq(2).css('top', $('.wBorder').find('div').eq(2).css('top'));
+									var m = parseInt($('.wrBorder').find('div').eq(1).css('top')) + parseInt($('.wrBorder').find('div').eq(1).css('height'));
+									$('.wrBorder').find('div').eq(3).css('top', m - 2);
+									$('.wBorder').find('.corner').css('top', m - 2);
+									 
+								}else{
+									 
+								}
+
+							});
+
+						}
+
+					} else {
+						return;
+					}
+
+				}
+
+			});
+			$(document).off('mouseup').on('mouseup', function() {
 				 
+				$(that.container).off('mousemove');
+				$('.mapdiv').remove();
+				$('.wBorder').find('div').eq(1).css('height', $('.wrBorder').find('div').eq(1).css('height'));
+				$('.wBorder').find('div').eq(2).css('height', $('.wrBorder').find('div').eq(2).css('height'));
+				$('.wBorder').find('div').eq(1).css('top', $('.wrBorder').find('div').eq(1).css('top'));
+				$('.wBorder').find('div').eq(2).css('top', $('.wrBorder').find('div').eq(2).css('top'));
+				$('.wBorder').find('div').eq(3).css('top', $('.wrBorder').find('div').eq(3).css('top'));
+				$('.wBorder').find('div').eq(0).css('top', $('.wrBorder').find('div').eq(0).css('top'));
+				var t3=parseInt($('.wBorder').find('div').eq(3).css('top'));
+				var t0=parseInt($('.wBorder').find('div').eq(0).css('top'));
 				 
-		    });
-		    $(document).off('mouseup').on('mouseup', function() {
-			    $(that.container).off('mousemove');
-			    //$('.mapdiv').remove();
-			    
-		    });
+				var l1=parseInt($('.wBorder').find('div').eq(1).css('left'));
+				var l2=parseInt($('.wBorder').find('div').eq(2).css('left'));
+				//console.log(t0,t3,l1,l2);
+                $('.dataTable tr td').each(function() {
+                	
+                    if($(this)[0].offsetTop <= t3 && $(this)[0].offsetTop  >= t0 && 
+                    $(this)[0].offsetLeft >= l1 && $(this)[0].offsetLeft < l2) {                    	 
+	                   $($(this)[0]).text(_text);
+                    }
+                	
+                });
+			});
 		});
-        
-      
+
 	});
 
 }
-
-
 
 iTable.prototype.lightCoor = function(obj) {
 
@@ -1347,8 +1419,8 @@ iTable.prototype.fontFamily = function() {
 			curClass = curClass.replace(reg, className);
 		} else {
 			return;
-		}				 
-		curClass=_.uniq(curClass.split(' ')).join(' ');	 
+		}
+		curClass = _.uniq(curClass.split(' ')).join(' ');
 		selThem = $('.picked');
 
 		$('.picked').removeAttr('class');
@@ -1386,7 +1458,7 @@ iTable.prototype.fontSize = function() {
 		} else {
 			return;
 		}
-		curClass=_.uniq(curClass.split(' ')).join(' ');	 
+		curClass = _.uniq(curClass.split(' ')).join(' ');
 		selThem = $('.picked');
 
 		$('.picked').removeAttr('class');
@@ -1459,7 +1531,7 @@ iTable.prototype.fontColor = function() {
 		} else {
 			return;
 		}
-		curClass=_.uniq(curClass.split(' ')).join(' ');	 
+		curClass = _.uniq(curClass.split(' ')).join(' ');
 		selThem = $('.picked');
 		$('.picked').removeAttr('class');
 
@@ -1486,7 +1558,7 @@ iTable.prototype.bgColor = function() {
 		} else {
 			return;
 		}
-		curClass=_.uniq(curClass.split(' ')).join(' ');	 
+		curClass = _.uniq(curClass.split(' ')).join(' ');
 		selThem = $('.picked');
 		$('.picked').removeAttr('class');
 
@@ -1517,7 +1589,7 @@ iTable.prototype.textAlign = function() {
 		} else {
 			return;
 		}
-		curClass=_.uniq(curClass.split(' ')).join(' ');	 
+		curClass = _.uniq(curClass.split(' ')).join(' ');
 		selThem = $('.picked');
 		$('.picked').removeAttr('class');
 
@@ -2303,7 +2375,7 @@ iTable.prototype.setIndex = function() {
 			var coo = cellStrArray[j];
 			cell.setAttribute('rows', i + 1);
 			cell.setAttribute('cols', col + 1);
-			 
+
 		}
 	}
 
@@ -2311,7 +2383,7 @@ iTable.prototype.setIndex = function() {
 
 //y轴更新
 iTable.prototype.updateLeft = function(index) {
-	 
+
 	$('.titleTable tbody tr').eq(index).find('td').append('<td></td>');
 	for(var j = index; j < this.rowCount; j++) {
 		var td = $("<td>" + IntToChr(j) + "</td>");
@@ -2323,14 +2395,14 @@ iTable.prototype.updateLeft = function(index) {
 //x轴更新
 iTable.prototype.updateTop = function(index) {
 	var that = this;
- 
+
 	$('.titleTable colgroup').find('col').eq(index).after('<col style="width:100px">');
 	$('.titleTable tbody tr').find('td').eq(index).after('<td></td>');
 	for(var j = index; j < this.cellCount - 1; j++) {
 		var td = $("<td>" + IntToChr(j) + "</td>");
 		$('.titleTable tbody tr').find('td').eq(j).text(IntToChr(j));
 	}
- 
+
 }
 //拖拽放宽列
 iTable.prototype.largeCol = function() {
@@ -2600,7 +2672,7 @@ iTable.prototype.rMenus = function() {
 		return false;
 	});
 
-	$('.dataTable').find('tr td').each(function() { 
+	$('.dataTable').find('tr td').each(function() {
 		$(this).contextmenu(function() {
 			var arr = $('.picked');
 			var obj = this;

@@ -545,8 +545,9 @@
 	   line-height: 28px;
 	   background: url(../images/img/dataSearch.png) no-repeat center;
    }
-   .wtBorder{
+   .wBorder{
    	position: absolute;
+   	z-index:13;
    }
    .corner{
    	width:5px;
@@ -563,4 +564,8 @@
    }
    .wtBorder{
    	position: absolute;
+   }
+   .wrBorder{
+   	position: absolute;
+   	z-index:12;
    }
