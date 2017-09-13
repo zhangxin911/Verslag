@@ -1113,7 +1113,7 @@ iTable.prototype.wBorder = function(obj) {
 	this.container.append(wBorder);
 	}
 	
-	
+	var oHeight=parseInt($('.wBorder').find('div').eq(1).css('height'));
 	corner.on('mouseenter',function(){
 		$(this).css('cursor','crosshair');
 		 
@@ -1122,7 +1122,7 @@ iTable.prototype.wBorder = function(obj) {
 //			$('body').off('mousedown').on('mousedown',function(){
 //			   
 //		    });
-             var cWidth = parseInt($(this.container).width());
+        var cWidth = parseInt($(this.container).width());
 	    var cHeight = parseInt($(this.container).height());
 	    var disWidth = parseInt($('.yOrder').outerWidth());
 	    var disHeight = parseInt($('.xOrder').outerHeight()) + parseInt($('.header').outerHeight());
@@ -1171,7 +1171,7 @@ iTable.prototype.wBorder = function(obj) {
 				_y = _y + stop - disHeight;
 
 				selDiv.css({
-					'left': Math.min(_x, oX),
+					'left': Math.min(_x, oX)-100,
 					'top': Math.min(_y, oY),
 					'width': Math.abs(_x - oX),
 					'height': Math.abs(_y - oY)
@@ -1180,14 +1180,46 @@ iTable.prototype.wBorder = function(obj) {
 				 if($('.wBorder').length>0){
 				 	
 				 	if( Math.abs(_y - oY)>10){
-				 		console.log(Math.abs(_y - oY));
-				 		$('.wBorder').find('div').eq(1).css('height',Math.abs(_y - oY));
-				 		$('.wBorder').find('div').eq(2).css('height',Math.abs(_y - oY));
+				 		//console.log(Math.abs(_y - oY));
 				 		
-				 		//var moveH=Math.abs(_y - oY)-parseInt($('.wBorder').find('div').eq(3).css('top'))-parseInt($('.wBorder').find('div').eq(3).css('height'));
-				 		var moveH=Math.abs(_y - oY)-parseInt($('.wBorder').find('div').eq(3).css('top'))+parseInt($('.wBorder').find('div').eq(1).css('height'));
-				 		$('.wBorder').find('div').eq(3).css('top',moveH);
-				 		$('.wBorder').find('.corner').css('top',moveH);
+				 		var tdH=0;
+				 		var moveH=Math.abs(_y - oY)+Math.min(_y, oY)-oHeight-2;
+				 		var t1=parseInt($('.wBorder').find('div').eq(0).css('top'));
+				 		//console.log(moveH);
+				 		
+				 		if(t1>moveH){
+				 			 $('.dataTable tr td').each(function(){
+				 			  
+				 			  if($(this)[0].offsetTop<=moveH&&$(this)[0].offsetTop+46>=Math.min(_y, oY)&&$(this)[0].offsetLeft>=parseInt($('.wBorder').find('div').eq(1).css('left'))&&$(this)[0].offsetLeft<=parseInt($('.wBorder').find('div').eq(1).css('left'))+96){
+				 			  	
+				 			  	tdH+=parseInt($(this)[0].offsetHeight);
+				 			  	$('.wBorder').find('div').eq(1).css('height',tdH);
+				 		        $('.wBorder').find('div').eq(2).css('height',tdH);
+				 		        var m=parseInt($('.wBorder').find('div').eq(1).css('top'))+parseInt($('.wBorder').find('div').eq(1).css('height'));
+				 			  	$('.wBorder').find('div').eq(3).css('top',m-2);
+				 		        $('.wBorder').find('.corner').css('top',m-2);
+				 			  }
+				 			 //  console.log($(this)[0].offsetTop);
+				 		   });
+				 		}else{
+				 			$('.dataTable tr td').each(function(){
+				 			  
+				 			  if($(this)[0].offsetTop<=moveH&&$(this)[0].offsetTop+46>=Math.min(_y, oY)&&$(this)[0].offsetLeft>=parseInt($('.wBorder').find('div').eq(1).css('left'))&&$(this)[0].offsetLeft<=parseInt($('.wBorder').find('div').eq(1).css('left'))+96){
+				 			  	
+				 			  	tdH+=parseInt($(this)[0].offsetHeight);
+				 			  	$('.wBorder').find('div').eq(1).css('height',tdH);
+				 		        $('.wBorder').find('div').eq(2).css('height',tdH);
+				 		        var m=parseInt($('.wBorder').find('div').eq(1).css('top'))+parseInt($('.wBorder').find('div').eq(1).css('height'));
+				 			  	$('.wBorder').find('div').eq(3).css('top',m-2);
+				 		        $('.wBorder').find('.corner').css('top',m-2);
+				 			  }
+				 			 //  console.log($(this)[0].offsetTop);
+				 		   });
+				 			
+				 		}
+				 		
+				 		
+				 		
 				 	}else{
 				 		return;
 				 	}
@@ -1200,6 +1232,7 @@ iTable.prototype.wBorder = function(obj) {
 		    $(document).off('mouseup').on('mouseup', function() {
 			    $(that.container).off('mousemove');
 			    //$('.mapdiv').remove();
+			    
 		    });
 		});
         
