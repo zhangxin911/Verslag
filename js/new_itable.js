@@ -144,7 +144,13 @@ function areaChoose() {
 	var stop = parseInt($(this).scrollTop());
 	var oX = ev.clientX + sleft;
 	var oY = ev.clientY - disHeight + stop;
+	
+	
 	var selDiv = $('<div class="mapdiv"></div>');
+	if($('.wrBorder').length>0){
+		$('.wrBorder').hide();
+	}
+	
 	selDiv.css({
 		'position': 'absolute',
 		'width': '0px',
@@ -1171,10 +1177,10 @@ iTable.prototype.wBorder = function(obj) {
 	}
 
 	var oHeight = parseInt($('.wBorder').find('div').eq(1).css('height'));
-	var oWidth  = parseInt($('.wBorder').find('div').eq(0).css('width'));
+	var oWidth = parseInt($('.wBorder').find('div').eq(0).css('width'));
 	corner.on('mouseenter', function() {
 		$(this).css('cursor', 'crosshair');
-        
+
 		$(this).on('mousedown', function() {
 			$(that.container).off('mousedown');
 			var cWidth = parseInt($(this.container).width());
@@ -1191,26 +1197,26 @@ iTable.prototype.wBorder = function(obj) {
 			$('.dataTable tr td').off('click');
 			var _x = null;
 			var _y = null;
-			var _text=$('.picked').text(); 
-            var direction; 
-            var selDiv = $('<div class="mapdiv"></div>');
-	selDiv.css({
-		'position': 'absolute',
-		'width': '0px',
-		'height': '0px',
-		'font-size': '0px',
-		'margin': '0px',
-		'padding': '0px',
-		'border': '1px solid #1ab394',
-		'background-color': '#4acfb4',
-		'z-index': '1000',
-		'filter': 'alpha(opacity:60)',
-		'opacity': '0.6',
-		'display': 'none',
-		'left': oX,
-		'top': oY
-	});
-			$(that.container).append(selDiv);
+			var _text = $('.picked').text();
+			var direction;
+			//          var selDiv = $('<div class="mapdiv"></div>');
+			//	selDiv.css({
+			//		'position': 'absolute',
+			//		'width': '0px',
+			//		'height': '0px',
+			//		'font-size': '0px',
+			//		'margin': '0px',
+			//		'padding': '0px',
+			//		'border': '1px solid #1ab394',
+			//		'background-color': '#4acfb4',
+			//		'z-index': '1000',
+			//		'filter': 'alpha(opacity:60)',
+			//		'opacity': '0.6',
+			//		'display': 'none',
+			//		'left': oX,
+			//		'top': oY
+			//	});
+			//			$(that.container).append(selDiv);
 			$(that.container).on('mousemove', function() {
 
 				var evt = window.event || arguments[0];
@@ -1218,45 +1224,44 @@ iTable.prototype.wBorder = function(obj) {
 					yArr = [];
 				var sleft = $(this).scrollLeft();
 				var stop = $(this).scrollTop();
-							if(selDiv.css('display') == "none") {
-								selDiv.css('display', '');
-							}
+				//							if(selDiv.css('display') == "none") {
+				//								selDiv.css('display', '');
+				//							}
 				_x = (evt.x || evt.clientX);
 				_y = (evt.y || evt.clientY);
 
 				_x = _x + sleft;
 				_y = _y + stop - disHeight;
 
-				selDiv.css({
-					'left': Math.min(_x, oX) - 100,
-					'top': Math.min(_y, oY),
-					'width': Math.abs(_x - oX),
-					'height': Math.abs(_y - oY)
-				});
+				//				selDiv.css({
+				//					'left': Math.min(_x, oX) ,
+				//					'top': Math.min(_y, oY),
+				//					'width': Math.abs(_x - oX),
+				//					'height': Math.abs(_y - oY)
+				//				});
 
 				if($('.wBorder').length > 0) {
 
-					if(Math.abs(_y - oY) > 10&&Math.abs(_x - oX)<10) {
-						 
-                        direction='vertical';
+					if(Math.abs(_y - oY) > 10 && Math.abs(_x - oX) < 10) {
+
+						direction = 'vertical';
 						var tdH = 0;
 						var moveH = Math.abs(_y - oY) + Math.min(_y, oY) - oHeight - 2;
 						var t1 = parseInt($('.wBorder').find('div').eq(0).css('top'));
 						var t3 = parseInt($('.wBorder').find('div').eq(3).css('top'));
 						var h2 = parseInt($('.wBorder').find('div').eq(1).css('height'));
-						//console.log(moveH);
+
 						var topA = [],
 							topB = [];
-						
-						 
+
 						if(t1 >= moveH) {
 							$('.dataTable tr td').each(function() {
-                                
+
 								if($(this)[0].offsetTop <= moveH && $(this)[0].offsetTop + $(this)[0].offsetHeight >= Math.min(_y, oY) && $(this)[0].offsetLeft >= parseInt($('.wBorder').find('div').eq(1).css('left')) && $(this)[0].offsetLeft <= parseInt($('.wBorder').find('div').eq(1).css('left')) + 96) {
 									//				 		 	  	
-									
+
 									tdH += parseInt($(this)[0].offsetHeight);
-                                    
+
 									topA.push($(this)[0].offsetTop);
 									$('.wrBorder').find('div').eq(1).css('height', tdH);
 									$('.wrBorder').find('div').eq(2).css('height', tdH);
@@ -1266,7 +1271,7 @@ iTable.prototype.wBorder = function(obj) {
 									$('.wrBorder').find('div').eq(2).css('top', _.first(_.uniq(topA)) + h2);
 									$('.wrBorder').find('div').eq(3).css('top', _.first(_.uniq(topA)) + h2);
 									$('.wBorder').find('.corner').css('top', $('.wrBorder').find('div').eq(0).css('top'));
-                                    
+
 								}
 
 							});
@@ -1274,9 +1279,9 @@ iTable.prototype.wBorder = function(obj) {
 							$('.dataTable tr td').each(function() {
 
 								if($(this)[0].offsetTop <= moveH && $(this)[0].offsetTop + $(this)[0].offsetHeight >= Math.min(_y, oY) && $(this)[0].offsetLeft >= parseInt($('.wBorder').find('div').eq(1).css('left')) && $(this)[0].offsetLeft <= parseInt($('.wBorder').find('div').eq(1).css('left')) + 96) {
-                                    
+
 									tdH += parseInt($(this)[0].offsetHeight);
-									 
+
 									topB.push($(this)[0].offsetTop);
 									$('.wrBorder').find('div').eq(1).css('height', tdH);
 									$('.wrBorder').find('div').eq(2).css('height', tdH);
@@ -1286,108 +1291,166 @@ iTable.prototype.wBorder = function(obj) {
 									var m = parseInt($('.wrBorder').find('div').eq(1).css('top')) + parseInt($('.wrBorder').find('div').eq(1).css('height'));
 									$('.wrBorder').find('div').eq(3).css('top', m - 2);
 									$('.wBorder').find('.corner').css('top', m - 2);
-									 
-								} 
+
+								}
 
 							});
 
 						}
-                    }
-//					else {
-//						return;
-//					}
-//
-					
-					if(Math.abs(_x - oX)>10){
-						 
-						 direction='horizontal';
-						 var tdW = 0;
-						 var moveW = Math.abs(_x - oX) + Math.min(_x, oX) - oWidth - 2;
-						 var l1 = parseInt($('.wBorder').find('div').eq(0).css('left'));
-						 var l3 = parseInt($('.wBorder').find('div').eq(3).css('left'));
-						 var w2 = parseInt($('.wBorder').find('div').eq(1).css('height'));
-						
-						 var leftA = [],
-							 leftB = [];
-						 
-					     if(l1 >= moveW) {
-					     	$('.dataTable tr td').each(function() {
-//					     		console.log($(this)[0].offsetLeft);
-//					     		if($(this)[0].offsetLeft <= moveH){
-//					     			console.log($(this)[0]);
-//					     		}
-//					     		
-					     		
-					     	});
-					     	
-					     }else{
-					     	$('.dataTable tr td').each(function() {
-					     		var tdL=$(this)[0].offsetLeft,_tdW=$(this)[0].offsetWidth,tdT=$(this)[0].offsetTop,_tdH=$(this)[0].offsetHeight;
-					     		var w3t= parseInt($('.wBorder').find('div').eq(3).css('top'));
-					     		var w0t=parseInt($('.wBorder').find('div').eq(0).css('top'));
-					     		if(tdL>=moveW&&(tdL)<=(Math.min(_x, oX)+Math.abs(_x - oX))&&(tdT+_tdH<=w3t)&&(_tdH+tdT+4>w0t)){
-					     			 					     	 							     						     			
-					     			tdW += parseInt($(this)[0].offsetWidth);
-					     			 
-					     			leftB.push($(this)[0].offsetLeft);
-								 
+					}
+
+					if(Math.abs(_x - oX) >= 10 && Math.abs(_y - oY) <= 10) {
+
+						direction = 'horizontal';
+						var tdW = 0;
+						var moveW = Math.abs(_x - oX) + Math.min(_x, oX) - oWidth + 4;
+						var l1 = parseInt($('.wBorder').find('div').eq(0).css('left'));
+						var l3 = parseInt($('.wBorder').find('div').eq(3).css('left'));
+						var w2 = parseInt($('.wBorder').find('div').eq(1).css('height'));
+
+						var leftA = [],
+							leftB = [];
+
+						if(Math.min(_x, oX) < l1) {
+
+							$('.dataTable tr td').each(function() {
+
+								var tdL = $(this)[0].offsetLeft,
+									_tdW = $(this)[0].offsetWidth,
+									tdT = $(this)[0].offsetTop,
+									_tdH = $(this)[0].offsetHeight;
+								var w3t = parseInt($('.wBorder').find('div').eq(3).css('top'));
+								var w0t = parseInt($('.wBorder').find('div').eq(0).css('top'));
+								var w1l = parseInt($('.wBorder').find('div').eq(1).css('left'));
+								if(tdL < w1l && tdL >= Math.min(_x, oX) && (tdT + _tdH <= w3t) && (tdT + 4 > w0t)) {
+									//					     			console.log($(this)[0]);
+									//					     			console.log(Math.min(_x, oX)); 
+									tdW += parseInt($(this)[0].offsetWidth);
+
+									leftA.push($(this)[0].offsetLeft);
 									$('.wrBorder').find('div').eq(0).css('width', tdW);
 									$('.wrBorder').find('div').eq(3).css('width', tdW);
-									console.log($(this)[0]); 
-									
+
+									$('.wrBorder').find('div').eq(0).css('left', _.first(_.uniq(leftA)));
+									$('.wrBorder').find('div').eq(3).css('left', _.first(_.uniq(leftA)));
+									$('.wrBorder').find('div').eq(2).css('left', _.first(_.uniq(leftA)));
+									//$('.wrBorder').find('div').eq(1).css('left', $('.wBorder').find('div').eq(1).css('left'));
+									//var n = parseInt($('.wrBorder').find('div').eq(0).css('left')) + parseInt($('.wrBorder').find('div').eq(0).css('width'));
+									//$('.wrBorder').find('div').eq(2).css('left', n - 2);
+									//$('.wBorder').find('.corner').css('l', n - 2);
+								}
+
+							});
+
+						} else {
+
+							$('.dataTable tr td').each(function() {
+								var tdL = $(this)[0].offsetLeft,
+									_tdW = $(this)[0].offsetWidth,
+									tdT = $(this)[0].offsetTop,
+									_tdH = $(this)[0].offsetHeight;
+								var w3t = parseInt($('.wBorder').find('div').eq(3).css('top'));
+								var w0t = parseInt($('.wBorder').find('div').eq(0).css('top'));
+								var w1l = parseInt($('.wBorder').find('div').eq(1).css('left'));
+								if(tdL > w1l && (tdL) <= (Math.min(_x, oX) + Math.abs(_x - oX)) && (tdT + _tdH <= w3t) && (tdT + 4 > w0t)) {
+
+									tdW += parseInt($(this)[0].offsetWidth);
+
+									leftB.push($(this)[0].offsetLeft);
+									$('.wrBorder').find('div').eq(0).css('width', tdW);
+									$('.wrBorder').find('div').eq(3).css('width', tdW);
 									$('.wrBorder').find('div').eq(1).css('left', $('.wBorder').find('div').eq(1).css('left'));
-//									$('.wrBorder').find('div').eq(2).css('left', $('.wBorder').find('div').eq(2).css('left'));
-//									$('.wrBorder').find('div').eq(3).css('left', $('.wBorder').find('div').eq(2).css('left'));
 									var n = parseInt($('.wrBorder').find('div').eq(0).css('left')) + parseInt($('.wrBorder').find('div').eq(0).css('width'));
 									$('.wrBorder').find('div').eq(2).css('left', n - 2);
-//									$('.wBorder').find('.corner').css('l', n - 2);
-					     		}
-					     		
-					     		
-					     	});
-					     }
-							 
-						 
+									$('.wBorder').find('.corner').css('l', n - 2);
+								}
+
+							});
+						}
+
 					}
-					
-					
 
 				}
 
 			});
 			$(document).off('mouseup').on('mouseup', function() {
-				 
+
 				$(that.container).off('mousemove');
-				
-				switch (direction){
+                
+				switch(direction) {
 					case 'vertical':
-					$('.wBorder').find('div').eq(1).css('height', $('.wrBorder').find('div').eq(1).css('height'));
-				    $('.wBorder').find('div').eq(2).css('height', $('.wrBorder').find('div').eq(2).css('height'));
-				    $('.wBorder').find('div').eq(1).css('top', $('.wrBorder').find('div').eq(1).css('top'));
-				    $('.wBorder').find('div').eq(2).css('top', $('.wrBorder').find('div').eq(2).css('top'));
-				    $('.wBorder').find('div').eq(3).css('top', $('.wrBorder').find('div').eq(3).css('top'));
-				   $('.wBorder').find('div').eq(0).css('top', $('.wrBorder').find('div').eq(0).css('top'));
-				var t3=parseInt($('.wBorder').find('div').eq(3).css('top'));
-				var t0=parseInt($('.wBorder').find('div').eq(0).css('top'));
-				 
-				var l1=parseInt($('.wBorder').find('div').eq(1).css('left'));
-				var l2=parseInt($('.wBorder').find('div').eq(2).css('left'));
-				//console.log(t0,t3,l1,l2);
-                $('.dataTable tr td').each(function() {
-                	
-                    if($(this)[0].offsetTop <= t3 && $(this)[0].offsetTop  >= t0 && 
-                    $(this)[0].offsetLeft >= l1 && $(this)[0].offsetLeft < l2) {                    	 
-	                   $($(this)[0]).text(_text);
-                    }
-                	
-                });
-					
+						$('.wBorder').find('div').eq(1).css('height', $('.wrBorder').find('div').eq(1).css('height'));
+						$('.wBorder').find('div').eq(2).css('height', $('.wrBorder').find('div').eq(2).css('height'));
+						$('.wBorder').find('div').eq(1).css('top', $('.wrBorder').find('div').eq(1).css('top'));
+						$('.wBorder').find('div').eq(2).css('top', $('.wrBorder').find('div').eq(2).css('top'));
+						$('.wBorder').find('div').eq(3).css('top', $('.wrBorder').find('div').eq(3).css('top'));
+						$('.wBorder').find('div').eq(0).css('top', $('.wrBorder').find('div').eq(0).css('top'));
+						var t3 = parseInt($('.wBorder').find('div').eq(3).css('top'));
+						var t0 = parseInt($('.wBorder').find('div').eq(0).css('top'));
+
+						var l1 = parseInt($('.wBorder').find('div').eq(1).css('left'));
+						var l2 = parseInt($('.wBorder').find('div').eq(2).css('left'));
+
+						$('.dataTable tr td').each(function() {
+
+							if($(this)[0].offsetTop <= t3 && $(this)[0].offsetTop >= t0 &&
+								$(this)[0].offsetLeft >= l1 && $(this)[0].offsetLeft < l2) {
+								$($(this)[0]).text(_text);
+							}
+
+						});
+                         $(that.container).on('mousedown', areaChoose);
 						break;
+						
+					case 'horizontal':
+                        $('.wBorder').find('div').eq(0).css('width', $('.wrBorder').find('div').eq(0).css('width'));
+						$('.wBorder').find('div').eq(3).css('width', $('.wrBorder').find('div').eq(3).css('width'));
+						$('.wBorder').find('div').eq(0).css('left', $('.wrBorder').find('div').eq(0).css('left'));
+						$('.wBorder').find('div').eq(3).css('left', $('.wrBorder').find('div').eq(3).css('left'));
+						$('.wBorder').find('div').eq(1).css('left', $('.wrBorder').find('div').eq(1).css('left'));
+						$('.wBorder').find('div').eq(2).css('left', $('.wrBorder').find('div').eq(2).css('left'));
+						var t3 = parseInt($('.wBorder').find('div').eq(3).css('top'));
+						var t0 = parseInt($('.wBorder').find('div').eq(0).css('top'));
+
+						var l1 = parseInt($('.wBorder').find('div').eq(1).css('left'));
+						var l2 = parseInt($('.wBorder').find('div').eq(2).css('left'));
+
+						$('.dataTable tr td').each(function() {
+
+							if($(this)[0].offsetTop <= t3 && $(this)[0].offsetTop >= t0 &&
+							$(this)[0].offsetLeft >= l1 && $(this)[0].offsetLeft < l2) {
+								$($(this)[0]).text(_text);
+							}
+
+						});
+						 $(that.container).on('mousedown', areaChoose);
+						break;
+
 					default:
 						break;
-				} 
-				 
-				
+				}
+                
+                $('.dataTable tr td').on('click',function() {
+
+			var tr = $(this).parent();
+			$('.picked').removeClass('picked');
+			$('.wBorder').remove();
+			$(this).addClass('picked');
+
+			that.wBorder($(this));
+			//t.createMask(left, top, width, height,'',''); 
+			var xCoo = Number($(this).attr('cols')) - 1,
+				yCoo = Number($(this).attr('rows')) - 1;
+			if($('.disbox').length > 0) {
+				$('.disbox').text(IntToChr(xCoo) + String(yCoo + 1));
+			}
+			that.tdTofx($(this));
+			that.lightCoor($(this));
+			$('#ip_fx').blur();
+
+		});
+            // $(that.container).off('mousemove'); 
+            
 			});
 		});
 
