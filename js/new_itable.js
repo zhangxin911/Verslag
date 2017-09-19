@@ -1,5821 +1,5719 @@
-"use strict" //严格模式
+    "use strict" //严格模式
 
-function iTable(tContainer, tSettings, tabs) {
+    function iTable(tContainer, tSettings, tabs) {
 
-	this.rowCount = tSettings.rowCount;
+        this.rowCount = tSettings.rowCount;
 
-	this.cellCount = tSettings.cellCount;
+        this.cellCount = tSettings.cellCount;
 
-	this.container = tContainer;
+        this.container = tContainer;
 
-	this.settings = tSettings;
+        this.settings = tSettings;
 
-	this.tabs = tabs;
+        this.tabs = tabs;
 
-	var header, footer, curIndex, tools;
+        var header, footer, curIndex, tools;
 
-}
+    }
 
-iTable.prototype.createContent = function(tid) {
+    iTable.prototype.createContent = function (tid) {
 
-	var tId = tid || 1;
+        var tId = tid || 1;
 
-	var myContainer = this.container;
+        var myContainer = this.container;
 
-	myContainer.empty();
+        myContainer.empty();
 
-	var tb = $("<table class='dataTable' id='iTable" + tId + "'></table>");
+        var tb = $("<table class='dataTable' id='iTable" + tId + "'></table>");
 
-	myContainer.append(tb);
+        myContainer.append(tb);
 
-	for(var i = 0; i < this.rowCount; i++) {
+        for (var i = 0; i < this.rowCount; i++) {
 
-		var tr = this.createTr();
+            var tr = this.createTr();
 
-		var th = $('<th></th>');
+            var th = $('<th></th>');
 
-		var colg = $('<colgroup></colgroup>');
+            var colg = $('<colgroup></colgroup>');
 
-		tr.append(th);
+            tr.append(th);
 
-		for(var j = 0; j < this.cellCount + 1; j++) {
+            for (var j = 0; j < this.cellCount + 1; j++) {
 
-			var td = this.createTd('', '');
+                var td = this.createTd('', '');
 
-			if(j == 0) {
+                if (j == 0) {
 
-				var col = $('<col style="width:63px">');
+                    var col = $('<col style="width:63px">');
 
-			} else {
+                } else {
 
-				var col = $('<col style="width:100px">');
+                    var col = $('<col style="width:100px">');
 
-			}
+                }
 
-			colg.append(col);
+                colg.append(col);
 
-			if(i == 0) {
+                if (i == 0) {
 
-				$("#iTable" + tId).append(colg);
+                    $("#iTable" + tId).append(colg);
 
-			}
+                }
 
-			tr.append(td);
+                tr.append(td);
 
-		}
+            }
 
-		$("#iTable" + tId).append(tr);
+            $("#iTable" + tId).append(tr);
 
-	}
+        }
 
-	this.setIndex();
+        this.setIndex();
 
-}
+    }
 
-iTable.prototype.createTr = function() {
+    iTable.prototype.createTr = function () {
 
-	var tr = $("<tr></tr>");
+        var tr = $("<tr></tr>");
 
-	return tr;
+        return tr;
 
-}
+    }
 
-iTable.prototype.createTd = function(className, tdValue) {
+    iTable.prototype.createTd = function (className, tdValue) {
 
-	var td = $("<td class=" + className + ">" + tdValue + "</td>");
+        var td = $("<td class=" + className + ">" + tdValue + "</td>");
 
-	return td;
+        return td;
 
-}
+    }
 
-iTable.prototype.createXaxis = function() {
+    iTable.prototype.createXaxis = function () {
 
-	var xAxis = $("<div class='xOrder'></div>");
+        var xAxis = $("<div class='xOrder'></div>");
 
-	xAxis.empty();
+        xAxis.empty();
 
-	var xTable = $("<table class='titleTable'></table>");
+        var xTable = $("<table class='titleTable'></table>");
 
-	var curT = this.getCurTable();
+        var curT = this.getCurTable();
 
-	var firTds = curT.find('tr:first td');
+        var th = $('<th></th>');
 
-	var th = $('<th></th>');
+        xAxis.insertBefore(this.container);
 
-	xAxis.insertBefore(this.container);
+        xAxis.append(xTable);
 
-	xAxis.append(xTable);
+        var tr = $("<tr></tr>");
 
-	var tr = $("<tr></tr>");
+        tr.append(th);
 
-	tr.append(th);
+        for (var i = 0; i < 1; i++) {
 
-	for(var i = 0; i < 1; i++) {
+            var colg = $('<colgroup></colgroup>');
 
-		var colg = $('<colgroup></colgroup>');
+            for (var j = 0; j < this.cellCount + 1; j++) {
 
-		for(var j = 0; j < this.cellCount + 1; j++) {
+                var td = $("<td>" + IntToChr(j) + "</td>");
 
-			var td = $("<td>" + IntToChr(j) + "</td>");
+                if (j == 0) {
 
-			if(j == 0) {
+                    var col = $('<col style="width:63px">');
 
-				var col = $('<col style="width:63px">');
+                } else {
 
-			} else {
+                    var col = $('<col style="width:100px">');
 
-				var col = $('<col style="width:100px">');
+                }
 
-			}
+                colg.append(col);
 
-			colg.append(col);
+                if (i == 0) {
 
-			if(i == 0) {
+                    xTable.append(colg);
 
-				xTable.append(colg);
+                }
 
-			}
+                tr.append(td);
 
-			tr.append(td);
+            }
 
-		}
+            xTable.append(tr);
 
-		xTable.append(tr);
+        }
 
-	}
+    }
 
-}
+    iTable.prototype.createYaxis = function () {
 
-iTable.prototype.createYaxis = function() {
+        var yAxis = $("<div class='yOrder'></div>");
 
-	var yAxis = $("<div class='yOrder'></div>");
+        var yTable = $("<table class='leftTable'></table>");
 
-	var yTable = $("<table class='leftTable'></table>");
+        yAxis.empty();
 
-	yAxis.empty();
+        yAxis.insertBefore(this.container);
 
-	yAxis.insertBefore(this.container);
+        yAxis.append(yTable);
 
-	yAxis.append(yTable);
+        for (var i = 0; i < this.rowCount; i++) {
 
-	for(var i = 0; i < this.rowCount; i++) {
+            var tr = $("<tr></tr>");
 
-		var tr = $("<tr></tr>");
+            for (var j = 0; j < 1; j++) {
 
-		var colg = $('<colgroup></colgroup>');
+                var th = $("<td>" + (i + 1) + "</td>");
 
-		for(var j = 0; j < 1; j++) {
+                th.appendTo(tr);
 
-			var th = $("<td>" + (i + 1) + "</td>");
+            }
 
-			th.appendTo(tr);
+            yTable.append(tr);
 
-		}
+        }
 
-		yTable.append(tr);
+    }
 
-	}
+    iTable.prototype.getTdDis = function () {
+        $('.dataTable tr td').each(function () {
+            $(this).mouseenter(function () {
+                // console.log($(this)[0].offsetLeft,$(this)[0].offsetHeight);
+            });
+        });
+    }
 
-}
+    iTable.prototype.createTip = function () {
 
-iTable.prototype.getTdDis=function(){
-	$('.dataTable tr td').each(function(){
-		$(this).mouseenter(function(){
-			console.log($(this)[0].offsetLeft,$(this)[0].offsetHeight);
-		});
-	});
-}
+        var content = $('<div class="greyBlock"></div>'),
 
-iTable.prototype.createTip = function() {
+            tLeft = $('.yOrder'),
 
-	var content = $('<div class="greyBlock"></div>'),
+            tHead = $('.xOrder');
 
-		tLeft = $('.yOrder'),
+        var bLeft = tLeft.find('table tr:first td:first').outerWidth(),
 
-		tHead = $('.xOrder');
+            bTop = tHead.find('table tr:first td:first').outerHeight();
 
-	var bLeft = tLeft.find('table tr:first td:first').outerWidth(),
+        content.css({
+            'width': bLeft,
+            'height': bTop,
+        });
 
-		bTop = tHead.find('table tr:first td:first').outerHeight();
+        //	content.insertBefore(this.container);
 
-	content.css({
-		'width': bLeft,
-		'height': bTop,
-	});
+        $(this.container).append(content);
 
-	//	content.insertBefore(this.container);
+    }
 
-	$(this.container).append(content);
+    iTable.prototype.frameSelect = function () {
 
-}
+        //	var that = this;
 
-iTable.prototype.frameSelect = function() {
+        //	var cWidth = parseInt($(this.container).width());
 
-	//	var that = this;
+        //	var cHeight = parseInt($(this.container).height());
 
-	//	var cWidth = parseInt($(this.container).width());
+        //
 
-	//	var cHeight = parseInt($(this.container).height());
+        //	var disWidth = parseInt($('.yOrder').outerWidth());
 
-	//
+        //	var disHeight = parseInt($('.xOrder').outerHeight()) + parseInt($('.header').outerHeight());
 
-	//	var disWidth = parseInt($('.yOrder').outerWidth());
+        $(this.container).on('mousedown', areaChoose);
 
-	//	var disHeight = parseInt($('.xOrder').outerHeight()) + parseInt($('.header').outerHeight());
+    }
 
-	$(this.container).on('mousedown', areaChoose);
+    function areaChoose() {
 
-}
+        var cWidth = parseInt($(this.container).width());
 
-function areaChoose() {
+        var cHeight = parseInt($(this.container).height());
 
-	var cWidth = parseInt($(this.container).width());
+        var disWidth = parseInt($('.yOrder').outerWidth());
 
-	var cHeight = parseInt($(this.container).height());
+        var disHeight = parseInt($('.xOrder').outerHeight()) + parseInt($('.header').outerHeight());
 
-	var disWidth = parseInt($('.yOrder').outerWidth());
+        var that = t;
 
-	var disHeight = parseInt($('.xOrder').outerHeight()) + parseInt($('.header').outerHeight());
+        var fileNodes = $('.dataTable tr td');
 
-	var that = t;
+        var isSelect = true;
 
-	var fileNodes = $('.dataTable tr td');
+        var ev = window.event || arguments[0];
 
-	var isSelect = true;
+        var sleft = parseInt($(this).scrollLeft());
 
-	var ev = window.event || arguments[0];
+        var stop = parseInt($(this).scrollTop());
 
-	var sleft = parseInt($(this).scrollLeft());
+        var oX = ev.clientX + sleft;
 
-	var stop = parseInt($(this).scrollTop());
+        var oY = ev.clientY - disHeight + stop;
 
-	var oX = ev.clientX + sleft;
+        //	var selDiv = $('<div class="mapdiv"></div>');
 
-	var oY = ev.clientY - disHeight + stop;
+        if ($('.wrBorder').length > 0) {
 
-	//	var selDiv = $('<div class="mapdiv"></div>');
+            $('.wrBorder').hide();
 
-	if($('.wrBorder').length > 0) {
+        }
 
-		$('.wrBorder').hide();
+        //	selDiv.css({
+        //
+        //		'position': 'absolute',
+        //
+        //		'width': '0px',
+        //
+        //		'height': '0px',
+        //
+        //		'font-size': '0px',
+        //
+        //		'margin': '0px',
+        //
+        //		'padding': '0px',
+        //
+        //		'border': '1px solid #1ab394',
+        //
+        //		'background-color': '#4acfb4',
+        //
+        //		'z-index': '1000',
+        //
+        //		'filter': 'alpha(opacity:60)',
+        //
+        //		'opacity': '0.6',
+        //
+        //		'display': 'none',
+        //
+        //		'left': oX,
+        //
+        //		'top': oY
+        //
+        //	});
+        //
+        //	$(this).append(selDiv);
 
-	}
+        $('.wBorder').remove();
 
-	//	selDiv.css({
-	//
-	//		'position': 'absolute',
-	//
-	//		'width': '0px',
-	//
-	//		'height': '0px',
-	//
-	//		'font-size': '0px',
-	//
-	//		'margin': '0px',
-	//
-	//		'padding': '0px',
-	//
-	//		'border': '1px solid #1ab394',
-	//
-	//		'background-color': '#4acfb4',
-	//
-	//		'z-index': '1000',
-	//
-	//		'filter': 'alpha(opacity:60)',
-	//
-	//		'opacity': '0.6',
-	//
-	//		'display': 'none',
-	//
-	//		'left': oX,
-	//
-	//		'top': oY
-	//
-	//	});
-	//
-	//	$(this).append(selDiv);
+        var _x = null;
 
-	$('.wBorder').remove();
+        var _y = null;
 
-	var _x = null;
+        var mergeArr = [];
 
-	var _y = null;
+        $(that.container).on('mousemove', function () {
 
-	var mergeArr = [];
+            var evt = window.event || arguments[0];
 
-	$(that.container).on('mousemove', function() {
+            var xArr = [],
 
-		var evt = window.event || arguments[0];
+                yArr = [];
 
-		var xArr = [],
+            var sleft = $(this).scrollLeft();
 
-			yArr = [];
+            var stop = $(this).scrollTop();
 
-		var sleft = $(this).scrollLeft();
+            if (isSelect) {
 
-		var stop = $(this).scrollTop();
+                //				if(selDiv.css('display') == "none") {
 
-		if(isSelect) {
+                //					selDiv.css('display', 'none');
 
-			//				if(selDiv.css('display') == "none") {
+                //				}
 
-			//					selDiv.css('display', 'none');
+                _x = (evt.x || evt.clientX);
 
-			//				}
+                _y = (evt.y || evt.clientY);
 
-			_x = (evt.x || evt.clientX);
+                _x = _x + sleft;
 
-			_y = (evt.y || evt.clientY);
+                _y = _y + stop - disHeight;
 
-			_x = _x + sleft;
+                //			selDiv.css({
+                //
+                //				'left': Math.min(_x, oX),
+                //
+                //				'top': Math.min(_y, oY),
+                //
+                //				'width': Math.abs(_x - oX),
+                //
+                //				'height': Math.abs(_y - oY)
+                //
+                //			});
 
-			_y = _y + stop - disHeight;
+                if (_x + 86 >= cWidth) {
 
-			//			selDiv.css({
-			//
-			//				'left': Math.min(_x, oX),
-			//
-			//				'top': Math.min(_y, oY),
-			//
-			//				'width': Math.abs(_x - oX),
-			//
-			//				'height': Math.abs(_y - oY)
-			//
-			//			});
+                    sleft += 100;
 
-			if(_x + 86 >= cWidth) {
+                    $(that.container).scrollLeft(sleft);
 
-				sleft += 100;
+                } else {
 
-				$(that.container).scrollLeft(sleft);
+                    sleft -= 100;
 
-			} else {
+                    $(that.container).scrollLeft(sleft);
 
-				sleft -= 100;
+                }
 
-				$(that.container).scrollLeft(sleft);
+                //			var _l = parseInt(selDiv.css('left'));
+                //
+                //			var _t = parseInt(selDiv.css('top'));
+                var _l = parseInt(Math.min(_x, oX));
 
-			}
+                var _t = parseInt(Math.min(_y, oY));
+                //			var _w = selDiv.width(),
+                //
+                //				_h = selDiv.height();
 
-			//			var _l = parseInt(selDiv.css('left'));
-			//
-			//			var _t = parseInt(selDiv.css('top'));
-			var _l = parseInt(Math.min(_x, oX));
+                var _w = Math.abs(_x - oX),
 
-			var _t = parseInt(Math.min(_y, oY));
-			//			var _w = selDiv.width(),
-			//
-			//				_h = selDiv.height();
+                    _h = Math.abs(_y - oY);
 
-			var _w = Math.abs(_x - oX),
+                for (var i = 0; i < fileNodes.length; i++) {
 
-				_h = Math.abs(_y - oY);
+                    var sl = fileNodes[i].offsetWidth + fileNodes[i].offsetLeft;
 
-			for(var i = 0; i < fileNodes.length; i++) {
+                    var st = fileNodes[i].offsetHeight + fileNodes[i].offsetTop;
 
-				var sl = fileNodes[i].offsetWidth + fileNodes[i].offsetLeft;
+                    if (sl > _l && st > _t && fileNodes[i].offsetLeft < _l + _w && fileNodes[i].offsetTop < _t + _h) {
 
-				var st = fileNodes[i].offsetHeight + fileNodes[i].offsetTop;
+                        var nCols = parseInt($(fileNodes[i]).attr('cols')) - 1;
 
-				if(sl > _l && st > _t && fileNodes[i].offsetLeft < _l + _w && fileNodes[i].offsetTop < _t + _h) {
+                        var nRows = parseInt($(fileNodes[i]).attr('rows')) - 1;
 
-					var nCols = parseInt($(fileNodes[i]).attr('cols')) - 1;
+                        var nCspan = parseInt($(fileNodes[i]).attr('colspan')) - 1 || 0;
 
-					var nRows = parseInt($(fileNodes[i]).attr('rows')) - 1;
+                        var nRspan = parseInt($(fileNodes[i]).attr('rowspan')) - 1 || 0;
 
-					var nCspan = parseInt($(fileNodes[i]).attr('colspan')) - 1 || 0;
+                        var expectX = nCols + nCspan;
 
-					var nRspan = parseInt($(fileNodes[i]).attr('rowspan')) - 1 || 0;
+                        var expectY = nRows + nRspan;
 
-					var expectX = nCols + nCspan;
+                        xArr.push(nCols);
 
-					var expectY = nRows + nRspan;
+                        yArr.push(nRows);
 
-					xArr.push(nCols);
+                        xArr.push(expectX);
 
-					yArr.push(nRows);
+                        yArr.push(expectY);
 
-					xArr.push(expectX);
+                        var xMax = xArr.max(),
 
-					yArr.push(expectY);
+                            xMin = xArr.min(),
 
-					var xMax = xArr.max(),
+                            yMax = yArr.max(),
 
-						xMin = xArr.min(),
+                            yMin = yArr.min();
 
-						yMax = yArr.max(),
+                        var top = $(fileNodes[i])[0].offsetTop,
 
-						yMin = yArr.min();
+                            left = $(fileNodes[i])[0].offsetLeft,
 
-					var top = $(fileNodes[i])[0].offsetTop,
+                            width = $(fileNodes[i])[0].offsetWidth,
 
-						left = $(fileNodes[i])[0].offsetLeft,
+                            height = $(fileNodes[i])[0].offsetHeight;
 
-						width = $(fileNodes[i])[0].offsetWidth,
+                        $(fileNodes[i]).addClass('picked');
 
-						height = $(fileNodes[i])[0].offsetHeight;
+                    } else {
 
-					$(fileNodes[i]).addClass('picked');
+                        $(fileNodes[i]).removeClass('picked');
 
-				} else {
+                    }
 
-					$(fileNodes[i]).removeClass('picked');
+                }
 
-				}
+                // for(var i = xMin; i < (xMax + 1); i++) {
+                // 	for(var j = yMin; j < (yMax + 1); j++) {
+                // 		if($('td[cols=' + (i + 1) + '][rows=' + (j + 1) + ']').length > 0&&!$('td[cols=' + (i + 1) + '][rows=' + (j + 1) + ']').hasClass('picked')) {
+                //
+                // 			$('td[cols=' + (i + 1) + '][rows=' + (j + 1) + ']').addClass('picked');
+                //
+                // 		}
+                //
+                // 	}
+                //
+                // }
 
-			}
+                that.wBorderSelect($('.picked'));
 
-			for(var i = xMin; i < (xMax + 1); i++) {
-				for(var j = yMin; j < (yMax + 1); j++) {
-					if($('td[cols=' + (i + 1) + '][rows=' + (j + 1) + ']').length > 0) {
+                that.lightCoor($('.picked'));
 
-						$('td[cols=' + (i + 1) + '][rows=' + (j + 1) + ']').addClass('picked');
+            }
 
-					}
+        });
 
-				}
+        $(document).off('mouseup').on('mouseup', function () {
 
-			}
+            isSelect = false;
 
-			that.wBorderSelect($('.picked'));
+            //selDiv && selDiv.remove();
 
-			that.lightCoor($('.picked'));
+        });
 
-		}
+    }
 
-	});
+    Array.prototype.min = function () {
 
-	$(document).off('mouseup').on('mouseup', function() {
+        var min = this[0];
 
-		isSelect = false;
+        var len = this.length;
 
-		//selDiv && selDiv.remove();
+        for (var i = 1; i < len; i++) {
 
-	});
+            if (this[i] < min) {
 
-}
+                min = this[i];
 
-Array.prototype.min = function() {
+            }
 
-	var min = this[0];
+        }
 
-	var len = this.length;
+        return min;
 
-	for(var i = 1; i < len; i++) {
+    }
 
-		if(this[i] < min) {
+    //最大值
 
-			min = this[i];
+    Array.prototype.max = function () {
 
-		}
+        var max = this[0];
 
-	}
+        var len = this.length;
 
-	return min;
+        for (var i = 1; i < len; i++) {
 
-}
+            if (this[i] > max) {
 
-//最大值
+                max = this[i];
 
-Array.prototype.max = function() {
+            }
 
-	var max = this[0];
+        }
 
-	var len = this.length;
+        return max;
 
-	for(var i = 1; i < len; i++) {
+    }
 
-		if(this[i] > max) {
+    iTable.prototype.keyCursor = function () {
 
-			max = this[i];
+        var that = this;
 
-		}
+        $(document).off('keydown').on('keydown', {
 
-	}
+            time: "0",
 
-	return max;
+            lastTd: "",
 
-}
+            fixX: "",
 
-iTable.prototype.keyCursor = function() {
+            fixY: "",
 
-	var that = this;
+            keyCode: "",
 
-	$(document).off('keydown').on('keydown', {
+            callz: that
 
-		time: "0",
+        }, typing);
 
-		lastTd: "",
+    }
 
-		fixX: "",
+    function typing(event) {
 
-		fixY: "",
+        var sNode = $('.picked');
 
-		keyCode: "",
+        var callZ = event.data.callz;
 
-		callz: that
+        if ($('.picked').length == 1) {
 
-	}, typing);
+            if (event.keyCode == '8' || event.keyCode == '18' || event.keyCode == '16' || event.keyCode == '9') {
 
-}
+                return;
 
-function typing(event) {
+            }
 
-	var sNode = $('.picked');
+            var that = $(this);
 
-	var callZ = event.data.callz;
+            var tdText = $('.picked').text();
 
-	if($('.picked').length == 1) {
+            var tdWidth = $('.picked').width();
 
-		if(event.keyCode == '8' || event.keyCode == '18' || event.keyCode == '16' || event.keyCode == '9') {
+            var tdHeight = $('.picked').height();
 
-			return;
+            var tdInput = $("<input type='text'  id='tdInput' class='tdInput'  value='" + tdText + "'>");
 
-		}
+            if (!$('.picked input').length) {
 
-		var that = $(this);
+                $('.picked').html(tdInput);
 
-		var tdText = $('.picked').text();
+            }
 
-		var tdWidth = $('.picked').width();
+            tdInput.width(tdWidth - 2);
 
-		var tdHeight = $('.picked').height();
+            tdInput.height(tdHeight - 2);
 
-		var tdInput = $("<input type='text'  id='tdInput' class='tdInput'  value='" + tdText + "'>");
+            tdInput.focus();
 
-		if(!$('.picked input').length) {
+            var nowX = parseInt($(sNode).attr('cols'));
 
-			$('.picked').html(tdInput);
+            var nowY = parseInt($(sNode).attr('rows'));
 
-		}
+            var colAdd = parseInt($(sNode).attr('colspan')) - 1 || 0;
 
-		tdInput.width(tdWidth - 2);
+            var rowAdd = parseInt($(sNode).attr('rowspan')) - 1 || 0;
 
-		tdInput.height(tdHeight - 2);
+            nowX += colAdd;
 
-		tdInput.focus();
+            nowY += rowAdd;
 
-		var nowX = parseInt($(sNode).attr('cols'));
+            event.data.time = parseInt(event.data.time) + 1;
 
-		var nowY = parseInt($(sNode).attr('rows'));
+            if (event.data.time === 1) {
 
-		var colAdd = parseInt($(sNode).attr('colspan')) - 1 || 0;
+                //获取第一次点击的单元格
 
-		var rowAdd = parseInt($(sNode).attr('rowspan')) - 1 || 0;
+                event.data.lastTd = sNode;
 
-		nowX += colAdd;
+                event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
 
-		nowY += rowAdd;
+                event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 
-		event.data.time = parseInt(event.data.time) + 1;
+            }
 
-		if(event.data.time === 1) {
+            //↓
 
-			//获取第一次点击的单元格
+            if (event.keyCode == '13' || event.keyCode == '40') {
 
-			event.data.lastTd = sNode;
+                if (event.target == $('body')[0]) {
 
-			event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                    tdInput.remove();
 
-			event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                }
 
-		}
+                if (event.target != $('body')[0]) {
 
-		//↓
+                    $('.picked').html($(event.target).val());
 
-		if(event.keyCode == '13' || event.keyCode == '40') {
+                    $(event.target).blur(function () {
 
-			if(event.target == $('body')[0]) {
+                        $(this).remove();
 
-				tdInput.remove();
+                    });
 
-			}
+                }
 
-			if(event.target != $('body')[0]) {
+                if ($(event.data.lastTd)[0] != $(sNode)[0]) {
 
-				$('.picked').html($(event.target).val());
+                    if (event.data.fixX != nowX) {
 
-				$(event.target).blur(function() {
+                        //不同单元格x坐标不同
 
-					$(this).remove();
+                        if (!$(sNode).attr('colspan') && !$(sNode).attr('rowspan')) {
 
-				});
+                            //区分跨行列时，单元格x坐标不同情况
 
-			}
+                            event.data.lastTd = sNode;
 
-			if($(event.data.lastTd)[0] != $(sNode)[0]) {
+                            event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
 
-				if(event.data.fixX != nowX) {
+                            event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 
-					//不同单元格x坐标不同
+                        }
 
-					if(!$(sNode).attr('colspan') && !$(sNode).attr('rowspan')) {
+                    }
 
-						//区分跨行列时，单元格x坐标不同情况
+                }
 
-						event.data.lastTd = sNode;
+                var lastKey = String(event.data.keyCode);
 
-						event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                switch (lastKey) {
 
-						event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                    case '39':
 
-					}
+                        event.data.lastTd = sNode;
 
-				}
+                        event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
 
-			}
+                        event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 
-			var lastKey = String(event.data.keyCode);
+                        break;
 
-			switch(lastKey) {
+                    case '37':
 
-				case '39':
+                        event.data.lastTd = sNode;
 
-					event.data.lastTd = sNode;
+                        event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
 
-					event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                        event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 
-					event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                        break;
 
-					break;
+                    case '38':
 
-				case '37':
+                        event.data.lastTd = sNode;
 
-					event.data.lastTd = sNode;
+                        event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
 
-					event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                        event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 
-					event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                        break;
 
-					break;
+                }
 
-				case '38':
+                var nextX = event.data.fixX;
 
-					event.data.lastTd = sNode;
+                var nextY = nowY + 1;
 
-					event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                if ($('td[cols=' + nextX + '][rows=' + nextY + ']').length > 0) {
 
-					event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                    $(sNode).removeClass('picked');
 
-					break;
+                    $('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('picked');
 
-			}
+                    callZ.wBorder($('td[cols=' + nextX + '][rows=' + nextY + ']'));
 
-			var nextX = event.data.fixX;
+                } else {
 
-			var nextY = nowY + 1;
+                    var _nowY = nowY + 1;
 
-			if($('td[cols=' + nextX + '][rows=' + nextY + ']').length > 0) {
+                    var _nowX = nowX + 1;
 
-				$(sNode).removeClass('picked');
+                    while (_nowY >= 0) {
 
-				$('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('picked');
+                        while (_nowX >= 0) {
 
-				callZ.wBorder($('td[cols=' + nextX + '][rows=' + nextY + ']'));
+                            var nextRowspan = parseInt($('td[cols=' + _nowX + '][rows=' + _nowY + ']').attr('rowspan'));
 
-			} else {
+                            var nextColspan = parseInt($('td[cols=' + _nowX + '][rows=' + _nowY + ']').attr('colspan'));
 
-				var _nowY = nowY + 1;
+                            $(sNode).removeClass('picked');
 
-				var _nowX = nowX + 1;
+                            //下一个单元格行列不合并
 
-				while(_nowY >= 0) {
+                            if (!nextRowspan && !nextColspan) {
 
-					while(_nowX >= 0) {
+                                //							$("[pos='" + nextX + "-" + nextY + "']").addClass('picked');
 
-						var nextRowspan = parseInt($('td[cols=' + _nowX + '][rows=' + _nowY + ']').attr('rowspan'));
+                                $('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('picked');
 
-						var nextColspan = parseInt($('td[cols=' + _nowX + '][rows=' + _nowY + ']').attr('colspan'));
+                                callZ.wBorder($('.picked'));
 
-						$(sNode).removeClass('picked');
+                            }
 
-						//下一个单元格行列不合并 
+                            //下一个单元格只列合并
 
-						if(!nextRowspan && !nextColspan) {
+                            if (!nextRowspan && nextColspan) {
 
-							//							$("[pos='" + nextX + "-" + nextY + "']").addClass('picked');
+                                //$("[pos='" + _nowX + "-" + nextY + "']").addClass('picked');
 
-							$('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('picked');
+                                $('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('picked');
 
-							callZ.wBorder($('.picked'));
+                                callZ.wBorder($('.picked'));
 
-						}
+                            }
 
-						//下一个单元格只列合并 
+                            //下一个单元格只行合并
 
-						if(!nextRowspan && nextColspan) {
+                            if (nextRowspan && !nextColspan) {
 
-							//$("[pos='" + _nowX + "-" + nextY + "']").addClass('picked');
+                                //	$("[pos='" + _nowX + "-" + nextY + "']").addClass('picked');
 
-							$('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('picked');
+                                $('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('picked');
 
-							callZ.wBorder($('.picked'));
+                                callZ.wBorder($('.picked'));
 
-						}
+                            }
 
-						//下一个单元格只行合并 
+                            //下一个单元格行列合并
 
-						if(nextRowspan && !nextColspan) {
+                            if (nextRowspan && nextColspan) {
 
-							//	$("[pos='" + _nowX + "-" + nextY + "']").addClass('picked');
+                                // $("[pos='" + _nowX + "-" + _nowY + "']").addClass('picked');
 
-							$('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('picked');
+                                $('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked');
 
-							callZ.wBorder($('.picked'));
+                                callZ.wBorder($('.picked'));
 
-						}
+                            }
 
-						//下一个单元格行列合并 
+                            _nowX--;
 
-						if(nextRowspan && nextColspan) {
+                        }
 
-							// $("[pos='" + _nowX + "-" + _nowY + "']").addClass('picked');
+                        _nowY--;
 
-							$('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked');
+                    }
 
-							callZ.wBorder($('.picked'));
+                }
 
-						}
+                event.data.keyCode = event.keyCode;
 
-						_nowX--;
+                callZ.lightCoor($('.picked'));
 
-					}
+            }
 
-					_nowY--;
+            //→
 
-				}
+            if (event.keyCode == '39') {
 
-			}
+                if (event.target == $('body')[0]) {
 
-			event.data.keyCode = event.keyCode;
+                    tdInput.remove();
 
-			callZ.lightCoor($('.picked'));
+                }
 
-		}
+                if (event.target != $('body')[0]) {
 
-		//→
+                    $('.picked').html($(event.target).val());
 
-		if(event.keyCode == '39') {
+                    $(event.target).blur(function () {
 
-			if(event.target == $('body')[0]) {
+                        $(this).remove();
 
-				tdInput.remove();
+                    });
 
-			}
+                }
 
-			if(event.target != $('body')[0]) {
+                if ($(event.data.lastTd)[0] != $(sNode)[0]) {
 
-				$('.picked').html($(event.target).val());
+                    if (event.data.fixY != nowY) {
 
-				$(event.target).blur(function() {
+                        //不同单元格x坐标不同
 
-					$(this).remove();
+                        if (!$(sNode).attr('colspan') && !$(sNode).attr('rowspan')) {
 
-				});
+                            //区分跨行列时，单元格x坐标不同情况
 
-			}
+                            event.data.lastTd = sNode;
 
-			if($(event.data.lastTd)[0] != $(sNode)[0]) {
+                            event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
 
-				if(event.data.fixY != nowY) {
+                            event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 
-					//不同单元格x坐标不同
+                        }
 
-					if(!$(sNode).attr('colspan') && !$(sNode).attr('rowspan')) {
+                    }
 
-						//区分跨行列时，单元格x坐标不同情况
+                }
 
-						event.data.lastTd = sNode;
+                var lastKey = String(event.data.keyCode);
 
-						event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                switch (lastKey) {
 
-						event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                    case '13':
 
-					}
+                        event.data.lastTd = sNode;
 
-				}
+                        event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
 
-			}
+                        event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 
-			var lastKey = String(event.data.keyCode);
+                        break;
 
-			switch(lastKey) {
+                    case '40':
 
-				case '13':
+                        event.data.lastTd = sNode;
 
-					event.data.lastTd = sNode;
+                        event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
 
-					event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                        event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 
-					event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                        break;
 
-					break;
+                    case '37':
 
-				case '40':
+                        event.data.lastTd = sNode;
 
-					event.data.lastTd = sNode;
+                        event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
 
-					event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                        event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 
-					event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                        break;
 
-					break;
+                    case '38':
 
-				case '37':
+                        event.data.lastTd = sNode;
 
-					event.data.lastTd = sNode;
+                        event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
 
-					event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                        event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 
-					event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                        break;
 
-					break;
+                }
 
-				case '38':
+                var nextX = nowX + 1;
 
-					event.data.lastTd = sNode;
+                var nextY = event.data.fixY;
 
-					event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                if ($('td[cols=' + nextX + '][rows=' + nextY + ']').length > 0) {
 
-					event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                    $(sNode).removeClass('picked');
 
-					break;
+                    $('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('picked');
 
-			}
+                    callZ.wBorder($('td[cols=' + nextX + '][rows=' + nextY + ']'));
 
-			var nextX = nowX + 1;
+                } else {
 
-			var nextY = event.data.fixY;
+                    var _nowY = nowY + 1;
 
-			if($('td[cols=' + nextX + '][rows=' + nextY + ']').length > 0) {
+                    var _nowX = nowX + 1;
 
-				$(sNode).removeClass('picked');
+                    while (_nowX >= 0) {
 
-				$('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('picked');
+                        while (_nowY >= 0) {
 
-				callZ.wBorder($('td[cols=' + nextX + '][rows=' + nextY + ']'));
+                            var nextRowspan = parseInt($('td[cols=' + _nowX + '][rows=' + _nowY + ']').attr('rowspan'));
 
-			} else {
+                            var nextColspan = parseInt($('td[cols=' + _nowX + '][rows=' + _nowY + ']').attr('colspan'));
 
-				var _nowY = nowY + 1;
+                            $(sNode).removeClass('picked');
 
-				var _nowX = nowX + 1;
+                            //下一个单元格行列不合并
 
-				while(_nowX >= 0) {
+                            if (!nextRowspan && !nextColspan) {
 
-					while(_nowY >= 0) {
+                                //$("[pos='" + nextX + "-" + nextY + "']").addClass('picked');
 
-						var nextRowspan = parseInt($('td[cols=' + _nowX + '][rows=' + _nowY + ']').attr('rowspan'));
+                                $('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('picked');
 
-						var nextColspan = parseInt($('td[cols=' + _nowX + '][rows=' + _nowY + ']').attr('colspan'));
+                                callZ.wBorder($('.picked'));
 
-						$(sNode).removeClass('picked');
+                            }
 
-						//下一个单元格行列不合并 
+                            //下一个单元格只行合并
 
-						if(!nextRowspan && !nextColspan) {
+                            if (!nextRowspan && nextColspan) {
 
-							//$("[pos='" + nextX + "-" + nextY + "']").addClass('picked');
+                                //	$("[pos='" + _nowX + "-" + nextY + "']").addClass('picked');
 
-							$('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('picked');
+                                $('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('picked');
 
-							callZ.wBorder($('.picked'));
+                                callZ.wBorder($('.picked'));
 
-						}
+                            }
 
-						//下一个单元格只行合并 
+                            //下一个单元格只列合并
 
-						if(!nextRowspan && nextColspan) {
+                            if (nextRowspan && !nextColspan) {
 
-							//	$("[pos='" + _nowX + "-" + nextY + "']").addClass('picked');
+                                //	$("[pos='" + nextX + "-" + _nowY + "']").addClass('picked');
 
-							$('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('picked');
+                                $('td[cols=' + nextX + '][rows=' + _nowY + ']').addClass('picked');
 
-							callZ.wBorder($('.picked'));
+                                callZ.wBorder($('.picked'));
 
-						}
+                            }
 
-						//下一个单元格只列合并 
+                            //下一个单元格行列合并
 
-						if(nextRowspan && !nextColspan) {
+                            if (nextRowspan && nextColspan) {
 
-							//	$("[pos='" + nextX + "-" + _nowY + "']").addClass('picked');
+                                //	$("[pos='" + _nowX + "-" + _nowY + "']").addClass('picked');
 
-							$('td[cols=' + nextX + '][rows=' + _nowY + ']').addClass('picked');
+                                $('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked');
 
-							callZ.wBorder($('.picked'));
+                                callZ.wBorder($('.picked'));
 
-						}
+                            }
 
-						//下一个单元格行列合并 
+                            _nowY--;
 
-						if(nextRowspan && nextColspan) {
+                        }
 
-							//	$("[pos='" + _nowX + "-" + _nowY + "']").addClass('picked');
+                        _nowX--;
 
-							$('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked');
+                    }
 
-							callZ.wBorder($('.picked'));
+                }
 
-						}
+                event.data.keyCode = event.keyCode;
 
-						_nowY--;
+                callZ.lightCoor($('.picked'));
 
-					}
+            }
 
-					_nowX--;
+            //←
 
-				}
+            if (event.keyCode == '37') {
 
-			}
+                var r1 = 0,
 
-			event.data.keyCode = event.keyCode;
+                    r2 = 0,
 
-			callZ.lightCoor($('.picked'));
+                    r3 = 0;
 
-		}
+                if (event.target == $('body')[0]) {
 
-		//←
+                    tdInput.remove();
 
-		if(event.keyCode == '37') {
+                }
 
-			var r1 = 0,
+                if (event.target != $('body')[0]) {
 
-				r2 = 0,
+                    $('.picked').html($(event.target).val());
 
-				r3 = 0;
+                    $(event.target).blur(function () {
 
-			if(event.target == $('body')[0]) {
+                        $(this).remove();
 
-				tdInput.remove();
+                    });
 
-			}
+                }
 
-			if(event.target != $('body')[0]) {
+                if ($(event.data.lastTd)[0] != $(sNode)[0]) {
 
-				$('.picked').html($(event.target).val());
+                    if (event.data.fixX != nowX) {
 
-				$(event.target).blur(function() {
+                        //不同单元格x坐标不同
 
-					$(this).remove();
+                        if (!$(sNode).attr('colspan') && !$(sNode).attr('rowspan')) {
 
-				});
+                            //区分跨行列时，单元格x坐标不同情况
 
-			}
+                            event.data.lastTd = sNode;
 
-			if($(event.data.lastTd)[0] != $(sNode)[0]) {
+                            event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
 
-				if(event.data.fixX != nowX) {
+                            event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 
-					//不同单元格x坐标不同
+                        }
 
-					if(!$(sNode).attr('colspan') && !$(sNode).attr('rowspan')) {
+                    }
 
-						//区分跨行列时，单元格x坐标不同情况
+                }
 
-						event.data.lastTd = sNode;
+                var lastKey = String(event.data.keyCode);
 
-						event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                switch (lastKey) {
 
-						event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                    case '13':
 
-					}
+                        event.data.lastTd = sNode;
 
-				}
+                        event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
 
-			}
+                        event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 
-			var lastKey = String(event.data.keyCode);
+                        break;
 
-			switch(lastKey) {
+                    case '40':
 
-				case '13':
+                        event.data.lastTd = sNode;
 
-					event.data.lastTd = sNode;
+                        event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
 
-					event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                        event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 
-					event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                        break;
 
-					break;
+                    case '38':
 
-				case '40':
+                        event.data.lastTd = sNode;
 
-					event.data.lastTd = sNode;
+                        event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
 
-					event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                        event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 
-					event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                        break;
 
-					break;
+                    case '39':
 
-				case '38':
+                        event.data.lastTd = sNode;
 
-					event.data.lastTd = sNode;
+                        event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
 
-					event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                        event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 
-					event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                        break;
 
-					break;
+                }
 
-				case '39':
+                var nextX = parseInt(nowX - 1);
 
-					event.data.lastTd = sNode;
+                var nextY = parseInt(event.data.fixY);
 
-					event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                if ($('td[cols=' + nextX + '][rows=' + nextY + ']').length > 0) {
 
-					event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                    $(sNode).removeClass('picked');
 
-					break;
+                    $('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('picked');
 
-			}
+                    callZ.wBorder($('.picked'));
 
-			var nextX = parseInt(nowX - 1);
+                } else {
 
-			var nextY = parseInt(event.data.fixY);
+                    var _nowY = nowY;
 
-			if($('td[cols=' + nextX + '][rows=' + nextY + ']').length > 0) {
+                    var _nowX = nowX;
 
-				$(sNode).removeClass('picked');
+                    while (_nowY >= 0) {
 
-				$('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('picked');
+                        _nowX = nowX;
 
-				callZ.wBorder($('.picked'));
+                        while (_nowX >= 0) {
 
-			} else {
+                            var nextRowspan = parseInt($('td[cols=' + _nowX + '][rows=' + _nowY + ']').attr('rowspan'));
 
-				var _nowY = nowY;
+                            var nextColspan = parseInt($('td[cols=' + _nowX + '][rows=' + _nowY + ']').attr('colspan'));
 
-				var _nowX = nowX;
+                            var lastColspan = parseInt($(sNode).attr('colspan')) - 1;
 
-				while(_nowY >= 0) {
+                            var lastRowspan = parseInt($(sNode).attr('rowspan')) - 1;
 
-					_nowX = nowX;
+                            $(sNode).removeClass('picked');
 
-					while(_nowX >= 0) {
+                            //下一个单元格行列不合并
 
-						var nextRowspan = parseInt($('td[cols=' + _nowX + '][rows=' + _nowY + ']').attr('rowspan'));
+                            if (!nextRowspan && !nextColspan) {
 
-						var nextColspan = parseInt($('td[cols=' + _nowX + '][rows=' + _nowY + ']').attr('colspan'));
+                                //	$("[pos='" + (nextX - lastColspan) + "-" + nextY + "']").addClass('picked');
 
-						var lastColspan = parseInt($(sNode).attr('colspan')) - 1;
+                                $('td[cols=' + (nextX - lastColspan) + '][rows=' + nextY + ']').addClass('picked');
 
-						var lastRowspan = parseInt($(sNode).attr('rowspan')) - 1;
+                                callZ.wBorder($('td[cols=' + (nextX - lastColspan) + '][rows=' + nextY + ']'));
 
-						$(sNode).removeClass('picked');
+                            }
 
-						//下一个单元格行列不合并 
+                            //下一个单元格只列合并
 
-						if(!nextRowspan && !nextColspan) {
+                            if (!nextRowspan && nextColspan) {
 
-							//	$("[pos='" + (nextX - lastColspan) + "-" + nextY + "']").addClass('picked');
+                                if ($('td[cols=' + (nextX - nextColspan + 1) + '][rows=' + nextY + ']').length > 0) {
 
-							$('td[cols=' + (nextX - lastColspan) + '][rows=' + nextY + ']').addClass('picked');
+                                    r1++;
 
-							callZ.wBorder($('td[cols=' + (nextX - lastColspan) + '][rows=' + nextY + ']'));
+                                    if (r1 == 1) {
 
-						}
+                                        $('td[cols=' + (nextX - nextColspan + 1) + '][rows=' + nextY + ']').addClass('picked');
 
-						//下一个单元格只列合并 
+                                        callZ.wBorder($('.picked'));
 
-						if(!nextRowspan && nextColspan) {
+                                    }
 
-							if($('td[cols=' + (nextX - nextColspan + 1) + '][rows=' + nextY + ']').length > 0) {
+                                }
 
-								r1++;
+                            }
 
-								if(r1 == 1) {
+                            //下一个单元格只行合并
 
-									$('td[cols=' + (nextX - nextColspan + 1) + '][rows=' + nextY + ']').addClass('picked');
+                            if (nextRowspan && !nextColspan) {
 
-									callZ.wBorder($('.picked'));
+                                if ($('td[cols=' + nextX + '][rows=' + _nowY + ']').length > 0) {
 
-								}
+                                    r2++;
 
-							}
+                                    if (r2 == 1) {
 
-						}
+                                        $('td[cols=' + nextX + '][rows=' + _nowY + ']').addClass('picked');
 
-						//下一个单元格只行合并 
+                                        callZ.wBorder($('.picked'));
 
-						if(nextRowspan && !nextColspan) {
+                                    }
 
-							if($('td[cols=' + nextX + '][rows=' + _nowY + ']').length > 0) {
+                                    //(r2 == 1) && ($('td[cols=' + nextX + '][rows=' + _nowY + ']').addClass('picked'));
 
-								r2++;
+                                }
 
-								if(r2 == 1) {
+                            }
 
-									$('td[cols=' + nextX + '][rows=' + _nowY + ']').addClass('picked');
+                            //下一个单元格行列合并
 
-									callZ.wBorder($('.picked'));
+                            if (nextRowspan && nextColspan) {
 
-								}
+                                if ($('td[cols=' + _nowX + '][rows=' + _nowY + ']').length > 0) {
 
-								//(r2 == 1) && ($('td[cols=' + nextX + '][rows=' + _nowY + ']').addClass('picked'));
+                                    r3++;
 
-							}
+                                    if (r3 == 1) {
 
-						}
+                                        $('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked');
 
-						//下一个单元格行列合并 
+                                        callZ.wBorder($('.picked'));
 
-						if(nextRowspan && nextColspan) {
+                                    }
 
-							if($('td[cols=' + _nowX + '][rows=' + _nowY + ']').length > 0) {
+                                    //(r3 == 1) && ($('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked'));
 
-								r3++;
+                                }
 
-								if(r3 == 1) {
+                            }
 
-									$('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked');
+                            _nowX--;
 
-									callZ.wBorder($('.picked'));
+                        }
 
-								}
+                        _nowY--;
 
-								//(r3 == 1) && ($('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked'));
+                    }
 
-							}
+                }
 
-						}
+                event.data.keyCode = event.keyCode;
 
-						_nowX--;
+                callZ.lightCoor($('.picked'));
 
-					}
+            }
 
-					_nowY--;
+            //↑
 
-				}
+            if (event.keyCode == '38') {
 
-			}
+                var u1 = 0,
 
-			event.data.keyCode = event.keyCode;
+                    u2 = 0,
 
-			callZ.lightCoor($('.picked'));
+                    u3 = 0;
 
-		}
+                if (event.target == $('body')[0]) {
 
-		//↑
+                    tdInput.remove();
 
-		if(event.keyCode == '38') {
+                }
 
-			var u1 = 0,
+                if (event.target != $('body')[0]) {
 
-				u2 = 0,
+                    $('.picked').html($(event.target).val());
 
-				u3 = 0;
+                    $(event.target).blur(function () {
 
-			if(event.target == $('body')[0]) {
+                        $(this).remove();
 
-				tdInput.remove();
+                    });
 
-			}
+                }
 
-			if(event.target != $('body')[0]) {
+                if ($(event.data.lastTd)[0] != $(sNode)[0]) {
 
-				$('.picked').html($(event.target).val());
+                    if (event.data.fixX != nowX) {
 
-				$(event.target).blur(function() {
+                        //不同单元格x坐标不同
 
-					$(this).remove();
+                        if (!$(sNode).attr('colspan') && !$(sNode).attr('rowspan')) {
 
-				});
+                            //区分跨行列时，单元格x坐标不同情况
 
-			}
+                            event.data.lastTd = sNode;
 
-			if($(event.data.lastTd)[0] != $(sNode)[0]) {
+                            event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
 
-				if(event.data.fixX != nowX) {
+                            event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 
-					//不同单元格x坐标不同
+                        }
 
-					if(!$(sNode).attr('colspan') && !$(sNode).attr('rowspan')) {
+                    }
 
-						//区分跨行列时，单元格x坐标不同情况
+                }
 
-						event.data.lastTd = sNode;
+                var lastKey = String(event.data.keyCode);
 
-						event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                switch (lastKey) {
 
-						event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                    case '13':
 
-					}
+                        event.data.lastTd = sNode;
 
-				}
+                        event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
 
-			}
+                        event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 
-			var lastKey = String(event.data.keyCode);
+                        break;
 
-			switch(lastKey) {
+                    case '40':
 
-				case '13':
+                        event.data.lastTd = sNode;
 
-					event.data.lastTd = sNode;
+                        event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
 
-					event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                        event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 
-					event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                        break;
 
-					break;
+                    case '37':
 
-				case '40':
+                        event.data.lastTd = sNode;
 
-					event.data.lastTd = sNode;
+                        event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
 
-					event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                        event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 
-					event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                        break;
 
-					break;
+                    case '39':
 
-				case '37':
+                        event.data.lastTd = sNode;
 
-					event.data.lastTd = sNode;
+                        event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
 
-					event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                        event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
 
-					event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                        break;
 
-					break;
+                }
 
-				case '39':
+                var nextX = event.data.fixX;
 
-					event.data.lastTd = sNode;
+                var nextY = nowY - 1;
 
-					event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                if ($('td[cols=' + nextX + '][rows=' + nextY + ']').length > 0) {
 
-					event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                    $(sNode).removeClass('picked');
 
-					break;
+                    $('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('picked');
 
-			}
+                    callZ.wBorder($('.picked'));
 
-			var nextX = event.data.fixX;
+                } else {
 
-			var nextY = nowY - 1;
+                    var _nowY = nowY;
 
-			if($('td[cols=' + nextX + '][rows=' + nextY + ']').length > 0) {
+                    var _nowX = nowX;
 
-				$(sNode).removeClass('picked');
+                    while (_nowX >= 0) {
 
-				$('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('picked');
+                        _nowY = nowY;
 
-				callZ.wBorder($('.picked'));
+                        while (_nowY >= 0) {
 
-			} else {
+                            var nextRowspan = parseInt($('td[cols=' + _nowX + '][rows=' + _nowY + ']').attr('rowspan'));
 
-				var _nowY = nowY;
+                            var nextColspan = parseInt($('td[cols=' + _nowX + '][rows=' + _nowY + ']').attr('colspan'));
 
-				var _nowX = nowX;
+                            var lastColspan = parseInt($(sNode).attr('colspan')) - 1;
 
-				while(_nowX >= 0) {
+                            var lastRowspan = parseInt($(sNode).attr('rowspan')) - 1;
 
-					_nowY = nowY;
+                            $(sNode).removeClass('picked');
 
-					while(_nowY >= 0) {
+                            //下一个单元格行列不合并
 
-						var nextRowspan = parseInt($('td[cols=' + _nowX + '][rows=' + _nowY + ']').attr('rowspan'));
+                            if (!nextRowspan && !nextColspan) {
 
-						var nextColspan = parseInt($('td[cols=' + _nowX + '][rows=' + _nowY + ']').attr('colspan'));
+                                $('td[cols=' + nextX + '][rows=' + (nextY - lastRowspan) + ']').addClass('picked');
 
-						var lastColspan = parseInt($(sNode).attr('colspan')) - 1;
+                                callZ.wBorder($('.picked'));
 
-						var lastRowspan = parseInt($(sNode).attr('rowspan')) - 1;
+                            }
 
-						$(sNode).removeClass('picked');
+                            //下一个单元格只列合并
 
-						//下一个单元格行列不合并 
+                            if (!nextRowspan && nextColspan) {
 
-						if(!nextRowspan && !nextColspan) {
+                                if ($('td[cols=' + _nowX + '][rows=' + nextY + ']').length > 0) {
 
-							$('td[cols=' + nextX + '][rows=' + (nextY - lastRowspan) + ']').addClass('picked');
+                                    u1++;
 
-							callZ.wBorder($('.picked'));
+                                    if (u1 == 1) {
 
-						}
+                                        $('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('picked');
 
-						//下一个单元格只列合并 
+                                        callZ.wBorder($('.picked'));
 
-						if(!nextRowspan && nextColspan) {
+                                    }
 
-							if($('td[cols=' + _nowX + '][rows=' + nextY + ']').length > 0) {
+                                    //(u1 == 1) && ($('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('picked'));
 
-								u1++;
+                                }
 
-								if(u1 == 1) {
+                            }
 
-									$('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('picked');
+                            //下一个单元格只行合并
 
-									callZ.wBorder($('.picked'));
+                            if (nextRowspan && !nextColspan) {
 
-								}
+                                if ($('td[cols=' + nextX + '][rows=' + _nowY + ']').length > 0) {
 
-								//(u1 == 1) && ($('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('picked'));
+                                    u2++;
 
-							}
+                                    if (u2 == 1) {
 
-						}
+                                        $('td[cols=' + nextX + '][rows=' + _nowY + ']').addClass('picked');
 
-						//下一个单元格只行合并 
+                                        callZ.wBorder($('.picked'));
 
-						if(nextRowspan && !nextColspan) {
+                                    }
 
-							if($('td[cols=' + nextX + '][rows=' + _nowY + ']').length > 0) {
+                                    //(u2 == 1) && ($('td[cols=' + nextX + '][rows=' + _nowY + ']').addClass('picked'));
 
-								u2++;
+                                }
 
-								if(u2 == 1) {
+                            }
 
-									$('td[cols=' + nextX + '][rows=' + _nowY + ']').addClass('picked');
+                            //下一个单元格行列合并
 
-									callZ.wBorder($('.picked'));
+                            if (nextRowspan && nextColspan) {
 
-								}
+                                if ($('td[cols=' + _nowX + '][rows=' + _nowY + ']').length > 0) {
 
-								//(u2 == 1) && ($('td[cols=' + nextX + '][rows=' + _nowY + ']').addClass('picked'));
+                                    u3++;
 
-							}
+                                    if (u3 == 1) {
 
-						}
+                                        $('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked');
 
-						//下一个单元格行列合并 
+                                        callZ.wBorder($('.picked'));
 
-						if(nextRowspan && nextColspan) {
+                                    }
 
-							if($('td[cols=' + _nowX + '][rows=' + _nowY + ']').length > 0) {
+                                    //(u3 == 1) && ($('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked'));
 
-								u3++;
+                                }
 
-								if(u3 == 1) {
+                            }
 
-									$('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked');
+                            _nowY--;
 
-									callZ.wBorder($('.picked'));
+                        }
 
-								}
+                        _nowX--;
 
-								//(u3 == 1) && ($('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked'));
+                    }
 
-							}
+                }
 
-						}
+                event.data.keyCode = event.keyCode;
 
-						_nowY--;
+                callZ.lightCoor($('.picked'));
 
-					}
+            }
 
-					_nowX--;
+            if ($('.picked').length > 0) {
 
-				}
+                var xCoo = Number($('.picked').attr('cols')) - 1,
 
-			}
+                    yCoo = Number($('.picked').attr('rows')) - 1;
 
-			event.data.keyCode = event.keyCode;
+                $('.disbox').text(IntToChr(xCoo) + String(yCoo + 1));
 
-			callZ.lightCoor($('.picked'));
+            }
 
-		}
+        } else {
 
-		if($('.picked').length > 0) {
+            return;
 
-			var xCoo = Number($('.picked').attr('cols')) - 1,
+        }
 
-				yCoo = Number($('.picked').attr('rows')) - 1;
+    }
 
-			$('.disbox').text(IntToChr(xCoo) + String(yCoo + 1));
+    iTable.prototype.getCurTable = function () {
 
-		}
+        var t;
 
-	} else {
+        t = this.container.find('table:visible');
 
-		return;
+        return t
 
-	}
+    }
 
-}
+    iTable.prototype.setCss = function () {
 
-iTable.prototype.getCurTable = function() {
+        var viewWidth = $(window).width(),
 
-	var t;
+            viewHeight = $(window).height();
 
-	t = this.container.find('table:visible');
+        var tBody = this.getCurTable().parent(),
 
-	return t
+            tLeft = $('.yOrder'),
 
-}
+            tHead = $('.xOrder');
 
-iTable.prototype.setCss = function() {
+        var bLeft = tLeft.find('table tr:first td:first').outerWidth() + 1;
 
-	var viewWidth = $(window).width(),
+        var bTop = tHead.find('table tr:first td:first').outerHeight() + 1;
 
-		viewHeight = $(window).height();
+        tLeft.css({
+            'height': viewHeight,
+        });
 
-	var tBody = this.getCurTable().parent(),
+        tHead.css({
+            'width': viewWidth,
+        });
 
-		tLeft = $('.yOrder'),
+        tBody.css({
 
-		tHead = $('.xOrder');
+            'margin-left': 4,
 
-	var bLeft = tLeft.find('table tr:first td:first').outerWidth() + 1;
+            'margin-top': bTop + 70,
 
-	var bTop = tHead.find('table tr:first td:first').outerHeight() + 1;
+            'width': viewWidth - 4,
 
-	tLeft.css({
-		'height': viewHeight,
-	});
+            'height': viewHeight - bTop - 110,
 
-	tHead.css({
-		'width': viewWidth,
-	});
+            'overflow': 'scroll',
 
-	tBody.css({
+            'position': 'relative'
 
-		'margin-left': 4,
+        });
 
-		'margin-top': bTop + 70,
+        var that = this.container;
 
-		'width': viewWidth - 4,
+        $(window).resize(function () {
 
-		'height': viewHeight - bTop - 110,
+            var viewWidth = $(window).width();
 
-		'overflow': 'scroll',
+            var viewHeight = $(window).height();
 
-		'position': 'relative'
+            that.width(viewWidth - 4);
 
-	});
+            that.height(viewHeight - bTop - 113);
+            $('.yOrder').height(viewHeight - bTop - 113);
 
-	var that = this.container;
+        });
 
-	$(window).resize(function() {
+    }
 
-		var viewWidth = $(window).width();
+    //滚动
 
-		var viewHeight = $(window).height();
+    iTable.prototype.tableScroll = function () {
 
-		that.width(viewWidth - 4);
+        this.container.scroll(function () {
 
-		that.height(viewHeight - bTop - 113);
-		$('.yOrder').height(viewHeight - bTop - 113);
+            var scrollY = $(this).scrollTop();
 
-	});
+            var scrollX = $(this).scrollLeft();
 
-}
+            $(".yOrder table").css('margin-top', -scrollY);
 
-//滚动
+            $(".xOrder table").css('margin-left', -scrollX);
 
-iTable.prototype.tableScroll = function() {
+        });
 
-	this.container.scroll(function() {
+    }
 
-		var scrollY = $(this).scrollTop();
+    //填写表格
 
-		var scrollX = $(this).scrollLeft();
+    iTable.prototype.fillTd = function (tid) {
 
-		$(".yOrder table").css('margin-top', -scrollY);
+        var event = window.event || arguments[0];
 
-		$(".xOrder table").css('margin-left', -scrollX);
+        var tid = tid || 1;
+        ;
 
-	});
+        var that = this;
 
-}
+        $('#iTable' + tid).find('tr td').each(function () {
 
-//填写表格
+            $(this).dblclick(function () {
 
-iTable.prototype.fillTd = function(tid) {
+                var tdWidth = $(this).width();
 
-	var event = window.event || arguments[0];
+                var tdHeight = $(this).height();
 
-	var tid = tid || 1;;
+                var tdText = $(this).text();
 
-	var that = this;
+                var tdInput = $("<input type='text'  id='tdInput' class='tdInput'  value='" + tdText + "'>");
 
-	$('#iTable' + tid).find('tr td').each(function() {
+                tdInput.width(tdWidth - 2);
 
-		$(this).dblclick(function() {
+                tdInput.height(tdHeight - 2);
 
-			var tdWidth = $(this).width();
+                $(this).html(tdInput);
 
-			var tdHeight = $(this).height();
+                set_text_value_position(tdInput, -1);
 
-			var tdText = $(this).text();
+                $('.tdInput').keyup(function () {
 
-			var tdInput = $("<input type='text'  id='tdInput' class='tdInput'  value='" + tdText + "'>");
+                    $('#ip_fx').val($(this).val());
 
-			tdInput.width(tdWidth - 2);
+                });
 
-			tdInput.height(tdHeight - 2);
+                $('.tdInput').blur(function () {
 
-			$(this).html(tdInput);
+                    var content = $('.tdInput').val();
 
-			set_text_value_position(tdInput, -1);
+                    if (tdText == content) {
 
-			$('.tdInput').keyup(function() {
+                        $(this).parent().html(content);
 
-				$('#ip_fx').val($(this).val());
+                    } else {
 
-			});
+                        $(this).parent().html(content);
 
-			$('.tdInput').blur(function() {
+                    }
 
-				var content = $('.tdInput').val();
+                    $('.tdInput').remove();
 
-				if(tdText == content) {
+                });
 
-					$(this).parent().html(content);
+                $(".tdInput").keyup(function (event) {
 
-				} else {
+                    if (event.keyCode == 13) {
 
-					$(this).parent().html(content);
+                        $('.tdInput').blur();
 
-				}
+                        $(document).on('keyup', typing);
 
-				$('.tdInput').remove();
+                    }
 
-			});
+                });
 
-			$(".tdInput").keyup(function(event) {
+                $(".tdInput").click(function (event) {
 
-				if(event.keyCode == 13) {
+                    return false;
 
-					$('.tdInput').blur();
+                });
 
-					$(document).on('keyup', typing);
+                $('#iTable' + tid + ' tr td').not($(this)).click(function (event) {
 
-				}
+                    $('.tdInput').blur();
 
-			});
+                });
 
-			$(".tdInput").click(function(event) {
+            });
 
-				return false;
+            $(this).click(function () {
 
-			});
+                var tr = $(this).parent();
 
-			$('#iTable' + tid + ' tr td').not($(this)).click(function(event) {
+                $('.picked').removeClass('picked');
 
-				$('.tdInput').blur();
+                $('.wBorder').remove();
 
-			});
+                $(this).addClass('picked');
 
-		});
+                that.wBorder($(this));
 
-		$(this).click(function() {
+                //t.createMask(left, top, width, height,'','');
 
-			var tr = $(this).parent();
+                var xCoo = Number($(this).attr('cols')) - 1,
 
-			$('.picked').removeClass('picked');
+                    yCoo = Number($(this).attr('rows')) - 1;
 
-			$('.wBorder').remove();
+                if ($('.disbox').length > 0) {
 
-			$(this).addClass('picked');
+                    $('.disbox').text(IntToChr(xCoo) + String(yCoo + 1));
 
-			that.wBorder($(this));
+                }
 
-			//t.createMask(left, top, width, height,'',''); 
+                that.tdTofx($(this));
 
-			var xCoo = Number($(this).attr('cols')) - 1,
+                that.lightCoor($(this));
 
-				yCoo = Number($(this).attr('rows')) - 1;
+                $('#ip_fx').blur();
 
-			if($('.disbox').length > 0) {
+            });
 
-				$('.disbox').text(IntToChr(xCoo) + String(yCoo + 1));
 
-			}
 
-			that.tdTofx($(this));
+        });
 
-			that.lightCoor($(this));
+    }
 
-			$('#ip_fx').blur();
+    iTable.prototype.wBorderSelect = function (obj) {
 
-		});
+        var topArr = [],
 
-		$(this).mouseenter(function() {
+            leftArr = [];
 
-			var text = $(this).text();
+        var topMin, leftMin, totalWidth = 0,
 
-			var div = $('<div class="tdTip">' + text + '</div>');
+            totalHeight = 0;
 
-			var len = getStrLength(text);
+        for (var i = 0; i < obj.length; i++) {
 
-			if(len > 10) {
+            var top = obj[i].offsetTop,
 
-				$('body').append(div);
+                left = obj[i].offsetLeft,
 
-				var dis = mouseCoords();
+                width = obj[i].offsetWidth,
 
-				div.css({
+                height = obj[i].offsetHeight;
 
-					'position': 'absolute',
+            if (top < _.min(topArr)) {
 
-					'top': dis.y,
+                if ($('.wsBorder').length > 0) {
 
-					'left': dis.x
+                    $('.wsBorder').remove();
 
-				});
+                }
 
-			} else {
+            }
 
-				return;
+            if (left < _.min(leftArr)) {
 
-			}
+                if ($('.wsBorder').length > 0) {
 
-		});
+                    $('.wsBorder').remove();
 
-		$(this).mouseout(function() {
+                }
 
-			$('.tdTip').remove();
+            }
 
-		});
+            topArr.push(top);
 
-	});
+            leftArr.push(left);
 
-}
+            var col = parseInt($(obj[i]).attr('cols')) + parseInt($(obj[i]).attr('colspan'));
 
-iTable.prototype.wBorderSelect = function(obj) {
+            topMin = _.min(topArr), leftMin = _.min(leftArr);
 
-	var topArr = [],
+            if (top == _.min(topArr)) {
 
-		leftArr = [];
+                totalWidth += width;
 
-	var topMin, leftMin, totalWidth = 0,
+            }
 
-		totalHeight = 0;
+            if (left == _.min(leftArr)) {
 
-	for(var i = 0; i < obj.length; i++) {
+                totalHeight += height;
 
-		var top = obj[i].offsetTop,
+            }
 
-			left = obj[i].offsetLeft,
+            var wsBorder = $('<div class="wsBorder"></div>');
 
-			width = obj[i].offsetWidth,
+            wsBorder.css({
 
-			height = obj[i].offsetHeight;
+                'width': totalWidth,
 
-		if(top < _.min(topArr)) {
+                'height': height + 6,
 
-			if($('.wsBorder').length > 0) {
+                'top': topMin,
 
-				$('.wsBorder').remove();
+                'left': leftMin
 
-			}
+            });
 
-		}
+            var topsB = $('<div></div>');
 
-		if(left < _.min(leftArr)) {
+            topsB.css({
 
-			if($('.wsBorder').length > 0) {
+                'width': totalWidth,
 
-				$('.wsBorder').remove();
+                'height': '2px',
 
-			}
+                'position': 'absolute',
 
-		}
+                'left': leftMin,
 
-		topArr.push(top);
+                'top': topMin,
 
-		leftArr.push(left);
+                'background': 'rgb(82, 146, 247)'
 
-		var col = parseInt($(obj[i]).attr('cols')) + parseInt($(obj[i]).attr('colspan'));
+            });
 
-		topMin = _.min(topArr), leftMin = _.min(leftArr);
+            var bottomsB = $('<div></div>');
 
-		if(top == _.min(topArr)) {
+            bottomsB.css({
 
-			totalWidth += width;
+                'width': totalWidth,
 
-		}
+                'height': '2px',
 
-		if(left == _.min(leftArr)) {
+                'position': 'absolute',
 
-			totalHeight += height;
+                'left': leftMin,
 
-		}
+                'top': topMin + totalHeight,
 
-		var wsBorder = $('<div class="wsBorder"></div>');
+                'background': 'rgb(82, 146, 247)'
 
-		wsBorder.css({
+            });
 
-			'width': totalWidth,
+            var leftB = $('<div></div>');
 
-			'height': height + 6,
+            leftB.css({
 
-			'top': topMin,
+                'width': '2px',
 
-			'left': leftMin
+                'height': totalHeight,
 
-		});
+                'position': 'absolute',
 
-		var topsB = $('<div></div>');
+                'left': leftMin,
 
-		topsB.css({
+                'top': topMin,
 
-			'width': totalWidth,
+                'background': 'rgb(82, 146, 247)'
 
-			'height': '2px',
+            });
 
-			'position': 'absolute',
+            var rightB = $('<div></div>');
 
-			'left': leftMin,
+            rightB.css({
 
-			'top': topMin,
+                'width': '2px',
 
-			'background': 'rgb(82, 146, 247)'
+                'height': totalHeight,
 
-		});
+                'position': 'absolute',
 
-		var bottomsB = $('<div></div>');
+                'left': leftMin + totalWidth,
 
-		bottomsB.css({
+                'top': topMin,
 
-			'width': totalWidth,
+                'background': 'rgb(82, 146, 247)'
 
-			'height': '2px',
+            });
 
-			'position': 'absolute',
+            var corner = $('<div class="scorner"></div>');
 
-			'left': leftMin,
+            corner.css({
 
-			'top': topMin + totalHeight,
+                'top': topMin + totalHeight - 2,
 
-			'background': 'rgb(82, 146, 247)'
+                'left': leftMin + totalWidth - 2,
 
-		});
+            });
 
-		var leftB = $('<div></div>');
+        }
 
-		leftB.css({
+        //	if(wsBorder.length > 0) {
 
-			'width': '2px',
+        wsBorder.append(topsB);
 
-			'height': totalHeight,
+        wsBorder.append(bottomsB);
 
-			'position': 'absolute',
+        wsBorder.append(leftB);
 
-			'left': leftMin,
+        wsBorder.append(rightB);
 
-			'top': topMin,
+        wsBorder.append(corner);
 
-			'background': 'rgb(82, 146, 247)'
+        this.container.append(wsBorder);
 
-		});
+        //	}
 
-		var rightB = $('<div></div>');
+    }
 
-		rightB.css({
+    iTable.prototype.wBorder = function (obj) {
 
-			'width': '2px',
+        var that = this;
 
-			'height': totalHeight,
+        if ($('.wsBorder').length > 0) {
 
-			'position': 'absolute',
+            $('.wsBorder').remove();
 
-			'left': leftMin + totalWidth,
+        }
 
-			'top': topMin,
+        if ($('.wBorder').length > 0) {
 
-			'background': 'rgb(82, 146, 247)'
+            $('.wBorder').remove();
 
-		});
+        }
 
-		var corner = $('<div class="scorner"></div>');
+        if ($('.wrBorder').length > 0) {
 
-		corner.css({
+            $('.wrBorder').remove();
 
-			'top': topMin + totalHeight - 2,
+        }
 
-			'left': leftMin + totalWidth - 2,
+        if ($(obj).length > 0) {
 
-		});
+            var width = $(obj)[0].offsetWidth,
 
-	}
+                height = $(obj)[0].offsetHeight;
 
-	//	if(wsBorder.length > 0) {
+            var left = $(obj)[0].offsetLeft,
 
-	wsBorder.append(topsB);
+                top = $(obj)[0].offsetTop;
 
-	wsBorder.append(bottomsB);
+            var wBorder = $('<div class="wBorder"></div>');
 
-	wsBorder.append(leftB);
+            wBorder.css({
 
-	wsBorder.append(rightB);
+                'width': width,
 
-	wsBorder.append(corner);
+                'height': height + 6,
 
-	this.container.append(wsBorder);
+                'top': 0,
 
-	//	}
+                'left': 0
 
-}
+            });
 
-iTable.prototype.wBorder = function(obj) {
+            var topB = $('<div></div>');
 
-	var that = this;
+            topB.css({
 
-	if($('.wsBorder').length > 0) {
+                'width': width,
 
-		$('.wsBorder').remove();
+                'height': '2px',
 
-	}
+                'position': 'absolute',
 
-	if($('.wBorder').length > 0) {
+                'left': left,
 
-		$('.wBorder').remove();
+                'top': top,
 
-	}
+                'background': 'rgb(82, 146, 247)'
 
-	if($('.wrBorder').length > 0) {
+            });
 
-		$('.wrBorder').remove();
+            wBorder.append(topB);
 
-	}
+            var leftB = $('<div></div>');
 
-	if($(obj).length > 0) {
+            leftB.css({
 
-		var width = $(obj)[0].offsetWidth,
+                'width': '2px',
 
-			height = $(obj)[0].offsetHeight;
+                'height': height,
 
-		var left = $(obj)[0].offsetLeft,
+                'position': 'absolute',
 
-			top = $(obj)[0].offsetTop;
+                'left': left,
 
-		var wBorder = $('<div class="wBorder"></div>');
+                'top': top,
 
-		wBorder.css({
+                'background': 'rgb(82, 146, 247)'
 
-			'width': width,
+            });
 
-			'height': height + 6,
+            wBorder.append(leftB);
 
-			'top': 0,
+            var rightB = $('<div></div>');
 
-			'left': 0
+            rightB.css({
 
-		});
+                'width': '2px',
 
-		var topB = $('<div></div>');
+                'height': height,
 
-		topB.css({
+                'position': 'absolute',
 
-			'width': width,
+                'left': parseInt(left + width),
 
-			'height': '2px',
+                'top': top,
 
-			'position': 'absolute',
+                'background': 'rgb(82, 146, 247)'
 
-			'left': left,
+            });
 
-			'top': top,
+            wBorder.append(rightB);
 
-			'background': 'rgb(82, 146, 247)'
+            var bottomB = $('<div></div>');
 
-		});
+            bottomB.css({
 
-		wBorder.append(topB);
+                'width': width,
 
-		var leftB = $('<div></div>');
+                'height': '2px',
 
-		leftB.css({
+                'position': 'absolute',
 
-			'width': '2px',
+                'left': left,
 
-			'height': height,
+                'top': top + height,
 
-			'position': 'absolute',
+                'background': 'rgb(82, 146, 247)'
 
-			'left': left,
+            });
 
-			'top': top,
+            var corner = $('<div class="corner"></div>');
 
-			'background': 'rgb(82, 146, 247)'
+            corner.css({
 
-		});
+                'top': top + height - 2,
 
-		wBorder.append(leftB);
+                'left': left + width - 2,
 
-		var rightB = $('<div></div>');
+            });
 
-		rightB.css({
+            //红色
 
-			'width': '2px',
+            var wrBorder = $('<div class="wrBorder"></div>');
 
-			'height': height,
+            wrBorder.css({
 
-			'position': 'absolute',
+                'width': width,
 
-			'left': parseInt(left + width),
+                'height': height + 6,
 
-			'top': top,
+                'top': 0,
 
-			'background': 'rgb(82, 146, 247)'
+                'left': 0
 
-		});
+            });
 
-		wBorder.append(rightB);
+            var toprB = $('<div></div>');
 
-		var bottomB = $('<div></div>');
+            toprB.css({
 
-		bottomB.css({
+                'width': width,
 
-			'width': width,
+                'height': '2px',
 
-			'height': '2px',
+                'position': 'absolute',
 
-			'position': 'absolute',
+                'left': left,
 
-			'left': left,
+                'top': top,
 
-			'top': top + height,
+                'background': 'red'
 
-			'background': 'rgb(82, 146, 247)'
+            });
 
-		});
+            wrBorder.append(toprB);
 
-		var corner = $('<div class="corner"></div>');
+            var leftrB = $('<div></div>');
 
-		corner.css({
+            leftrB.css({
 
-			'top': top + height - 2,
+                'width': '2px',
 
-			'left': left + width - 2,
+                'height': height,
 
-		});
+                'position': 'absolute',
 
-		//红色
+                'left': left,
 
-		var wrBorder = $('<div class="wrBorder"></div>');
+                'top': top,
 
-		wrBorder.css({
+                'background': 'red'
 
-			'width': width,
+            });
 
-			'height': height + 6,
+            wrBorder.append(leftrB);
 
-			'top': 0,
+            var rightrB = $('<div></div>');
 
-			'left': 0
+            rightrB.css({
 
-		});
+                'width': '2px',
 
-		var toprB = $('<div></div>');
+                'height': height,
 
-		toprB.css({
+                'position': 'absolute',
 
-			'width': width,
+                'left': parseInt(left + width),
 
-			'height': '2px',
+                'top': top,
 
-			'position': 'absolute',
+                'background': 'red'
 
-			'left': left,
+            });
 
-			'top': top,
+            wrBorder.append(rightrB);
 
-			'background': 'red'
+            var bottomrB = $('<div></div>');
 
-		});
+            bottomrB.css({
 
-		wrBorder.append(toprB);
+                'width': width,
 
-		var leftrB = $('<div></div>');
+                'height': '2px',
 
-		leftrB.css({
+                'position': 'absolute',
 
-			'width': '2px',
+                'left': left,
 
-			'height': height,
+                'top': top + height,
 
-			'position': 'absolute',
+                'background': 'red'
 
-			'left': left,
+            });
 
-			'top': top,
+            wrBorder.append(bottomrB);
 
-			'background': 'red'
+            //
 
-		});
+            wBorder.append(bottomB);
 
-		wrBorder.append(leftrB);
+            wBorder.append(corner);
 
-		var rightrB = $('<div></div>');
+            this.container.append(wBorder);
 
-		rightrB.css({
+            this.container.append(wrBorder);
 
-			'width': '2px',
+        }
 
-			'height': height,
+        var oHeight = parseInt($('.wBorder').find('div').eq(1).css('height'));
 
-			'position': 'absolute',
+        var oWidth = parseInt($('.wBorder').find('div').eq(0).css('width'));
 
-			'left': parseInt(left + width),
+        corner.on('mouseenter', function () {
 
-			'top': top,
+            $(this).css('cursor', 'crosshair');
 
-			'background': 'red'
+            $(this).on('mousedown', function () {
 
-		});
+                $(that.container).off('mousedown');
 
-		wrBorder.append(rightrB);
+                var cWidth = parseInt($(this.container).width());
 
-		var bottomrB = $('<div></div>');
+                var cHeight = parseInt($(this.container).height());
 
-		bottomrB.css({
+                var disWidth = parseInt($('.yOrder').outerWidth());
 
-			'width': width,
+                var disHeight = parseInt($('.xOrder').outerHeight()) + parseInt($('.header').outerHeight());
 
-			'height': '2px',
+                var fileNodes = $('.dataTable tr td');
 
-			'position': 'absolute',
+                var isSelect = true;
 
-			'left': left,
+                var ev = window.event || arguments[0];
 
-			'top': top + height,
+                var sleft = parseInt($(this).scrollLeft());
 
-			'background': 'red'
+                var stop = parseInt($(this).scrollTop());
 
-		});
+                var oX = ev.clientX + sleft;
 
-		wrBorder.append(bottomrB);
+                var oY = ev.clientY - disHeight + stop;
 
-		//
+                $('.dataTable tr td').off('click');
 
-		wBorder.append(bottomB);
+                var _x = null;
 
-		wBorder.append(corner);
+                var _y = null;
 
-		this.container.append(wBorder);
+                var _text = $('.picked').text();
 
-		this.container.append(wrBorder);
+                var direction;
 
-	}
+                //          var selDiv = $('<div class="mapdiv"></div>');
 
-	var oHeight = parseInt($('.wBorder').find('div').eq(1).css('height'));
+                //	selDiv.css({
 
-	var oWidth = parseInt($('.wBorder').find('div').eq(0).css('width'));
+                //		'position': 'absolute',
 
-	corner.on('mouseenter', function() {
+                //		'width': '0px',
 
-		$(this).css('cursor', 'crosshair');
+                //		'height': '0px',
 
-		$(this).on('mousedown', function() {
+                //		'font-size': '0px',
 
-			$(that.container).off('mousedown');
+                //		'margin': '0px',
 
-			var cWidth = parseInt($(this.container).width());
+                //		'padding': '0px',
 
-			var cHeight = parseInt($(this.container).height());
+                //		'border': '1px solid #1ab394',
 
-			var disWidth = parseInt($('.yOrder').outerWidth());
+                //		'background-color': '#4acfb4',
 
-			var disHeight = parseInt($('.xOrder').outerHeight()) + parseInt($('.header').outerHeight());
+                //		'z-index': '1000',
 
-			var fileNodes = $('.dataTable tr td');
+                //		'filter': 'alpha(opacity:60)',
 
-			var isSelect = true;
+                //		'opacity': '0.6',
 
-			var ev = window.event || arguments[0];
+                //		'display': 'none',
 
-			var sleft = parseInt($(this).scrollLeft());
+                //		'left': oX,
 
-			var stop = parseInt($(this).scrollTop());
+                //		'top': oY
 
-			var oX = ev.clientX + sleft;
+                //	});
 
-			var oY = ev.clientY - disHeight + stop;
+                //			$(that.container).append(selDiv);
 
-			$('.dataTable tr td').off('click');
+                $(that.container).on('mousemove', function () {
 
-			var _x = null;
+                    var evt = window.event || arguments[0];
 
-			var _y = null;
+                    var xArr = [],
 
-			var _text = $('.picked').text();
+                        yArr = [];
 
-			var direction;
+                    var sleft = $(this).scrollLeft();
 
-			//          var selDiv = $('<div class="mapdiv"></div>');
+                    var stop = $(this).scrollTop();
 
-			//	selDiv.css({
+                    //							if(selDiv.css('display') == "none") {
 
-			//		'position': 'absolute',
+                    //								selDiv.css('display', '');
 
-			//		'width': '0px',
+                    //							}
 
-			//		'height': '0px',
+                    _x = (evt.x || evt.clientX);
 
-			//		'font-size': '0px',
+                    _y = (evt.y || evt.clientY);
 
-			//		'margin': '0px',
+                    _x = _x + sleft;
 
-			//		'padding': '0px',
+                    _y = _y + stop - disHeight;
 
-			//		'border': '1px solid #1ab394',
+                    //				selDiv.css({
 
-			//		'background-color': '#4acfb4',
+                    //					'left': Math.min(_x, oX) ,
 
-			//		'z-index': '1000',
+                    //					'top': Math.min(_y, oY),
 
-			//		'filter': 'alpha(opacity:60)',
+                    //					'width': Math.abs(_x - oX),
 
-			//		'opacity': '0.6',
+                    //					'height': Math.abs(_y - oY)
 
-			//		'display': 'none',
+                    //				});
 
-			//		'left': oX,
+                    if ($('.wBorder').length > 0) {
 
-			//		'top': oY
+                        if (Math.abs(_y - oY) > 10 && Math.abs(_x - oX) < 10) {
 
-			//	});
+                            direction = 'vertical';
 
-			//			$(that.container).append(selDiv);
+                            var tdH = 0;
 
-			$(that.container).on('mousemove', function() {
+                            var moveH = Math.abs(_y - oY) + Math.min(_y, oY) - oHeight - 2;
 
-				var evt = window.event || arguments[0];
+                            var t1 = parseInt($('.wBorder').find('div').eq(0).css('top'));
 
-				var xArr = [],
+                            var t3 = parseInt($('.wBorder').find('div').eq(3).css('top'));
 
-					yArr = [];
+                            var h2 = parseInt($('.wBorder').find('div').eq(1).css('height'));
 
-				var sleft = $(this).scrollLeft();
+                            var topA = [],
 
-				var stop = $(this).scrollTop();
+                                topB = [];
 
-				//							if(selDiv.css('display') == "none") {
+                            if (t1 >= moveH) {
 
-				//								selDiv.css('display', '');
+                                $('.dataTable tr td').each(function () {
 
-				//							}
+                                    if ($(this)[0].offsetTop <= moveH && $(this)[0].offsetTop + $(this)[0].offsetHeight >= Math.min(_y, oY) && $(this)[0].offsetLeft >= parseInt($('.wBorder').find('div').eq(1).css('left')) && $(this)[0].offsetLeft <= parseInt($('.wBorder').find('div').eq(1).css('left')) + 96) {
 
-				_x = (evt.x || evt.clientX);
+                                        //
 
-				_y = (evt.y || evt.clientY);
+                                        tdH += parseInt($(this)[0].offsetHeight);
 
-				_x = _x + sleft;
+                                        topA.push($(this)[0].offsetTop);
 
-				_y = _y + stop - disHeight;
+                                        $('.wrBorder').find('div').eq(1).css('height', tdH);
 
-				//				selDiv.css({
+                                        $('.wrBorder').find('div').eq(2).css('height', tdH);
 
-				//					'left': Math.min(_x, oX) ,
+                                        $('.wrBorder').find('div').eq(0).css('top', t3);
 
-				//					'top': Math.min(_y, oY),
+                                        $('.wrBorder').find('div').eq(1).css('top', _.first(_.uniq(topA)) + h2);
 
-				//					'width': Math.abs(_x - oX),
+                                        $('.wrBorder').find('div').eq(2).css('top', _.first(_.uniq(topA)) + h2);
 
-				//					'height': Math.abs(_y - oY)
+                                        $('.wrBorder').find('div').eq(3).css('top', _.first(_.uniq(topA)) + h2);
 
-				//				});
+                                        $('.wBorder').find('.corner').css('top', $('.wrBorder').find('div').eq(0).css('top'));
 
-				if($('.wBorder').length > 0) {
+                                    }
 
-					if(Math.abs(_y - oY) > 10 && Math.abs(_x - oX) < 10) {
+                                });
 
-						direction = 'vertical';
+                            } else {
 
-						var tdH = 0;
+                                $('.dataTable tr td').each(function () {
 
-						var moveH = Math.abs(_y - oY) + Math.min(_y, oY) - oHeight - 2;
+                                    if ($(this)[0].offsetTop <= moveH && $(this)[0].offsetTop + $(this)[0].offsetHeight >= Math.min(_y, oY) && $(this)[0].offsetLeft >= parseInt($('.wBorder').find('div').eq(1).css('left')) && $(this)[0].offsetLeft <= parseInt($('.wBorder').find('div').eq(1).css('left')) + 96) {
 
-						var t1 = parseInt($('.wBorder').find('div').eq(0).css('top'));
+                                        tdH += parseInt($(this)[0].offsetHeight);
 
-						var t3 = parseInt($('.wBorder').find('div').eq(3).css('top'));
+                                        topB.push($(this)[0].offsetTop);
 
-						var h2 = parseInt($('.wBorder').find('div').eq(1).css('height'));
+                                        $('.wrBorder').find('div').eq(1).css('height', tdH);
 
-						var topA = [],
+                                        $('.wrBorder').find('div').eq(2).css('height', tdH);
 
-							topB = [];
+                                        $('.wrBorder').find('div').eq(0).css('top', $('.wBorder').find('div').eq(1).css('top'));
 
-						if(t1 >= moveH) {
+                                        $('.wrBorder').find('div').eq(1).css('top', $('.wBorder').find('div').eq(1).css('top'));
 
-							$('.dataTable tr td').each(function() {
+                                        $('.wrBorder').find('div').eq(2).css('top', $('.wBorder').find('div').eq(2).css('top'));
 
-								if($(this)[0].offsetTop <= moveH && $(this)[0].offsetTop + $(this)[0].offsetHeight >= Math.min(_y, oY) && $(this)[0].offsetLeft >= parseInt($('.wBorder').find('div').eq(1).css('left')) && $(this)[0].offsetLeft <= parseInt($('.wBorder').find('div').eq(1).css('left')) + 96) {
+                                        var m = parseInt($('.wrBorder').find('div').eq(1).css('top')) + parseInt($('.wrBorder').find('div').eq(1).css('height'));
 
-									//				 		 	  	
+                                        $('.wrBorder').find('div').eq(3).css('top', m - 2);
 
-									tdH += parseInt($(this)[0].offsetHeight);
+                                        $('.wBorder').find('.corner').css('top', m - 2);
 
-									topA.push($(this)[0].offsetTop);
+                                    }
 
-									$('.wrBorder').find('div').eq(1).css('height', tdH);
+                                });
 
-									$('.wrBorder').find('div').eq(2).css('height', tdH);
+                            }
 
-									$('.wrBorder').find('div').eq(0).css('top', t3);
+                        }
 
-									$('.wrBorder').find('div').eq(1).css('top', _.first(_.uniq(topA)) + h2);
+                        if (Math.abs(_x - oX) >= 10 && Math.abs(_y - oY) <= 10) {
 
-									$('.wrBorder').find('div').eq(2).css('top', _.first(_.uniq(topA)) + h2);
+                            direction = 'horizontal';
 
-									$('.wrBorder').find('div').eq(3).css('top', _.first(_.uniq(topA)) + h2);
+                            var tdW = 0;
 
-									$('.wBorder').find('.corner').css('top', $('.wrBorder').find('div').eq(0).css('top'));
+                            var moveW = Math.abs(_x - oX) + Math.min(_x, oX) - oWidth + 4;
 
-								}
+                            var l1 = parseInt($('.wBorder').find('div').eq(0).css('left'));
 
-							});
+                            var l3 = parseInt($('.wBorder').find('div').eq(3).css('left'));
 
-						} else {
+                            var w2 = parseInt($('.wBorder').find('div').eq(1).css('height'));
 
-							$('.dataTable tr td').each(function() {
+                            var leftA = [],
 
-								if($(this)[0].offsetTop <= moveH && $(this)[0].offsetTop + $(this)[0].offsetHeight >= Math.min(_y, oY) && $(this)[0].offsetLeft >= parseInt($('.wBorder').find('div').eq(1).css('left')) && $(this)[0].offsetLeft <= parseInt($('.wBorder').find('div').eq(1).css('left')) + 96) {
+                                leftB = [];
 
-									tdH += parseInt($(this)[0].offsetHeight);
+                            if (Math.min(_x, oX) < l1) {
 
-									topB.push($(this)[0].offsetTop);
+                                $('.dataTable tr td').each(function () {
 
-									$('.wrBorder').find('div').eq(1).css('height', tdH);
+                                    var tdL = $(this)[0].offsetLeft,
 
-									$('.wrBorder').find('div').eq(2).css('height', tdH);
+                                        _tdW = $(this)[0].offsetWidth,
 
-									$('.wrBorder').find('div').eq(0).css('top', $('.wBorder').find('div').eq(1).css('top'));
+                                        tdT = $(this)[0].offsetTop,
 
-									$('.wrBorder').find('div').eq(1).css('top', $('.wBorder').find('div').eq(1).css('top'));
+                                        _tdH = $(this)[0].offsetHeight;
 
-									$('.wrBorder').find('div').eq(2).css('top', $('.wBorder').find('div').eq(2).css('top'));
+                                    var w3t = parseInt($('.wBorder').find('div').eq(3).css('top'));
 
-									var m = parseInt($('.wrBorder').find('div').eq(1).css('top')) + parseInt($('.wrBorder').find('div').eq(1).css('height'));
+                                    var w0t = parseInt($('.wBorder').find('div').eq(0).css('top'));
 
-									$('.wrBorder').find('div').eq(3).css('top', m - 2);
+                                    var w1l = parseInt($('.wBorder').find('div').eq(1).css('left'));
 
-									$('.wBorder').find('.corner').css('top', m - 2);
+                                    if (tdL < w1l && tdL >= Math.min(_x, oX) && (tdT + _tdH <= w3t) && (tdT + 4 > w0t)) {
 
-								}
+                                        tdW += parseInt($(this)[0].offsetWidth);
 
-							});
+                                        leftA.push($(this)[0].offsetLeft);
 
-						}
+                                        $('.wrBorder').find('div').eq(0).css('width', tdW);
 
-					}
+                                        $('.wrBorder').find('div').eq(3).css('width', tdW);
 
-					if(Math.abs(_x - oX) >= 10 && Math.abs(_y - oY) <= 10) {
+                                        $('.wrBorder').find('div').eq(0).css('left', _.first(_.uniq(leftA)));
 
-						direction = 'horizontal';
+                                        $('.wrBorder').find('div').eq(3).css('left', _.first(_.uniq(leftA)));
 
-						var tdW = 0;
+                                        $('.wrBorder').find('div').eq(2).css('left', _.first(_.uniq(leftA)));
 
-						var moveW = Math.abs(_x - oX) + Math.min(_x, oX) - oWidth + 4;
+                                        //$('.wrBorder').find('div').eq(1).css('left', $('.wBorder').find('div').eq(1).css('left'));
 
-						var l1 = parseInt($('.wBorder').find('div').eq(0).css('left'));
+                                        //var n = parseInt($('.wrBorder').find('div').eq(0).css('left')) + parseInt($('.wrBorder').find('div').eq(0).css('width'));
 
-						var l3 = parseInt($('.wBorder').find('div').eq(3).css('left'));
+                                        //$('.wrBorder').find('div').eq(2).css('left', n - 2);
 
-						var w2 = parseInt($('.wBorder').find('div').eq(1).css('height'));
+                                        //$('.wBorder').find('.corner').css('l', n - 2);
 
-						var leftA = [],
+                                    }
 
-							leftB = [];
+                                });
 
-						if(Math.min(_x, oX) < l1) {
+                            } else {
 
-							$('.dataTable tr td').each(function() {
+                                $('.dataTable tr td').each(function () {
 
-								var tdL = $(this)[0].offsetLeft,
+                                    var tdL = $(this)[0].offsetLeft,
 
-									_tdW = $(this)[0].offsetWidth,
+                                        _tdW = $(this)[0].offsetWidth,
 
-									tdT = $(this)[0].offsetTop,
+                                        tdT = $(this)[0].offsetTop,
 
-									_tdH = $(this)[0].offsetHeight;
+                                        _tdH = $(this)[0].offsetHeight;
 
-								var w3t = parseInt($('.wBorder').find('div').eq(3).css('top'));
+                                    var w3t = parseInt($('.wBorder').find('div').eq(3).css('top'));
 
-								var w0t = parseInt($('.wBorder').find('div').eq(0).css('top'));
+                                    var w0t = parseInt($('.wBorder').find('div').eq(0).css('top'));
 
-								var w1l = parseInt($('.wBorder').find('div').eq(1).css('left'));
+                                    var w1l = parseInt($('.wBorder').find('div').eq(1).css('left'));
 
-								if(tdL < w1l && tdL >= Math.min(_x, oX) && (tdT + _tdH <= w3t) && (tdT + 4 > w0t)) {
+                                    if (tdL > w1l && (tdL) <= (Math.min(_x, oX) + Math.abs(_x - oX)) && (tdT + _tdH <= w3t) && (tdT + 4 > w0t)) {
 
-									tdW += parseInt($(this)[0].offsetWidth);
+                                        tdW += parseInt($(this)[0].offsetWidth);
 
-									leftA.push($(this)[0].offsetLeft);
+                                        leftB.push($(this)[0].offsetLeft);
 
-									$('.wrBorder').find('div').eq(0).css('width', tdW);
+                                        $('.wrBorder').find('div').eq(0).css('width', tdW);
 
-									$('.wrBorder').find('div').eq(3).css('width', tdW);
+                                        $('.wrBorder').find('div').eq(3).css('width', tdW);
 
-									$('.wrBorder').find('div').eq(0).css('left', _.first(_.uniq(leftA)));
+                                        $('.wrBorder').find('div').eq(1).css('left', $('.wBorder').find('div').eq(1).css('left'));
 
-									$('.wrBorder').find('div').eq(3).css('left', _.first(_.uniq(leftA)));
+                                        var n = parseInt($('.wrBorder').find('div').eq(0).css('left')) + parseInt($('.wrBorder').find('div').eq(0).css('width'));
 
-									$('.wrBorder').find('div').eq(2).css('left', _.first(_.uniq(leftA)));
+                                        $('.wrBorder').find('div').eq(2).css('left', n - 2);
 
-									//$('.wrBorder').find('div').eq(1).css('left', $('.wBorder').find('div').eq(1).css('left'));
+                                        $('.wBorder').find('.corner').css('l', n - 2);
 
-									//var n = parseInt($('.wrBorder').find('div').eq(0).css('left')) + parseInt($('.wrBorder').find('div').eq(0).css('width'));
+                                    }
 
-									//$('.wrBorder').find('div').eq(2).css('left', n - 2);
+                                });
 
-									//$('.wBorder').find('.corner').css('l', n - 2);
+                            }
 
-								}
+                        }
 
-							});
+                    }
 
-						} else {
+                });
 
-							$('.dataTable tr td').each(function() {
+                $(document).off('mouseup').on('mouseup', function () {
 
-								var tdL = $(this)[0].offsetLeft,
+                    $(that.container).off('mousemove');
 
-									_tdW = $(this)[0].offsetWidth,
+                    switch (direction) {
 
-									tdT = $(this)[0].offsetTop,
+                        case 'vertical':
 
-									_tdH = $(this)[0].offsetHeight;
+                            $('.wBorder').find('div').eq(1).css('height', $('.wrBorder').find('div').eq(1).css('height'));
 
-								var w3t = parseInt($('.wBorder').find('div').eq(3).css('top'));
+                            $('.wBorder').find('div').eq(2).css('height', $('.wrBorder').find('div').eq(2).css('height'));
 
-								var w0t = parseInt($('.wBorder').find('div').eq(0).css('top'));
+                            $('.wBorder').find('div').eq(1).css('top', $('.wrBorder').find('div').eq(1).css('top'));
 
-								var w1l = parseInt($('.wBorder').find('div').eq(1).css('left'));
+                            $('.wBorder').find('div').eq(2).css('top', $('.wrBorder').find('div').eq(2).css('top'));
 
-								if(tdL > w1l && (tdL) <= (Math.min(_x, oX) + Math.abs(_x - oX)) && (tdT + _tdH <= w3t) && (tdT + 4 > w0t)) {
+                            $('.wBorder').find('div').eq(3).css('top', $('.wrBorder').find('div').eq(3).css('top'));
 
-									tdW += parseInt($(this)[0].offsetWidth);
+                            $('.wBorder').find('div').eq(0).css('top', $('.wrBorder').find('div').eq(0).css('top'));
 
-									leftB.push($(this)[0].offsetLeft);
+                            var t3 = parseInt($('.wBorder').find('div').eq(3).css('top'));
 
-									$('.wrBorder').find('div').eq(0).css('width', tdW);
+                            var t0 = parseInt($('.wBorder').find('div').eq(0).css('top'));
 
-									$('.wrBorder').find('div').eq(3).css('width', tdW);
+                            var l1 = parseInt($('.wBorder').find('div').eq(1).css('left'));
 
-									$('.wrBorder').find('div').eq(1).css('left', $('.wBorder').find('div').eq(1).css('left'));
+                            var l2 = parseInt($('.wBorder').find('div').eq(2).css('left'));
 
-									var n = parseInt($('.wrBorder').find('div').eq(0).css('left')) + parseInt($('.wrBorder').find('div').eq(0).css('width'));
+                            $('.dataTable tr td').each(function () {
 
-									$('.wrBorder').find('div').eq(2).css('left', n - 2);
+                                if ($(this)[0].offsetTop <= t3 && $(this)[0].offsetTop >= t0 &&
 
-									$('.wBorder').find('.corner').css('l', n - 2);
+                                    $(this)[0].offsetLeft >= l1 && $(this)[0].offsetLeft < l2) {
 
-								}
+                                    $($(this)[0]).text(_text);
 
-							});
+                                }
 
-						}
+                            });
 
-					}
+                            $(that.container).on('mousedown', areaChoose);
 
-				}
+                            break;
 
-			});
+                        case 'horizontal':
 
-			$(document).off('mouseup').on('mouseup', function() {
+                            $('.wBorder').find('div').eq(0).css('width', $('.wrBorder').find('div').eq(0).css('width'));
 
-				$(that.container).off('mousemove');
+                            $('.wBorder').find('div').eq(3).css('width', $('.wrBorder').find('div').eq(3).css('width'));
 
-				switch(direction) {
+                            $('.wBorder').find('div').eq(0).css('left', $('.wrBorder').find('div').eq(0).css('left'));
 
-					case 'vertical':
+                            $('.wBorder').find('div').eq(3).css('left', $('.wrBorder').find('div').eq(3).css('left'));
 
-						$('.wBorder').find('div').eq(1).css('height', $('.wrBorder').find('div').eq(1).css('height'));
+                            $('.wBorder').find('div').eq(1).css('left', $('.wrBorder').find('div').eq(1).css('left'));
 
-						$('.wBorder').find('div').eq(2).css('height', $('.wrBorder').find('div').eq(2).css('height'));
+                            $('.wBorder').find('div').eq(2).css('left', $('.wrBorder').find('div').eq(2).css('left'));
 
-						$('.wBorder').find('div').eq(1).css('top', $('.wrBorder').find('div').eq(1).css('top'));
+                            var t3 = parseInt($('.wBorder').find('div').eq(3).css('top'));
 
-						$('.wBorder').find('div').eq(2).css('top', $('.wrBorder').find('div').eq(2).css('top'));
+                            var t0 = parseInt($('.wBorder').find('div').eq(0).css('top'));
 
-						$('.wBorder').find('div').eq(3).css('top', $('.wrBorder').find('div').eq(3).css('top'));
+                            var l1 = parseInt($('.wBorder').find('div').eq(1).css('left'));
 
-						$('.wBorder').find('div').eq(0).css('top', $('.wrBorder').find('div').eq(0).css('top'));
+                            var l2 = parseInt($('.wBorder').find('div').eq(2).css('left'));
 
-						var t3 = parseInt($('.wBorder').find('div').eq(3).css('top'));
+                            $('.dataTable tr td').each(function () {
 
-						var t0 = parseInt($('.wBorder').find('div').eq(0).css('top'));
+                                if ($(this)[0].offsetTop <= t3 && $(this)[0].offsetTop >= t0 &&
 
-						var l1 = parseInt($('.wBorder').find('div').eq(1).css('left'));
+                                    $(this)[0].offsetLeft >= l1 && $(this)[0].offsetLeft < l2) {
 
-						var l2 = parseInt($('.wBorder').find('div').eq(2).css('left'));
+                                    $($(this)[0]).text(_text);
 
-						$('.dataTable tr td').each(function() {
+                                }
 
-							if($(this)[0].offsetTop <= t3 && $(this)[0].offsetTop >= t0 &&
+                            });
 
-								$(this)[0].offsetLeft >= l1 && $(this)[0].offsetLeft < l2) {
+                            $(that.container).on('mousedown', areaChoose);
 
-								$($(this)[0]).text(_text);
+                            break;
 
-							}
+                        default:
 
-						});
+                            break;
 
-						$(that.container).on('mousedown', areaChoose);
+                    }
 
-						break;
+                    $('.dataTable tr td').on('click', function () {
 
-					case 'horizontal':
+                        var tr = $(this).parent();
 
-						$('.wBorder').find('div').eq(0).css('width', $('.wrBorder').find('div').eq(0).css('width'));
+                        $('.picked').removeClass('picked');
 
-						$('.wBorder').find('div').eq(3).css('width', $('.wrBorder').find('div').eq(3).css('width'));
+                        $('.wBorder').remove();
 
-						$('.wBorder').find('div').eq(0).css('left', $('.wrBorder').find('div').eq(0).css('left'));
+                        $(this).addClass('picked');
 
-						$('.wBorder').find('div').eq(3).css('left', $('.wrBorder').find('div').eq(3).css('left'));
+                        that.wBorder($(this));
 
-						$('.wBorder').find('div').eq(1).css('left', $('.wrBorder').find('div').eq(1).css('left'));
+                        //t.createMask(left, top, width, height,'','');
 
-						$('.wBorder').find('div').eq(2).css('left', $('.wrBorder').find('div').eq(2).css('left'));
+                        var xCoo = Number($(this).attr('cols')) - 1,
 
-						var t3 = parseInt($('.wBorder').find('div').eq(3).css('top'));
+                            yCoo = Number($(this).attr('rows')) - 1;
 
-						var t0 = parseInt($('.wBorder').find('div').eq(0).css('top'));
+                        if ($('.disbox').length > 0) {
 
-						var l1 = parseInt($('.wBorder').find('div').eq(1).css('left'));
+                            $('.disbox').text(IntToChr(xCoo) + String(yCoo + 1));
 
-						var l2 = parseInt($('.wBorder').find('div').eq(2).css('left'));
+                        }
 
-						$('.dataTable tr td').each(function() {
+                        that.tdTofx($(this));
 
-							if($(this)[0].offsetTop <= t3 && $(this)[0].offsetTop >= t0 &&
+                        that.lightCoor($(this));
 
-								$(this)[0].offsetLeft >= l1 && $(this)[0].offsetLeft < l2) {
+                        $('#ip_fx').blur();
 
-								$($(this)[0]).text(_text);
+                    });
 
-							}
+                    // $(that.container).off('mousemove');
 
-						});
+                });
 
-						$(that.container).on('mousedown', areaChoose);
+            });
 
-						break;
+        });
 
-					default:
+    }
 
-						break;
+    iTable.prototype.lightCoor = function (obj) {
 
-				}
+        var target = obj;
 
-				$('.dataTable tr td').on('click', function() {
+        $('.leftTable tr td').removeClass('lCoo');
 
-					var tr = $(this).parent();
+        $('.titleTable tr td').removeClass('lCoo');
 
-					$('.picked').removeClass('picked');
+        for (var t = 0; t < target.length; t++) {
 
-					$('.wBorder').remove();
+            var cols = parseInt($(target).eq(t).attr('cols')) - 1;
 
-					$(this).addClass('picked');
+            var rows = parseInt($(target).eq(t).attr('rows')) - 1;
 
-					that.wBorder($(this));
+            var cSpan = parseInt($(target).eq(t).attr('colspan')) - 1 || 0;
 
-					//t.createMask(left, top, width, height,'',''); 
+            var rSpan = parseInt($(target).eq(t).attr('rowspan')) - 1 || 0;
 
-					var xCoo = Number($(this).attr('cols')) - 1,
+            for (var i = rows; i < rows + rSpan + 1; i++) {
 
-						yCoo = Number($(this).attr('rows')) - 1;
+                $('.leftTable').find('tr').eq(i).find('td').addClass('lCoo');
 
-					if($('.disbox').length > 0) {
+            }
 
-						$('.disbox').text(IntToChr(xCoo) + String(yCoo + 1));
+            for (var j = cols; j < cols + cSpan + 1; j++) {
 
-					}
+                $('.titleTable tr').find('td').eq(j - 1).addClass('lCoo');
 
-					that.tdTofx($(this));
+            }
 
-					that.lightCoor($(this));
+        }
 
-					$('#ip_fx').blur();
+    }
 
-				});
 
-				// $(that.container).off('mousemove'); 
 
-			});
+    //创建底部容器
 
-		});
+    iTable.prototype.createFooter = function () {
 
-	});
+        this.footer = $('<div class="footer"></div>');
 
-}
+        this.footer.css({
 
-iTable.prototype.lightCoor = function(obj) {
+            'z-index': 102
 
-	var target = obj;
+        })
 
-	$('.leftTable tr td').removeClass('lCoo');
+        this.container.after(this.footer);
 
-	$('.titleTable tr td').removeClass('lCoo');
+        var addBox = $('<div class="addBox"><div class="addSheet"></div></div>');
 
-	for(var t = 0; t < target.length; t++) {
+        this.footer.append(addBox);
 
-		var cols = parseInt($(target).eq(t).attr('cols')) - 1;
+        var sheetQueue = $('<div class="sheetqueue"><div><dl class="sheetqueuedl"><dd class="sheet sheetdefault" id="sheet1">1</dd></dl></div></div>');
 
-		var rows = parseInt($(target).eq(t).attr('rows')) - 1;
+        this.footer.append(sheetQueue);
 
-		var cSpan = parseInt($(target).eq(t).attr('colspan')) - 1 || 0;
+        var sheetFloat = $('<div class="sheetfloat"><span class="lsheet"></span><span class="rsheet"></span></div>');
 
-		var rSpan = parseInt($(target).eq(t).attr('rowspan')) - 1 || 0;
+        this.footer.append(sheetFloat);
 
-		for(var i = rows; i < rows + rSpan + 1; i++) {
+        this.sheetWork();
 
-			$('.leftTable').find('tr').eq(i).find('td').addClass('lCoo');
+    }
 
-		}
+    //创建头部容器
 
-		for(var j = cols; j < cols + cSpan + 1; j++) {
+    iTable.prototype.createHeader = function () {
 
-			$('.titleTable tr').find('td').eq(j - 1).addClass('lCoo');
+        this.header = $('<div class="header"></div>');
 
-		}
+        this.header.css({
 
-	}
+            'z-index': 103
 
-}
+        })
 
-iTable.prototype._try = function() {
+        this.tools = $('<div class="tools"></div>');
 
-}
+        this.header.append(this.tools);
 
-function getStrLength(str) {
+        this.header.insertBefore(this.container);
 
-	var realLength = 0,
+    }
 
-		len = str.length,
+    //字体类型
 
-		charCode = -1;
+    iTable.prototype.fontFamily = function () {
 
-	for(var i = 0; i < len; i++) {
+        var menu = this.createSelection('fontFamily', this.settings.fontFamily);
 
-		charCode = str.charCodeAt(i);
+        var sel_a = $(menu).find('ul li a');
 
-		if(charCode >= 0 && charCode <= 128) realLength += 1;
+        $(menu).find('#fontFamily').attr('defaultClass', sel_a.eq(0).attr('class'));
 
-		else realLength += 2;
+        var className, curClass;
 
-	}
+        var selThem;
 
-	return realLength;
+        sel_a.on('click', function () {
 
-};
+            className = $(this).attr('class');
 
-function mouseCoords(ev) {
+            $('.picked').addClass(className);
 
-	var ev = ev || window.event;
+            var reg = new RegExp("(((font_)[A-Za-z0-9_]+\s*)+)", "g");
 
-	if(ev.pageX || ev.pageY) {
+            curClass = $('.picked').attr('class');
 
-		return {
+            if (!!curClass) {
 
-			x: ev.pageX,
+                curClass = curClass.replace(reg, className);
 
-			y: ev.pageY
+            } else {
 
-		};
+                return;
 
-	}
+            }
 
-	return {
+            curClass = _.uniq(curClass.split(' ')).join(' ');
 
-		x: ev.clientX + document.body.scrollLeft - document.body.clientLeft,
+            selThem = $('.picked');
 
-		y: ev.clientY + document.body.scrollTop - document.body.clientTop
+            $('.picked').removeAttr('class');
 
-	};
+            selThem.addClass(curClass);
 
-}
+        });
 
-//创建底部容器
+        sel_a.mouseover(function () {
 
-iTable.prototype.createFooter = function() {
+            $(this).css({
 
-	this.footer = $('<div class="footer"></div>');
+                'background': '#ECECEC'
 
-	this.footer.css({
+            });
 
-		'z-index': 102
+        });
 
-	})
+        sel_a.mouseout(function () {
 
-	this.container.after(this.footer);
+            $(this).css({
 
-	var addBox = $('<div class="addBox"><div class="addSheet"></div></div>');
+                'background': '#FFFFFF'
 
-	this.footer.append(addBox);
+            });
 
-	var sheetQueue = $('<div class="sheetqueue"><div><dl class="sheetqueuedl"><dd class="sheet sheetdefault" id="sheet1">1</dd></dl></div></div>');
+        });
 
-	this.footer.append(sheetQueue);
+    }
 
-	var sheetFloat = $('<div class="sheetfloat"><span class="lsheet"></span><span class="rsheet"></span></div>');
+    //字体大小
 
-	this.footer.append(sheetFloat);
+    iTable.prototype.fontSize = function () {
 
-	this.sheetWork();
+        var menu = this.createSelection('fontSize', this.settings.fontSize);
 
-}
+        var sel_a = $(menu).find('ul li a');
 
-//创建头部容器
+        $(menu).find('#fontFamily').attr('defaultClass', sel_a.eq(0).attr('class'));
 
-iTable.prototype.createHeader = function() {
+        var className, curClass;
 
-	this.header = $('<div class="header"></div>');
+        var selThem;
 
-	this.header.css({
+        sel_a.on('click', function () {
 
-		'z-index': 103
+            className = $(this).attr('class');
 
-	})
+            $('.picked').addClass(className);
 
-	this.tools = $('<div class="tools"></div>');
+            var reg = new RegExp("(((fsize_)[A-Za-z0-9_]+\s*)+)", "g");
 
-	this.header.append(this.tools);
+            curClass = $('.picked').attr('class');
 
-	this.header.insertBefore(this.container);
+            if (!!curClass) {
 
-}
+                curClass = curClass.replace(reg, className);
 
-//字体类型
+            } else {
 
-iTable.prototype.fontFamily = function() {
+                return;
 
-	var menu = this.createSelection('fontFamily', this.settings.fontFamily);
+            }
 
-	var sel_a = $(menu).find('ul li a');
+            curClass = _.uniq(curClass.split(' ')).join(' ');
 
-	$(menu).find('#fontFamily').attr('defaultClass', sel_a.eq(0).attr('class'));
+            selThem = $('.picked');
 
-	var className, curClass;
+            $('.picked').removeAttr('class');
 
-	var selThem;
+            selThem.addClass(curClass);
 
-	sel_a.on('click', function() {
+        });
 
-		className = $(this).attr('class');
+        sel_a.mouseover(function () {
 
-		$('.picked').addClass(className);
+            $(this).css({
 
-		var reg = new RegExp("(((font_)[A-Za-z0-9_]+\s*)+)", "g");
+                'background': '#ECECEC'
 
-		curClass = $('.picked').attr('class');
+            });
 
-		if(!!curClass) {
+        });
 
-			curClass = curClass.replace(reg, className);
+        sel_a.mouseout(function () {
 
-		} else {
+            $(this).css({
 
-			return;
+                'background': '#FFFFFF'
 
-		}
+            });
 
-		curClass = _.uniq(curClass.split(' ')).join(' ');
+        });
 
-		selThem = $('.picked');
+    }
 
-		$('.picked').removeAttr('class');
+    //字体粗细
 
-		selThem.addClass(curClass);
+    iTable.prototype.fontBold = function () {
 
-	});
+        var simMenu = this.createSimpleMenu('fbold');
 
-	sel_a.mouseover(function() {
+        var sel_a = $(simMenu).children(0);
 
-		$(this).css({
+        sel_a.on('click', function () {
 
-			'background': '#ECECEC'
+            $('.picked').hasClass('ffbold') ? $('.picked').removeClass('ffbold') : $('.picked').addClass('ffbold');
 
-		});
+        });
 
-	});
+    }
 
-	sel_a.mouseout(function() {
+    //字体倾斜
 
-		$(this).css({
+    iTable.prototype.fontItalic = function () {
 
-			'background': '#FFFFFF'
+        var simMenu = this.createSimpleMenu('fitalic');
 
-		});
+        var sel_a = $(simMenu).children(0);
 
-	});
+        sel_a.on('click', function () {
 
-}
+            $('.picked').hasClass('ffitalic') ? $('.picked').removeClass('ffitalic') : $('.picked').addClass('ffitalic');
 
-//字体大小
+        });
 
-iTable.prototype.fontSize = function() {
+    }
 
-	var menu = this.createSelection('fontSize', this.settings.fontSize);
+    //字体下划线
 
-	var sel_a = $(menu).find('ul li a');
+    iTable.prototype.fontOverline = function () {
 
-	$(menu).find('#fontFamily').attr('defaultClass', sel_a.eq(0).attr('class'));
+        var simMenu = this.createSimpleMenu('foverline');
 
-	var className, curClass;
+        var sel_a = $(simMenu).children(0);
 
-	var selThem;
+        sel_a.on('click', function () {
 
-	sel_a.on('click', function() {
+            $('.picked').hasClass('ffoverline') ? $('.picked').removeClass('ffoverline') : $('.picked').addClass('ffoverline');
 
-		className = $(this).attr('class');
+        });
 
-		$('.picked').addClass(className);
+    }
 
-		var reg = new RegExp("(((fsize_)[A-Za-z0-9_]+\s*)+)", "g");
+    //字体颜色
 
-		curClass = $('.picked').attr('class');
+    iTable.prototype.fontColor = function () {
 
-		if(!!curClass) {
+        var select = this.createCellMenu('d_fcolor', 'fontColor', this.settings.fontColor);
 
-			curClass = curClass.replace(reg, className);
+        var td = $(select).find('table tr td');
 
-		} else {
+        var className, curClass;
 
-			return;
+        var selThem;
 
-		}
+        td.on('click', function () {
 
-		curClass = _.uniq(curClass.split(' ')).join(' ');
+            className = $(this).find('a').attr('class');
 
-		selThem = $('.picked');
+            $('.picked').addClass(className);
 
-		$('.picked').removeAttr('class');
+            var reg = new RegExp("(((fc_)[A-Za-z0-9_]+\s*)+)", "g");
 
-		selThem.addClass(curClass);
+            curClass = $('.picked').attr('class');
 
-	});
+            if (!!curClass) {
 
-	sel_a.mouseover(function() {
+                curClass = curClass.replace(reg, className);
 
-		$(this).css({
+            } else {
 
-			'background': '#ECECEC'
+                return;
 
-		});
+            }
 
-	});
+            curClass = _.uniq(curClass.split(' ')).join(' ');
 
-	sel_a.mouseout(function() {
+            selThem = $('.picked');
 
-		$(this).css({
+            $('.picked').removeAttr('class');
 
-			'background': '#FFFFFF'
+            selThem.addClass(curClass);
 
-		});
+        });
 
-	});
+    }
 
-}
+    //表格背景
 
-//字体粗细
+    iTable.prototype.bgColor = function () {
 
-iTable.prototype.fontBold = function() {
+        var select = this.createCellMenu('d_fill', 'bgColor', this.settings.bgColor);
 
-	var simMenu = this.createSimpleMenu('fbold');
+        var td = $(select).find('table tr td');
 
-	var sel_a = $(simMenu).children(0);
+        var className, curClass;
 
-	sel_a.on('click', function() {
+        var selThem;
 
-		$('.picked').hasClass('ffbold') ? $('.picked').removeClass('ffbold') : $('.picked').addClass('ffbold');
+        td.on('click', function () {
 
-	});
+            className = $(this).attr('class');
 
-}
+            $('.picked').addClass(className);
 
-//字体倾斜
+            var reg = new RegExp("(((ffill_)[A-Za-z0-9_]+\s*)+)", "g");
 
-iTable.prototype.fontItalic = function() {
+            curClass = $('.picked').attr('class');
 
-	var simMenu = this.createSimpleMenu('fitalic');
+            if (!!curClass) {
 
-	var sel_a = $(simMenu).children(0);
+                curClass = curClass.replace(reg, className);
 
-	sel_a.on('click', function() {
+            } else {
 
-		$('.picked').hasClass('ffitalic') ? $('.picked').removeClass('ffitalic') : $('.picked').addClass('ffitalic');
+                return;
 
-	});
+            }
 
-}
+            curClass = _.uniq(curClass.split(' ')).join(' ');
 
-//字体下划线
+            selThem = $('.picked');
 
-iTable.prototype.fontOverline = function() {
+            $('.picked').removeAttr('class');
 
-	var simMenu = this.createSimpleMenu('foverline');
+            selThem.addClass(curClass);
 
-	var sel_a = $(simMenu).children(0);
+        });
 
-	sel_a.on('click', function() {
+    }
 
-		$('.picked').hasClass('ffoverline') ? $('.picked').removeClass('ffoverline') : $('.picked').addClass('ffoverline');
+    //字符对齐
 
-	});
+    iTable.prototype.textAlign = function () {
 
-}
+        var select = this.createCellMenu('f_align', 'textAlign', this.settings.textAlign);
 
-//字体颜色
+        var td = $(select).find('table tr td');
 
-iTable.prototype.fontColor = function() {
+        var className, curClass;
 
-	var select = this.createCellMenu('d_fcolor', 'fontColor', this.settings.fontColor);
+        var selThem;
 
-	var td = $(select).find('table tr td');
+        td.css({
 
-	var className, curClass;
+            'background': '#FFFFFF'
 
-	var selThem;
+        });
 
-	td.on('click', function() {
+        td.on('click', function () {
 
-		className = $(this).find('a').attr('class');
+            className = $(this).attr('class');
 
-		$('.picked').addClass(className);
+            $('.picked').addClass(className);
 
-		var reg = new RegExp("(((fc_)[A-Za-z0-9_]+\s*)+)", "g");
+            var reg = new RegExp("(((falign_)[A-Za-z0-9_]+\s*)+)", "g");
 
-		curClass = $('.picked').attr('class');
+            curClass = $('.picked').attr('class');
 
-		if(!!curClass) {
+            if (!!curClass) {
 
-			curClass = curClass.replace(reg, className);
+                curClass = curClass.replace(reg, className);
 
-		} else {
+            } else {
 
-			return;
+                return;
 
-		}
+            }
 
-		curClass = _.uniq(curClass.split(' ')).join(' ');
+            curClass = _.uniq(curClass.split(' ')).join(' ');
 
-		selThem = $('.picked');
+            selThem = $('.picked');
 
-		$('.picked').removeAttr('class');
+            $('.picked').removeAttr('class');
 
-		selThem.addClass(curClass);
+            selThem.addClass(curClass);
 
-	});
+        });
 
-}
+        td.mouseover(function () {
 
-//表格背景
+            $(this).css({
 
-iTable.prototype.bgColor = function() {
+                'background': '#ECECEC'
 
-	var select = this.createCellMenu('d_fill', 'bgColor', this.settings.bgColor);
+            });
 
-	var td = $(select).find('table tr td');
+        });
 
-	var className, curClass;
+        td.mouseout(function () {
 
-	var selThem;
+            $(this).css({
 
-	td.on('click', function() {
+                'background': '#FFFFFF'
 
-		className = $(this).attr('class');
+            });
 
-		$('.picked').addClass(className);
+        });
 
-		var reg = new RegExp("(((ffill_)[A-Za-z0-9_]+\s*)+)", "g");
+    }
 
-		curClass = $('.picked').attr('class');
+    //公式选择
 
-		if(!!curClass) {
+    iTable.prototype.express = function () {
 
-			curClass = curClass.replace(reg, className);
+        var select = this.createSelection('express', this.settings.express);
 
-		} else {
+        var sel_a = $(select).find('ul li a');
 
-			return;
+        var that = this;
 
-		}
+        sel_a.on('click', function () {
 
-		curClass = _.uniq(curClass.split(' ')).join(' ');
+            var ways = $(this).attr('class').replace('fx_', '');
 
-		selThem = $('.picked');
+            that.formula(ways);
 
-		$('.picked').removeAttr('class');
+        });
 
-		selThem.addClass(curClass);
+    }
 
-	});
+    //列插入
 
-}
+    iTable.prototype.insertCol = function () {
 
-//字符对齐
+        var simMenu = this.createSimpleMenu('editRowCol insertCol', '');
 
-iTable.prototype.textAlign = function() {
+        var sel_a = $(simMenu).children(0);
 
-	var select = this.createCellMenu('f_align', 'textAlign', this.settings.textAlign);
+        var that = this;
 
-	var td = $(select).find('table tr td');
+        sel_a.on('click', function () {
 
-	var className, curClass;
+            var sNode = $('.picked');
 
-	var selThem;
+            var xArr = [],
 
-	td.css({
+                yArr = [];
 
-		'background': '#FFFFFF'
+            var xMax, xMin, yMax, yMin;
 
-	});
+            if (sNode.length >= 2) {
 
-	td.on('click', function() {
+                for (var i = 0; i < sNode.length; i++) {
 
-		className = $(this).attr('class');
+                    var cols = parseInt(sNode.eq(i).attr('cols'));
 
-		$('.picked').addClass(className);
+                    var rows = parseInt(sNode.eq(i).attr('rows'));
 
-		var reg = new RegExp("(((falign_)[A-Za-z0-9_]+\s*)+)", "g");
+                    var cAdd = parseInt(sNode.eq(i).attr('colspan')) || 1;
 
-		curClass = $('.picked').attr('class');
+                    var rAdd = parseInt(sNode.eq(i).attr('rowspan')) || 1;
 
-		if(!!curClass) {
+                    cols = cols + cAdd - 1;
 
-			curClass = curClass.replace(reg, className);
+                    rows = rows + rAdd - 1;
 
-		} else {
+                    xArr.push(cols);
 
-			return;
+                    yArr.push(rows);
 
-		}
+                    xMax = xArr.max(), xMin = xArr.min(), yMax = yArr.max(), yMin = yArr.min();
 
-		curClass = _.uniq(curClass.split(' ')).join(' ');
+                }
 
-		selThem = $('.picked');
+                for (var _y = 0; _y < that.rowCount + 1; _y++) {
 
-		$('.picked').removeAttr('class');
+                    var time = 0;
 
-		selThem.addClass(curClass);
+                    for (var _x = xMin; _x < xMax + 1; _x++) {
 
-	});
+                        var index = xMin;
 
-	td.mouseover(function() {
+                        if ($('td[cols=' + xMin + '][rows=' + _y + ']').length > 0) {
 
-		$(this).css({
+                            $('td[cols=' + xMin + '][rows=' + _y + ']').before('<td style="background:orange"></td>');
 
-			'background': '#ECECEC'
+                        } else {
 
-		});
+                            while (index > -1) {
 
-	});
+                                if ($('td[cols=' + index + '][rows=' + _y + ']').length > 0) {
 
-	td.mouseout(function() {
+                                    time++;
 
-		$(this).css({
+                                    if (time == 1) {
 
-			'background': '#FFFFFF'
+                                        $('td[cols=' + index + '][rows=' + _y + ']').after('<td style="background:orange"></td>');
 
-		});
+                                    }
 
-	});
+                                    //console.log($('td[cols=' + index + '][rows=' + _y + ']'));
 
-}
+                                }
 
-//公式选择
+                                index--;
 
-iTable.prototype.express = function() {
+                            }
 
-	var select = this.createSelection('express', this.settings.express);
+                            //$('td[cols=' + (xMin - 1) + '][rows=' + _y + ']').after('<td style="background:orange"></td>');
 
-	var sel_a = $(select).find('ul li a');
+                        }
 
-	var that = this;
+                    }
 
-	sel_a.on('click', function() {
+                }
 
-		var ways = $(this).attr('class').replace('fx_', '');
+                that.cellCount = that.cellCount + xMax - xMin + 1;
 
-		that.formula(ways);
+                that.updateTop(index);
 
-	});
+            } else {
 
-}
+                var xIndex = parseInt(sNode.attr('cols'));
 
-//列插入
+                var yIndex = parseInt(sNode.attr('rows'));
 
-iTable.prototype.insertCol = function() {
+                for (var i = 0; i < that.rowCount + 1; i++) {
 
-	var simMenu = this.createSimpleMenu('editRowCol insertCol', '');
+                    var time = 0;
 
-	var sel_a = $(simMenu).children(0);
+                    for (var j = xIndex; j > -1; j--) {
 
-	var that = this;
+                        var cols = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('cols'));
 
-	sel_a.on('click', function() {
+                        if (cols == xIndex) {
 
-		var sNode = $('.picked');
+                            var cspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
 
-		var xArr = [],
+                            var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
 
-			yArr = [];
+                            if (cspan >= 2) {
 
-		var xMax, xMin, yMax, yMin;
+                                $('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cspan + 1);
 
-		if(sNode.length >= 2) {
+                            } else {
 
-			for(var i = 0; i < sNode.length; i++) {
+                                if (rspan > 1) {
 
-				var cols = parseInt(sNode.eq(i).attr('cols'));
+                                    for (var r = i; r < i + rspan; r++) {
 
-				var rows = parseInt(sNode.eq(i).attr('rows'));
+                                        $('td[cols=' + (j - cspan) + '][rows=' + r + ']').after('<td style="background:orange"></td>');
 
-				var cAdd = parseInt(sNode.eq(i).attr('colspan')) || 1;
+                                    }
 
-				var rAdd = parseInt(sNode.eq(i).attr('rowspan')) || 1;
+                                } else {
 
-				cols = cols + cAdd - 1;
+                                    $('td[cols=' + j + '][rows=' + i + ']').before('<td style="background:orange"></td>');
 
-				rows = rows + rAdd - 1;
+                                }
 
-				xArr.push(cols);
+                            }
 
-				yArr.push(rows);
+                        } else {
 
-				xMax = xArr.max(), xMin = xArr.min(), yMax = yArr.max(), yMin = yArr.min();
+                            if ($('td[cols=' + j + '][rows=' + i + ']').length > 0) {
 
-			}
+                                time++;
 
-			for(var _y = 0; _y < that.rowCount + 1; _y++) {
+                                if (time == 1) {
 
-				var time = 0;
+                                    var cspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
 
-				for(var _x = xMin; _x < xMax + 1; _x++) {
+                                    var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
 
-					var index = xMin;
+                                    if (cspan >= 2) {
 
-					if($('td[cols=' + xMin + '][rows=' + _y + ']').length > 0) {
+                                        //不同行拓宽
 
-						$('td[cols=' + xMin + '][rows=' + _y + ']').before('<td style="background:orange"></td>');
+                                        if (!(i < yIndex && (rspan + i) > yIndex)) {
 
-					} else {
+                                            $('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cspan + 1);
 
-						while(index > -1) {
+                                        }
 
-							if($('td[cols=' + index + '][rows=' + _y + ']').length > 0) {
+                                    }
 
-								time++;
+                                }
 
-								if(time == 1) {
+                            }
 
-									$('td[cols=' + index + '][rows=' + _y + ']').after('<td style="background:orange"></td>');
+                        }
 
-								}
+                    }
 
-								//console.log($('td[cols=' + index + '][rows=' + _y + ']'));
+                }
 
-							}
+                that.cellCount++;
 
-							index--;
+                that.updateTop(xIndex);
 
-						}
+            }
 
-						//$('td[cols=' + (xMin - 1) + '][rows=' + _y + ']').after('<td style="background:orange"></td>');
+            that.setIndex();
 
-					}
+            that.fillTd();
 
-				}
+            that.keyCursor();
 
-			}
+            //that.updateTop();
 
-			that.cellCount = that.cellCount + xMax - xMin + 1;
+        });
 
-			that.updateTop(index);
+    }
 
-		} else {
+    //行插入
 
-			var xIndex = parseInt(sNode.attr('cols'));
+    iTable.prototype.insertRow = function () {
 
-			var yIndex = parseInt(sNode.attr('rows'));
+        var simMenu = this.createSimpleMenu('editRowCol insertRow', '');
 
-			for(var i = 0; i < that.rowCount + 1; i++) {
+        var sel_a = $(simMenu).children(0);
 
-				var time = 0;
+        var that = this;
 
-				for(var j = xIndex; j > -1; j--) {
+        sel_a.on('click', function () {
 
-					var cols = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('cols'));
+            var sNode = $('.picked');
 
-					if(cols == xIndex) {
+            var xArr = [],
 
-						var cspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
+                yArr = [];
 
-						var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
+            var xMax, xMin, yMax, yMin;
 
-						if(cspan >= 2) {
+            if (sNode.length >= 2) {
 
-							$('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cspan + 1);
+                for (var i = 0; i < sNode.length; i++) {
 
-						} else {
+                    var cols = parseInt(sNode.eq(i).attr('cols'));
 
-							if(rspan > 1) {
+                    var rows = parseInt(sNode.eq(i).attr('rows'));
 
-								for(var r = i; r < i + rspan; r++) {
+                    var cAdd = parseInt(sNode.eq(i).attr('colspan')) || 1;
 
-									$('td[cols=' + (j - cspan) + '][rows=' + r + ']').after('<td style="background:orange"></td>');
+                    var rAdd = parseInt(sNode.eq(i).attr('rowspan')) || 1;
 
-								}
+                    cols = cols + cAdd - 1;
 
-							} else {
+                    rows = rows + rAdd - 1;
 
-								$('td[cols=' + j + '][rows=' + i + ']').before('<td style="background:orange"></td>');
+                    xArr.push(cols);
 
-							}
+                    yArr.push(rows);
 
-						}
+                    xMax = xArr.max(), xMin = xArr.min(), yMax = yArr.max(), yMin = yArr.min();
 
-					} else {
+                }
 
-						if($('td[cols=' + j + '][rows=' + i + ']').length > 0) {
+                for (var _y = yMin; _y < yMax + 1; _y++) {
 
-							time++;
+                    var tr = $('<tr></tr>');
 
-							if(time == 1) {
+                    for (var _x = 0; _x < that.cellCount + 1; _x++) {
 
-								var cspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
+                        var th = $('<th></th>');
 
-								var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
+                        if ($('td[cols=' + _x + '][rows=' + yMin + ']').length > 0) {
 
-								if(cspan >= 2) {
+                            if (_x == 0) {
 
-									//不同行拓宽
+                                tr.append(th);
 
-									if(!(i < yIndex && (rspan + i) > yIndex)) {
+                            }
 
-										$('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cspan + 1);
+                            tr.append('<td style="background:orange"></td>');
 
-									}
+                            $('td[cols=' + _x + '][rows=' + yMin + ']').parent().before(tr);
 
-								}
+                        } else {
 
-							}
+                            $('td[cols=' + (_x - 1) + '][rows=' + yMin + ']').parent().after(tr);
 
-						}
+                        }
 
-					}
+                    }
 
-				}
+                }
 
-			}
+            } else {
 
-			that.cellCount++;
+                var yIndex = parseInt(sNode.attr('rows'));
 
-			that.updateTop(xIndex);
+                var xIndex = parseInt(sNode.attr('cols'));
 
-		}
+                for (var i = yIndex; i > -1; i--) {
 
-		that.setIndex();
+                    var tr = $('<tr></tr>');
 
-		that.fillTd();
+                    for (var j = 0; j < that.cellCount + 2; j++) {
 
-		that.keyCursor();
+                        var rows = $('td[cols=' + j + '][rows=' + i + ']').attr('rows');
 
-		//that.updateTop();
+                        if (rows == yIndex) {
 
-	});
+                            //console.log(rows,j);
 
-}
+                            if (j == 2) {
 
-//行插入
+                                var th = $('<th></th>');
 
-iTable.prototype.insertRow = function() {
+                                tr.append(th);
 
-	var simMenu = this.createSimpleMenu('editRowCol insertRow', '');
+                            }
 
-	var sel_a = $(simMenu).children(0);
+                            var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
 
-	var that = this;
+                            if (rspan >= 2) {
 
-	sel_a.on('click', function() {
+                                $('td[cols=' + j + '][rows=' + i + ']').attr('rowspan', rspan + 1);
 
-		var sNode = $('.picked');
+                            } else {
 
-		var xArr = [],
+                                tr.append('<td style="background:orange"></td>');
 
-			yArr = [];
+                                $('td[cols=' + j + '][rows=' + i + ']').parent().before(tr);
 
-		var xMax, xMin, yMax, yMin;
+                            }
 
-		if(sNode.length >= 2) {
+                        } else {
 
-			for(var i = 0; i < sNode.length; i++) {
+                            if ($('td[cols=' + j + '][rows=' + i + ']').length > 0) {
 
-				var cols = parseInt(sNode.eq(i).attr('cols'));
+                                var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
 
-				var rows = parseInt(sNode.eq(i).attr('rows'));
+                                var cspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
 
-				var cAdd = parseInt(sNode.eq(i).attr('colspan')) || 1;
+                                if (rspan >= 2) {
 
-				var rAdd = parseInt(sNode.eq(i).attr('rowspan')) || 1;
+                                    if (parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rows')) + parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) - 1 >= yIndex) {
 
-				cols = cols + cAdd - 1;
+                                        $('td[cols=' + j + '][rows=' + i + ']').attr('rowspan', rspan + 1);
 
-				rows = rows + rAdd - 1;
+                                    }
 
-				xArr.push(cols);
+                                }
 
-				yArr.push(rows);
+                            }
 
-				xMax = xArr.max(), xMin = xArr.min(), yMax = yArr.max(), yMin = yArr.min();
+                        }
 
-			}
+                    }
 
-			for(var _y = yMin; _y < yMax + 1; _y++) {
+                }
 
-				var tr = $('<tr></tr>');
+                that.rowCount++;
 
-				for(var _x = 0; _x < that.cellCount + 1; _x++) {
+                that.updateLeft(yIndex);
 
-					var th = $('<th></th>');
+            }
 
-					if($('td[cols=' + _x + '][rows=' + yMin + ']').length > 0) {
+            that.setIndex();
 
-						if(_x == 0) {
+            that.fillTd();
 
-							tr.append(th);
+            that.keyCursor();
 
-						}
+            //that.updateLeft();
 
-						tr.append('<td style="background:orange"></td>');
+        });
 
-						$('td[cols=' + _x + '][rows=' + yMin + ']').parent().before(tr);
+    }
 
-					} else {
+    //列删除
 
-						$('td[cols=' + (_x - 1) + '][rows=' + yMin + ']').parent().after(tr);
+    iTable.prototype.deleteCol = function () {
 
-					}
+        var simMenu = this.createSimpleMenu('editRowCol delCol', '');
 
-				}
+        var sel_a = $(simMenu).children(0);
 
-			}
+        var that = this;
 
-		} else {
+        sel_a.on('click', function () {
 
-			var yIndex = parseInt(sNode.attr('rows'));
+            var xArr = [],
 
-			var xIndex = parseInt(sNode.attr('cols'));
+                yArr = [];
 
-			for(var i = yIndex; i > -1; i--) {
+            var xMax, xMin, yMax, yMin;
 
-				var tr = $('<tr></tr>');
+            var sNode = $('.picked');
 
-				for(var j = 0; j < that.cellCount + 2; j++) {
+            if (sNode.length >= 2) {
 
-					var rows = $('td[cols=' + j + '][rows=' + i + ']').attr('rows');
+                for (var i = 0; i < sNode.length; i++) {
 
-					if(rows == yIndex) {
+                    var cols = parseInt(sNode.eq(i).attr('cols'));
 
-						//console.log(rows,j);
+                    var rows = parseInt(sNode.eq(i).attr('rows'));
 
-						if(j == 2) {
+                    var cAdd = parseInt(sNode.eq(i).attr('colspan')) || 1;
 
-							var th = $('<th></th>');
+                    var rAdd = parseInt(sNode.eq(i).attr('rowspan')) || 1;
 
-							tr.append(th);
+                    cols = cols + cAdd - 1;
 
-						}
+                    rows = rows + rAdd - 1;
 
-						var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
+                    xArr.push(cols);
 
-						if(rspan >= 2) {
+                    yArr.push(rows);
 
-							$('td[cols=' + j + '][rows=' + i + ']').attr('rowspan', rspan + 1);
+                    xMax = xArr.max(), xMin = xArr.min(), yMax = yArr.max(), yMin = yArr.min();
 
-						} else {
+                }
 
-							tr.append('<td style="background:orange"></td>');
+            } else {
 
-							$('td[cols=' + j + '][rows=' + i + ']').parent().before(tr);
+                var index = parseInt(sNode.attr('cols'));
 
-						}
+                for (var i = 0; i < that.rowCount + 1; i++) {
 
-					} else {
+                    var time = 0;
 
-						if($('td[cols=' + j + '][rows=' + i + ']').length > 0) {
+                    for (var j = index; j > -1; j--) {
 
-							var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
+                        var cols = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('cols'));
 
-							var cspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
+                        if (cols == index) {
 
-							if(rspan >= 2) {
+                            var cspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
 
-								if(parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rows')) + parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) - 1 >= yIndex) {
+                            if (cspan >= 2) {
 
-									$('td[cols=' + j + '][rows=' + i + ']').attr('rowspan', rspan + 1);
+                                $('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cspan - 1);
 
-								}
+                            } else {
 
-							}
+                                $('td[cols=' + j + '][rows=' + i + ']').remove();
 
-						}
+                            }
 
-					}
+                        } else {
 
-				}
+                            if ($('td[cols=' + j + '][rows=' + i + ']').length > 0) {
 
-			}
+                                time++;
 
-			that.rowCount++;
+                                if (time == 1) {
 
-			that.updateLeft(yIndex);
+                                    var cspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
 
-		}
+                                    if (cspan >= 2) {
 
-		that.setIndex();
+                                        $('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cspan - 1);
 
-		that.fillTd();
+                                    }
 
-		that.keyCursor();
+                                }
 
-		//that.updateLeft();
+                            }
 
-	});
+                        }
 
-}
+                    }
 
-//列删除
+                }
 
-iTable.prototype.deleteCol = function() {
+                that.cellCount--;
 
-	var simMenu = this.createSimpleMenu('editRowCol delCol', '');
+                that.updateLeft(index);
 
-	var sel_a = $(simMenu).children(0);
+            }
 
-	var that = this;
+            that.setIndex();
 
-	sel_a.on('click', function() {
+            that.fillTd();
 
-		var xArr = [],
+            that.keyCursor();
 
-			yArr = [];
+        });
 
-		var xMax, xMin, yMax, yMin;
+    }
 
-		var sNode = $('.picked');
+    //行删除
 
-		if(sNode.length >= 2) {
+    iTable.prototype.deleteRow = function () {
 
-			for(var i = 0; i < sNode.length; i++) {
+        var simMenu = this.createSimpleMenu('editRowCol delRow', '');
 
-				var cols = parseInt(sNode.eq(i).attr('cols'));
+        var sel_a = $(simMenu).children(0);
 
-				var rows = parseInt(sNode.eq(i).attr('rows'));
+        var that = this;
 
-				var cAdd = parseInt(sNode.eq(i).attr('colspan')) || 1;
+        sel_a.on('click', function () {
 
-				var rAdd = parseInt(sNode.eq(i).attr('rowspan')) || 1;
+            var sNode = $('.picked');
 
-				cols = cols + cAdd - 1;
+            if (sNode.length >= 2) {
 
-				rows = rows + rAdd - 1;
+            } else {
 
-				xArr.push(cols);
+                var index = parseInt(sNode.attr('rows'));
 
-				yArr.push(rows);
+                var yIndex = parseInt(sNode.attr('rows'));
 
-				xMax = xArr.max(), xMin = xArr.min(), yMax = yArr.max(), yMin = yArr.min();
+                // var xIndex = parseInt($(obj).attr('cols'));
 
-			}
+                for (var i = index; i > -1; i--) {
 
-		} else {
+                    //var tr=$('<tr></tr>');
 
-			var index = parseInt(sNode.attr('cols'));
+                    //var time = 0;
 
-			for(var i = 0; i < that.rowCount + 1; i++) {
+                    for (var j = 0; j < that.cellCount; j++) {
 
-				var time = 0;
+                        var rows = $('td[cols=' + j + '][rows=' + i + ']').attr('rows');
 
-				for(var j = index; j > -1; j--) {
+                        if (rows == index) {
 
-					var cols = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('cols'));
+                            var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
 
-					if(cols == index) {
+                            if (rspan >= 2) {
 
-						var cspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
+                                $('td[cols=' + j + '][rows=' + i + ']').attr('rowspan', rspan - 1);
 
-						if(cspan >= 2) {
+                            } else {
 
-							$('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cspan - 1);
+                                $('td[cols=' + j + '][rows=' + i + ']').parent().remove();
 
-						} else {
+                            }
 
-							$('td[cols=' + j + '][rows=' + i + ']').remove();
+                        } else {
 
-						}
+                            if ($('td[cols=' + j + '][rows=' + i + ']').length > 0) {
 
-					} else {
+                                var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
 
-						if($('td[cols=' + j + '][rows=' + i + ']').length > 0) {
+                                if (rspan >= 2) {
 
-							time++;
+                                    if (parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rows')) + parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) - 1 >= yIndex) {
 
-							if(time == 1) {
+                                        $('td[cols=' + j + '][rows=' + i + ']').attr('rowspan', rspan - 1);
 
-								var cspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
+                                    }
 
-								if(cspan >= 2) {
+                                }
 
-									$('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cspan - 1);
+                            }
 
-								}
+                        }
 
-							}
+                    }
 
-						}
+                }
 
-					}
+                that.rowCount--;
 
-				}
+                that.updateLeft(index);
 
-			}
+            }
 
-			that.cellCount--;
+            that.setIndex();
 
-			that.updateLeft(index);
+            that.fillTd();
 
-		}
+            that.keyCursor();
 
-		that.setIndex();
+        });
 
-		that.fillTd();
+    }
 
-		that.keyCursor();
+    //单元格上的公式区域
 
-	});
+    iTable.prototype.formula = function (ways) {
 
-}
+        var func = ways;
 
-//行删除
+        var target = $('.picked')[0];
 
-iTable.prototype.deleteRow = function() {
+        var tmpContent = $(target).text();
 
-	var simMenu = this.createSimpleMenu('editRowCol delRow', '');
+        var xCoo = $(target).attr('cols');
 
-	var sel_a = $(simMenu).children(0);
+        var yCoo = $(target).attr('rows');
 
-	var that = this;
+        var input = '<input type="text" class="fxInput" onkeyup="this.size=(this.value.length>4?this.value.length:4)";>';
 
-	sel_a.on('click', function() {
+        var width = target.offsetWidth;
 
-		var sNode = $('.picked');
+        var height = target.offsetHeight;
 
-		if(sNode.length >= 2) {
+        var left = target.offsetLeft;
 
-		} else {
+        var top = target.offsetTop;
 
-			var index = parseInt(sNode.attr('rows'));
+        var enterDiv = '<div class="fxDiv">';
 
-			var yIndex = parseInt(sNode.attr('rows'));
+        enterDiv = enterDiv + ways + '(' + input + ')' + '</div>';
 
-			// var xIndex = parseInt($(obj).attr('cols'));
+        this.container.append($(enterDiv));
 
-			for(var i = index; i > -1; i--) {
+        $('.fxDiv').css({
 
-				//var tr=$('<tr></tr>');
+            'height': height - 2,
 
-				//var time = 0;
+            'left': left,
 
-				for(var j = 0; j < that.cellCount; j++) {
+            'top': top,
 
-					var rows = $('td[cols=' + j + '][rows=' + i + ']').attr('rows');
+            'position': 'absolute',
 
-					if(rows == index) {
+            'border': '1px solid red',
 
-						var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
+            'z-index': '98',
 
-						if(rspan >= 2) {
+            'background': '#ffffff'
 
-							$('td[cols=' + j + '][rows=' + i + ']').attr('rowspan', rspan - 1);
+        });
 
-						} else {
+        $('.fxInput').css({
 
-							$('td[cols=' + j + '][rows=' + i + ']').parent().remove();
+            'height': height - 10,
 
-						}
+            'line-height': height - 10,
 
-					} else {
+            'border': 'none',
 
-						if($('td[cols=' + j + '][rows=' + i + ']').length > 0) {
+            'outline': 'none'
 
-							var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
+        });
 
-							if(rspan >= 2) {
+        $('.fxInput').keyup(function () {
 
-								if(parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rows')) + parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) - 1 >= yIndex) {
+            var ev = ev || event;
 
-									$('td[cols=' + j + '][rows=' + i + ']').attr('rowspan', rspan - 1);
+            var endValue = $(this).val();
 
-								}
+            if (ev.keyCode == 13) {
 
-							}
+                endValue.split();
 
-						}
+                $(this).blur();
 
-					}
+                $(this).parent().remove();
 
-				}
+            }
 
-			}
+        });
 
-			that.rowCount--;
+    }
 
-			that.updateLeft(index);
+    //合并单元格
 
-		}
+    iTable.prototype.mergeTd = function () {
 
-		that.setIndex();
+        var mergeBtn = this.createSimpleMenu('mergeBtn');
 
-		that.fillTd();
+        var that = this;
 
-		that.keyCursor();
+        mergeBtn.on('click', function () {
 
-	});
+            var $t = $('.dataTable');
 
-}
+            if ($("table", $t).length > 0) {
 
-//单元格上的公式区域
+                alert("不支持嵌套表格！");
 
-iTable.prototype.formula = function(ways) {
+                return;
 
-	var func = ways;
+            }
 
-	var target = $('.picked')[0];
+          //  var sigDel = "sign4delete";
 
-	var tmpContent = $(target).text();
+            var sigSel = "picked";
 
-	var xCoo = $(target).attr('cols');
+            $("th,td", $t).each(function () {
 
-	var yCoo = $(target).attr('rows');
+                var ridx = $("tr", $t).index($(this).parent("tr"));
 
-	var input = '<input type="text" class="fxInput" onkeyup="this.size=(this.value.length>4?this.value.length:4)";>';
+                var cidx = $(this).parent().children("th,td").index(this);
 
-	var width = target.offsetWidth;
+                var rowspan = Number($(this).attr("rowspan")) || 1;
 
-	var height = target.offsetHeight;
+                var colspan = Number($(this).attr("colspan")) || 1;
 
-	var left = target.offsetLeft;
+                var isSel = $(this).hasClass(sigSel);
 
-	var top = target.offsetTop;
+                if (rowspan <= 1 && colspan <= 1) return;
 
-	var enterDiv = '<div class="fxDiv">';
+                $("tr", $t).each(function () {
 
-	enterDiv = enterDiv + ways + '(' + input + ')' + '</div>';
+                    var idx = $("tr", $t).index(this);
 
-	this.container.append($(enterDiv));
+                    var arr, $td = $("<td>").addClass(isSel ? sigSel : sigDel);
 
-	$('.fxDiv').css({
+                    if (idx == ridx) {
 
-		'height': height - 2,
+                        // 本行在 [cidx] 后插入 colspan-1 个
 
-		'left': left,
+                        arr = $(); // 准备待插单元格
 
-		'top': top,
+                        for (var i = 0; i < colspan - 1; i++)
 
-		'position': 'absolute',
+                            arr = arr.add($td.clone());
 
-		'border': '1px solid red',
+                        // 插入
 
-		'z-index': '98',
+                        $("th,td", this).eq(cidx).after(arr);
 
-		'background': '#ffffff'
+                    } else if (ridx < idx && idx < ridx + rowspan) {
 
-	});
+                        // 以下行在 [cidx] 前插入 colspan 个
 
-	$('.fxInput').css({
+                        arr = $(); // 准备待插单元格
 
-		'height': height - 10,
+                        for (var i = 0; i < colspan; i++)
 
-		'line-height': height - 10,
+                            arr = arr.add($td.clone());
 
-		'border': 'none',
+                        // 插入
 
-		'outline': 'none'
+                        if (cidx > 0 && $("th,td", this).eq(cidx - 1).length > 0) $("th,td", this).eq(cidx - 1).after(arr);
 
-	});
+                        else if ($("th,td", this).eq(cidx).length > 0) $("th,td", this).eq(cidx).before(arr);
 
-	$('.fxInput').keyup(function() {
+                        else $(this).prepend(arr);
 
-		var ev = ev || event;
+                    }
 
-		var endValue = $(this).val();
+                });
 
-		if(ev.keyCode == 13) {
+            });
 
-			endValue.split();
+            var rmin = 10000,
 
-			$(this).blur();
+                cmin = 10000;
 
-			$(this).parent().remove();
+            var rmax = 0,
 
-		}
+                cmax = 0;
 
-	});
+            var rnum, cnum;
 
-}
+            // 计算起始和跨距
 
-//合并单元格
+            $("th,td", $t).filter("." + sigSel).each(function () {
 
-iTable.prototype.mergeTd = function() {
+                var ridx = $("tr", $t).index($(this).parent("tr"));
 
-	var mergeBtn = this.createSimpleMenu('mergeBtn');
+                rmin = ridx < rmin ? ridx : rmin;
 
-	var that = this;
+                rmax = ridx > rmax ? ridx : rmax;
 
-	mergeBtn.on('click', function() {
+                var cidx = $(this).parent().children("th,td").index(this);
 
-		var $t = $('.dataTable');
+                cmin = cidx < cmin ? cidx : cmin;
 
-		if($("table", $t).length > 0) {
+                cmax = cidx > cmax ? cidx : cmax;
 
-			alert("不支持嵌套表格！");
+            });
 
-			return;
+            rnum = rmax - rmin + 1;
 
-		}
+            cnum = cmax - cmin + 1;
 
-		var sigDel = "sign4delete";
+            // 合并单元格
 
-		var sigSel = "picked";
+            $("th,td", $t).each(function () {
 
-		$("th,td", $t).each(function() {
+                var ridx = $("tr", $t).index($(this).parent("tr"));
 
-			var ridx = $("tr", $t).index($(this).parent("tr"));
+                var cidx = $(this).parent().children("th,td").index(this);
 
-			var cidx = $(this).parent().children("th,td").index(this);
+                if (rmin <= ridx && ridx <= rmax && cmin <= cidx && cidx <= cmax) $(this).addClass(sigDel);
 
-			var rowspan = Number($(this).attr("rowspan")) || 1;
+                if (ridx == rmin && cidx == cmin) $(this).removeClass(sigDel).attr({
 
-			var colspan = Number($(this).attr("colspan")) || 1;
+                    rowspan: rnum,
 
-			var isSel = $(this).hasClass(sigSel);
+                    colspan: cnum
 
-			if(rowspan <= 1 && colspan <= 1) return;
+                });
 
-			$("tr", $t).each(function() {
+                if ($(this).attr("rowspan") == 1) $(this).removeAttr("rowspan");
 
-				var idx = $("tr", $t).index(this);
+                if ($(this).attr("colspan") == 1) $(this).removeAttr("colspan");
 
-				var arr, $td = $("<td>").addClass(isSel ? sigSel : sigDel);
+            }).remove("." + sigDel);
 
-				if(idx == ridx) {
+            that.setIndex();
 
-					// 本行在 [cidx] 后插入 colspan-1 个
+        });
 
-					arr = $(); // 准备待插单元格
+    }
 
-					for(var i = 0; i < colspan - 1; i++)
+    //拆分单元格
 
-						arr = arr.add($td.clone());
+    iTable.prototype.splitTd = function () {
 
-					// 插入
+        var splitBtn = this.createSimpleMenu('splitBtn');
 
-					$("th,td", this).eq(cidx).after(arr);
+        var that = this;
 
-				} else if(ridx < idx && idx < ridx + rowspan) {
+        splitBtn.on('click', function () {
 
-					// 以下行在 [cidx] 前插入 colspan 个
+            var $t = $(".dataTable");
 
-					arr = $(); // 准备待插单元格
+            if ($("table", $t).length > 0) {
 
-					for(var i = 0; i < colspan; i++)
+                alert("不支持嵌套表格！");
 
-						arr = arr.add($td.clone());
+                return;
 
-					// 插入
+            }
 
-					if(cidx > 0 && $("th,td", this).eq(cidx - 1).length > 0) $("th,td", this).eq(cidx - 1).after(arr);
+            var sigDel = "sign4delete";
 
-					else if($("th,td", this).eq(cidx).length > 0) $("th,td", this).eq(cidx).before(arr);
+            var sigSel = "picked";
 
-					else $(this).prepend(arr);
+            $("th,td", $t).each(function () {
 
-				}
+                var ridx = $("tr", $t).index($(this).parent("tr"));
 
-			});
+                var cidx = $(this).parent().children("th,td").index(this);
 
-		});
+                var rowspan = Number($(this).attr("rowspan")) || 1;
 
-		var rmin = 10000,
+                var colspan = Number($(this).attr("colspan")) || 1;
 
-			cmin = 10000;
+                var isSel = $(this).hasClass(sigSel);
 
-		var rmax = 0,
+                if (rowspan <= 1 && colspan <= 1) return;
 
-			cmax = 0;
+                if (isSel) $(this).removeAttr("colspan").removeAttr("rowspan");
 
-		var rnum, cnum;
+                // 跨格开插
 
-		// 计算起始和跨距
+                $("tr", $t).each(function () {
 
-		$("th,td", $t).filter("." + sigSel).each(function() {
+                    var idx = $("tr", $t).index(this);
 
-			var ridx = $("tr", $t).index($(this).parent("tr"));
+                    var arr, $td = $("<td>");
 
-			rmin = ridx < rmin ? ridx : rmin;
+                    if (!isSel) $td.addClass(sigDel);
 
-			rmax = ridx > rmax ? ridx : rmax;
+                    if (idx == ridx) {
 
-			var cidx = $(this).parent().children("th,td").index(this);
+                        // 本行在 [cidx] 后插入 colspan-1 个
 
-			cmin = cidx < cmin ? cidx : cmin;
+                        arr = $(); // 准备待插单元格
 
-			cmax = cidx > cmax ? cidx : cmax;
+                        for (var i = 0; i < colspan - 1; i++)
 
-		});
+                            arr = arr.add($td.clone());
 
-		rnum = rmax - rmin + 1;
+                        $("th,td", this).eq(cidx).after(arr);
 
-		cnum = cmax - cmin + 1;
+                    } else if (ridx < idx && idx < ridx + rowspan) {
 
-		// 合并单元格
+                        // 以下行在 [cidx] 前插入 colspan 个
 
-		$("th,td", $t).each(function() {
+                        arr = $(); // 准备待插单元格
 
-			var ridx = $("tr", $t).index($(this).parent("tr"));
+                        for (var i = 0; i < colspan; i++)
 
-			var cidx = $(this).parent().children("th,td").index(this);
+                            arr = arr.add($td.clone());
 
-			if(rmin <= ridx && ridx <= rmax && cmin <= cidx && cidx <= cmax) $(this).addClass(sigDel);
+                        if (cidx > 0 && $("th,td", this).eq(cidx - 1).length > 0) $("th,td", this).eq(cidx - 1).after(arr);
 
-			if(ridx == rmin && cidx == cmin) $(this).removeClass(sigDel).attr({
+                        else if ($("th,td", this).eq(cidx).length > 0) $("th,td", this).eq(cidx).before(arr);
 
-				rowspan: rnum,
+                        else $(this).prepend(arr);
 
-				colspan: cnum
+                    }
 
-			});
+                });
 
-			if($(this).attr("rowspan") == 1) $(this).removeAttr("rowspan");
+            });
 
-			if($(this).attr("colspan") == 1) $(this).removeAttr("colspan");
+            $("th,td", $t).remove("." + sigDel);
 
-		}).remove("." + sigDel);
+            that.setIndex();
 
-		that.setIndex();
+        });
 
-	});
+    }
 
-}
+    //创建工具栏下拉菜单
 
-//拆分单元格
+    iTable.prototype.createSelection = function (id, menus) {
 
-iTable.prototype.splitTd = function() {
+        var selectionBox = $('<div class="toolBox"></div>');
 
-	var splitBtn = this.createSimpleMenu('splitBtn');
+        var selectHead = $('<div id="' + id + '"></div>');
 
-	var that = this;
+        var selectUl = $('<ul></ul>');
 
-	splitBtn.on('click', function() {
+        var selectLi, arr = [];
 
-		var $t = $(".dataTable");
+        for (var index in menus) {
 
-		if($("table", $t).length > 0) {
+            arr.push(index);
 
-			alert("不支持嵌套表格！");
+            selectHead.text(arr[0]);
 
-			return;
+            selectLi = $('<li><a class="' + menus[index] + '">' + index + '</a></li>');
 
-		}
+            selectUl.append(selectLi);
 
-		var sigDel = "sign4delete";
+        }
 
-		var sigSel = "picked";
+        selectHead.after(selectUl);
 
-		$("th,td", $t).each(function() {
+        selectionBox.append(selectHead);
 
-			var ridx = $("tr", $t).index($(this).parent("tr"));
+        this.tools.append(selectionBox);
 
-			var cidx = $(this).parent().children("th,td").index(this);
+        selectUl.hide();
 
-			var rowspan = Number($(this).attr("rowspan")) || 1;
+        selectHead.on('click', function () {
 
-			var colspan = Number($(this).attr("colspan")) || 1;
+            selectUl.toggle();
 
-			var isSel = $(this).hasClass(sigSel);
+        });
 
-			if(rowspan <= 1 && colspan <= 1) return;
+        selectUl.find('li a').on('click', function () {
 
-			if(isSel) $(this).removeAttr("colspan").removeAttr("rowspan");
+            $(selectHead[0]).text($(this).text());
 
-			// 跨格开插
+            $(selectHead[0]).attr('curClass', $(this).attr('class'));
 
-			$("tr", $t).each(function() {
+        });
 
-				var idx = $("tr", $t).index(this);
+        return selectionBox;
 
-				var arr, $td = $("<td>");
+    }
 
-				if(!isSel) $td.addClass(sigDel);
+    //创建工具栏单个菜单
 
-				if(idx == ridx) {
+    iTable.prototype.createSimpleMenu = function (className, text) {
 
-					// 本行在 [cidx] 后插入 colspan-1 个
+        var menus = $('<div class="toolBox"></div>');
 
-					arr = $(); // 准备待插单元格
+        var mText = text || '';
 
-					for(var i = 0; i < colspan - 1; i++)
+        var mClass = className;
 
-						arr = arr.add($td.clone());
+        var simTool = $('<span class="' + mClass + '">' + mText + '</span>');
 
-					$("th,td", this).eq(cidx).after(arr);
+        menus.append(simTool);
 
-				} else if(ridx < idx && idx < ridx + rowspan) {
+        this.tools.append(menus);
 
-					// 以下行在 [cidx] 前插入 colspan 个
+        return menus;
 
-					arr = $(); // 准备待插单元格
+    }
 
-					for(var i = 0; i < colspan; i++)
+    //创建工具栏格子菜单
 
-						arr = arr.add($td.clone());
+    iTable.prototype.createCellMenu = function (dClass, className, menus) {
 
-					if(cidx > 0 && $("th,td", this).eq(cidx - 1).length > 0) $("th,td", this).eq(cidx - 1).after(arr);
+        var selectionBox = $('<div class="toolBox"></div>');
 
-					else if($("th,td", this).eq(cidx).length > 0) $("th,td", this).eq(cidx).before(arr);
+        var selectHead = $('<div class="' + dClass + '"></div>');
 
-					else $(this).prepend(arr);
+        var selectTb = $('<table class="' + className + '"></table>');
 
-				}
+        var selectTr = $('<tr></tr>');
 
-			});
+        var selectTd, length = JSONLength(menus);
 
-		});
+        var arr1 = [],
 
-		$("th,td", $t).remove("." + sigDel);
+            arr2 = [];
 
-		that.setIndex();
+        for (var index in menus) {
 
-	});
+            arr1.push(menus[index].tdclass);
 
-}
+            arr2.push(menus[index].fclass);
 
-//创建工具栏下拉菜单
+        }
 
-iTable.prototype.createSelection = function(id, menus) {
+        for (var i = 0; i < arr1.length + 1; i++) {
 
-	var selectionBox = $('<div class="toolBox"></div>');
+            selectTd = $('<td class="' + arr1[i] + '"><a class="' + arr2[i] + '"></a></td>');
 
-	var selectHead = $('<div id="' + id + '"></div>');
+            selectTr.append(selectTd);
 
-	var selectUl = $('<ul></ul>');
+            if ((i + 1) % 5 == 0 && (i + 1) != 0) {
 
-	var selectLi, arr = [];
+                selectTb.append(selectTr);
 
-	for(var index in menus) {
+                selectTr = $('<tr></tr>');
 
-		arr.push(index);
+            } else {
 
-		selectHead.text(arr[0]);
+                selectTb.append(selectTr);
 
-		selectLi = $('<li><a class="' + menus[index] + '">' + index + '</a></li>');
+            }
 
-		selectUl.append(selectLi);
+        }
 
-	}
+        selectHead.after(selectTb);
 
-	selectHead.after(selectUl);
+        selectionBox.append(selectHead);
 
-	selectionBox.append(selectHead);
+        this.tools.append(selectionBox);
 
-	this.tools.append(selectionBox);
+        selectTb.hide();
 
-	selectUl.hide();
+        selectHead.on('click', function () {
 
-	selectHead.on('click', function() {
+            selectTb.toggle();
 
-		selectUl.toggle();
+        });
 
-	});
+        return selectionBox;
 
-	selectUl.find('li a').on('click', function() {
+    }
 
-		$(selectHead[0]).text($(this).text());
+    //增加sheet
 
-		$(selectHead[0]).attr('curClass', $(this).attr('class'));
+    iTable.prototype.addSheet = function () {
 
-	});
+        var i = 2;
 
-	return selectionBox;
+        var box = this.container;
 
-}
+        var that = this;
 
-//创建工具栏单个菜单
+        $('.addSheet').click(function () {
 
-iTable.prototype.createSimpleMenu = function(className, text) {
+            box.empty();
 
-	var menus = $('<div class="toolBox"></div>');
+            var dd = $("<dd class='sheet sheetdefault' id=sheet" + i + ">sheet" + i + "</dd>");
 
-	var mText = text || '';
+            var curId = $(".sheetdefault").attr('id');
 
-	var mClass = className;
+            curId = curId.replace('sheet', '');
 
-	var simTool = $('<span class="' + mClass + '">' + mText + '</span>');
+            curId = parseInt(curId);
 
-	menus.append(simTool);
+            $("#sheet" + curId).removeClass('sheetdefault');
 
-	this.tools.append(menus);
+            var neId = parseInt(curId) + 1;
 
-	return menus;
+            $('.sheetqueuedl').append(dd);
 
-}
+            that.createContent(neId);
 
-//创建工具栏格子菜单
+            that.fillTd(neId);
 
-iTable.prototype.createCellMenu = function(dClass, className, menus) {
+            i++;
 
-	var selectionBox = $('<div class="toolBox"></div>');
+            that.sheetWork();
 
-	var selectHead = $('<div class="' + dClass + '"></div>');
+        });
 
-	var selectTb = $('<table class="' + className + '"></table>');
+    }
 
-	var selectTr = $('<tr></tr>');
+    iTable.prototype.sheetWork = function () {
 
-	var selectTd, length = JSONLength(menus);
+        var that = this;
 
-	var arr1 = [],
+        $('.sheet').on('click', function () {
 
-		arr2 = [];
+            box.empty();
 
-	for(var index in menus) {
+            var dId = $(this).attr('id');
 
-		arr1.push(menus[index].tdclass);
+            dId = dId.replace('sheet', '');
 
-		arr2.push(menus[index].fclass);
+            dId = parseInt(dId);
 
-	}
+            that.createContent(dId);
 
-	for(var i = 0; i < arr1.length + 1; i++) {
+            that.fillTd(dId);
 
-		selectTd = $('<td class="' + arr1[i] + '"><a class="' + arr2[i] + '"></a></td>');
+            $(this).addClass('sheetdefault').siblings().removeClass('sheetdefault');
 
-		selectTr.append(selectTd);
+            return false;
 
-		if((i + 1) % 5 == 0 && (i + 1) != 0) {
+        });
 
-			selectTb.append(selectTr);
+        $('.sheet').on('dblclick', function () {
 
-			selectTr = $('<tr></tr>');
+            var that = $(this);
 
-		} else {
+            var ev = ev || window.event;
 
-			selectTb.append(selectTr);
+            var tdWidth = that.width();
 
-		}
+            var tdHeight = that.height();
 
-	}
+            var tdText = that.text();
 
-	selectHead.after(selectTb);
+            var stInput = $("<input type='text' class='stInput'  value='" + tdText + "'>");
 
-	selectionBox.append(selectHead);
+            stInput.width(tdWidth - 2);
 
-	this.tools.append(selectionBox);
+            stInput.height(tdHeight - 2);
 
-	selectTb.hide();
+            that.html(stInput);
 
-	selectHead.on('click', function() {
+            stInput.select();
 
-		selectTb.toggle();
+            $('.stInput').blur(function () {
 
-	});
+                var content = $('.stInput').val();
 
-	return selectionBox;
+                if (tdText == content) {
 
-}
+                    $(this).parent().html(content);
 
-//增加sheet
+                } else {
 
-iTable.prototype.addSheet = function() {
+                    $(this).parent().html(content);
 
-	var i = 2;
+                }
 
-	var box = this.container;
+                $('.stInput').remove();
 
-	var that = this;
+                event.stopPropagation();
 
-	$('.addSheet').click(function() {
+            });
 
-		box.empty();
+            $(".stInput").keyup(function (ev) {
 
-		var dd = $("<dd class='sheet sheetdefault' id=sheet" + i + ">sheet" + i + "</dd>");
+                if (ev.keyCode == 13) {
 
-		var curId = $(".sheetdefault").attr('id');
+                    $('.stInput').blur();
 
-		curId = curId.replace('sheet', '');
+                }
 
-		curId = parseInt(curId);
+            });
 
-		$("#sheet" + curId).removeClass('sheetdefault');
+        });
 
-		var neId = parseInt(curId) + 1;
+    }
 
-		$('.sheetqueuedl').append(dd);
+    //sheet移动
 
-		that.createContent(neId);
+    iTable.prototype.sheetMove = function () {
 
-		that.fillTd(neId);
+        var lsheet = $('.lsheet');
 
-		i++;
+        var rsheet = $('.rsheet');
 
-		that.sheetWork();
+        var sDl = $(".sheetqueuedl");
 
-	});
+        var num = 0;
 
-}
+        rsheet.click(function () {
 
-iTable.prototype.sheetWork = function() {
+            num == sDl.find('dd').length - 1 ? num = sDl.find('dd').length - 1 : num++;
 
-	var that = this;
+            toNavRPos();
 
-	$('.sheet').on('click', function() {
+        });
 
-		box.empty();
+        lsheet.click(function () {
 
-		var dId = $(this).attr('id');
+            num == 0 ? num = 0 : num--;
 
-		dId = dId.replace('sheet', '');
+            toNavRPos();
 
-		dId = parseInt(dId);
+        });
 
-		that.createContent(dId);
+        function toNavRPos() {
 
-		that.fillTd(dId);
+            sDl.stop().animate({
 
-		$(this).addClass('sheetdefault').siblings().removeClass('sheetdefault');
+                'margin-left': -num * 80
 
-		return false;
+            }, 100);
 
-	});
+        }
 
-	$('.sheet').on('dblclick', function() {
+        function toNavLPos() {
 
-		var that = $(this);
+            if (sDl.css('marginLeft') < sDl.css('width')) {
 
-		var ev = ev || window.event;
+                sDl.animate({
 
-		var tdWidth = that.width();
+                    'margin-left': 100
 
-		var tdHeight = that.height();
+                }, 100);
 
-		var tdText = that.text();
+            } else {
 
-		var stInput = $("<input type='text' class='stInput'  value='" + tdText + "'>");
+                sDl.stop();
 
-		stInput.width(tdWidth - 2);
+            }
 
-		stInput.height(tdHeight - 2);
+        }
 
-		that.html(stInput);
+    }
 
-		stInput.select();
+    //设置坐标
 
-		$('.stInput').blur(function() {
+    iTable.prototype.setIndex = function () {
 
-			var content = $('.stInput').val();
+        var offsetLeftArray = new Array();
 
-			if(tdText == content) {
+        var cell; // 单元格Dom
 
-				$(this).parent().html(content);
+        var col; // 单元格实际所在列
 
-			} else {
+        var cellStr; // 每个cell以row,col,rowSpan,colSpan,value形式
 
-				$(this).parent().html(content);
+        var cellStrArray = [];
 
-			}
+        var t = this.getCurTable();
 
-			$('.stInput').remove();
+        var id = (t.attr('id')).replace('iTable', '');
 
-			event.stopPropagation();
+        var objTab = document.getElementById('iTable' + id);
 
-		});
+        // 遍历第一次取出offsetLeft集合
 
-		$(".stInput").keyup(function(ev) {
+        for (var i = 0; i < objTab.rows.length; i++) {
 
-			if(ev.keyCode == 13) {
+            for (var j = 0; j < objTab.rows[i].cells.length; j++) {
 
-				$('.stInput').blur();
+                cell = objTab.rows[i].cells[j];
 
-			}
+                if (offsetLeftArray.contains(cell.offsetLeft) == -1)
 
-		});
+                    offsetLeftArray.push(cell.offsetLeft);
 
-	});
+            }
 
-}
+        }
 
-//sheet移动
+        offsetLeftArray.sort(function (x, y) {
 
-iTable.prototype.sheetMove = function() {
+            return parseInt(x) - parseInt(y);
 
-	var lsheet = $('.lsheet');
+        });
 
-	var rsheet = $('.rsheet');
+        // 遍历第二次生成cellStrArray
 
-	var sDl = $(".sheetqueuedl");
+        for (var i = 0; i < objTab.rows.length; i++) {
 
-	var num = 0;
+            for (var j = 0; j < objTab.rows[i].cells.length; j++) {
 
-	rsheet.click(function() {
+                cell = objTab.rows[i].cells[j];
 
-		num == sDl.find('dd').length - 1 ? num = sDl.find('dd').length - 1 : num++;
+                col = offsetLeftArray.contains(cell.offsetLeft);
 
-		toNavRPos();
+                cellStr = i + ',' + col;
 
-	});
+                cellStrArray.push(cellStr);
 
-	lsheet.click(function() {
+                var coo = (i + 1) + ',' + (col + 1);
 
-		num == 0 ? num = 0 : num--;
+                var coo = cellStrArray[j];
 
-		toNavRPos();
+                cell.setAttribute('rows', i + 1);
 
-	});
+                cell.setAttribute('cols', col + 1);
 
-	function toNavRPos() {
+            }
 
-		sDl.stop().animate({
+        }
 
-			'margin-left': -num * 80
+    }
 
-		}, 100);
+    //y轴更新
 
-	}
+    iTable.prototype.updateLeft = function (index) {
 
-	function toNavLPos() {
+        $('.titleTable tbody tr').eq(index).find('td').append('<td></td>');
 
-		if(sDl.css('marginLeft') < sDl.css('width')) {
+        for (var j = index; j < this.rowCount; j++) {
 
-			sDl.animate({
+            var td = $("<td>" + IntToChr(j) + "</td>");
 
-				'margin-left': 100
+            $('.titleTable tbody tr').eq(j).find('td').text(IntToChr(j));
 
-			}, 100);
+        }
 
-		} else {
+    }
 
-			sDl.stop();
+    //x轴更新
 
-		}
+    iTable.prototype.updateTop = function (index) {
 
-	}
+        var that = this;
 
-}
+        $('.titleTable colgroup').find('col').eq(index).after('<col style="width:100px">');
 
-//设置坐标
+        $('.titleTable tbody tr').find('td').eq(index).after('<td></td>');
 
-iTable.prototype.setIndex = function() {
+        for (var j = index; j < this.cellCount - 1; j++) {
 
-	var offsetLeftArray = new Array();
+            var td = $("<td>" + IntToChr(j) + "</td>");
 
-	var cell; // 单元格Dom  
+            $('.titleTable tbody tr').find('td').eq(j).text(IntToChr(j));
 
-	var col; // 单元格实际所在列  
+        }
 
-	var cellStr; // 每个cell以row,col,rowSpan,colSpan,value形式  
+    }
 
-	var cellStrArray = [];
+    //拖拽放宽列
 
-	var t = this.getCurTable();
+    iTable.prototype.largeCol = function () {
 
-	var id = (t.attr('id')).replace('iTable', '');
+        var container = this.container;
 
-	var objTab = document.getElementById('iTable' + id);
+        var that = this;
 
-	// 遍历第一次取出offsetLeft集合  
+        var event = window.event || arguments[0];
 
-	for(var i = 0; i < objTab.rows.length; i++) {
+        var exW = $('.yOrder').outerWidth();
 
-		for(var j = 0; j < objTab.rows[i].cells.length; j++) {
+        $('.titleTable tr td').each(function (event) {
 
-			cell = objTab.rows[i].cells[j];
+            $(this).off('mousedown').on('mousedown', function (event) {
 
-			if(offsetLeftArray.contains(cell.offsetLeft) == -1)
+                var td = $(this);
 
-				offsetLeftArray.push(cell.offsetLeft);
+                var index = $(this).index();
 
-		}
+                var sline = $('<div class="sline"></div>');
 
-	}
+                var lline = $('<div class="lline"></div>');
 
-	offsetLeftArray.sort(function(x, y) {
+                var h = $(this).height();
 
-		return parseInt(x) - parseInt(y);
+                var w = $(this).width();
 
-	});
+                var x = event.clientX - exW;
 
-	// 遍历第二次生成cellStrArray  
+                sline.css({
 
-	for(var i = 0; i < objTab.rows.length; i++) {
+                    'left': x,
 
-		for(var j = 0; j < objTab.rows[i].cells.length; j++) {
+                    'height': h
 
-			cell = objTab.rows[i].cells[j];
+                });
 
-			col = offsetLeftArray.contains(cell.offsetLeft);
+                $(this).append(sline);
 
-			cellStr = i + ',' + col;
+                $('body').mousemove(function (event) {
 
-			cellStrArray.push(cellStr);
+                    var allH = $('.dataTable').outerHeight();
 
-			var coo = (i + 1) + ',' + (col + 1);
+                    var l = event.clientX - exW;
 
-			var coo = cellStrArray[j];
+                    var move = l - x;
 
-			cell.setAttribute('rows', i + 1);
+                    if (w + move < 20) {
 
-			cell.setAttribute('cols', col + 1);
+                        return;
 
-		}
+                    } else {
 
-	}
+                        lline.css({
 
-}
+                            'height': allH,
 
-//y轴更新
+                            'left': event.clientX
 
-iTable.prototype.updateLeft = function(index) {
+                        });
 
-	$('.titleTable tbody tr').eq(index).find('td').append('<td></td>');
+                        $('.dataTable colgroup col').eq(index).css('width', w + move);
 
-	for(var j = index; j < this.rowCount; j++) {
+                        $('.titleTable colgroup col').eq(index).css('width', w + move);
 
-		var td = $("<td>" + IntToChr(j) + "</td>");
+                        $(container).append(lline);
 
-		$('.titleTable tbody tr').eq(j).find('td').text(IntToChr(j));
+                    }
 
-	}
+                });
 
-}
+                $('body').mouseup(function (event) {
 
-//x轴更新
+                    $('body').off('mousemove');
 
-iTable.prototype.updateTop = function(index) {
+                    $(lline).remove();
 
-	var that = this;
+                    $(sline).remove();
 
-	$('.titleTable colgroup').find('col').eq(index).after('<col style="width:100px">');
+                });
 
-	$('.titleTable tbody tr').find('td').eq(index).after('<td></td>');
+            });
 
-	for(var j = index; j < this.cellCount - 1; j++) {
+        });
 
-		var td = $("<td>" + IntToChr(j) + "</td>");
+    }
 
-		$('.titleTable tbody tr').find('td').eq(j).text(IntToChr(j));
+    //拖拽放宽行
 
-	}
+    iTable.prototype.largeRow = function () {
 
-}
+        var container = this.container;
 
-//拖拽放宽列
+        var that = this;
 
-iTable.prototype.largeCol = function() {
+        var event = window.event || arguments[0];
 
-	var container = this.container;
+        var exH = $('.yOrder').outerHeight();
 
-	var that = this;
+        $('.leftTable tr td').each(function (event) {
 
-	var event = window.event || arguments[0];
+            $(this).off('mousedown').on('mousedown', function (event) {
 
-	var exW = $('.yOrder').outerWidth();
+                var td = $(this);
 
-	$('.titleTable tr td').each(function(event) {
+                var index = $(this).parent().index();
 
-		$(this).off('mousedown').on('mousedown', function(event) {
+                var sline = $('<div class="sline"></div>');
 
-			var td = $(this);
+                var lline = $('<div class="rline"></div>');
 
-			var index = $(this).index();
+                var h = $(this).height();
 
-			var sline = $('<div class="sline"></div>');
+                var w = $(this).width();
 
-			var lline = $('<div class="lline"></div>');
+                var y = event.clientY - exH;
 
-			var h = $(this).height();
+                sline.css({
 
-			var w = $(this).width();
+                    'top': y,
 
-			var x = event.clientX - exW;
+                    'height': 1,
 
-			sline.css({
+                    'float': 'none',
 
-				'left': x,
+                    'width': w
 
-				'height': h
+                });
 
-			});
+                $(this).append(sline);
 
-			$(this).append(sline);
+                $('body').mousemove(function (event) {
 
-			$('body').mousemove(function(event) {
+                    var allW = $('.dataTable').outerWidth();
 
-				var allH = $('.dataTable').outerHeight();
+                    var l = event.clientY - exH;
 
-				var l = event.clientX - exW;
+                    var move = l - y;
 
-				var move = l - x;
+                    if (h + move < 20) {
 
-				if(w + move < 20) {
+                        return;
 
-					return;
+                    } else {
 
-				} else {
+                        lline.css({
 
-					lline.css({
+                            'width': allW,
 
-						'height': allH,
+                            'top': event.clientY
 
-						'left': event.clientX
+                        });
 
-					});
+                        $('.dataTable tr th').eq(index).css('height', h + move + 1);
 
-					$('.dataTable colgroup col').eq(index).css('width', w + move);
+                        $('.leftTable td').eq(index).css('height', h + move);
 
-					$('.titleTable colgroup col').eq(index).css('width', w + move);
+                        $(container).append(lline);
 
-					$(container).append(lline);
+                    }
 
-				}
+                });
 
-			});
+                $('body').mouseup(function (event) {
 
-			$('body').mouseup(function(event) {
+                    $('body').off('mousemove');
 
-				$('body').off('mousemove');
+                    $(lline).remove();
 
-				$(lline).remove();
+                    $(sline).remove();
 
-				$(sline).remove();
+                });
 
-			});
+            });
 
-		});
+        });
 
-	});
+    }
 
-}
+    //创建公式输入框
 
-//拖拽放宽行
+    iTable.prototype.fillBlank = function () {
 
-iTable.prototype.largeRow = function() {
+        var fxBox = $('<div class="fx"></div>');
 
-	var container = this.container;
+        var fxInput = $('<input type="text" id="ip_fx">');
 
-	var that = this;
+        var dis = $('<span class="disbox"></span>');
 
-	var event = window.event || arguments[0];
+        fxBox.append(dis);
 
-	var exH = $('.yOrder').outerHeight();
+        fxBox.append(fxInput);
 
-	$('.leftTable tr td').each(function(event) {
+        this.header.append(fxBox);
 
-		$(this).off('mousedown').on('mousedown', function(event) {
+        this.fillWork();
 
-			var td = $(this);
+    }
 
-			var index = $(this).parent().index();
+    //输入操作
 
-			var sline = $('<div class="sline"></div>');
+    iTable.prototype.fillWork = function () {
 
-			var lline = $('<div class="rline"></div>');
+        var ev = window.event || arguments[0];
 
-			var h = $(this).height();
+        var ifx = $('#ip_fx');
 
-			var w = $(this).width();
+        var pValue, nValue;
 
-			var y = event.clientY - exH;
+        var pArr, nArr, cArr;
 
-			sline.css({
+        var endText;
 
-				'top': y,
+        var res, delRes;
 
-				'height': 1,
+        var delText;
 
-				'float': 'none',
+        var reg, flReg;
 
-				'width': w
+        var that = this;
 
-			});
+        var calText;
 
-			$(this).append(sline);
+        ifx.keyup(function (ev) {
 
-			$('body').mousemove(function(event) {
+            pValue = ifx.val();
 
-				var allW = $('.dataTable').outerWidth();
+            flReg = /^\=|\+|\-|\*|\/|\(|\)/;
 
-				var l = event.clientY - exH;
+            reg = /^\=((((\(*([a-zA-Z]([1-9]\d*))\)*|([1-9]\d*))(\+|-|\/|\*))*(([1-9]\d*)|([a-zA-Z]([1-9]\d*))*\)*))|([a-zA-Z]([1-9]\d*)))/;
 
-				var move = l - y;
+            res = pValue.match(reg);
 
-				if(h + move < 20) {
+            if ((!!res) && (!!res[0])) {
 
-					return;
+                endText = res[0].toString();
 
-				} else {
+                pArr = endText.split(flReg);
 
-					lline.css({
+                for (var i = 0; i < pArr.length; i++) {
 
-						'width': allW,
+                    if (!!pArr[i]) {
 
-						'top': event.clientY
+                        if (String(nValue).indexOf(pArr[i]) <= -1) {
 
-					});
+                            lightTd(pArr[i]);
 
-					$('.dataTable tr th').eq(index).css('height', h + move + 1);
+                            cLightTd(pArr[i].substr(0, pArr[i].length - 1));
 
-					$('.leftTable td').eq(index).css('height', h + move);
+                        }
 
-					$(container).append(lline);
+                    }
 
-				}
+                }
 
-			});
+            }
 
-			$('body').mouseup(function(event) {
+            if ($('.picked').length > 1) {
 
-				$('body').off('mousemove');
+                return;
 
-				$(lline).remove();
+            } else {
 
-				$(sline).remove();
+                $('.picked').text(pValue);
 
-			});
+            }
 
-		});
+            //删除
 
-	});
+            if ((ev.keyCode == 8)) {
 
-}
+                delRes = nValue.match(/([a-zA-Z]([1-9]\d*))(((\-|\+|\*|\\){1}([a-zA-Z]{1})(([1-9]\d*){1})))*/);
 
-//创建公式输入框
+                if (!!nValue) {
 
-iTable.prototype.fillBlank = function() {
+                    dArr = nValue.split(flReg);
 
-	var fxBox = $('<div class="fx"></div>');
+                    cArr = pValue.split(flReg);
 
-	var fxInput = $('<input type="text" id="ip_fx">');
+                    delTmp = getUniqueSet(cArr, dArr);
 
-	var dis = $('<span class="disbox"></span>');
+                    if (!!delTmp[1]) {
 
-	fxBox.append(dis);
+                        cLightTd(delTmp[1]);
 
-	fxBox.append(fxInput);
+                    }
 
-	this.header.append(fxBox);
+                }
 
-	this.fillWork();
+            }
 
-}
+            if ((ev.keyCode == 13)) {
 
-//输入操作
+                this.blur();
 
-iTable.prototype.fillWork = function() {
+                var allValue = pValue;
 
-	var ev = window.event || arguments[0];
+                calRes = allValue.match(reg);
 
-	var ifx = $('#ip_fx');
+                if ((!!calRes) && (!!calRes[0])) {
 
-	var pValue, nValue;
+                    fText = calRes[0].toString();
 
-	var pArr, nArr, cArr;
+                    allArr = fText.split(flReg);
 
-	var endText;
+                    for (var i = 0; i < allArr.length; i++) {
 
-	var res, delRes;
+                        if (!!allArr[i]) {
 
-	var delText;
+                            var tmp = allArr[i];
 
-	var reg, flReg;
+                            var tmpVal = String(that.getValue(allArr[i]));
 
-	var that = this;
+                            allValue = allValue.replace(tmp, tmpVal);
 
-	var calText;
+                        }
 
-	ifx.keyup(function(ev) {
+                    }
 
-		pValue = ifx.val();
+                    calText = allValue;
 
-		flReg = /^\=|\+|\-|\*|\/|\(|\)/;
+                    calText = calText.substring(1);
 
-		reg = /^\=((((\(*([a-zA-Z]([1-9]\d*))\)*|([1-9]\d*))(\+|-|\/|\*))*(([1-9]\d*)|([a-zA-Z]([1-9]\d*))*\)*))|([a-zA-Z]([1-9]\d*)))/;
+                    var result = dal2Rpn(calText);
 
-		res = pValue.match(reg);
+                    $('.picked').text(result);
 
-		if((!!res) && (!!res[0])) {
+                    $('.mask').remove();
 
-			endText = res[0].toString();
+                }
 
-			pArr = endText.split(flReg);
+            }
 
-			for(var i = 0; i < pArr.length; i++) {
+            ifx.keydown(function (ev) {
 
-				if(!!pArr[i]) {
+                nValue = ifx.val();
 
-					if(String(nValue).indexOf(pArr[i]) <= -1) {
+            });
 
-						lightTd(pArr[i]);
+        });
 
-						cLightTd(pArr[i].substr(0, pArr[i].length - 1));
+    }
 
-					}
+    //高亮蒙版
 
-				}
+    iTable.prototype.createMask = function (left, top, width, height, posX, posY) {
 
-			}
+        var mask = $('<div class="mask"></div>');
 
-		}
+        var color = getRandomColor();
 
-		if($('.picked').length > 1) {
+        mask.css({
 
-			return;
+            'width': width - 2,
 
-		} else {
+            'height': height - 2,
 
-			$('.picked').text(pValue);
+            'left': left,
 
-		}
+            'top': top,
 
-		//删除
+            'position': 'absolute',
 
-		if((ev.keyCode == 8)) {
+            'border': '1px solid' + color,
 
-			delRes = nValue.match(/([a-zA-Z]([1-9]\d*))(((\-|\+|\*|\\){1}([a-zA-Z]{1})(([1-9]\d*){1})))*/);
+            'z-index': '99'
 
-			if(!!nValue) {
+        });
 
-				dArr = nValue.split(flReg);
+        mask.attr('mpos', posX + '-' + posY);
 
-				cArr = pValue.split(flReg);
+        this.container.append(mask);
 
-				delTmp = getUniqueSet(cArr, dArr);
+    }
 
-				if(!!delTmp[1]) {
+    iTable.prototype.rMenus = function () {
 
-					cLightTd(delTmp[1]);
+        var that = this;
 
-				}
+        var rMenus = this.createRmenus();
 
-			}
+        var winH = $(window).height() - $(this.footer).outerHeight();
 
-		}
+        var winW = $(window).width();
 
-		if((ev.keyCode == 13)) {
+        $('.dataTable').contextmenu(function () {
 
-			this.blur();
+            var ev = ev || window.event;
 
-			var allValue = pValue;
+            var oX = ev.clientX;
 
-			calRes = allValue.match(reg);
+            var oY = ev.clientY;
 
-			if((!!calRes) && (!!calRes[0])) {
+            var mH = $(rMenus).height();
 
-				fText = calRes[0].toString();
+            var mW = $(rMenus).width();
 
-				allArr = fText.split(flReg);
+            $(rMenus).css({
 
-				for(var i = 0; i < allArr.length; i++) {
+                'left': oX,
 
-					if(!!allArr[i]) {
+                'top': oY,
 
-						var tmp = allArr[i];
+                'display': 'block'
 
-						var tmpVal = String(that.getValue(allArr[i]));
+            });
 
-						allValue = allValue.replace(tmp, tmpVal);
+            (oY + mH > winH) && ($(rMenus).css({
 
-					}
+                'top': winH - mH - 20
 
-				}
+            }));
 
-				calText = allValue;
+            (oX + mW > winW) && ($(rMenus).css({
 
-				calText = calText.substring(1);
+                'left': winW - mW - 20
 
-				var result = dal2Rpn(calText);
+            }));
 
-				$('.picked').text(result);
+            return false;
 
-				$('.mask').remove();
+        });
 
-			}
+        $('.dataTable').find('tr td').each(function () {
 
-		}
+            $(this).contextmenu(function () {
 
-		ifx.keydown(function(ev) {
+                var arr = $('.picked');
 
-			nValue = ifx.val();
+                var obj = this;
 
-		});
+                var has = containsArray(arr, obj);
 
-	});
+                if (has == -1) {
 
-}
+                    $('.dataTable').find('td').removeClass('picked');
 
-//高亮蒙版
+                }
 
-iTable.prototype.createMask = function(left, top, width, height, posX, posY) {
+                $(this).addClass('picked');
 
-	var mask = $('<div class="mask"></div>');
+            });
 
-	var color = getRandomColor();
+        })
 
-	mask.css({
+    }
 
-		'width': width - 2,
+    iTable.prototype.createRmenus = function () {
 
-		'height': height - 2,
+        var menus = $('<div></div>');
 
-		'left': left,
+        var dataArr = [];
 
-		'top': top,
+        var cut = this.cut(dataArr);
 
-		'position': 'absolute',
+        menus.append(cut);
 
-		'border': '1px solid' + color,
+        var copy = this.copy();
 
-		'z-index': '99'
+        menus.append(copy);
 
-	});
+        var paste = this.paste(dataArr);
 
-	mask.attr('mpos', posX + '-' + posY);
+        menus.append(paste);
 
-	this.container.append(mask);
+        var _insert = this._insert(dataArr);
 
-}
+        menus.append(_insert);
 
-iTable.prototype.rMenus = function() {
+        var _delete = this._delete(dataArr);
 
-	var that = this;
+        menus.append(_delete);
 
-	var rMenus = this.createRmenus();
+        var that = this;
 
-	var winH = $(window).height() - $(this.footer).outerHeight();
+        menus.css({
 
-	var winW = $(window).width();
+            'position': 'absolute',
 
-	$('.dataTable').contextmenu(function() {
+            'width': '200px',
 
-		var ev = ev || window.event;
+            'overflow': 'hidden',
 
-		var oX = ev.clientX;
+            'background': '#FBFBFB',
 
-		var oY = ev.clientY;
+            'display': 'none',
 
-		var mH = $(rMenus).height();
+            'font-size': '14px',
 
-		var mW = $(rMenus).width();
+        });
 
-		$(rMenus).css({
+        $('body').append(menus);
 
-			'left': oX,
+        $(document).on('click', function () {
 
-			'top': oY,
+            menus.hide();
 
-			'display': 'block'
+            return false;
 
-		});
+        });
 
-		(oY + mH > winH) && ($(rMenus).css({
+        return menus;
 
-			'top': winH - mH - 20
+    }
 
-		}));
+    iTable.prototype.cut = function (dataArr) {
 
-		(oX + mW > winW) && ($(rMenus).css({
+        var cutDiv = $('<div class="menu-cut">剪切</div>');
 
-			'left': winW - mW - 20
+        cutDiv.css({
 
-		}));
+            'padding': '2px 10px',
 
-		return false;
+            'cursor': 'pointer'
 
-	});
+        })
 
-	$('.dataTable').find('tr td').each(function() {
+        cutDiv.on('click', function () {
 
-		$(this).contextmenu(function() {
+            var tdLength = $('.picked').length;
 
-			var arr = $('.picked');
+            $(this).parent().hide();
 
-			var obj = this;
+            if (tdLength <= 1) {
 
-			var has = containsArray(arr, obj);
+                dataArr.length = 0;
 
-			if(has == -1) {
+                var td = $('.picked')[0];
 
-				$('.dataTable').find('td').removeClass('picked');
+                dataArr.push($(td).text());
 
-			}
+                $(td).text('');
 
-			$(this).addClass('picked');
+            } else {
 
-		});
+                dataArr.length = 0;
 
-	})
+                for (var i = 0; i < tdLength; i++) {
 
-}
+                    var tds = $('.picked')[i];
 
-iTable.prototype.createRmenus = function() {
+                    dataArr.push($(tds));
 
-	var menus = $('<div></div>');
+                    $(tds).text('');
 
-	var dataArr = [];
+                }
 
-	var cut = this.cut(dataArr);
+            }
 
-	menus.append(cut);
+        });
 
-	var copy = this.copy();
+        return cutDiv;
 
-	menus.append(copy);
+    }
 
-	var paste = this.paste(dataArr);
+    iTable.prototype.copy = function () {
 
-	menus.append(paste);
+        var copyDiv = $('<div class="menu-copy">复制</div>');
 
-	var _insert = this._insert(dataArr);
+        copyDiv.css({
 
-	menus.append(_insert);
+            'padding': '2px 10px',
 
-	var _delete = this._delete(dataArr);
+            'cursor': 'pointer'
 
-	menus.append(_delete);
+        })
 
-	var that = this;
+        copyDiv.on('click', function () {
 
-	menus.css({
+            var tdLength = $('.picked').length;
 
-		'position': 'absolute',
+            $(this).parent().hide();
 
-		'width': '200px',
+            if (tdLength <= 1) {
 
-		'overflow': 'hidden',
+                dataArr.length = 0;
 
-		'background': '#FBFBFB',
+                var td = $('.picked')[0];
 
-		'display': 'none',
+                dataArr.push($(td).text());
 
-		'font-size': '14px',
+            } else {
 
-	});
+                dataArr.length = 0;
 
-	$('body').append(menus);
+                for (var i = 0; i < tdLength; i++) {
 
-	$(document).on('click', function() {
+                    var tds = $('.picked')[i];
 
-		menus.hide();
+                    dataArr.push($(tds));
 
-		return false;
+                }
 
-	});
+            }
 
-	return menus;
+        });
 
-}
+        return copyDiv;
 
-iTable.prototype.cut = function(dataArr) {
+    }
 
-	var cutDiv = $('<div class="menu-cut">剪切</div>');
+    iTable.prototype.paste = function (dataArr) {
 
-	cutDiv.css({
+        var pasteDiv = $('<div class="menu-paste">粘贴</div>');
 
-		'padding': '2px 10px',
+        pasteDiv.css({
 
-		'cursor': 'pointer'
+            'padding': '2px 10px',
 
-	})
+            'cursor': 'pointer'
 
-	cutDiv.on('click', function() {
+        });
 
-		var tdLength = $('.picked').length;
+        pasteDiv.on('click', function () {
 
-		$(this).parent().hide();
+            $(this).parent().hide();
 
-		if(tdLength <= 1) {
+            var tdLength = $('.picked').length;
 
-			dataArr.length = 0;
+            if (tdLength <= 1) {
 
-			var td = $('.picked')[0];
+                $('.picked').text(dataArr[0]);
 
-			dataArr.push($(td).text());
+            } else {
 
-			$(td).text('');
+                for (var i = 0; i < tdLength; i++) {
 
-		} else {
+                    //           removeUied();
 
-			dataArr.length = 0;
+                    //           var tds=$('.picked')[i];
 
-			for(var i = 0; i < tdLength; i++) {
+                    //           dataArr.push($(tds));
 
-				var tds = $('.picked')[i];
+                    //           $(tds).text('');
 
-				dataArr.push($(tds));
+                }
 
-				$(tds).text('');
+            }
 
-			}
+        });
 
-		}
+        return pasteDiv;
 
-	});
+    }
 
-	return cutDiv;
+    iTable.prototype._insert = function () {
 
-}
+        var insertDiv = $('<div class="menu-insert">插入</div>');
 
-iTable.prototype.copy = function() {
+        var that = this;
 
-	var copyDiv = $('<div class="menu-copy">复制</div>');
+        insertDiv.css({
 
-	copyDiv.css({
+            'padding': '2px 10px',
 
-		'padding': '2px 10px',
+            'cursor': 'pointer'
 
-		'cursor': 'pointer'
+        });
 
-	})
+        insertDiv.on('click', function () {
 
-	copyDiv.on('click', function() {
+            var ev = ev || window.event;
 
-		var tdLength = $('.picked').length;
+            var winW = $(window).width();
 
-		$(this).parent().hide();
+            var winH = $(window).height();
 
-		if(tdLength <= 1) {
+            var toolsDiv = $('<div></div>');
 
-			dataArr.length = 0;
+            var toolsTitle = $('<div><span>插入</span></div>');
 
-			var td = $('.picked')[0];
+            toolsDiv.append(toolsTitle);
 
-			dataArr.push($(td).text());
+            toolsDiv.css({
 
-		} else {
+                'position': 'absolute',
 
-			dataArr.length = 0;
+                'top': '50%',
 
-			for(var i = 0; i < tdLength; i++) {
+                'left': '50%',
 
-				var tds = $('.picked')[i];
+                'width': '200px',
 
-				dataArr.push($(tds));
+                'background': '#ffffff'
 
-			}
+            });
 
-		}
+            $(that.container).append(toolsDiv);
 
-	});
+        });
 
-	return copyDiv;
+        return insertDiv;
 
-}
+    }
 
-iTable.prototype.paste = function(dataArr) {
+    iTable.prototype._delete = function () {
 
-	var pasteDiv = $('<div class="menu-paste">粘贴</div>');
+        var deleteDiv = $('<div class="menu-delete">删除</div>');
 
-	pasteDiv.css({
+        deleteDiv.css({
 
-		'padding': '2px 10px',
+            'padding': '2px 10px',
 
-		'cursor': 'pointer'
+            'cursor': 'pointer'
 
-	});
+        });
 
-	pasteDiv.on('click', function() {
+        return deleteDiv;
 
-		$(this).parent().hide();
+    }
 
-		var tdLength = $('.picked').length;
+    iTable.prototype.tdTofx = function (obj) {
 
-		if(tdLength <= 1) {
+        var tdVal = obj.text();
 
-			$('.picked').text(dataArr[0]);
+        var fx = $('#ip_fx');
 
-		} else {
+        fx.val(tdVal);
 
-			for(var i = 0; i < tdLength; i++) {
+    }
 
-				//           removeUied();
+    iTable.prototype.getValue = function (arr) {
 
-				//           var tds=$('.picked')[i];
+        arr = arr.toString();
 
-				//           dataArr.push($(tds));
+        var xCoo = arr.replace(/[a-zA-Z]*/, ' '),
 
-				//           $(tds).text('');
+            yCoo = arr.replace(/[1-9]\d*/, ' ');
 
-			}
+        yCoo = yCoo.charCodeAt(0) - 96;
 
-		}
+        xCoo--, yCoo--;
 
-	});
+        var value;
 
-	return pasteDiv;
+        var text = Number($('td[cols=' + xCoo + '][rows=' + yCoo + ']').text());
 
-}
+        if (typeof(text) != 'number') {
 
-iTable.prototype._insert = function() {
+            value = 0;
 
-	var insertDiv = $('<div class="menu-insert">插入</div>');
+        } else {
 
-	var that = this;
+            (!!text) ? value = Number(text) : value = 0;
 
-	insertDiv.css({
+        }
 
-		'padding': '2px 10px',
+        return value;
 
-		'cursor': 'pointer'
+    }
 
-	});
+    iTable.prototype.modal = function (_style, _content) {
 
-	insertDiv.on('click', function() {
+        var modalBox = $('<div class="itModal"></div>');
 
-		var ev = ev || window.event;
+        var mTitle = _style.title;
 
-		var winW = $(window).width();
+        var closeBtn = $('<a class="itModal-close">x</a>');
 
-		var winH = $(window).height();
+        var modalTitle = $('<div class="itModal-title">' + mTitle + '</div>');
 
-		var toolsDiv = $('<div></div>');
+        modalBox.css({
 
-		var toolsTitle = $('<div><span>插入</span></div>');
+            'width': parseInt(_style.width),
 
-		toolsDiv.append(toolsTitle);
+            'height': parseInt(_style.width),
 
-		toolsDiv.css({
+            'position': 'absolute',
 
-			'position': 'absolute',
+            'top': '100px',
 
-			'top': '50%',
+            'left': '500px',
 
-			'left': '50%',
+            'background': 'red',
 
-			'width': '200px',
+            //		'margin-left':-parseInt(_style.width)/2,
 
-			'background': '#ffffff'
+            //		'margin-top':-parseInt(_style.width)/2
 
-		});
+        });
 
-		$(that.container).append(toolsDiv);
+        modalTitle.append(closeBtn);
 
-	});
+        modalBox.append(modalTitle);
 
-	return insertDiv;
+        $('body').append(modalBox);
 
-}
+        //modalBox.on('mousedown',this.iDrag(event));
 
-iTable.prototype._delete = function() {
+        this.iDrag(modalBox);
 
-	var deleteDiv = $('<div class="menu-delete">删除</div>');
+    }
 
-	deleteDiv.css({
+    iTable.prototype.leftBar = function () {
 
-		'padding': '2px 10px',
+        var box = $('<div class="leftbar"></div>');
 
-		'cursor': 'pointer'
+        var span = $('<span class="ltoggle tl"></span>');
 
-	});
+        box.append(span);
 
-	return deleteDiv;
+        $('body').append(box);
 
-}
+        span.on('click', function () {
 
-iTable.prototype.tdTofx = function(obj) {
+            var l = parseInt($('.leftbar').css('left'));
 
-	var tdVal = obj.text();
+            if (l < 0) {
 
-	var fx = $('#ip_fx');
+                $('.leftbar').stop().animate({
 
-	fx.val(tdVal);
+                    left: "0px"
 
-}
+                });
 
-iTable.prototype.getValue = function(arr) {
+                $('.ltoggle').removeClass('tr').addClass('tl')
 
-	arr = arr.toString();
+            } else {
 
-	var xCoo = arr.replace(/[a-zA-Z]*/, ' '),
+                $('.leftbar').stop().animate({
 
-		yCoo = arr.replace(/[1-9]\d*/, ' ');
+                    left: "-400px"
 
-	yCoo = yCoo.charCodeAt(0) - 96;
+                });
 
-	xCoo--, yCoo--;
+                $('.ltoggle').removeClass('tl').addClass('tr')
 
-	var value;
+            }
 
-	var text = Number($('td[cols=' + xCoo + '][rows=' + yCoo + ']').text());
+        });
 
-	if(typeof(text) != 'number') {
+        this.leftBarHandle();
 
-		value = 0;
+        //callback();
 
-	} else {
+    }
 
-		(!!text) ? value = Number(text): value = 0;
+    iTable.prototype.leftBarHandle = function (callback) {
 
-	}
+        if (callback) {
 
-	return value;
+            callback();
 
-}
+        }
 
-iTable.prototype.modal = function(_style, _content) {
+    }
 
-	var modalBox = $('<div class="itModal"></div>');
+    iTable.prototype.charts = function () {
 
-	var mTitle = _style.title;
+        var menu = this.createSimpleMenu('charts');
 
-	var closeBtn = $('<a class="itModal-close">x</a>');
+        this.chartsHandler();
 
-	var modalTitle = $('<div class="itModal-title">' + mTitle + '</div>');
+    }
 
-	modalBox.css({
+    iTable.prototype.chartsHandler = function (callback) {
 
-		'width': parseInt(_style.width),
+        if (callback) {
 
-		'height': parseInt(_style.width),
+            callback();
 
-		'position': 'absolute',
+        }
 
-		'top': '100px',
+    }
 
-		'left': '500px',
+    iTable.prototype.dataSource = function () {
 
-		'background': 'red',
+        var menu = this.createSimpleMenu('dataSource');
 
-		//		'margin-left':-parseInt(_style.width)/2,
+        this.dataSourceHandler();
 
-		//		'margin-top':-parseInt(_style.width)/2
+    }
 
-	});
+    iTable.prototype.dataSourceHandler = function (callback) {
 
-	modalTitle.append(closeBtn);
+        if (callback) {
 
-	modalBox.append(modalTitle);
+            callback();
 
-	$('body').append(modalBox);
+        }
 
-	//modalBox.on('mousedown',this.iDrag(event));
+    }
 
-	this.iDrag(modalBox);
+    iTable.prototype.dataSet = function () {
 
-}
+        var menu = this.createSimpleMenu('dataSet');
 
-iTable.prototype.leftBar = function() {
+        this.dataSetHandler();
 
-	var box = $('<div class="leftbar"></div>');
+    }
 
-	var span = $('<span class="ltoggle tl"></span>');
+    iTable.prototype.dataSetHandler = function (callback) {
 
-	box.append(span);
+        if (callback) {
 
-	$('body').append(box);
+            callback();
 
-	span.on('click', function() {
+        }
 
-		var l = parseInt($('.leftbar').css('left'));
+    }
 
-		if(l < 0) {
+    iTable.prototype.dataSearch = function () {
 
-			$('.leftbar').stop().animate({
+        var menu = this.createSimpleMenu('dataSearch');
 
-				left: "0px"
+        this.dataSetHandler();
 
-			});
+    }
 
-			$('.ltoggle').removeClass('tr').addClass('tl')
+    iTable.prototype.dataSearchHandler = function (callback) {
 
-		} else {
+        if (callback) {
 
-			$('.leftbar').stop().animate({
+            callback();
 
-				left: "-400px"
+        }
 
-			});
+    }
 
-			$('.ltoggle').removeClass('tl').addClass('tr')
+    iTable.prototype.iDrag = function (obj) {
 
-		}
+        var event = window.event || arguments[0];
 
-	});
+        obj.on('mousedown', function (event) {
 
-	this.leftBarHandle();
+            var disX = event.clientX - this.offsetLeft;
 
-	//callback();
+            var disY = event.clientY - this.offsetTop;
 
-}
+            obj.on('mousemove', function (event) {
 
-iTable.prototype.leftBarHandle = function(callback) {
+                obj.css({
 
-	if(callback) {
+                    'left': event.clientX - disX,
 
-		callback();
+                    'top': event.clientY - disY
 
-	}
+                });
 
-}
+            });
 
-iTable.prototype.charts = function() {
+        });
 
-	var menu = this.createSimpleMenu('charts');
+        obj.on('mouseup', function () {
 
-	this.chartsHandler();
+            obj.off('mousemove');
 
-}
+        });
 
-iTable.prototype.chartsHandler = function(callback) {
+    }
 
-	if(callback) {
+    //高亮单元格
 
-		callback();
+    function lightTd(tmp) {
 
-	}
+        var posY = tmp.match(/^[a-zA-Z]{1}/gi);
 
-}
+        var posX = tmp.match(/\+?[1-9][0-9]*$/g);
 
-iTable.prototype.dataSource = function() {
+        posY = posY.toString();
 
-	var menu = this.createSimpleMenu('dataSource');
+        posY = posY.toLocaleLowerCase().charCodeAt(0) - 96;
 
-	this.dataSourceHandler();
+        posY--;
 
-}
+        posX = posX.toString() - 1;
 
-iTable.prototype.dataSourceHandler = function(callback) {
+        if (posY == null || posX == null || posY.length == 0 || String(posY).length == 0) {
 
-	if(callback) {
+            return;
 
-		callback();
+        }
 
-	}
+        var lTd = $('td[cols=' + (posX + 1) + '][rows=' + (posY + 1) + ']');
 
-}
+        var width = lTd[0].offsetWidth,
 
-iTable.prototype.dataSet = function() {
+            height = lTd[0].offsetHeight;
 
-	var menu = this.createSimpleMenu('dataSet');
+        var left = lTd[0].offsetLeft,
 
-	this.dataSetHandler();
+            top = lTd[0].offsetTop;
 
-}
+        t.createMask(left, top, width, height, posX, posY);
 
-iTable.prototype.dataSetHandler = function(callback) {
+    }
 
-	if(callback) {
+    //随机颜色
 
-		callback();
+    function getRandomColor() {
 
-	}
+        return '#' + ('00000' + (Math.random() * 0x1000000 << 0).toString(16)).slice(-6);
 
-}
+    }
 
-iTable.prototype.dataSearch = function() {
+    //取消高亮
 
-	var menu = this.createSimpleMenu('dataSearch');
+    function cLightTd(tmp) {
 
-	this.dataSetHandler();
+        var posY = tmp.match(/^[a-zA-Z]{1}/gi);
 
-}
+        var posX = tmp.match(/\+?[1-9][0-9]*$/g);
 
-iTable.prototype.dataSearchHandler = function(callback) {
+        posY = posY.toString();
 
-	if(callback) {
+        posY = posY.toLocaleLowerCase().charCodeAt(0) - 96;
 
-		callback();
+        if (posY == null || posX == null || posY.length == 0 || String(posX).length == 0) {
 
-	}
+            return;
 
-}
+        }
 
-iTable.prototype.iDrag = function(obj) {
+        posY--;
 
-	var event = window.event || arguments[0];
+        posX = posX.toString() - 1;
 
-	obj.on('mousedown', function(event) {
+        $('[mpos="' + posX + '-' + posY + '"]').remove();
 
-		var disX = event.clientX - this.offsetLeft;
+    }
 
-		var disY = event.clientY - this.offsetTop;
+    //字符串取异
 
-		obj.on('mousemove', function(event) {
+    function getUniqueSet(setA, setB) {
 
-			obj.css({
+        var temp = {};
 
-				'left': event.clientX - disX,
+        for (var i = 0, len = setA.length; i < len; i++) {
 
-				'top': event.clientY - disY
+            temp[setA[i]] = 0;
 
-			});
+        }
 
-		});
+        for (var j = 0, len = setB.length; j < len; j++) {
 
-	});
+            if (typeof temp[setB[j]] === 'undefined') {
 
-	obj.on('mouseup', function() {
+                temp[setB[j]] = 0;
 
-		obj.off('mousemove');
+            } else {
 
-	});
+                temp[setB[j]]++;
 
-}
+            }
 
-//高亮单元格
+        }
 
-function lightTd(tmp) {
+        //output
 
-	var posY = tmp.match(/^[a-zA-Z]{1}/gi);
+        var ret = [];
 
-	var posX = tmp.match(/\+?[1-9][0-9]*$/g);
+        for (var item in temp) {
 
-	posY = posY.toString();
+            !temp[item] && ret.push(item);
 
-	posY = posY.toLocaleLowerCase().charCodeAt(0) - 96;
+        }
 
-	posY--;
+        return ret;
 
-	posX = posX.toString() - 1;
+    }
 
-	if(posY == null || posX == null || posY.length == 0 || String(posY).length == 0) {
+    //Input光标
 
-		return;
+    function set_text_value_position(obj, spos) {
 
-	}
+        var tobj = document.getElementById('tdInput');
 
-	var lTd = $('td[cols=' + (posX + 1) + '][rows=' + (posY + 1) + ']');
+        if (spos < 0) spos = tobj.value.length;
 
-	var width = lTd[0].offsetWidth,
+        if (tobj.setSelectionRange) { //兼容火狐,谷歌
 
-		height = lTd[0].offsetHeight;
+            setTimeout(function () {
 
-	var left = lTd[0].offsetLeft,
+                tobj.setSelectionRange(spos, spos);
 
-		top = lTd[0].offsetTop;
+                tobj.focus();
 
-	t.createMask(left, top, width, height, posX, posY);
+            }, 0);
 
-}
+        } else if (tobj.createTextRange) { //兼容IE
 
-//随机颜色
+            var rng = tobj.createTextRange();
 
-function getRandomColor() {
+            rng.move('character', spos);
 
-	return '#' + ('00000' + (Math.random() * 0x1000000 << 0).toString(16)).slice(-6);
+            rng.select();
 
-}
+        }
 
-//取消高亮
+    }
 
-function cLightTd(tmp) {
+    //取消冒泡
 
-	var posY = tmp.match(/^[a-zA-Z]{1}/gi);
+    function stopPropagation(e) {
 
-	var posX = tmp.match(/\+?[1-9][0-9]*$/g);
+        var e = window.event || arguments[0];
 
-	posY = posY.toString();
+        if (e.stopPropagation) {
 
-	posY = posY.toLocaleLowerCase().charCodeAt(0) - 96;
+            e.stopPropagation();
 
-	if(posY == null || posX == null || posY.length == 0 || String(posX).length == 0) {
+        } else {
 
-		return;
+            e.cancelBubble = true;
 
-	}
+        }
 
-	posY--;
+    }
 
-	posX = posX.toString() - 1;
+    //
 
-	$('[mpos="' + posX + '-' + posY + '"]').remove();
+    function JSONLength(obj) {
 
-}
+        var size = 0,
 
-//字符串取异
+            key;
 
-function getUniqueSet(setA, setB) {
+        for (key in obj) {
 
-	var temp = {};
+            if (obj.hasOwnProperty(key)) size++;
 
-	for(var i = 0, len = setA.length; i < len; i++) {
+        }
 
-		temp[setA[i]] = 0;
+        return size;
 
-	}
+    };
 
-	for(var j = 0, len = setB.length; j < len; j++) {
+    //数字转字母 27->AA
 
-		if(typeof temp[setB[j]] === 'undefined') {
+    function IntToChr(index) {
 
-			temp[setB[j]] = 0;
+        var start = 65;
 
-		} else {
+        var str = '';
 
-			temp[setB[j]]++;
+        if (Math.floor(index / 26) > 0) {
 
-		}
+            str += IntToChr(Math.floor(index / 26) - 1);
 
-	}
+        }
 
-	//output
+        str += String.fromCharCode(index % 26 + start);
 
-	var ret = [];
+        return str;
 
-	for(var item in temp) {
+    }
 
-		!temp[item] && ret.push(item);
+    function containsArray(array, obj) {
 
-	}
+        for (var i = 0; i < array.length; i++) {
 
-	return ret;
+            if (array[i] == obj) {
 
-}
+                return i;
 
-//Input光标
+                break;
 
-function set_text_value_position(obj, spos) {
+            }
 
-	var tobj = document.getElementById('tdInput');
+        }
 
-	if(spos < 0) spos = tobj.value.length;
+        return -1;
 
-	if(tobj.setSelectionRange) { //兼容火狐,谷歌
+    }
 
-		setTimeout(function() {
+    Array.prototype.contains = function (obj) {
 
-			tobj.setSelectionRange(spos, spos);
+        return containsArray(this, obj);
 
-			tobj.focus();
+    }
 
-		}, 0);
+    iTable.prototype.init = function () {
 
-	} else if(tobj.createTextRange) { //兼容IE
+        var tOption = this.tabs;
 
-		var rng = tobj.createTextRange();
+        this.createContent();
 
-		rng.move('character', spos);
+        this.createXaxis();
 
-		rng.select();
+        this.createYaxis();
 
-	}
+        this.setCss();
 
-}
+        this.fillTd();
 
-//取消冒泡
+        this.tableScroll();
 
-function stopPropagation(e) {
+        this.createTip();
 
-	var e = window.event || arguments[0];
+        this.createFooter();
 
-	if(e.stopPropagation) {
+        this.createHeader();
 
-		e.stopPropagation();
+        tOption.fontFamily && this.fontFamily();
 
-	} else {
+        tOption.fontSize && this.fontSize();
 
-		e.cancelBubble = true;
+        tOption.fontBold && this.fontBold();
 
-	}
+        tOption.fontItalic && this.fontItalic();
 
-}
+        tOption.fontOverline && this.fontOverline();
 
-//
+        tOption.fontColor && this.fontColor();
 
-function JSONLength(obj) {
+        tOption.bgColor && this.bgColor();
 
-	var size = 0,
+        tOption.mergeTd && this.mergeTd();
 
-		key;
+        tOption.splitTd && this.splitTd();
 
-	for(key in obj) {
+        tOption.textAlign && this.textAlign();
 
-		if(obj.hasOwnProperty(key)) size++;
+        this.express();
 
-	}
+        this.insertCol();
 
-	return size;
+        this.insertRow();
 
-};
+        this.deleteCol();
 
-//数字转字母 27->AA
+        this.deleteRow();
 
-function IntToChr(index) {
+        this.addSheet();
 
-	var start = 65;
+        this.sheetMove();
 
-	var str = '';
+        this.setIndex();
 
-	if(Math.floor(index / 26) > 0) {
+        this.fillBlank();
 
-		str += IntToChr(Math.floor(index / 26) - 1);
+        this.rMenus();
 
-	}
+        this.frameSelect();
 
-	str += String.fromCharCode(index % 26 + start);
+        this.keyCursor();
 
-	return str;
+        this.leftBar();
 
-}
+        this.charts();
 
-function containsArray(array, obj) {
+        this.dataSource();
 
-	for(var i = 0; i < array.length; i++) {
+        this.dataSet();
 
-		if(array[i] == obj) {
+        this.dataSearch();
 
-			return i;
+        this.largeCol();
 
-			break;
+        this.largeRow();
 
-		}
 
-	}
+    }
 
-	return -1;
+    var settings = {
 
-}
+        rowCount: 40,
 
-Array.prototype.contains = function(obj) {
+        cellCount: 26,
 
-	return containsArray(this, obj);
+        fontFamily: {
 
-}
+            '黑体': 'font_Black',
 
-iTable.prototype.init = function() {
+            '宋体': 'font_Song',
 
-	var tOption = this.tabs;
+            '楷体': 'font_Kai',
 
-	this.createContent();
+            '微软雅黑': 'font_Mirco'
 
-	this.createXaxis();
+        },
 
-	this.createYaxis();
+        fontSize: {
 
-	this.setCss();
+            '10': 'fsize_10',
 
-	this.fillTd();
+            '12': 'fsize_12',
 
-	this.tableScroll();
+            '14': 'fsize_14',
 
-	this.createTip();
+            '16': 'fsize_16',
 
-	this.createFooter();
+            '18': 'fsize_18',
 
-	this.createHeader();
+            '20': 'fsize_20'
 
-	tOption.fontFamily && this.fontFamily();
+        },
 
-	tOption.fontSize && this.fontSize();
+        fontBold: 1,
 
-	tOption.fontBold && this.fontBold();
+        fontColor: {
 
-	tOption.fontItalic && this.fontItalic();
+            'red': {
 
-	tOption.fontOverline && this.fontOverline();
+                'tdclass': 'ffc_red',
 
-	tOption.fontColor && this.fontColor();
+                'fclass': 'fc_red'
 
-	tOption.bgColor && this.bgColor();
+            },
 
-	tOption.mergeTd && this.mergeTd();
+            'yellow': {
 
-	tOption.splitTd && this.splitTd();
+                'tdclass': 'ffc_yellow',
 
-	tOption.textAlign && this.textAlign();
+                'fclass': 'fc_yellow',
 
-	this.express();
+            },
 
-	this.insertCol();
+            'green': {
 
-	this.insertRow();
+                'tdclass': 'ffc_green',
 
-	this.deleteCol();
+                'fclass': 'fc_green',
 
-	this.deleteRow();
+            },
 
-	this.addSheet();
+            'orange': {
 
-	this.sheetMove();
+                'tdclass': 'ffc_orange',
 
-	this.setIndex();
+                'fclass': 'fc_orange',
 
-	this.fillBlank();
+            },
 
-	this.rMenus();
+            'blue': {
 
-	this.frameSelect();
+                'tdclass': 'ffc_blue',
 
-	this.keyCursor();
+                'fclass': 'fc_blue',
 
-	this.leftBar();
+            },
 
-	this.charts();
+            'aqua': {
 
-	this.dataSource();
+                'tdclass': 'ffc_aqua',
 
-	this.dataSet();
+                'fclass': 'fc_aqua',
 
-	this.dataSearch();
+            },
 
-	this.largeCol();
+            'purple': {
 
-	this.largeRow();
-	
-	this.getTdDis();
+                'tdclass': 'ffc_purple',
 
-}
+                'fclass': 'fc_purple',
 
-var settings = {
+            },
 
-	rowCount: 40,
+            'black': {
 
-	cellCount: 26,
+                'tdclass': 'ffc_black',
 
-	fontFamily: {
+                'fclass': 'fc_black',
 
-		'黑体': 'font_Black',
+            },
 
-		'宋体': 'font_Song',
+            'white': {
 
-		'楷体': 'font_Kai',
+                'tdclass': 'ffc_white',
 
-		'微软雅黑': 'font_Mirco'
+                'fclass': 'fc_white',
 
-	},
+            },
 
-	fontSize: {
+            'grey': {
 
-		'10': 'fsize_10',
+                'tdclass': 'ffc_grey',
 
-		'12': 'fsize_12',
+                'fclass': 'fc_grey',
 
-		'14': 'fsize_14',
+            }
 
-		'16': 'fsize_16',
+        },
 
-		'18': 'fsize_18',
+        bgColor: {
 
-		'20': 'fsize_20'
+            'red': {
 
-	},
+                'tdclass': 'ffill_red',
 
-	fontBold: 1,
+                'fclass': 'fill_red'
 
-	fontColor: {
+            },
 
-		'red': {
+            'yellow': {
 
-			'tdclass': 'ffc_red',
+                'tdclass': 'ffill_yellow',
 
-			'fclass': 'fc_red'
+                'fclass': 'fill_yellow',
 
-		},
+            },
 
-		'yellow': {
+            'green': {
 
-			'tdclass': 'ffc_yellow',
+                'tdclass': 'ffill_green',
 
-			'fclass': 'fc_yellow',
+                'fclass': 'fill_green',
 
-		},
+            },
 
-		'green': {
+            'orange': {
 
-			'tdclass': 'ffc_green',
+                'tdclass': 'ffill_orange',
 
-			'fclass': 'fc_green',
+                'fclass': 'fill_orange',
 
-		},
+            },
 
-		'orange': {
+            'blue': {
 
-			'tdclass': 'ffc_orange',
+                'tdclass': 'ffill_blue',
 
-			'fclass': 'fc_orange',
+                'fclass': 'fill_blue',
 
-		},
+            },
 
-		'blue': {
+            'aqua': {
 
-			'tdclass': 'ffc_blue',
+                'tdclass': 'ffill_aqua',
 
-			'fclass': 'fc_blue',
+                'fclass': 'fill_aqua',
 
-		},
+            },
 
-		'aqua': {
+            'purple': {
 
-			'tdclass': 'ffc_aqua',
+                'tdclass': 'ffill_purple',
 
-			'fclass': 'fc_aqua',
+                'fclass': 'fill_purple',
 
-		},
+            },
 
-		'purple': {
+            'black': {
 
-			'tdclass': 'ffc_purple',
+                'tdclass': 'ffill_black',
 
-			'fclass': 'fc_purple',
+                'fclass': 'fill_black',
 
-		},
+            },
 
-		'black': {
+            'white': {
 
-			'tdclass': 'ffc_black',
+                'tdclass': 'ffill_white',
 
-			'fclass': 'fc_black',
+                'fclass': 'fill_white',
 
-		},
+            },
 
-		'white': {
+            'grey': {
 
-			'tdclass': 'ffc_white',
+                'tdclass': 'ffill_grey',
 
-			'fclass': 'fc_white',
+                'fclass': 'fill_grey',
 
-		},
+            }
 
-		'grey': {
+        },
 
-			'tdclass': 'ffc_grey',
+        textAlign: {
 
-			'fclass': 'fc_grey',
+            'left': {
 
-		}
+                'tdclass': 'falign_left',
 
-	},
+                'fclass': 'ffalign_left',
 
-	bgColor: {
+            },
 
-		'red': {
+            'center': {
 
-			'tdclass': 'ffill_red',
+                'tdclass': 'falign_center',
 
-			'fclass': 'fill_red'
+                'fclass': 'ffalign_center',
 
-		},
+            },
 
-		'yellow': {
+            'right': {
 
-			'tdclass': 'ffill_yellow',
+                'tdclass': 'falign_right',
 
-			'fclass': 'fill_yellow',
+                'fclass': 'ffalign_right',
 
-		},
+            }
 
-		'green': {
+        },
 
-			'tdclass': 'ffill_green',
+        express: {
 
-			'fclass': 'fill_green',
+            'sum': 'fx_sum',
 
-		},
+            'avg': 'fx_avg',
 
-		'orange': {
+            'count': 'fx_count',
 
-			'tdclass': 'ffill_orange',
+            'max': 'fx_max',
 
-			'fclass': 'fill_orange',
+            'min': 'fx_min'
 
-		},
+        }
 
-		'blue': {
+    }
 
-			'tdclass': 'ffill_blue',
+    var box = $('.box');
 
-			'fclass': 'fill_blue',
+    var tabs = {
 
-		},
+        fontColor: true,
 
-		'aqua': {
+        fontFamily: true,
 
-			'tdclass': 'ffill_aqua',
+        fontSize: true,
 
-			'fclass': 'fill_aqua',
+        fontBold: true,
 
-		},
+        fontItalic: true,
 
-		'purple': {
+        fontOverline: true,
 
-			'tdclass': 'ffill_purple',
+        fontBgcolor: true,
 
-			'fclass': 'fill_purple',
+        mergeTd: true,
 
-		},
+        splitTd: true,
 
-		'black': {
+        textAlign: true,
 
-			'tdclass': 'ffill_black',
+    }
 
-			'fclass': 'fill_black',
+    var t = new iTable(box, settings, tabs);
 
-		},
+    t.init();
 
-		'white': {
+    t.leftBarHandle(function () {
 
-			'tdclass': 'ffill_white',
+        console.log('do sth');
 
-			'fclass': 'fill_white',
-
-		},
-
-		'grey': {
-
-			'tdclass': 'ffill_grey',
-
-			'fclass': 'fill_grey',
-
-		}
-
-	},
-
-	textAlign: {
-
-		'left': {
-
-			'tdclass': 'falign_left',
-
-			'fclass': 'ffalign_left',
-
-		},
-
-		'center': {
-
-			'tdclass': 'falign_center',
-
-			'fclass': 'ffalign_center',
-
-		},
-
-		'right': {
-
-			'tdclass': 'falign_right',
-
-			'fclass': 'ffalign_right',
-
-		}
-
-	},
-
-	express: {
-
-		'sum': 'fx_sum',
-
-		'avg': 'fx_avg',
-
-		'count': 'fx_count',
-
-		'max': 'fx_max',
-
-		'min': 'fx_min'
-
-	}
-
-}
-
-var box = $('.box');
-
-var tabs = {
-
-	fontColor: true,
-
-	fontFamily: true,
-
-	fontSize: true,
-
-	fontBold: true,
-
-	fontItalic: true,
-
-	fontOverline: true,
-
-	fontBgcolor: true,
-
-	mergeTd: true,
-
-	splitTd: true,
-
-	textAlign: true,
-
-}
-
-var t = new iTable(box, settings, tabs);
-
-t.init();
-
-t._try();
-
-//t.modal({
-
-//	width:'300px',
-
-//	height:'200px',
-
-//	title:'这是标题',
-
-//});
-
-t.leftBarHandle(function() {
-
-	console.log('do sth');
-
-});
+    });
