@@ -689,8 +689,6 @@
 
                             if (!nextRowspan && !nextColspan) {
 
-                                //							$("[pos='" + nextX + "-" + nextY + "']").addClass('picked');
-
                                 $('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('picked');
 
                                 callZ.wBorder($('.picked'));
@@ -700,8 +698,6 @@
                             //下一个单元格只列合并
 
                             if (!nextRowspan && nextColspan) {
-
-                                //$("[pos='" + _nowX + "-" + nextY + "']").addClass('picked');
 
                                 $('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('picked');
 
@@ -713,8 +709,6 @@
 
                             if (nextRowspan && !nextColspan) {
 
-                                //	$("[pos='" + _nowX + "-" + nextY + "']").addClass('picked');
-
                                 $('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('picked');
 
                                 callZ.wBorder($('.picked'));
@@ -724,8 +718,6 @@
                             //下一个单元格行列合并
 
                             if (nextRowspan && nextColspan) {
-
-                                // $("[pos='" + _nowX + "-" + _nowY + "']").addClass('picked');
 
                                 $('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked');
 
@@ -871,8 +863,6 @@
 
                             if (!nextRowspan && !nextColspan) {
 
-                                //$("[pos='" + nextX + "-" + nextY + "']").addClass('picked');
-
                                 $('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('picked');
 
                                 callZ.wBorder($('.picked'));
@@ -882,8 +872,6 @@
                             //下一个单元格只行合并
 
                             if (!nextRowspan && nextColspan) {
-
-                                //	$("[pos='" + _nowX + "-" + nextY + "']").addClass('picked');
 
                                 $('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('picked');
 
@@ -895,8 +883,6 @@
 
                             if (nextRowspan && !nextColspan) {
 
-                                //	$("[pos='" + nextX + "-" + _nowY + "']").addClass('picked');
-
                                 $('td[cols=' + nextX + '][rows=' + _nowY + ']').addClass('picked');
 
                                 callZ.wBorder($('.picked'));
@@ -906,8 +892,6 @@
                             //下一个单元格行列合并
 
                             if (nextRowspan && nextColspan) {
-
-                                //	$("[pos='" + _nowX + "-" + _nowY + "']").addClass('picked');
 
                                 $('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked');
 
@@ -1065,8 +1049,6 @@
 
                             if (!nextRowspan && !nextColspan) {
 
-                                //	$("[pos='" + (nextX - lastColspan) + "-" + nextY + "']").addClass('picked');
-
                                 $('td[cols=' + (nextX - lastColspan) + '][rows=' + nextY + ']').addClass('picked');
 
                                 callZ.wBorder($('td[cols=' + (nextX - lastColspan) + '][rows=' + nextY + ']'));
@@ -1109,8 +1091,6 @@
 
                                     }
 
-                                    //(r2 == 1) && ($('td[cols=' + nextX + '][rows=' + _nowY + ']').addClass('picked'));
-
                                 }
 
                             }
@@ -1130,8 +1110,6 @@
                                         callZ.wBorder($('.picked'));
 
                                     }
-
-                                    //(r3 == 1) && ($('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked'));
 
                                 }
 
@@ -1309,8 +1287,6 @@
 
                                     }
 
-                                    //(u1 == 1) && ($('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('picked'));
-
                                 }
 
                             }
@@ -1331,8 +1307,6 @@
 
                                     }
 
-                                    //(u2 == 1) && ($('td[cols=' + nextX + '][rows=' + _nowY + ']').addClass('picked'));
-
                                 }
 
                             }
@@ -1352,8 +1326,6 @@
                                         callZ.wBorder($('.picked'));
 
                                     }
-
-                                    //(u3 == 1) && ($('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked'));
 
                                 }
 
@@ -3545,7 +3517,7 @@
 
             }
 
-          //  var sigDel = "sign4delete";
+            var sigDel = "sign4delete";
 
             var sigSel = "picked";
 
@@ -3971,7 +3943,7 @@
 
             var tdText = that.text();
 
-            var stInput = $("<input type='text' class='stInput'  value='" + tdText + "'>");
+            var stInput = $("<input type=\'text' class='stInput'  value='" + tdText + "'>");
 
             stInput.width(tdWidth - 2);
 
@@ -4195,8 +4167,6 @@
 
             $(this).off('mousedown').on('mousedown', function (event) {
 
-                var td = $(this);
-
                 var index = $(this).index();
 
                 var sline = $('<div class="sline"></div>');
@@ -4282,8 +4252,6 @@
         $('.leftTable tr td').each(function (event) {
 
             $(this).off('mousedown').on('mousedown', function (event) {
-
-                var td = $(this);
 
                 var index = $(this).parent().index();
 
@@ -4629,7 +4597,7 @@
 
     iTable.prototype.createRmenus = function () {
 
-        var menus = $('<div></div>');
+        var menus = $('<div class="rmenu"></div>');
 
         var dataArr = [];
 
@@ -4653,24 +4621,6 @@
 
         menus.append(_delete);
 
-        var that = this;
-
-        menus.css({
-
-            'position': 'absolute',
-
-            'width': '200px',
-
-            'overflow': 'hidden',
-
-            'background': '#FBFBFB',
-
-            'display': 'none',
-
-            'font-size': '14px',
-
-        });
-
         $('body').append(menus);
 
         $(document).on('click', function () {
@@ -4688,14 +4638,6 @@
     iTable.prototype.cut = function (dataArr) {
 
         var cutDiv = $('<div class="menu-cut">剪切</div>');
-
-        cutDiv.css({
-
-            'padding': '2px 10px',
-
-            'cursor': 'pointer'
-
-        })
 
         cutDiv.on('click', function () {
 
@@ -4738,14 +4680,6 @@
     iTable.prototype.copy = function () {
 
         var copyDiv = $('<div class="menu-copy">复制</div>');
-
-        copyDiv.css({
-
-            'padding': '2px 10px',
-
-            'cursor': 'pointer'
-
-        })
 
         copyDiv.on('click', function () {
 
