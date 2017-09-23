@@ -278,6 +278,7 @@
         var _y = null;
 
         var mergeArr = [];
+        console.log(oX,oY);
 
         $(that.container).on('mousemove', function () {
 
@@ -355,13 +356,13 @@
 
                     if (sl > _l && st > _t && fileNodes[i].offsetLeft < _l + _w && fileNodes[i].offsetTop < _t + _h) {
 
-                        var nCols = parseInt($(fileNodes[i]).attr('cols')) - 1;
+                        var nCols = parseInt($(fileNodes[i]).attr('cols')) ;
 
-                        var nRows = parseInt($(fileNodes[i]).attr('rows')) - 1;
+                        var nRows = parseInt($(fileNodes[i]).attr('rows')) ;
 
-                        var nCspan = parseInt($(fileNodes[i]).attr('colspan')) - 1 || 0;
+                        var nCspan = parseInt($(fileNodes[i]).attr('colspan'))  || 1;
 
-                        var nRspan = parseInt($(fileNodes[i]).attr('rowspan')) - 1 || 0;
+                        var nRspan = parseInt($(fileNodes[i]).attr('rowspan'))  || 1;
 
                         var expectX = nCols + nCspan;
 
@@ -375,13 +376,18 @@
 
                         yArr.push(expectY);
 
-                        var xMax = xArr.max(),
+                        xArr=_.uniq(xArr);
 
-                            xMin = xArr.min(),
+                        yArr=_.uniq(yArr)
 
-                            yMax = yArr.max(),
 
-                            yMin = yArr.min();
+                        var xMax = _.max(xArr),
+
+                            xMin = _.min(xArr),
+
+                            yMax = _.max(yArr),
+
+                            yMin = _.min(yArr);
 
                         var top = $(fileNodes[i])[0].offsetTop,
 
@@ -400,18 +406,31 @@
                     }
 
                 }
-
-                // for(var i = xMin; i < (xMax + 1); i++) {
-                // 	for(var j = yMin; j < (yMax + 1); j++) {
-                // 		if($('td[cols=' + (i + 1) + '][rows=' + (j + 1) + ']').length > 0&&!$('td[cols=' + (i + 1) + '][rows=' + (j + 1) + ']').hasClass('picked')) {
+                // if(xMax<=yMax){
+                //     for(var i = xMin; i < (xMax + 1); i++) {
+                //     	for(var j = yMin; j < (yMax + 1); j++) {
+                //     		// if($('td[cols=' + (i + 1) + '][rows=' + (j + 1) + ']').length > 0&&!$('td[cols=' + (i + 1) + '][rows=' + (j + 1) + ']').hasClass('picked')) {
+                //     			$('td[cols=' + i  + '][rows=' + j + ']').addClass('picked');
+                //     		// }
                 //
-                // 			$('td[cols=' + (i + 1) + '][rows=' + (j + 1) + ']').addClass('picked');
+                //     	}
                 //
-                // 		}
+                //     }
+                // }else{
+                //     for(var i = xMin; i < (xMax + 1); i++) {
+                //     	for(var j = yMin; j < (yMax + 1); j++) {
+                //     		// if($('td[cols=' + (i + 1) + '][rows=' + (j + 1) + ']').length > 0&&!$('td[cols=' + (i + 1) + '][rows=' + (j + 1) + ']').hasClass('picked')) {
                 //
-                // 	}
+                //     			$('td[cols=' + i  + '][rows=' + j + ']').addClass('picked');
                 //
+                //     		// }
+                //
+                //     	}
+                //
+                //     }
                 // }
+
+
 
                 that.wBorderSelect($('.picked'));
 
@@ -431,47 +450,7 @@
 
     }
 
-    Array.prototype.min = function () {
 
-        var min = this[0];
-
-        var len = this.length;
-
-        for (var i = 1; i < len; i++) {
-
-            if (this[i] < min) {
-
-                min = this[i];
-
-            }
-
-        }
-
-        return min;
-
-    }
-
-    //最大值
-
-    Array.prototype.max = function () {
-
-        var max = this[0];
-
-        var len = this.length;
-
-        for (var i = 1; i < len; i++) {
-
-            if (this[i] > max) {
-
-                max = this[i];
-
-            }
-
-        }
-
-        return max;
-
-    }
 
     iTable.prototype.keyCursor = function () {
 
@@ -1753,7 +1732,7 @@
 
                 height = $(obj)[0].offsetHeight;
 
-            var left = $(obj)[0].offsetLeft,
+            var left =$(obj)[0].offsetLeft,
 
                 top = $(obj)[0].offsetTop;
 
@@ -1955,8 +1934,6 @@
 
             wrBorder.append(bottomrB);
 
-            //
-
             wBorder.append(bottomB);
 
             wBorder.append(corner);
@@ -1979,17 +1956,17 @@
 
                 $(that.container).off('mousedown');
 
-                var cWidth = parseInt($(this.container).width());
-
-                var cHeight = parseInt($(this.container).height());
-
-                var disWidth = parseInt($('.yOrder').outerWidth());
-
-                var disHeight = parseInt($('.xOrder').outerHeight()) + parseInt($('.header').outerHeight());
-
-                var fileNodes = $('.dataTable tr td');
-
-                var isSelect = true;
+                // var cWidth = parseInt($(this.container).width());
+                //
+                // var cHeight = parseInt($(this.container).height());
+                //
+                // var disWidth = parseInt($('.yOrder').outerWidth());
+                //
+                // var disHeight = parseInt($('.xOrder').outerHeight()) + parseInt($('.header').outerHeight());
+                //
+                // var fileNodes = $('.dataTable tr td');
+                //
+                // var isSelect = true;
 
                 var ev = window.event || arguments[0];
 
@@ -2109,13 +2086,13 @@
 
                                 $('.dataTable tr td').each(function () {
 
-                                    if ($(this)[0].offsetTop <= moveH && $(this)[0].offsetTop + $(this)[0].offsetHeight >= Math.min(_y, oY) && $(this)[0].offsetLeft >= parseInt($('.wBorder').find('div').eq(1).css('left')) && $(this)[0].offsetLeft <= parseInt($('.wBorder').find('div').eq(1).css('left')) + 96) {
+                                    if ($(this).offset().top <= moveH && $(this).offset().top + $(this).offset().height >= Math.min(_y, oY) && $(this).offset().left >= parseInt($('.wBorder').find('div').eq(1).css('left')) && $(this).offset().left <= parseInt($('.wBorder').find('div').eq(1).css('left')) + 96) {
 
                                         //
 
                                         tdH += parseInt($(this)[0].offsetHeight);
 
-                                        topA.push($(this)[0].offsetTop);
+                                        topA.push($(this).offset().top);
 
                                         $('.wrBorder').find('div').eq(1).css('height', tdH);
 
@@ -2139,11 +2116,11 @@
 
                                 $('.dataTable tr td').each(function () {
 
-                                    if ($(this)[0].offsetTop <= moveH && $(this)[0].offsetTop + $(this)[0].offsetHeight >= Math.min(_y, oY) && $(this)[0].offsetLeft >= parseInt($('.wBorder').find('div').eq(1).css('left')) && $(this)[0].offsetLeft <= parseInt($('.wBorder').find('div').eq(1).css('left')) + 96) {
+                                    if ($(this).offset().top <= moveH && $(this).offset().top + $(this).offset().height >= Math.min(_y, oY) && $(this).offset().left >= parseInt($('.wBorder').find('div').eq(1).css('left')) && $(this).offset().left <= parseInt($('.wBorder').find('div').eq(1).css('left')) + 96) {
 
-                                        tdH += parseInt($(this)[0].offsetHeight);
+                                        tdH += parseInt($(this)[0].Height);
 
-                                        topB.push($(this)[0].offsetTop);
+                                        topB.push($(this).offset().top);
 
                                         $('.wrBorder').find('div').eq(1).css('height', tdH);
 
@@ -2191,11 +2168,11 @@
 
                                 $('.dataTable tr td').each(function () {
 
-                                    var tdL = $(this)[0].offsetLeft,
+                                    var tdL = $(this).offset().left,
 
                                         _tdW = $(this)[0].offsetWidth,
 
-                                        tdT = $(this)[0].offsetTop,
+                                        tdT = $(this).offset().top,
 
                                         _tdH = $(this)[0].offsetHeight;
 
@@ -2209,7 +2186,7 @@
 
                                         tdW += parseInt($(this)[0].offsetWidth);
 
-                                        leftA.push($(this)[0].offsetLeft);
+                                        leftA.push($(this).offset().left);
 
                                         $('.wrBorder').find('div').eq(0).css('width', tdW);
 
@@ -2237,11 +2214,11 @@
 
                                 $('.dataTable tr td').each(function () {
 
-                                    var tdL = $(this)[0].offsetLeft,
+                                    var tdL = $(this).offset().left,
 
                                         _tdW = $(this)[0].offsetWidth,
 
-                                        tdT = $(this)[0].offsetTop,
+                                        tdT = $(this).offset().top,
 
                                         _tdH = $(this)[0].offsetHeight;
 
@@ -2255,7 +2232,7 @@
 
                                         tdW += parseInt($(this)[0].offsetWidth);
 
-                                        leftB.push($(this)[0].offsetLeft);
+                                        leftB.push($(this).offset().left);
 
                                         $('.wrBorder').find('div').eq(0).css('width', tdW);
 
@@ -2895,8 +2872,9 @@
 
                     yArr.push(rows);
 
-                    xMax = xArr.max(), xMin = xArr.min(), yMax = yArr.max(), yMin = yArr.min();
+                  //  xMax = xArr.max(), xMin = xArr.min(), yMax = yArr.max(), yMin = yArr.min();
 
+                    xMax = _.max(xArr), xMin = _.min(xArr), yMax = _.max(yArr), yMin = _.min(yArr);
                 }
 
                 for (var _y = 0; _y < that.rowCount + 1; _y++) {
@@ -3075,7 +3053,7 @@
 
                     yArr.push(rows);
 
-                    xMax = xArr.max(), xMin = xArr.min(), yMax = yArr.max(), yMin = yArr.min();
+                    xMax = _.max(xArr), xMin = _.min(xArr), yMax = _.max(yArr), yMin = _.min(yArr);
 
                 }
 
@@ -3233,7 +3211,7 @@
 
                     yArr.push(rows);
 
-                    xMax = xArr.max(), xMin = xArr.min(), yMax = yArr.max(), yMin = yArr.min();
+                    xMax = _.max(xArr), xMin = _.min(xArr), yMax = _.max(yArr), yMin = _.min(yArr);
 
                 }
 
@@ -5395,9 +5373,9 @@
 
     var settings = {
 
-        rowCount: 40,
+        rowCount: 100,
 
-        cellCount: 26,
+        cellCount: 100,
 
         fontFamily: {
 
