@@ -174,14 +174,6 @@
 
     }
 
-    iTable.prototype.getTdDis = function () {
-        $('.dataTable tr td').each(function () {
-            $(this).mouseenter(function () {
-                // console.log($(this)[0].offsetLeft,$(this)[0].offsetHeight);
-            });
-        });
-    }
-
     iTable.prototype.createTip = function () {
 
         var content = $('<div class="greyBlock"></div>'),
@@ -206,18 +198,6 @@
     }
 
     iTable.prototype.frameSelect = function () {
-
-        //	var that = this;
-
-        //	var cWidth = parseInt($(this.container).width());
-
-        //	var cHeight = parseInt($(this.container).height());
-
-        //
-
-        //	var disWidth = parseInt($('.yOrder').outerWidth());
-
-        //	var disHeight = parseInt($('.xOrder').outerHeight()) + parseInt($('.header').outerHeight());
 
         $(this.container).on('mousedown', areaChoose);
 
@@ -2945,15 +2925,11 @@
 
                                     }
 
-                                    //console.log($('td[cols=' + index + '][rows=' + _y + ']'));
-
                                 }
 
                                 index--;
 
                             }
-
-                            //$('td[cols=' + (xMin - 1) + '][rows=' + _y + ']').after('<td style="background:orange"></td>');
 
                         }
 
@@ -3781,6 +3757,51 @@
 
         return selectionBox;
 
+    }
+
+    iTable.prototype.dataSelection=function(json){
+        var selectionBox = $('<div class="toolBox"></div>');
+
+        var selectHead = $('<div></div>');
+
+        var selectUl = $('<ul></ul>');
+
+        var selectLi, arr = [],aTab;
+        for(var index in json){
+            selectHead.text('配置菜单');
+            aTab=$('<a class="dTab" id="'+json[index].id +'">'+ json[index].name + '</a></li>');
+
+            selectLi = $('<li></li>');
+            selectLi.append(aTab);
+            selectUl.append(selectLi);
+            var callback=json[index].callback;
+            aTab.on('click',{callback},function(event){
+                event.data.callback();
+            });
+
+        }
+        selectHead.after(selectUl);
+        selectionBox.append(selectHead);
+
+        this.tools.append(selectionBox);
+
+        selectUl.hide();
+
+        selectHead.on('click', function () {
+
+            selectUl.toggle();
+
+        });
+
+        selectUl.find('li a').on('click', function () {
+
+            $(selectHead[0]).text($(this).text());
+
+            $(selectHead[0]).attr('curClass', $(this).attr('class'));
+
+        });
+
+        // return selectionBox;
     }
 
     //创建工具栏单个菜单
@@ -4835,6 +4856,8 @@
 
     }
 
+
+
     iTable.prototype.getValue = function (arr) {
 
         arr = arr.toString();
@@ -5065,6 +5088,8 @@
 
     }
 
+
+
     //高亮单元格
 
     function lightTd(tmp) {
@@ -5177,7 +5202,7 @@
 
     //Input光标
 
-    function set_text_value_position(obj, spos) {
+    function set_text_value_position(spos) {
 
         var tobj = document.getElementById('tdInput');
 
@@ -5614,6 +5639,7 @@
 
         }
 
+
     }
 
     var box = $('.box');
@@ -5651,3 +5677,28 @@
         console.log('do sth');
 
     });
+    t.dataSelection({
+        table1:{
+            id:'table1',
+            name:'全国报表',
+            callback:function a(){
+                console.log('1');
+            }
+        },
+        table2:{
+            id:'table2',
+            name:'地方报表',
+            callback:function b(){
+                console.log('2');
+            }
+        },
+        table3:{
+            id:'table3',
+            name:'其他报表',
+            callback:other
+        }
+    });
+
+    function other(){
+        console.log('other');
+    }
