@@ -198,10 +198,173 @@
     }
 
     iTable.prototype.frameSelect = function () {
+        var coords;
+        var that=this;
+       //$(this.container).on('mousedown', areaChoose);
+        $('.dataTable tr td').each(function(){
+            $(this).on('mouseover',function(){
+                 coords=$(this);
+            });
+        });
 
-        $(this.container).on('mousedown', areaChoose);
+        $(this.container).on('mousedown',function(){
+            var originTd=$(coords);
+
+            var ev = window.event || arguments[0];
+
+            var onCols = parseInt($(coords).attr('cols')) ;
+
+            var onRows = parseInt($(coords).attr('rows')) ;
+
+            var onCspan = parseInt($(coords).attr('colspan'))  || 1;
+
+            var onRspan = parseInt($(coords).attr('rowspan'))  || 1;
+
+            var expectX = onCols + onCspan-1;
+
+            var expectY = onRows + onRspan-1;
+
+            var xMin = expectX,yMin = expectY;
+
+            var sleft = parseInt($(this).scrollLeft());
+
+            var stop = parseInt($(this).scrollTop());
+
+            var disHeight = parseInt($('.xOrder').outerHeight()) + parseInt($('.header').outerHeight());
+
+            var oX = ev.clientX + sleft;
+
+            var oY = ev.clientY - disHeight + stop;
+
+
+            $(that.container).on('mousemove',function(){
+
+                var nCols = parseInt($(coords).attr('cols')) ;
+
+                var nRows = parseInt($(coords).attr('rows')) ;
+
+                var nCspan = parseInt($(coords).attr('colspan'))  || 1;
+
+                var nRspan = parseInt($(coords).attr('rowspan'))  || 1;
+
+                var expectX = nCols + nCspan-1;
+
+                var expectY = nRows + nRspan-1;
+
+                var xMax=expectX,yMax=expectY;
+
+                var evt = window.event || arguments[0];
+                var _x,_y;
+
+                _x = (evt.x || evt.clientX);
+
+                _y = (evt.y || evt.clientY);
+
+                _x = _x + sleft;
+
+                _y = _y + stop - disHeight;
+
+
+               if(_x-oX>40){
+
+                   if(_y-oY>40){
+                       //E-S 东南
+                       xMin=onCols,yMin=onRows;
+                   }else{
+                       //E-N 东北
+                       xMin=onCols,yMin=onRows + onRspan-1;
+                   }
+               }else{
+                   if(_y-oY>40){
+                       // W-S 西南
+                        xMin=onCols+onCspan-1,yMin=onRows;
+                   }else{
+                       //W-N  西北
+                        xMin=onCols+onCspan-1,yMin=onRows+onRspan-1;
+                   }
+
+               }
+
+
+
+
+
+                $('.dataTable tr td').removeClass('picked');
+
+                if(xMin<=xMax&&yMin<=yMax){
+                    for(var i = xMin; i <= xMax ; i++) {
+                        for(var j = yMin; j <= yMax; j++) {
+                            var id='#'+j+'-'+i;
+
+
+                            $(id).addClass('picked');
+
+                        }
+
+                    }
+                }else if(xMin<=xMax&&yMin>yMax){
+                    for(var i = xMin; i <= xMax ; i++) {
+                        for(var j = yMax; j <= yMin; j++) {
+                            var id='#'+j+'-'+i;
+
+
+                            $(id).addClass('picked');
+
+                        }
+
+                    }
+                }else if(xMin>xMax&&yMin<yMax){
+                    for(var i = xMax; i <= xMin ; i++) {
+                        for(var j = yMin; j <= yMax; j++) {
+                            var id='#'+j+'-'+i;
+
+
+                            $(id).addClass('picked');
+
+                        }
+
+                    }
+                }else{
+                    for(var i = xMax; i <= xMin ; i++) {
+                        for(var j = yMax; j <= yMin; j++) {
+                            var id='#'+j+'-'+i;
+
+
+                            $(id).addClass('picked');
+
+                        }
+
+                    }
+
+                }
+
+
+
+            });
+            $(that.container).on('mouseup',function(){
+                $(this).off('mousemove');
+            })
+        });
+    }
+
+
+    function tdHover(event){
+
+        var coords=event.data.target;
+        console.log(event.data.target);
+
+        // $('.dataTable tr td').each(function(){
+        //     $(this).on('mouseover',function(){
+        //         console.log($(this));
+        //
+        //     });
+        //
+        // });
+
+
 
     }
+
 
     function areaChoose() {
 
@@ -278,7 +441,13 @@
         var _y = null;
 
         var mergeArr = [];
-        console.log(oX,oY);
+
+        // $(fileNodes).each(function(){
+        //
+        //     if($(this).offset().left+$(this).width()>oX&&$(this).offset().left<oX&&$(this).offset().top+$(this).height()>oY&&$(this).offset().top<oY){
+        //         console.log($(this).offset().top,oY);
+        //     }
+        // });
 
         $(that.container).on('mousemove', function () {
 
@@ -348,6 +517,14 @@
 
                     _h = Math.abs(_y - oY);
 
+                $(fileNodes).on('mouseover',function(){
+                     console.log($(this));
+                     $(document).on('mouseup',function(){
+                        $(fileNodes).off('mouseover');
+                     });
+                     event.stopPropagation();
+                });
+
                 for (var i = 0; i < fileNodes.length; i++) {
 
                     var sl = fileNodes[i].offsetWidth + fileNodes[i].offsetLeft;
@@ -405,6 +582,7 @@
 
                     }
 
+
                 }
                 // if(xMax<=yMax){
                 //     for(var i = xMin; i < (xMax + 1); i++) {
@@ -435,6 +613,8 @@
                 that.wBorderSelect($('.picked'));
 
                 that.lightCoor($('.picked'));
+
+
 
             }
 
@@ -1482,6 +1662,8 @@
 
                 });
 
+
+
                 $('#iTable' + tid + ' tr td').not($(this)).click(function (event) {
 
                     $('.tdInput').blur();
@@ -1489,6 +1671,9 @@
                 });
 
             });
+            // $(this).on('mouseover',function(){
+            //    console.log($(this));
+            // });
 
             $(this).click(function () {
 
@@ -4107,6 +4292,8 @@
                 cell.setAttribute('rows', i + 1);
 
                 cell.setAttribute('cols', col + 1);
+
+                cell.setAttribute('id',i+1+'-'+(col+1));
 
             }
 
