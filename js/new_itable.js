@@ -306,8 +306,6 @@
                     for(var i = xMin; i <= xMax ; i++) {
                         for(var j = yMax; j <= yMin; j++) {
                             var id='#'+j+'-'+i;
-
-
                             $(id).addClass('picked');
 
                         }
@@ -317,7 +315,6 @@
                     for(var i = xMax; i <= xMin ; i++) {
                         for(var j = yMin; j <= yMax; j++) {
                             var id='#'+j+'-'+i;
-
 
                             $(id).addClass('picked');
 
@@ -329,7 +326,6 @@
                         for(var j = yMax; j <= yMin; j++) {
                             var id='#'+j+'-'+i;
 
-
                             $(id).addClass('picked');
 
                         }
@@ -337,7 +333,7 @@
                     }
 
                 }
-
+            that.wBorderSelect($('.picked'));
 
 
             });
@@ -348,22 +344,7 @@
     }
 
 
-    function tdHover(event){
 
-        var coords=event.data.target;
-        console.log(event.data.target);
-
-        // $('.dataTable tr td').each(function(){
-        //     $(this).on('mouseover',function(){
-        //         console.log($(this));
-        //
-        //     });
-        //
-        // });
-
-
-
-    }
 
 
     function areaChoose() {
@@ -799,6 +780,7 @@
                 var nextX = event.data.fixX;
 
                 var nextY = nowY + 1;
+
 
                 if ($('td[cols=' + nextX + '][rows=' + nextY + ']').length > 0) {
 
@@ -1596,7 +1578,6 @@
         var event = window.event || arguments[0];
 
         var tid = tid || 1;
-        ;
 
         var that = this;
 
@@ -1671,9 +1652,6 @@
                 });
 
             });
-            // $(this).on('mouseover',function(){
-            //    console.log($(this));
-            // });
 
             $(this).click(function () {
 
@@ -1687,7 +1665,6 @@
 
                 that.wBorder($(this));
 
-                //t.createMask(left, top, width, height,'','');
 
                 var xCoo = Number($(this).attr('cols')) - 1,
 
@@ -2147,7 +2124,7 @@
                 //
                 // var disWidth = parseInt($('.yOrder').outerWidth());
                 //
-                // var disHeight = parseInt($('.xOrder').outerHeight()) + parseInt($('.header').outerHeight());
+                 var disHeight = parseInt($('.xOrder').outerHeight()) + parseInt($('.header').outerHeight());
                 //
                 // var fileNodes = $('.dataTable tr td');
                 //
@@ -2173,42 +2150,6 @@
 
                 var direction;
 
-                //          var selDiv = $('<div class="mapdiv"></div>');
-
-                //	selDiv.css({
-
-                //		'position': 'absolute',
-
-                //		'width': '0px',
-
-                //		'height': '0px',
-
-                //		'font-size': '0px',
-
-                //		'margin': '0px',
-
-                //		'padding': '0px',
-
-                //		'border': '1px solid #1ab394',
-
-                //		'background-color': '#4acfb4',
-
-                //		'z-index': '1000',
-
-                //		'filter': 'alpha(opacity:60)',
-
-                //		'opacity': '0.6',
-
-                //		'display': 'none',
-
-                //		'left': oX,
-
-                //		'top': oY
-
-                //	});
-
-                //			$(that.container).append(selDiv);
-
                 $(that.container).on('mousemove', function () {
 
                     var evt = window.event || arguments[0];
@@ -2220,12 +2161,6 @@
                     var sleft = $(this).scrollLeft();
 
                     var stop = $(this).scrollTop();
-
-                    //							if(selDiv.css('display') == "none") {
-
-                    //								selDiv.css('display', '');
-
-                    //							}
 
                     _x = (evt.x || evt.clientX);
 
@@ -2383,14 +2318,6 @@
 
                                         $('.wrBorder').find('div').eq(2).css('left', _.first(_.uniq(leftA)));
 
-                                        //$('.wrBorder').find('div').eq(1).css('left', $('.wBorder').find('div').eq(1).css('left'));
-
-                                        //var n = parseInt($('.wrBorder').find('div').eq(0).css('left')) + parseInt($('.wrBorder').find('div').eq(0).css('width'));
-
-                                        //$('.wrBorder').find('div').eq(2).css('left', n - 2);
-
-                                        //$('.wBorder').find('.corner').css('l', n - 2);
-
                                     }
 
                                 });
@@ -2543,8 +2470,6 @@
 
                         that.wBorder($(this));
 
-                        //t.createMask(left, top, width, height,'','');
-
                         var xCoo = Number($(this).attr('cols')) - 1,
 
                             yCoo = Number($(this).attr('rows')) - 1;
@@ -2644,12 +2569,6 @@
     iTable.prototype.createHeader = function () {
 
         this.header = $('<div class="header"></div>');
-
-        this.header.css({
-
-            'z-index': 103
-
-        })
 
         this.tools = $('<div class="tools"></div>');
 
