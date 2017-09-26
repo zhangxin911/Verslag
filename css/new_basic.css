@@ -632,3 +632,13 @@
    .wBorder{
        display:none;
    }
+	.fxDiv{
+
+	position: absolute;
+
+	border: 1px solid red;
+
+	z-index: 98;
+
+	background: #ffffff
+	}

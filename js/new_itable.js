@@ -14,6 +14,8 @@ function iTable(tContainer, tSettings, tabs) {
 
     var header, footer, curIndex, tools;
 
+    var moveLast;
+
 }
 
 iTable.prototype.createContent = function (tid) {
@@ -197,17 +199,20 @@ iTable.prototype.createTip = function () {
 }
 
 iTable.prototype.frameSelect = function () {
-    var coords;
+
     var that=this;
+    var coords;
     //$(this.container).on('mousedown', areaChoose);
+
     $('.dataTable tr td').each(function(){
+
+
         $(this).on('mouseover',function(){
             coords=$(this);
         });
     });
 
-    $(this.container).on('mousedown',function(){
-        var originTd=$(coords);
+    $(this.container).on('mousedown',function(event){
 
         var ev = window.event || arguments[0];
 
@@ -284,10 +289,6 @@ iTable.prototype.frameSelect = function () {
 
             }
 
-
-
-
-
             $('.dataTable tr td').removeClass('picked');
 
             if(xMin<=xMax&&yMin<=yMax){
@@ -333,15 +334,22 @@ iTable.prototype.frameSelect = function () {
 
             }
             that.setBlueBorder($('.picked'));
-          //  that.wBorderSelect($('.picked'));
+            //  that.wBorderSelect($('.picked'));
 
 
         });
         $(that.container).on('mouseup',function(){
             $(this).off('mousemove');
-        })
+        });
+
     });
 }
+
+
+iTable.prototype.getArea=function(event){
+
+}
+
 
 iTable.prototype.textArea=function(){
      var div=$('<div class="itableInputHolder"></div>');
@@ -351,13 +359,19 @@ iTable.prototype.textArea=function(){
 
 }
 
-iTable.prototype.setTextarea=function(x,y){
-      var x=x,y=y;
+iTable.prototype.setTextarea=function(x,y,w,h,val){
+
       $('.itableInputHolder').css({
-         'left':'x',
-         'top':'y'
+         'left':x-2,
+         'top':y-6,
+
       });
 
+    $('.itableInput').css({
+        'width':w,
+        'height':h
+    });
+      $('.itableInput').html(val);
 }
 
 
@@ -388,6 +402,7 @@ function typing(event) {
 
     var sNode = $('.picked');
 
+    var tdText = $(sNode).text();
     var callZ = event.data.callz;
 
     if ($('.picked').length == 1) {
@@ -400,13 +415,13 @@ function typing(event) {
 
         var that = $(this);
 
-        var tdText = $('.picked').text();
+
 
         var tdWidth = $('.picked').width();
 
         var tdHeight = $('.picked').height();
 
-
+        console.log(tdText);
 
         var tdInput = $("<input type='text'  id='tdInput' class='tdInput'  value='" + tdText + "'>");
 
@@ -540,7 +555,7 @@ function typing(event) {
 
                 $('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('picked');
 
-                callZ.wBorder($('td[cols=' + nextX + '][rows=' + nextY + ']'));
+                callZ.setBlueBorder($('td[cols=' + nextX + '][rows=' + nextY + ']'));
 
             } else {
 
@@ -564,7 +579,7 @@ function typing(event) {
 
                             $('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('picked');
 
-                            callZ.wBorder($('.picked'));
+                            callZ.setBlueBorder($('.picked'));
 
                         }
 
@@ -574,7 +589,7 @@ function typing(event) {
 
                             $('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('picked');
 
-                            callZ.wBorder($('.picked'));
+                            callZ.setBlueBorder($('.picked'));
 
                         }
 
@@ -584,7 +599,7 @@ function typing(event) {
 
                             $('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('picked');
 
-                            callZ.wBorder($('.picked'));
+                            callZ.setBlueBorder($('.picked'));
 
                         }
 
@@ -594,7 +609,7 @@ function typing(event) {
 
                             $('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked');
 
-                            callZ.wBorder($('.picked'));
+                            callZ.setBlueBorder($('.picked'));
 
                         }
 
@@ -714,7 +729,7 @@ function typing(event) {
 
                 $('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('picked');
 
-                callZ.wBorder($('td[cols=' + nextX + '][rows=' + nextY + ']'));
+                callZ.setBlueBorder($('td[cols=' + nextX + '][rows=' + nextY + ']'));
 
             } else {
 
@@ -738,7 +753,7 @@ function typing(event) {
 
                             $('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('picked');
 
-                            callZ.wBorder($('.picked'));
+                            callZ.setBlueBorder($('.picked'));
 
                         }
 
@@ -748,7 +763,7 @@ function typing(event) {
 
                             $('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('picked');
 
-                            callZ.wBorder($('.picked'));
+                            callZ.setBlueBorder($('.picked'));
 
                         }
 
@@ -758,7 +773,7 @@ function typing(event) {
 
                             $('td[cols=' + nextX + '][rows=' + _nowY + ']').addClass('picked');
 
-                            callZ.wBorder($('.picked'));
+                            callZ.setBlueBorder($('.picked'));
 
                         }
 
@@ -768,7 +783,7 @@ function typing(event) {
 
                             $('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked');
 
-                            callZ.wBorder($('.picked'));
+                            callZ.setBlueBorder($('.picked'));
 
                         }
 
@@ -894,7 +909,7 @@ function typing(event) {
 
                 $('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('picked');
 
-                callZ.wBorder($('.picked'));
+                callZ.setBlueBorder($('.picked'));
 
             } else {
 
@@ -924,7 +939,7 @@ function typing(event) {
 
                             $('td[cols=' + (nextX - lastColspan) + '][rows=' + nextY + ']').addClass('picked');
 
-                            callZ.wBorder($('td[cols=' + (nextX - lastColspan) + '][rows=' + nextY + ']'));
+                            callZ.setBlueBorder($('td[cols=' + (nextX - lastColspan) + '][rows=' + nextY + ']'));
 
                         }
 
@@ -940,7 +955,7 @@ function typing(event) {
 
                                     $('td[cols=' + (nextX - nextColspan + 1) + '][rows=' + nextY + ']').addClass('picked');
 
-                                    callZ.wBorder($('.picked'));
+                                    callZ.setBlueBorder($('.picked'));
 
                                 }
 
@@ -960,7 +975,7 @@ function typing(event) {
 
                                     $('td[cols=' + nextX + '][rows=' + _nowY + ']').addClass('picked');
 
-                                    callZ.wBorder($('.picked'));
+                                    callZ.setBlueBorder($('.picked'));
 
                                 }
 
@@ -980,7 +995,7 @@ function typing(event) {
 
                                     $('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked');
 
-                                    callZ.wBorder($('.picked'));
+                                    callZ.setBlueBorder($('.picked'));
 
                                 }
 
@@ -1110,7 +1125,7 @@ function typing(event) {
 
                 $('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('picked');
 
-                callZ.wBorder($('.picked'));
+                callZ.setBlueBorder($('.picked'));
 
             } else {
 
@@ -1140,7 +1155,7 @@ function typing(event) {
 
                             $('td[cols=' + nextX + '][rows=' + (nextY - lastRowspan) + ']').addClass('picked');
 
-                            callZ.wBorder($('.picked'));
+                            callZ.setBlueBorder($('.picked'));
 
                         }
 
@@ -1156,7 +1171,7 @@ function typing(event) {
 
                                     $('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('picked');
 
-                                    callZ.wBorder($('.picked'));
+                                    callZ.setBlueBorder($('.picked'));
 
                                 }
 
@@ -1176,7 +1191,7 @@ function typing(event) {
 
                                     $('td[cols=' + nextX + '][rows=' + _nowY + ']').addClass('picked');
 
-                                    callZ.wBorder($('.picked'));
+                                    callZ.setBlueBorder($('.picked'));
 
                                 }
 
@@ -1196,7 +1211,7 @@ function typing(event) {
 
                                     $('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked');
 
-                                    callZ.wBorder($('.picked'));
+                                    callZ.setBlueBorder($('.picked'));
 
                                 }
 
@@ -1219,6 +1234,8 @@ function typing(event) {
             callZ.lightCoor($('.picked'));
 
         }
+
+
 
         if ($('.picked').length > 0) {
 
@@ -1335,115 +1352,111 @@ iTable.prototype.fillTd = function (tid) {
 
     $('#iTable' + tid).find('tr td').each(function () {
 
-        $(this).dblclick(function () {
 
-            var tdWidth = $(this).width();
+       $(this).on('dblclick',{target:that,id:tid},that.tdDbclick);
 
-            var tdHeight = $(this).height();
-
-            var tdText = $(this).text();
-
-            var tdInput = $("<input type='text'  id='tdInput' class='tdInput'  value='" + tdText + "'>");
-
-            tdInput.width(tdWidth - 2);
-
-            tdInput.height(tdHeight - 2);
-
-            $(this).html(tdInput);
-
-            set_text_value_position(tdInput, -1);
-
-            $('.tdInput').keyup(function () {
-
-                $('#ip_fx').val($(this).val());
-
-            });
-
-            $('.tdInput').blur(function () {
-
-                var content = $('.tdInput').val();
-
-                if (tdText == content) {
-
-                    $(this).parent().html(content);
-
-                } else {
-
-                    $(this).parent().html(content);
-
-                }
-
-                $('.tdInput').remove();
-
-
-            });
-
-            $(".tdInput").keyup(function (event) {
-
-                $(document).off('keydown');
-
-                if (event.keyCode == 13) {
-
-                    $('.tdInput').blur();
-
-                    that.keyCursor();
-
-                }
-
-            });
-
-            $(".tdInput").click(function (event) {
-
-                return false;
-
-            });
-
-
-
-            $('#iTable' + tid + ' tr td').not($(this)).click(function (event) {
-
-                $('.tdInput').blur();
-
-            });
-
-        });
-
-        $(this).click(function () {
-
-            var tr = $(this).parent();
-
-            $('.picked').removeClass('picked');
-
-          //  $('.wBorder').remove();
-
-            $(this).addClass('picked');
-            that.setBlueBorder($(this));
-          //  that.wBorder($(this));
-
-
-            var xCoo = Number($(this).attr('cols')) - 1,
-
-                yCoo = Number($(this).attr('rows')) - 1;
-
-            if ($('.disbox').length > 0) {
-
-                $('.disbox').text(IntToChr(xCoo) + String(yCoo + 1));
-
-            }
-
-            that.tdTofx($(this));
-
-            that.lightCoor($(this));
-
-            $('#ip_fx').blur();
-
-        });
+       $(this).on('click',{target:that},that.tdClick);
 
 
 
     });
 
 }
+
+
+iTable.prototype.tdClick=function(event){
+
+    $('.picked').removeClass('picked');
+    $(this).addClass('picked');
+    event.data.target.setBlueBorder($(this));
+
+
+
+    var xCoo = Number($(this).attr('cols')) - 1,
+
+        yCoo = Number($(this).attr('rows')) - 1;
+
+    if ($('.disbox').length > 0) {
+
+        $('.disbox').text(IntToChr(xCoo) + String(yCoo + 1));
+
+    }
+    event.data.target.tdTofx($(this));
+    event.data.target.lightCoor($(this));
+    $('#ip_fx').blur();
+}
+
+iTable.prototype.tdDbclick=function(event){
+
+    var tdWidth = $(this).width();
+    var tdHeight = $(this).height();
+
+    var tdLeft=$(this).offset().left;
+    var tdTop=$(this).offset().top-$('.header').height()-tdHeight;
+
+    var tdText = $(this).text();
+
+    event.data.target.setTextarea(tdLeft,tdTop,tdWidth,tdHeight,tdText);
+
+    $('.itableInput').focus();
+    $('.itableInput').keyup(function () {
+
+        $('#ip_fx').val($(this).val());
+
+    });
+
+    $('.itableInput').blur(function () {
+
+        var content = $('.itableInput').val();
+
+        if (tdText == content) {
+
+            $(this).parent().html(content);
+
+        } else {
+
+            $(this).parent().html(content);
+
+        }
+
+
+
+
+    });
+
+    $(".itableInput").keyup(function (event) {
+
+        $(document).off('keydown');
+
+        if (event.keyCode == 13) {
+
+            $(".itableInput").blur();
+
+            event.data.target.keyCursor();
+
+        }
+        // if(event.keyCode==37||event.keyCode==38||event.keyCode==39||event.keyCode==40){
+        //
+        // }else{
+        //     event.data.target.keyCursor();
+        // }
+
+    });
+
+    $(".itableInput").click(function () {
+
+        return false;
+
+    });
+
+    $('#iTable' + event.data.id + ' tr td').not($(this)).click(function (event) {
+
+        $('.itableInput').blur();
+
+    });
+   stopPropagation();
+}
+
 
 iTable.prototype.wBorderSelect = function (obj) {
 
@@ -1662,9 +1675,7 @@ iTable.prototype.blueBorder=function(){
 
         'width': '2px',
 
-
         'position': 'absolute',
-
 
         'background': 'rgb(82, 146, 247)'
 
@@ -1676,7 +1687,6 @@ iTable.prototype.blueBorder=function(){
 
     bottomB.css({
 
-
         'height': '2px',
 
         'position': 'absolute',
@@ -1686,8 +1696,6 @@ iTable.prototype.blueBorder=function(){
     });
 
     var corner = $('<div class="scorner"></div>');
-
-
 
     //红色
 
@@ -1832,9 +1840,6 @@ iTable.prototype.setBlueBorder=function(obj){
 
 
                $('.wBorder').css({
-                   'width': totalWidth,
-
-                   'height': height + 6,
 
                    'top': topMin,
 
@@ -3146,7 +3151,6 @@ iTable.prototype.insertCol = function () {
 
         that.keyCursor();
 
-        //that.updateTop();
 
     });
 
@@ -3242,7 +3246,6 @@ iTable.prototype.insertRow = function () {
 
                     if (rows == yIndex) {
 
-                        //console.log(rows,j);
 
                         if (j == 2) {
 
@@ -3304,7 +3307,7 @@ iTable.prototype.insertRow = function () {
 
         that.keyCursor();
 
-        //that.updateLeft();
+
 
     });
 
@@ -3548,13 +3551,6 @@ iTable.prototype.formula = function (ways) {
 
         'top': top,
 
-        'position': 'absolute',
-
-        'border': '1px solid red',
-
-        'z-index': '98',
-
-        'background': '#ffffff'
 
     });
 
