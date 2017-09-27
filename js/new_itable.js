@@ -42,7 +42,7 @@ iTable.prototype.createContent = function (tid) {
 
         for (var j = 0; j < this.cellCount + 1; j++) {
 
-            var td = this.createTd('', '');
+            var td = this.createTd('','');
 
             if (j == 0) {
 
@@ -358,27 +358,29 @@ iTable.prototype.textArea=function(){
 }
 
 iTable.prototype.setTextarea=function(visible){
+    if($('.picked').length>0){
+        var w = $('.picked').width();
+        var h = $('.picked:last').height();
+        var x = $('.picked:last').offset().left+$(this.container).scrollLeft();
+        var y=$('.picked:last').offset().top+$(this.container).scrollTop()-$('.header').height()-h;
 
-    var w = $('.picked').width();
-    var h = $('.picked:last').height();
-    var x = $('.picked:last').offset().left+$(this.container).scrollLeft();
-    var y=$('.picked:last').offset().top+$(this.container).scrollTop()-$('.header').height()-h;
+        if(visible==1){
+            $('.itableInputHolder').show();
+        }else{
+            $('.itableInputHolder').hide();
+        }
 
-      if(visible==1){
-          $('.itableInputHolder').show();
-      }else{
-          $('.itableInputHolder').hide();
-      }
+        $('.itableInputHolder').css({
+            'left':x-2,
+            'top':y-6,
+        });
 
-      $('.itableInputHolder').css({
-         'left':x-2,
-         'top':y-6,
-      });
+        $('.itableInput').css({
+            'width':w,
+            'height':h
+        });
+    }
 
-    $('.itableInput').css({
-        'width':w,
-        'height':h
-    });
 
 }
 iTable.prototype.hideTextarea=function(){
@@ -413,19 +415,6 @@ iTable.prototype.fillTextarea=function(etype,val){
         default:
             console.log('moren');
     }
-
-    //
-    // $(".itableInput").keyup(function (event) {
-    //
-    //     $('#ip_fx').val($(this).val());
-    //     $(document).off('keydown');
-    //     if (event.keyCode == 13) {
-    //         $('.itableInput').blur();
-    //         callz.keyCursor();
-    //     }
-    //     stopPropagation();
-    // });
-
 }
 
 
@@ -501,9 +490,6 @@ function typing(event) {
         if (event.keyCode == '13' || event.keyCode == '40') {
 
             var tdText = $('picked').text();
-            //
-            // callZ.fillTextarea(tdText);
-            // console.log(event.target);
             if(event.target==$('.itableInput')[0]){
                 $('.picked').html($('.itableInput').val());
                 $('.itableInput').val('');
@@ -572,14 +558,19 @@ function typing(event) {
 
             var nextY = nowY + 1;
 
+            var id='#'+nextY+'-'+nextX;
 
-            if ($('td[cols=' + nextX + '][rows=' + nextY + ']').length > 0) {
+            if ($(id).length > 0) {
 
                 $(sNode).removeClass('picked');
 
-                $('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('picked');
+               // var id='#'+nextY+'-'+nextX;
 
-                callZ.setBlueBorder($('td[cols=' + nextX + '][rows=' + nextY + ']'));
+                $(id).addClass('picked');
+
+              //  $('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('picked');
+
+                callZ.setBlueBorder($(id));
 
                 callZ.setTextarea(0);
 
@@ -592,20 +583,28 @@ function typing(event) {
                 while (_nowY >= 0) {
 
                     while (_nowX >= 0) {
+                        var nid='#'+_nowY+'-'+_nowX;
 
-                        var nextRowspan = parseInt($('td[cols=' + _nowX + '][rows=' + _nowY + ']').attr('rowspan'));
+                        // var nextRowspan = parseInt($('td[cols=' + _nowX + '][rows=' + _nowY + ']').attr('rowspan'));
 
-                        var nextColspan = parseInt($('td[cols=' + _nowX + '][rows=' + _nowY + ']').attr('colspan'));
+                        var nextRowspan = parseInt($(nid).attr('rowspan'));
+
+                        // var nextColspan = parseInt($('td[cols=' + _nowX + '][rows=' + _nowY + ']').attr('colspan'));
+
+                        var nextColspan = parseInt($(nid).attr('colspan'));
+
 
                         $(sNode).removeClass('picked');
 
                         //下一个单元格行列不合并
 
                         if (!nextRowspan && !nextColspan) {
+                            var nid='#'+nextY+'-'+nextX;
 
-                            $('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('picked');
+                            // $('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('picked');
+                            $(nid).addClass('picked');
 
-                            callZ.setBlueBorder($('.picked'));
+                            callZ.setBlueBorder($(nid));
 
                             callZ.setTextarea(0);
 
@@ -615,9 +614,13 @@ function typing(event) {
 
                         if (!nextRowspan && nextColspan) {
 
-                            $('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('picked');
+                            var nid='#'+nextY+'-'+_nowX;
 
-                            callZ.setBlueBorder($('.picked'));
+                            // $('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('picked');
+
+                            $(nid).addClass('picked');
+
+                            callZ.setBlueBorder($(nid));
 
                             callZ.setTextarea(0);
 
@@ -627,9 +630,12 @@ function typing(event) {
 
                         if (nextRowspan && !nextColspan) {
 
-                            $('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('picked');
+                            var nid='#'+nextY+'-'+_nowX;
 
-                            callZ.setBlueBorder($('.picked'));
+                            // $('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('picked');
+                            $(nid).addClass('picked');
+
+                            callZ.setBlueBorder($(nid));
 
                             callZ.setTextarea(0);
 
@@ -638,10 +644,13 @@ function typing(event) {
                         //下一个单元格行列合并
 
                         if (nextRowspan && nextColspan) {
+                            var nid='#'+_nowY+'-'+_nowX;
 
-                            $('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked');
+                            // $('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked');
 
-                            callZ.setBlueBorder($('.picked'));
+                            $(nid).addClass('picked');
+
+                            callZ.setBlueBorder($(nid));
 
                             callZ.setTextarea(0);
 
@@ -744,13 +753,17 @@ function typing(event) {
 
             var nextY = event.data.fixY;
 
-            if ($('td[cols=' + nextX + '][rows=' + nextY + ']').length > 0) {
+            var id='#'+nextY+'-'+nextX;
+
+            if ($(id).length > 0) {
 
                 $(sNode).removeClass('picked');
 
-                $('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('picked');
+                // $('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('picked');
 
-                callZ.setBlueBorder($('td[cols=' + nextX + '][rows=' + nextY + ']'));
+                $(id).addClass('picked');
+
+                callZ.setBlueBorder($(id));
 
                 callZ.setTextarea(0);
 
@@ -764,9 +777,15 @@ function typing(event) {
 
                     while (_nowY >= 0) {
 
-                        var nextRowspan = parseInt($('td[cols=' + _nowX + '][rows=' + _nowY + ']').attr('rowspan'));
+                        var nid='#'+_nowY+'-'+_nowX;
 
-                        var nextColspan = parseInt($('td[cols=' + _nowX + '][rows=' + _nowY + ']').attr('colspan'));
+                   //     var nextRowspan = parseInt($('td[cols=' + _nowX + '][rows=' + _nowY + ']').attr('rowspan'));
+
+                        var nextRowspan = parseInt($(nid).attr('rowspan'));
+
+                        // var nextColspan = parseInt($('td[cols=' + _nowX + '][rows=' + _nowY + ']').attr('colspan'));
+
+                        var nextColspan = parseInt($(nid).attr('colspan'));
 
                         $(sNode).removeClass('picked');
 
@@ -774,9 +793,13 @@ function typing(event) {
 
                         if (!nextRowspan && !nextColspan) {
 
-                            $('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('picked');
+                            var nid='#'+nextY+'-'+nextX;
 
-                            callZ.setBlueBorder($('.picked'));
+                           // $('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('picked');
+
+                            $(nid).addClass('picked');
+
+                            callZ.setBlueBorder($(nid));
 
                             callZ.setTextarea(0);
 
@@ -786,9 +809,13 @@ function typing(event) {
 
                         if (!nextRowspan && nextColspan) {
 
-                            $('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('picked');
+                            var nid='#'+nextY+'-'+_nowX;
 
-                            callZ.setBlueBorder($('.picked'));
+                           // $('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('picked');
+
+                            $(nid).addClass('picked');
+
+                            callZ.setBlueBorder($(nid));
 
                             callZ.setTextarea(0);
 
@@ -798,9 +825,13 @@ function typing(event) {
 
                         if (nextRowspan && !nextColspan) {
 
-                            $('td[cols=' + nextX + '][rows=' + _nowY + ']').addClass('picked');
+                            var nid='#'+_nowY+'-'+nextX;
 
-                            callZ.setBlueBorder($('.picked'));
+                        //    $('td[cols=' + nextX + '][rows=' + _nowY + ']').addClass('picked');
+
+                            $(nid).addClass('picked');
+
+                            callZ.setBlueBorder($(nid));
 
                             callZ.setTextarea(0);
 
@@ -810,9 +841,13 @@ function typing(event) {
 
                         if (nextRowspan && nextColspan) {
 
-                            $('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked');
+                            var nid='#'+_nowY+'-'+_nowX;
 
-                            callZ.setBlueBorder($('.picked'));
+                         //   $('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked');
+
+                            $(nid).addClass('picked');
+
+                            callZ.setBlueBorder($(nid));
 
                             callZ.setTextarea(0);
 
@@ -921,13 +956,17 @@ function typing(event) {
 
             var nextY = parseInt(event.data.fixY);
 
-            if ($('td[cols=' + nextX + '][rows=' + nextY + ']').length > 0) {
+            var id='#'+nextY+'-'+nextX;
+
+            if ($(id).length > 0) {
 
                 $(sNode).removeClass('picked');
 
-                $('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('picked');
+              //  $('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('picked');
 
-                callZ.setBlueBorder($('.picked'));
+                $(id).addClass('picked');
+
+                callZ.setBlueBorder($(id));
 
                 callZ.setTextarea(0);
 
@@ -942,10 +981,11 @@ function typing(event) {
                     _nowX = nowX;
 
                     while (_nowX >= 0) {
+                        var _nid='#'+_nowY+'-'+_nowX;
 
-                        var nextRowspan = parseInt($('td[cols=' + _nowX + '][rows=' + _nowY + ']').attr('rowspan'));
+                        var nextRowspan = parseInt($(_nid).attr('rowspan'));
 
-                        var nextColspan = parseInt($('td[cols=' + _nowX + '][rows=' + _nowY + ']').attr('colspan'));
+                        var nextColspan = parseInt($(_nid).attr('colspan'));
 
                         var lastColspan = parseInt($(sNode).attr('colspan')) - 1;
 
@@ -957,11 +997,15 @@ function typing(event) {
 
                         if (!nextRowspan && !nextColspan) {
 
-                            $('td[cols=' + (nextX - lastColspan) + '][rows=' + nextY + ']').addClass('picked');
+                            var nid='#'+nextY+'-'+(nextX - lastColspan);
 
-                            callZ.setBlueBorder($('td[cols=' + (nextX - lastColspan) + '][rows=' + nextY + ']'));
+                          //  $('td[cols=' + (nextX - lastColspan) + '][rows=' + nextY + ']').addClass('picked');
+                            $(nid).addClass('picked');
+
+                            callZ.setBlueBorder($(nid));
 
                             callZ.setTextarea(0);
+
 
                         }
 
@@ -969,15 +1013,18 @@ function typing(event) {
 
                         if (!nextRowspan && nextColspan) {
 
-                            if ($('td[cols=' + (nextX - nextColspan + 1) + '][rows=' + nextY + ']').length > 0) {
+                            var nid='#'+nextY+'-'+(nextX - nextColspan + 1);
+
+                            if ($(nid).length > 0) {
 
                                 r1++;
 
                                 if (r1 == 1) {
 
-                                    $('td[cols=' + (nextX - nextColspan + 1) + '][rows=' + nextY + ']').addClass('picked');
+                               //     $('td[cols=' + (nextX - nextColspan + 1) + '][rows=' + nextY + ']').addClass('picked');
+                                    $(nid).addClass('picked');
 
-                                    callZ.setBlueBorder($('.picked'));
+                                    callZ.setBlueBorder($(nid));
 
                                     callZ.setTextarea(0);
 
@@ -990,16 +1037,20 @@ function typing(event) {
                         //下一个单元格只行合并
 
                         if (nextRowspan && !nextColspan) {
+                            var nid='#'+_nowY+'-'+nextX;
 
-                            if ($('td[cols=' + nextX + '][rows=' + _nowY + ']').length > 0) {
+                            if ($(nid).length > 0) {
 
                                 r2++;
 
                                 if (r2 == 1) {
 
-                                    $('td[cols=' + nextX + '][rows=' + _nowY + ']').addClass('picked');
 
-                                    callZ.setBlueBorder($('.picked'));
+
+                              //      $('td[cols=' + nextX + '][rows=' + _nowY + ']').addClass('picked');
+                                    $(nid).addClass('picked');
+
+                                    callZ.setBlueBorder($(nid));
 
                                     callZ.setTextarea(0);
 
@@ -1012,16 +1063,18 @@ function typing(event) {
                         //下一个单元格行列合并
 
                         if (nextRowspan && nextColspan) {
-
-                            if ($('td[cols=' + _nowX + '][rows=' + _nowY + ']').length > 0) {
+                            var nid='#'+_nowY+'-'+_nowX;
+                            if ($(nid).length > 0) {
 
                                 r3++;
 
                                 if (r3 == 1) {
 
-                                    $('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked');
 
-                                    callZ.setBlueBorder($('.picked'));
+                                //    $('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked');
+                                    $(nid).addClass('picked');
+
+                                    callZ.setBlueBorder($(nid));
 
                                     callZ.setTextarea(0);
 
@@ -1134,13 +1187,16 @@ function typing(event) {
 
             var nextY = nowY - 1;
 
-            if ($('td[cols=' + nextX + '][rows=' + nextY + ']').length > 0) {
+            var id='#'+nextY+'-'+nextX;
+
+            if ($(id).length > 0) {
 
                 $(sNode).removeClass('picked');
 
-                $('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('picked');
+             //   $('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('picked');
+                $(id).addClass('picked');
 
-                callZ.setBlueBorder($('.picked'));
+                callZ.setBlueBorder($(id));
 
                 callZ.setTextarea(0);
 
@@ -1155,10 +1211,11 @@ function typing(event) {
                     _nowY = nowY;
 
                     while (_nowY >= 0) {
+                        var _nid='#'+_nowY+'-'+_nowX;
 
-                        var nextRowspan = parseInt($('td[cols=' + _nowX + '][rows=' + _nowY + ']').attr('rowspan'));
+                        var nextRowspan = parseInt($(_nid).attr('rowspan'));
 
-                        var nextColspan = parseInt($('td[cols=' + _nowX + '][rows=' + _nowY + ']').attr('colspan'));
+                        var nextColspan = parseInt($(_nid).attr('colspan'));
 
                         var lastColspan = parseInt($(sNode).attr('colspan')) - 1;
 
@@ -1170,9 +1227,13 @@ function typing(event) {
 
                         if (!nextRowspan && !nextColspan) {
 
-                            $('td[cols=' + nextX + '][rows=' + (nextY - lastRowspan) + ']').addClass('picked');
+                            var nid='#'+(nextY - lastRowspan)+'-'+nextX;
 
-                            callZ.setBlueBorder($('.picked'));
+                            //$('td[cols=' + nextX + '][rows=' + (nextY - lastRowspan) + ']').addClass('picked');
+
+                            $(nid).addClass('picked');
+
+                            callZ.setBlueBorder($(nid));
 
                             callZ.setTextarea(0);
 
@@ -1181,16 +1242,21 @@ function typing(event) {
                         //下一个单元格只列合并
 
                         if (!nextRowspan && nextColspan) {
+                            var nid='#'+nextY+'-'+_nowX;
 
-                            if ($('td[cols=' + _nowX + '][rows=' + nextY + ']').length > 0) {
+                            if ($(nid).length > 0) {
 
                                 u1++;
 
                                 if (u1 == 1) {
 
-                                    $('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('picked');
 
-                                    callZ.setBlueBorder($('.picked'));
+
+                                    $(nid).addClass('picked');
+
+                                //    $('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('picked');
+
+                                    callZ.setBlueBorder($(nid));
 
                                     callZ.setTextarea(0);
 
@@ -1204,15 +1270,19 @@ function typing(event) {
 
                         if (nextRowspan && !nextColspan) {
 
-                            if ($('td[cols=' + nextX + '][rows=' + _nowY + ']').length > 0) {
+                            var nid='#'+_nowY+'-'+nextX;
+
+                            if ($(nid).length > 0) {
 
                                 u2++;
 
                                 if (u2 == 1) {
 
-                                    $('td[cols=' + nextX + '][rows=' + _nowY + ']').addClass('picked');
+                                   // $('td[cols=' + nextX + '][rows=' + _nowY + ']').addClass('picked');
 
-                                    callZ.setBlueBorder($('.picked'));
+                                    $(nid).addClass('picked');
+
+                                    callZ.setBlueBorder($(nid));
 
                                     callZ.setTextarea(0);
 
@@ -1226,15 +1296,20 @@ function typing(event) {
 
                         if (nextRowspan && nextColspan) {
 
-                            if ($('td[cols=' + _nowX + '][rows=' + _nowY + ']').length > 0) {
+                            var nid='#'+_nowY+'-'+_nowX;
+
+                            if ($(nid).length > 0) {
 
                                 u3++;
 
                                 if (u3 == 1) {
 
-                                    $('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked');
 
-                                    callZ.setBlueBorder($('.picked'));
+                                    //$('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked');
+
+                                    $(nid).addClass('picked');
+
+                                    callZ.setBlueBorder($(nid));
 
                                     callZ.setTextarea(0);
 
