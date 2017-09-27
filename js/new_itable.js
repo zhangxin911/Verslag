@@ -2165,11 +2165,12 @@ iTable.prototype.cornerCopy=function(){
                 _y = _y + stop - disHeight;
 
 
-                if(_x-oX>=40&&_x-oX<=tdWidth){
+                if(_x-oX>=0){
 
                     if(_y-oY>=0&&_y-oY<=tdHeight){
                          //E
                         xMin=onCols,yMin=onRows,yMax=yMin;
+
 
                     }
                     if(_y-oY>=0&&_y-oY>tdHeight){
@@ -2180,38 +2181,35 @@ iTable.prototype.cornerCopy=function(){
                     if(_y-oY<0&&_y-oY<=tdHeight){
                         //E-N
                         xMin=onCols,yMin=onRows,yMax=yMin;
+
                     }
 
                     if(_y-oY<0&&_y-oY>tdHeight){
                         //E-N
-                        console.log('N');
+                       // console.log('N');
                     }
-
-                    // if(_y-oY>0&&_y-oY>tdHeight){
-                    //     //E-S 东南
-                    //     xMin=onCols,yMin=onRows,yMax=yMin;
-                    //
-                    // }else{
-                    //     //E-N 东北
-                    //     xMin=onCols,yMin=onRows + onRspan-1,yMax=yMin;
-                    //
-                    //
-                    // }
-                     // if(_y-oY==0){
-                     //     console.log('q');
-                     // }
                 }else{
+                    if(_y-oY>=0&&_y-oY<=tdHeight){
+                        //E
+                        xMin=onCols,yMin=onRows,yMax=yMin;
 
-                    if(_y-oY>0){
-                        // W-S 西南
-                        xMin=onCols+onCspan-1,yMin=onRows, xMax=xMin;
-                    }else{
-                        //W-N  西北
-                        console.log('w');
-                        xMin=onCols+onCspan-1,yMin=onRows+onRspan-1;
+                    }
+                    if(_y-oY>=0&&_y-oY>tdHeight){
+                        //E-S
+                        xMin=onCols,yMin=onRows,xMax=xMin;
+
+                    }
+                    if(_y-oY<0&&_y-oY<=tdHeight){
+                        //E-N
+                        xMin=onCols,yMin=onRows,xMax=xMin;
+
                     }
 
-
+                    // if(_y-oY<0&&_y-oY<tdHeight){
+                    //     //E-N
+                    //
+                    //     xMin=onCols,yMin=onRows,xMax=xMin;
+                    // }
                 }
 
 
