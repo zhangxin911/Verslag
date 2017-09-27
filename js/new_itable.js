@@ -205,8 +205,6 @@ iTable.prototype.frameSelect = function () {
     //$(this.container).on('mousedown', areaChoose);
 
     $('.dataTable tr td').each(function(){
-
-
         $(this).on('mouseover',function(){
             coords=$(this);
         });
@@ -334,7 +332,7 @@ iTable.prototype.frameSelect = function () {
 
             }
             that.setBlueBorder($('.picked'));
-            //  that.wBorderSelect($('.picked'));
+
 
 
         });
@@ -359,21 +357,89 @@ iTable.prototype.textArea=function(){
 
 }
 
-iTable.prototype.setTextarea=function(x,y,w,h,val){
+iTable.prototype.setTextarea=function(visible){
+
+    var w = $('.picked').width();
+    var h = $('.picked:last').height();
+    var x = $('.picked:last').offset().left+$(this.container).scrollLeft();
+    var y=$('.picked:last').offset().top+$(this.container).scrollTop()-$('.header').height()-h;
+
+      if(visible==1){
+          $('.itableInputHolder').show();
+      }else{
+          $('.itableInputHolder').hide();
+      }
 
       $('.itableInputHolder').css({
          'left':x-2,
          'top':y-6,
-
       });
 
     $('.itableInput').css({
         'width':w,
         'height':h
     });
-      $('.itableInput').html(val);
-}
 
+}
+iTable.prototype.hideTextarea=function(){
+    $('.itableInputHolder').hide();
+
+}
+iTable.prototype.fillTextarea=function(etype,val){
+
+    var that=this;
+    switch(etype)
+    {
+        case 'dblclick':
+            $('.itableInput').val('');
+            $(document).off('keydown');
+            $('.itableInput').focus().val(val);
+            $(".itableInput").keyup(function (event) {
+                $('#ip_fx').val($(this).val());
+                if (event.keyCode == 13) {
+                    var content = $('.itableInput').val();
+                    $('.picked').html(content);
+                    $('.itableInput').blur();
+                    that.keyCursor();
+                    that.hideTextarea();
+                }
+                event.stopPropagation();
+            });
+
+            break;
+        case 'keymove':
+            console.log('key');
+            $('.itableInput').focus();
+            // $(document).keyup(function (event) {
+            //     if (event.keyCode == 13||event.keyCode==40||event.keyCode==37||event.keyCode==38||event.keyCode==39) {
+            //         var content = $('.itableInput').val();
+            //         console.log(content);
+            //
+            //         $('.itableInput').blur(function(){
+            //             $('.picked').html(content);
+            //         });
+            //         that.hideTextarea();
+            //     }
+            //     event.stopPropagation();
+            // });
+            break;
+        default:
+            console.log('moren');
+    }
+
+    //
+    // $(".itableInput").keyup(function (event) {
+    //
+    //     $('#ip_fx').val($(this).val());
+    //     $(document).off('keydown');
+    //     if (event.keyCode == 13) {
+    //         $('.itableInput').blur();
+    //         callz.keyCursor();
+    //     }
+    //     stopPropagation();
+    // });
+
+}
 
 
 iTable.prototype.keyCursor = function () {
@@ -402,7 +468,6 @@ function typing(event) {
 
     var sNode = $('.picked');
 
-    var tdText = $(sNode).text();
     var callZ = event.data.callz;
 
     if ($('.picked').length == 1) {
@@ -412,30 +477,10 @@ function typing(event) {
             return;
 
         }
+        callZ.setTextarea(1);
 
-        var that = $(this);
+        callZ.fillTextarea('keymove');
 
-
-
-        var tdWidth = $('.picked').width();
-
-        var tdHeight = $('.picked').height();
-
-        console.log(tdText);
-
-        var tdInput = $("<input type='text'  id='tdInput' class='tdInput'  value='" + tdText + "'>");
-
-        if (!$('.picked input').length) {
-
-            $('.picked'). html(tdInput);
-
-        }
-
-        tdInput.width(tdWidth - 2);
-
-        tdInput.height(tdHeight - 2);
-
-        tdInput.focus();
 
         var nowX = parseInt($(sNode).attr('cols'));
 
@@ -468,23 +513,14 @@ function typing(event) {
 
         if (event.keyCode == '13' || event.keyCode == '40') {
 
-            if (event.target == $('body')[0]) {
-
-                tdInput.remove();
-
+            var tdText = $('picked').text();
+            //
+            // callZ.fillTextarea(tdText);
+            // console.log(event.target);
+            if(event.target==$('.itableInput')[0]){
+                $('.picked').html($('.itableInput').val());
             }
 
-            if (event.target != $('body')[0]) {
-
-                $('.picked').html($(event.target).val());
-
-                $(event.target).blur(function () {
-
-                    $(this).remove();
-
-                });
-
-            }
 
             if ($(event.data.lastTd)[0] != $(sNode)[0]) {
 
@@ -557,6 +593,8 @@ function typing(event) {
 
                 callZ.setBlueBorder($('td[cols=' + nextX + '][rows=' + nextY + ']'));
 
+                callZ.setTextarea(0);
+
             } else {
 
                 var _nowY = nowY + 1;
@@ -581,6 +619,8 @@ function typing(event) {
 
                             callZ.setBlueBorder($('.picked'));
 
+                            callZ.setTextarea(0);
+
                         }
 
                         //下一个单元格只列合并
@@ -590,6 +630,8 @@ function typing(event) {
                             $('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('picked');
 
                             callZ.setBlueBorder($('.picked'));
+
+                            callZ.setTextarea(0);
 
                         }
 
@@ -601,6 +643,8 @@ function typing(event) {
 
                             callZ.setBlueBorder($('.picked'));
 
+                            callZ.setTextarea(0);
+
                         }
 
                         //下一个单元格行列合并
@@ -610,6 +654,8 @@ function typing(event) {
                             $('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked');
 
                             callZ.setBlueBorder($('.picked'));
+
+                            callZ.setTextarea(0);
 
                         }
 
@@ -633,23 +679,7 @@ function typing(event) {
 
         if (event.keyCode == '39') {
 
-            if (event.target == $('body')[0]) {
 
-                tdInput.remove();
-
-            }
-
-            if (event.target != $('body')[0]) {
-
-                $('.picked').html($(event.target).val());
-
-                $(event.target).blur(function () {
-
-                    $(this).remove();
-
-                });
-
-            }
 
             if ($(event.data.lastTd)[0] != $(sNode)[0]) {
 
@@ -731,6 +761,8 @@ function typing(event) {
 
                 callZ.setBlueBorder($('td[cols=' + nextX + '][rows=' + nextY + ']'));
 
+                callZ.setTextarea(0);
+
             } else {
 
                 var _nowY = nowY + 1;
@@ -755,6 +787,8 @@ function typing(event) {
 
                             callZ.setBlueBorder($('.picked'));
 
+                            callZ.setTextarea(0);
+
                         }
 
                         //下一个单元格只行合并
@@ -764,6 +798,8 @@ function typing(event) {
                             $('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('picked');
 
                             callZ.setBlueBorder($('.picked'));
+
+                            callZ.setTextarea(0);
 
                         }
 
@@ -775,6 +811,8 @@ function typing(event) {
 
                             callZ.setBlueBorder($('.picked'));
 
+                            callZ.setTextarea(0);
+
                         }
 
                         //下一个单元格行列合并
@@ -784,6 +822,8 @@ function typing(event) {
                             $('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked');
 
                             callZ.setBlueBorder($('.picked'));
+
+                            callZ.setTextarea(0);
 
                         }
 
@@ -813,23 +853,7 @@ function typing(event) {
 
                 r3 = 0;
 
-            if (event.target == $('body')[0]) {
 
-                tdInput.remove();
-
-            }
-
-            if (event.target != $('body')[0]) {
-
-                $('.picked').html($(event.target).val());
-
-                $(event.target).blur(function () {
-
-                    $(this).remove();
-
-                });
-
-            }
 
             if ($(event.data.lastTd)[0] != $(sNode)[0]) {
 
@@ -911,6 +935,8 @@ function typing(event) {
 
                 callZ.setBlueBorder($('.picked'));
 
+                callZ.setTextarea(0);
+
             } else {
 
                 var _nowY = nowY;
@@ -941,6 +967,8 @@ function typing(event) {
 
                             callZ.setBlueBorder($('td[cols=' + (nextX - lastColspan) + '][rows=' + nextY + ']'));
 
+                            callZ.setTextarea(0);
+
                         }
 
                         //下一个单元格只列合并
@@ -956,6 +984,8 @@ function typing(event) {
                                     $('td[cols=' + (nextX - nextColspan + 1) + '][rows=' + nextY + ']').addClass('picked');
 
                                     callZ.setBlueBorder($('.picked'));
+
+                                    callZ.setTextarea(0);
 
                                 }
 
@@ -977,6 +1007,8 @@ function typing(event) {
 
                                     callZ.setBlueBorder($('.picked'));
 
+                                    callZ.setTextarea(0);
+
                                 }
 
                             }
@@ -996,6 +1028,8 @@ function typing(event) {
                                     $('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked');
 
                                     callZ.setBlueBorder($('.picked'));
+
+                                    callZ.setTextarea(0);
 
                                 }
 
@@ -1029,23 +1063,7 @@ function typing(event) {
 
                 u3 = 0;
 
-            if (event.target == $('body')[0]) {
 
-                tdInput.remove();
-
-            }
-
-            if (event.target != $('body')[0]) {
-
-                $('.picked').html($(event.target).val());
-
-                $(event.target).blur(function () {
-
-                    $(this).remove();
-
-                });
-
-            }
 
             if ($(event.data.lastTd)[0] != $(sNode)[0]) {
 
@@ -1127,6 +1145,8 @@ function typing(event) {
 
                 callZ.setBlueBorder($('.picked'));
 
+                callZ.setTextarea(0);
+
             } else {
 
                 var _nowY = nowY;
@@ -1157,6 +1177,8 @@ function typing(event) {
 
                             callZ.setBlueBorder($('.picked'));
 
+                            callZ.setTextarea(0);
+
                         }
 
                         //下一个单元格只列合并
@@ -1172,6 +1194,8 @@ function typing(event) {
                                     $('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('picked');
 
                                     callZ.setBlueBorder($('.picked'));
+
+                                    callZ.setTextarea(0);
 
                                 }
 
@@ -1193,6 +1217,8 @@ function typing(event) {
 
                                     callZ.setBlueBorder($('.picked'));
 
+                                    callZ.setTextarea(0);
+
                                 }
 
                             }
@@ -1212,6 +1238,8 @@ function typing(event) {
                                     $('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked');
 
                                     callZ.setBlueBorder($('.picked'));
+
+                                    callZ.setTextarea(0);
 
                                 }
 
@@ -1352,12 +1380,9 @@ iTable.prototype.fillTd = function (tid) {
 
     $('#iTable' + tid).find('tr td').each(function () {
 
-
        $(this).on('dblclick',{target:that,id:tid},that.tdDbclick);
 
        $(this).on('click',{target:that},that.tdClick);
-
-
 
     });
 
@@ -1369,9 +1394,6 @@ iTable.prototype.tdClick=function(event){
     $('.picked').removeClass('picked');
     $(this).addClass('picked');
     event.data.target.setBlueBorder($(this));
-
-
-
     var xCoo = Number($(this).attr('cols')) - 1,
 
         yCoo = Number($(this).attr('rows')) - 1;
@@ -1387,72 +1409,28 @@ iTable.prototype.tdClick=function(event){
 }
 
 iTable.prototype.tdDbclick=function(event){
-
+    var td=$(this);
     var tdWidth = $(this).width();
     var tdHeight = $(this).height();
-
+    var callz=event.data.target;
     var tdLeft=$(this).offset().left;
     var tdTop=$(this).offset().top-$('.header').height()-tdHeight;
 
     var tdText = $(this).text();
+    var eType='dblclick';
 
-    event.data.target.setTextarea(tdLeft,tdTop,tdWidth,tdHeight,tdText);
-
-    $('.itableInput').focus();
-    $('.itableInput').keyup(function () {
-
-        $('#ip_fx').val($(this).val());
-
-    });
-
-    $('.itableInput').blur(function () {
-
-        var content = $('.itableInput').val();
-
-        if (tdText == content) {
-
-            $(this).parent().html(content);
-
-        } else {
-
-            $(this).parent().html(content);
-
-        }
+    event.data.target.setTextarea(1);
+    event.data.target.fillTextarea(eType,tdText);
 
 
 
-
-    });
-
-    $(".itableInput").keyup(function (event) {
-
-        $(document).off('keydown');
-
-        if (event.keyCode == 13) {
-
-            $(".itableInput").blur();
-
-            event.data.target.keyCursor();
-
-        }
-        // if(event.keyCode==37||event.keyCode==38||event.keyCode==39||event.keyCode==40){
-        //
-        // }else{
-        //     event.data.target.keyCursor();
-        // }
-
-    });
 
     $(".itableInput").click(function () {
-
         return false;
-
     });
 
     $('#iTable' + event.data.id + ' tr td').not($(this)).click(function (event) {
-
         $('.itableInput').blur();
-
     });
    stopPropagation();
 }
@@ -3016,8 +2994,6 @@ iTable.prototype.insertCol = function () {
 
                 yArr.push(rows);
 
-                //  xMax = xArr.max(), xMin = xArr.min(), yMax = yArr.max(), yMin = yArr.min();
-
                 xMax = _.max(xArr), xMin = _.min(xArr), yMax = _.max(yArr), yMin = _.min(yArr);
             }
 
@@ -3879,11 +3855,10 @@ iTable.prototype.dataSelection=function(json){
 
     var selectUl = $('<ul></ul>');
 
-    var selectLi, arr = [],aTab;
+    var selectLi, aTab;
     for(var index in json){
         selectHead.text('配置菜单');
         aTab=$('<a class="dTab" id="'+json[index].id +'">'+ json[index].name + '</a></li>');
-
         selectLi = $('<li></li>');
         selectLi.append(aTab);
         selectUl.append(selectLi);
