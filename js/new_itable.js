@@ -408,20 +408,7 @@ iTable.prototype.fillTextarea=function(etype,val){
 
             break;
         case 'keymove':
-            console.log('key');
             $('.itableInput').focus();
-            // $(document).keyup(function (event) {
-            //     if (event.keyCode == 13||event.keyCode==40||event.keyCode==37||event.keyCode==38||event.keyCode==39) {
-            //         var content = $('.itableInput').val();
-            //         console.log(content);
-            //
-            //         $('.itableInput').blur(function(){
-            //             $('.picked').html(content);
-            //         });
-            //         that.hideTextarea();
-            //     }
-            //     event.stopPropagation();
-            // });
             break;
         default:
             console.log('moren');
@@ -519,6 +506,7 @@ function typing(event) {
             // console.log(event.target);
             if(event.target==$('.itableInput')[0]){
                 $('.picked').html($('.itableInput').val());
+                $('.itableInput').val('');
             }
 
 
@@ -679,7 +667,10 @@ function typing(event) {
 
         if (event.keyCode == '39') {
 
-
+            if(event.target==$('.itableInput')[0]){
+                $('.picked').html($('.itableInput').val());
+                $('.itableInput').val('');
+            }
 
             if ($(event.data.lastTd)[0] != $(sNode)[0]) {
 
@@ -853,7 +844,10 @@ function typing(event) {
 
                 r3 = 0;
 
-
+            if(event.target==$('.itableInput')[0]){
+                $('.picked').html($('.itableInput').val());
+                $('.itableInput').val('');
+            }
 
             if ($(event.data.lastTd)[0] != $(sNode)[0]) {
 
@@ -1063,7 +1057,10 @@ function typing(event) {
 
                 u3 = 0;
 
-
+            if(event.target==$('.itableInput')[0]){
+                $('.picked').html($('.itableInput').val());
+                $('.itableInput').val('');
+            }
 
             if ($(event.data.lastTd)[0] != $(sNode)[0]) {
 
