@@ -14,7 +14,7 @@ function iTable(tContainer, tSettings, tabs) {
 
     var header, footer, curIndex, tools;
 
-    var moveLast;
+    this.moveLast;
 
 }
 
@@ -207,6 +207,7 @@ iTable.prototype.frameSelect = function () {
     $('.dataTable tr td').each(function(){
         $(this).on('mouseover',function(){
             coords=$(this);
+            that.moveLast=$(this);
         });
     });
 
@@ -1508,181 +1509,181 @@ iTable.prototype.tdDbclick=function(event){
 }
 
 
-iTable.prototype.wBorderSelect = function (obj) {
-
-    var topArr = [],
-
-        leftArr = [];
-
-    var topMin, leftMin, totalWidth = 0,
-
-        totalHeight = 0;
-
-    for (var i = 0; i < obj.length; i++) {
-
-        var top = obj[i].offsetTop,
-
-            left = obj[i].offsetLeft,
-
-            width = obj[i].offsetWidth,
-
-            height = obj[i].offsetHeight;
-
-        if (top < _.min(topArr)) {
-
-            if ($('.wsBorder').length > 0) {
-
-                $('.wsBorder').remove();
-
-            }
-
-        }
-
-        if (left < _.min(leftArr)) {
-
-            if ($('.wsBorder').length > 0) {
-
-                $('.wsBorder').remove();
-
-            }
-
-        }
-
-        topArr.push(top);
-
-        leftArr.push(left);
-
-        var col = parseInt($(obj[i]).attr('cols')) + parseInt($(obj[i]).attr('colspan'));
-
-        topMin = _.min(topArr), leftMin = _.min(leftArr);
-
-        if (top == _.min(topArr)) {
-
-            totalWidth += width;
-
-        }
-
-        if (left == _.min(leftArr)) {
-
-            totalHeight += height;
-
-        }
-
-        var wsBorder = $('<div class="wsBorder"></div>');
-
-        wsBorder.css({
-
-            'width': totalWidth,
-
-            'height': height + 6,
-
-            'top': topMin,
-
-            'left': leftMin
-
-        });
-
-        var topsB = $('<div></div>');
-
-        topsB.css({
-
-            'width': totalWidth,
-
-            'height': '2px',
-
-            'position': 'absolute',
-
-            'left': leftMin,
-
-            'top': topMin,
-
-            'background': 'rgb(82, 146, 247)'
-
-        });
-
-        var bottomsB = $('<div></div>');
-
-        bottomsB.css({
-
-            'width': totalWidth,
-
-            'height': '2px',
-
-            'position': 'absolute',
-
-            'left': leftMin,
-
-            'top': topMin + totalHeight,
-
-            'background': 'rgb(82, 146, 247)'
-
-        });
-
-        var leftB = $('<div></div>');
-
-        leftB.css({
-
-            'width': '2px',
-
-            'height': totalHeight,
-
-            'position': 'absolute',
-
-            'left': leftMin,
-
-            'top': topMin,
-
-            'background': 'rgb(82, 146, 247)'
-
-        });
-
-        var rightB = $('<div></div>');
-
-        rightB.css({
-
-            'width': '2px',
-
-            'height': totalHeight,
-
-            'position': 'absolute',
-
-            'left': leftMin + totalWidth,
-
-            'top': topMin,
-
-            'background': 'rgb(82, 146, 247)'
-
-        });
-
-        var corner = $('<div class="scorner"></div>');
-
-        corner.css({
-
-            'top': topMin + totalHeight - 2,
-
-            'left': leftMin + totalWidth - 2,
-
-        });
-
-    }
-
-    //	if(wsBorder.length > 0) {
-
-    wsBorder.append(topsB);
-
-    wsBorder.append(bottomsB);
-
-    wsBorder.append(leftB);
-
-    wsBorder.append(rightB);
-
-    wsBorder.append(corner);
-
-    this.container.append(wsBorder);
-
-    //	}
-
-}
+// iTable.prototype.wBorderSelect = function (obj) {
+//
+//     var topArr = [],
+//
+//         leftArr = [];
+//
+//     var topMin, leftMin, totalWidth = 0,
+//
+//         totalHeight = 0;
+//
+//     for (var i = 0; i < obj.length; i++) {
+//
+//         var top = obj[i].offsetTop,
+//
+//             left = obj[i].offsetLeft,
+//
+//             width = obj[i].offsetWidth,
+//
+//             height = obj[i].offsetHeight;
+//
+//         if (top < _.min(topArr)) {
+//
+//             if ($('.wsBorder').length > 0) {
+//
+//                 $('.wsBorder').remove();
+//
+//             }
+//
+//         }
+//
+//         if (left < _.min(leftArr)) {
+//
+//             if ($('.wsBorder').length > 0) {
+//
+//                 $('.wsBorder').remove();
+//
+//             }
+//
+//         }
+//
+//         topArr.push(top);
+//
+//         leftArr.push(left);
+//
+//         var col = parseInt($(obj[i]).attr('cols')) + parseInt($(obj[i]).attr('colspan'));
+//
+//         topMin = _.min(topArr), leftMin = _.min(leftArr);
+//
+//         if (top == _.min(topArr)) {
+//
+//             totalWidth += width;
+//
+//         }
+//
+//         if (left == _.min(leftArr)) {
+//
+//             totalHeight += height;
+//
+//         }
+//
+//         var wsBorder = $('<div class="wsBorder"></div>');
+//
+//         wsBorder.css({
+//
+//             'width': totalWidth,
+//
+//             'height': height + 6,
+//
+//             'top': topMin,
+//
+//             'left': leftMin
+//
+//         });
+//
+//         var topsB = $('<div></div>');
+//
+//         topsB.css({
+//
+//             'width': totalWidth,
+//
+//             'height': '2px',
+//
+//             'position': 'absolute',
+//
+//             'left': leftMin,
+//
+//             'top': topMin,
+//
+//             'background': 'rgb(82, 146, 247)'
+//
+//         });
+//
+//         var bottomsB = $('<div></div>');
+//
+//         bottomsB.css({
+//
+//             'width': totalWidth,
+//
+//             'height': '2px',
+//
+//             'position': 'absolute',
+//
+//             'left': leftMin,
+//
+//             'top': topMin + totalHeight,
+//
+//             'background': 'rgb(82, 146, 247)'
+//
+//         });
+//
+//         var leftB = $('<div></div>');
+//
+//         leftB.css({
+//
+//             'width': '2px',
+//
+//             'height': totalHeight,
+//
+//             'position': 'absolute',
+//
+//             'left': leftMin,
+//
+//             'top': topMin,
+//
+//             'background': 'rgb(82, 146, 247)'
+//
+//         });
+//
+//         var rightB = $('<div></div>');
+//
+//         rightB.css({
+//
+//             'width': '2px',
+//
+//             'height': totalHeight,
+//
+//             'position': 'absolute',
+//
+//             'left': leftMin + totalWidth,
+//
+//             'top': topMin,
+//
+//             'background': 'rgb(82, 146, 247)'
+//
+//         });
+//
+//         var corner = $('<div class="scorner"></div>');
+//
+//         corner.css({
+//
+//             'top': topMin + totalHeight - 2,
+//
+//             'left': leftMin + totalWidth - 2,
+//
+//         });
+//
+//     }
+//
+//     //	if(wsBorder.length > 0) {
+//
+//     wsBorder.append(topsB);
+//
+//     wsBorder.append(bottomsB);
+//
+//     wsBorder.append(leftB);
+//
+//     wsBorder.append(rightB);
+//
+//     wsBorder.append(corner);
+//
+//     this.container.append(wsBorder);
+//
+//     //	}
+//
+// }
 
 
 iTable.prototype.blueBorder=function(){
@@ -1831,6 +1832,135 @@ iTable.prototype.blueBorder=function(){
 
 }
 
+
+iTable.prototype.setRedBorder=function(obj){
+    if($(obj).length>0){
+        var topArr = [], leftArr = [];
+
+        var topMin, leftMin, totalWidth = 0, totalHeight = 0;
+
+        for (var i = 0; i < obj.length; i++) {
+
+            var top = obj[i].offsetTop,
+
+                left = obj[i].offsetLeft,
+
+                width = obj[i].offsetWidth,
+
+                height = obj[i].offsetHeight;
+
+            if (top < _.min(topArr)) {
+
+                if ($('.wrBorder').length > 0) {
+
+                    $('.wrBorder').hide();
+
+                }
+
+            }
+
+            if (left < _.min(leftArr)) {
+
+                if ($('.wrBorder').length > 0) {
+
+                    $('.wrBorder').hide();
+
+                }
+
+            }
+
+            topArr.push(top);
+
+            leftArr.push(left);
+
+            var col = parseInt($(obj[i]).attr('cols')) + parseInt($(obj[i]).attr('colspan'));
+
+            topMin = _.min(topArr), leftMin = _.min(leftArr);
+
+            if (top == _.min(topArr)) {
+
+                totalWidth += width;
+
+            }
+
+            if (left == _.min(leftArr)) {
+
+                totalHeight += height;
+
+            }
+
+
+            $('.wrBorder').css({
+
+                'top': topMin,
+
+                'left': leftMin,
+
+                'display': 'block'
+            });
+
+            $('.wrBorder').find('div').eq(0).css({
+
+                'width': totalWidth,
+
+                'height': '2px',
+
+                'left': 0,
+
+                'top': 0,
+
+            });
+
+            $('.wrBorder').find('div').eq(1).css({
+                'width': totalWidth,
+
+                'height': '2px',
+
+                'left': 0,
+
+                'top': totalHeight,
+            });
+
+            $('.wrBorder').find('div').eq(2).css({
+
+                'width': '2px',
+
+                'height': totalHeight,
+
+                'left': 0,
+
+                'top': 0,
+
+            });
+
+            $('.wrBorder').find('div').eq(3).css({
+                'width': '2px',
+
+                'height': totalHeight,
+
+                'left': totalWidth,
+
+                'top': 0,
+
+            });
+
+            $('.scorner').css({
+
+                'top':  totalHeight - 2,
+
+                'left': totalWidth - 2,
+
+            });
+
+        }
+
+
+    }else{
+
+    }
+}
+
+
 iTable.prototype.setBlueBorder=function(obj){
 
        if($(obj).length>0){
@@ -1959,6 +2089,187 @@ iTable.prototype.setBlueBorder=function(obj){
        }
 
 }
+
+iTable.prototype.cornerCopy=function(){
+    var that=this;
+
+    $('.scorner').on('mouseenter',function(){
+
+        $(this).css('cursor', 'crosshair');
+
+        $(this).on('mousedown', function () {
+            $(that.container).off('mousedown');
+
+            var ev = window.event || arguments[0];
+
+            var coords=$(that.moveLast);
+
+            var tdWidth=parseInt($(coords).width());
+
+            var tdHeight=parseInt($(coords).height());
+
+            var onCols = parseInt($(coords).attr('cols')) ;
+
+            var onRows = parseInt($(coords).attr('rows')) ;
+
+            var onCspan = parseInt($(coords).attr('colspan'))  || 1;
+
+            var onRspan = parseInt($(coords).attr('rowspan'))  || 1;
+
+            var expectX = onCols + onCspan-1;
+
+            var expectY = onRows + onRspan-1;
+
+            var xMin = expectX,yMin = expectY;
+
+            var sleft = parseInt($(this).scrollLeft());
+
+            var stop = parseInt($(this).scrollTop());
+
+            var disHeight = parseInt($('.xOrder').outerHeight()) + parseInt($('.header').outerHeight());
+
+            var oX = ev.clientX + sleft;
+
+            var oY = ev.clientY - disHeight + stop;
+
+            $(that.container).on('mousemove', function () {
+                var coords=$(that.moveLast);
+
+                var nCols = parseInt($(coords).attr('cols')) ;
+
+                var nRows = parseInt($(coords).attr('rows')) ;
+
+                var nCspan = parseInt($(coords).attr('colspan'))  || 1;
+
+                var nRspan = parseInt($(coords).attr('rowspan'))  || 1;
+
+                if(nCspan>1||nRspan>1){
+                   return;
+                }
+
+                var expectX = nCols + nCspan-1;
+
+                var expectY = nRows + nRspan-1;
+
+                var xMax=expectX,yMax=expectY;
+
+                var evt = window.event || arguments[0];
+                var _x,_y;
+
+                _x = (evt.x || evt.clientX);
+
+                _y = (evt.y || evt.clientY);
+
+                _x = _x + sleft;
+
+                _y = _y + stop - disHeight;
+
+
+                if(_x-oX>=40&&_x-oX<=tdWidth){
+
+                    if(_y-oY>=0&&_y-oY<=tdHeight){
+                         //E
+                        xMin=onCols,yMin=onRows,yMax=yMin;
+
+                    }
+                    if(_y-oY>=0&&_y-oY>tdHeight){
+                        //E-S
+                       xMin=onCols,yMin=onRows,yMax=yMin;
+
+                    }
+                    if(_y-oY<0&&_y-oY<=tdHeight){
+                        //E-N
+                        xMin=onCols,yMin=onRows,yMax=yMin;
+                    }
+
+                    if(_y-oY<0&&_y-oY>tdHeight){
+                        //E-N
+                        console.log('N');
+                    }
+
+                    // if(_y-oY>0&&_y-oY>tdHeight){
+                    //     //E-S 东南
+                    //     xMin=onCols,yMin=onRows,yMax=yMin;
+                    //
+                    // }else{
+                    //     //E-N 东北
+                    //     xMin=onCols,yMin=onRows + onRspan-1,yMax=yMin;
+                    //
+                    //
+                    // }
+                     // if(_y-oY==0){
+                     //     console.log('q');
+                     // }
+                }else{
+
+                    if(_y-oY>0){
+                        // W-S 西南
+                        xMin=onCols+onCspan-1,yMin=onRows, xMax=xMin;
+                    }else{
+                        //W-N  西北
+                        console.log('w');
+                        xMin=onCols+onCspan-1,yMin=onRows+onRspan-1;
+                    }
+
+
+                }
+
+
+
+                $('.dataTable tr td').removeClass('picked');
+
+                if(xMin<=xMax&&yMin<=yMax){
+                    for(var i = xMin; i <= xMax ; i++) {
+                        for(var j = yMin; j <= yMax; j++) {
+                            var id='#'+j+'-'+i;
+
+
+                            $(id).addClass('picked');
+
+                        }
+
+                    }
+                }else if(xMin<=xMax&&yMin>yMax){
+                    for(var i = xMin; i <= xMax ; i++) {
+                        for(var j = yMax; j <= yMin; j++) {
+                            var id='#'+j+'-'+i;
+                            $(id).addClass('picked');
+
+                        }
+
+                    }
+                }else if(xMin>xMax&&yMin<yMax){
+                    for(var i = xMax; i <= xMin ; i++) {
+                        for(var j = yMin; j <= yMax; j++) {
+                            var id='#'+j+'-'+i;
+
+                            $(id).addClass('picked');
+
+                        }
+
+                    }
+                }else{
+                    for(var i = xMax; i <= xMin ; i++) {
+                        for(var j = yMax; j <= yMin; j++) {
+                            var id='#'+j+'-'+i;
+
+                            $(id).addClass('picked');
+
+                        }
+
+                    }
+
+                }
+                that.setRedBorder($('.picked'));
+
+
+            });
+
+
+        });
+    });
+}
+
 
 
 iTable.prototype.wBorder = function (obj) {
@@ -2260,18 +2571,6 @@ iTable.prototype.wBorder = function (obj) {
 
                 _y = _y + stop - disHeight;
 
-                //				selDiv.css({
-
-                //					'left': Math.min(_x, oX) ,
-
-                //					'top': Math.min(_y, oY),
-
-                //					'width': Math.abs(_x - oX),
-
-                //					'height': Math.abs(_y - oY)
-
-                //				});
-
                 if ($('.wBorder').length > 0) {
 
                     if (Math.abs(_y - oY) > 10 && Math.abs(_x - oX) < 10) {
@@ -2548,37 +2847,8 @@ iTable.prototype.wBorder = function (obj) {
 
                 }
 
-                $('.dataTable tr td').on('click', function () {
-
-                    var tr = $(this).parent();
-
-                    $('.picked').removeClass('picked');
 
 
-
-                    $(this).addClass('picked');
-
-
-                      that.setBlueBorder($(this));
-                    var xCoo = Number($(this).attr('cols')) - 1,
-
-                        yCoo = Number($(this).attr('rows')) - 1;
-
-                    if ($('.disbox').length > 0) {
-
-                        $('.disbox').text(IntToChr(xCoo) + String(yCoo + 1));
-
-                    }
-
-                    that.tdTofx($(this));
-
-                    that.lightCoor($(this));
-
-                    $('#ip_fx').blur();
-
-                });
-
-                // $(that.container).off('mousemove');
 
             });
 
@@ -5555,6 +5825,8 @@ iTable.prototype.init = function () {
     this.largeRow();
 
     this.blueBorder();
+
+    this.cornerCopy();
 }
 
 var settings = {
