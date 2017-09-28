@@ -2138,6 +2138,12 @@ iTable.prototype.cornerCopy=function(){
 
             var oY = ev.clientY - disHeight + stop;
 
+            if($(coords).length>1){
+                that.hideReadBorder();
+                return;
+            }
+
+
             $(that.container).on('mousemove', function () {
                 var coords=$(that.moveLast);
 
@@ -2150,7 +2156,8 @@ iTable.prototype.cornerCopy=function(){
                 var nRspan = parseInt($(coords).attr('rowspan'))  || 1;
 
                 if(nCspan>1||nRspan>1){
-                   return;
+                    that.hideReadBorder();
+                    return;
                 }
 
                 var expectX = nCols + nCspan-1;
