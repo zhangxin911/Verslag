@@ -36,7 +36,7 @@ iTable.prototype.createContent = function (tid) {
 
         var th = $('<th></th>');
 
-        var colg = $('<colgroup></colgroup>');
+        var colG = $('<colgroup></colgroup>');
 
         tr.append(th);
 
@@ -54,11 +54,11 @@ iTable.prototype.createContent = function (tid) {
 
             }
 
-            colg.append(col);
+            colG.append(col);
 
             if (i == 0) {
 
-                $("#iTable" + tId).append(colg);
+                $("#iTable" + tId).append(colG);
 
             }
 
@@ -98,8 +98,6 @@ iTable.prototype.createXaxis = function () {
 
     var xTable = $("<table class='titleTable'></table>");
 
-    var curT = this.getCurTable();
-
     var th = $('<th></th>');
 
     xAxis.insertBefore(this.container);
@@ -112,7 +110,7 @@ iTable.prototype.createXaxis = function () {
 
     for (var i = 0; i < 1; i++) {
 
-        var colg = $('<colgroup></colgroup>');
+        var colG = $('<colgroup></colgroup>');
 
         for (var j = 0; j < this.cellCount + 1; j++) {
 
@@ -128,11 +126,11 @@ iTable.prototype.createXaxis = function () {
 
             }
 
-            colg.append(col);
+            colG.append(col);
 
             if (i == 0) {
 
-                xTable.append(colg);
+                xTable.append(colG);
 
             }
 
@@ -345,10 +343,6 @@ iTable.prototype.frameSelect = function () {
 }
 
 
-iTable.prototype.getArea=function(event){
-
-}
-
 
 iTable.prototype.textArea=function(){
      var div=$('<div class="itableInputHolder"></div>');
@@ -361,9 +355,9 @@ iTable.prototype.textArea=function(){
 iTable.prototype.setTextarea=function(visible){
     if($('.picked').length>0){
         var w = $('.picked').width();
-        var h = $('.picked:last').height();
-        var x = $('.picked:last').offset().left+$(this.container).scrollLeft();
-        var y=$('.picked:last').offset().top+$(this.container).scrollTop()-$('.header').height()-h;
+        var h = $('.picked').height();
+        var x = $('.picked').offset().left+$(this.container).scrollLeft();
+        var y=$('.picked').offset().top+$(this.container).scrollTop()-$('.header').height()-h;
 
         if(visible==1){
             $('.itableInputHolder').show();
@@ -388,10 +382,10 @@ iTable.prototype.hideTextarea=function(){
     $('.itableInputHolder').hide();
 
 }
-iTable.prototype.fillTextarea=function(etype,val){
+iTable.prototype.fillTextarea=function(eType,val){
 
     var that=this;
-    switch(etype)
+    switch(eType)
     {
         case 'dblclick':
             $('.itableInput').val('');
@@ -435,7 +429,7 @@ iTable.prototype.keyCursor = function () {
 
         keyCode: "",
 
-        callz: that
+        callZ: that
 
     }, typing);
 
@@ -445,7 +439,7 @@ function typing(event) {
 
     var sNode = $('.picked');
 
-    var callZ = event.data.callz;
+    var callZ = event.data.callZ;
 
     if ($('.picked').length == 1) {
 
@@ -1466,7 +1460,9 @@ iTable.prototype.tdClick=function(event){
 
     $('.picked').removeClass('picked');
     $(this).addClass('picked');
+    event.data.target.setTextarea(0);
     event.data.target.setBlueBorder($(this));
+
     var xCoo = Number($(this).attr('cols')) - 1,
 
         yCoo = Number($(this).attr('rows')) - 1;
@@ -1476,18 +1472,14 @@ iTable.prototype.tdClick=function(event){
         $('.disbox').text(IntToChr(xCoo) + String(yCoo + 1));
 
     }
+
     event.data.target.tdTofx($(this));
     event.data.target.lightCoor($(this));
+
     $('#ip_fx').blur();
 }
 
 iTable.prototype.tdDbclick=function(event){
-    var td=$(this);
-    var tdWidth = $(this).width();
-    var tdHeight = $(this).height();
-    var callz=event.data.target;
-    var tdLeft=$(this).offset().left;
-    var tdTop=$(this).offset().top-$('.header').height()-tdHeight;
 
     var tdText = $(this).text();
     var eType='dblclick';
@@ -1509,181 +1501,7 @@ iTable.prototype.tdDbclick=function(event){
 }
 
 
-// iTable.prototype.wBorderSelect = function (obj) {
-//
-//     var topArr = [],
-//
-//         leftArr = [];
-//
-//     var topMin, leftMin, totalWidth = 0,
-//
-//         totalHeight = 0;
-//
-//     for (var i = 0; i < obj.length; i++) {
-//
-//         var top = obj[i].offsetTop,
-//
-//             left = obj[i].offsetLeft,
-//
-//             width = obj[i].offsetWidth,
-//
-//             height = obj[i].offsetHeight;
-//
-//         if (top < _.min(topArr)) {
-//
-//             if ($('.wsBorder').length > 0) {
-//
-//                 $('.wsBorder').remove();
-//
-//             }
-//
-//         }
-//
-//         if (left < _.min(leftArr)) {
-//
-//             if ($('.wsBorder').length > 0) {
-//
-//                 $('.wsBorder').remove();
-//
-//             }
-//
-//         }
-//
-//         topArr.push(top);
-//
-//         leftArr.push(left);
-//
-//         var col = parseInt($(obj[i]).attr('cols')) + parseInt($(obj[i]).attr('colspan'));
-//
-//         topMin = _.min(topArr), leftMin = _.min(leftArr);
-//
-//         if (top == _.min(topArr)) {
-//
-//             totalWidth += width;
-//
-//         }
-//
-//         if (left == _.min(leftArr)) {
-//
-//             totalHeight += height;
-//
-//         }
-//
-//         var wsBorder = $('<div class="wsBorder"></div>');
-//
-//         wsBorder.css({
-//
-//             'width': totalWidth,
-//
-//             'height': height + 6,
-//
-//             'top': topMin,
-//
-//             'left': leftMin
-//
-//         });
-//
-//         var topsB = $('<div></div>');
-//
-//         topsB.css({
-//
-//             'width': totalWidth,
-//
-//             'height': '2px',
-//
-//             'position': 'absolute',
-//
-//             'left': leftMin,
-//
-//             'top': topMin,
-//
-//             'background': 'rgb(82, 146, 247)'
-//
-//         });
-//
-//         var bottomsB = $('<div></div>');
-//
-//         bottomsB.css({
-//
-//             'width': totalWidth,
-//
-//             'height': '2px',
-//
-//             'position': 'absolute',
-//
-//             'left': leftMin,
-//
-//             'top': topMin + totalHeight,
-//
-//             'background': 'rgb(82, 146, 247)'
-//
-//         });
-//
-//         var leftB = $('<div></div>');
-//
-//         leftB.css({
-//
-//             'width': '2px',
-//
-//             'height': totalHeight,
-//
-//             'position': 'absolute',
-//
-//             'left': leftMin,
-//
-//             'top': topMin,
-//
-//             'background': 'rgb(82, 146, 247)'
-//
-//         });
-//
-//         var rightB = $('<div></div>');
-//
-//         rightB.css({
-//
-//             'width': '2px',
-//
-//             'height': totalHeight,
-//
-//             'position': 'absolute',
-//
-//             'left': leftMin + totalWidth,
-//
-//             'top': topMin,
-//
-//             'background': 'rgb(82, 146, 247)'
-//
-//         });
-//
-//         var corner = $('<div class="scorner"></div>');
-//
-//         corner.css({
-//
-//             'top': topMin + totalHeight - 2,
-//
-//             'left': leftMin + totalWidth - 2,
-//
-//         });
-//
-//     }
-//
-//     //	if(wsBorder.length > 0) {
-//
-//     wsBorder.append(topsB);
-//
-//     wsBorder.append(bottomsB);
-//
-//     wsBorder.append(leftB);
-//
-//     wsBorder.append(rightB);
-//
-//     wsBorder.append(corner);
-//
-//     this.container.append(wsBorder);
-//
-//     //	}
-//
-// }
+
 
 
 iTable.prototype.blueBorder=function(){
@@ -1873,7 +1691,7 @@ iTable.prototype.setRedBorder=function(obj){
 
             leftArr.push(left);
 
-            var col = parseInt($(obj[i]).attr('cols')) + parseInt($(obj[i]).attr('colspan'));
+           // var col = parseInt($(obj[i]).attr('cols')) + parseInt($(obj[i]).attr('colspan'));
 
             topMin = _.min(topArr), leftMin = _.min(leftArr);
 
@@ -1944,7 +1762,7 @@ iTable.prototype.setRedBorder=function(obj){
 
             });
 
-         //   $('.scorner').hide();
+
 
         }
 
@@ -2284,593 +2102,6 @@ iTable.prototype.cornerCopy=function(){
 }
 
 
-
-iTable.prototype.wBorder = function (obj) {
-
-    var that = this;
-
-    if ($('.wsBorder').length > 0) {
-
-        $('.wsBorder').remove();
-
-    }
-
-    if ($('.wBorder').length > 0) {
-
-      //  $('.wBorder').remove();
-
-    }
-
-    if ($('.wrBorder').length > 0) {
-
-        $('.wrBorder').remove();
-
-    }
-
-    if ($(obj).length > 0) {
-
-        var width = $(obj)[0].offsetWidth,
-
-            height = $(obj)[0].offsetHeight;
-
-        var left =$(obj)[0].offsetLeft,
-
-            top = $(obj)[0].offsetTop;
-
-        var wBorder = $('<div class="wBorder"></div>');
-
-        wBorder.css({
-
-            'width': width,
-
-            'height': height + 6,
-        });
-
-        var topB = $('<div></div>');
-
-        topB.css({
-
-            'width': width,
-
-            'height': '2px',
-
-            'position': 'absolute',
-
-            'left': left,
-
-            'top': top,
-
-            'background': 'rgb(82, 146, 247)'
-
-        });
-
-        wBorder.append(topB);
-
-        var leftB = $('<div></div>');
-
-        leftB.css({
-
-            'width': '2px',
-
-            'height': height,
-
-            'position': 'absolute',
-
-            'left': left,
-
-            'top': top,
-
-            'background': 'rgb(82, 146, 247)'
-
-        });
-
-        wBorder.append(leftB);
-
-        var rightB = $('<div></div>');
-
-        rightB.css({
-
-            'width': '2px',
-
-            'height': height,
-
-            'position': 'absolute',
-
-            'left': parseInt(left + width),
-
-            'top': top,
-
-            'background': 'rgb(82, 146, 247)'
-
-        });
-
-        wBorder.append(rightB);
-
-        var bottomB = $('<div></div>');
-
-        bottomB.css({
-
-            'width': width,
-
-            'height': '2px',
-
-            'position': 'absolute',
-
-            'left': left,
-
-            'top': top + height,
-
-            'background': 'rgb(82, 146, 247)'
-
-        });
-
-        var corner = $('<div class="corner"></div>');
-
-        corner.css({
-
-            'top': top + height - 2,
-
-            'left': left + width - 2,
-
-        });
-
-        //红色
-
-        var wrBorder = $('<div class="wrBorder"></div>');
-
-        wrBorder.css({
-
-            'width': width,
-
-            'height': height + 6,
-
-            'top': 0,
-
-            'left': 0
-
-        });
-
-        var toprB = $('<div></div>');
-
-        toprB.css({
-
-            'width': width,
-
-            'height': '2px',
-
-            'position': 'absolute',
-
-            'left': left,
-
-            'top': top,
-
-            'background': 'red'
-
-        });
-
-        wrBorder.append(toprB);
-
-        var leftrB = $('<div></div>');
-
-        leftrB.css({
-
-            'width': '2px',
-
-            'height': height,
-
-            'position': 'absolute',
-
-            'left': left,
-
-            'top': top,
-
-            'background': 'red'
-
-        });
-
-        wrBorder.append(leftrB);
-
-        var rightrB = $('<div></div>');
-
-        rightrB.css({
-
-            'width': '2px',
-
-            'height': height,
-
-            'position': 'absolute',
-
-            'left': parseInt(left + width),
-
-            'top': top,
-
-            'background': 'red'
-
-        });
-
-        wrBorder.append(rightrB);
-
-        var bottomrB = $('<div></div>');
-
-        bottomrB.css({
-
-            'width': width,
-
-            'height': '2px',
-
-            'position': 'absolute',
-
-            'left': left,
-
-            'top': top + height,
-
-            'background': 'red'
-
-        });
-
-        wrBorder.append(bottomrB);
-
-        wBorder.append(bottomB);
-
-        wBorder.append(corner);
-
-        this.container.append(wBorder);
-
-        this.container.append(wrBorder);
-
-    }
-
-    var oHeight = parseInt($('.wBorder').find('div').eq(1).css('height'));
-
-    var oWidth = parseInt($('.wBorder').find('div').eq(0).css('width'));
-
-    corner.on('mouseenter', function () {
-
-        $(this).css('cursor', 'crosshair');
-
-        $(this).on('mousedown', function () {
-
-            $(that.container).off('mousedown');
-
-            // var cWidth = parseInt($(this.container).width());
-            //
-            // var cHeight = parseInt($(this.container).height());
-            //
-            // var disWidth = parseInt($('.yOrder').outerWidth());
-            //
-            var disHeight = parseInt($('.xOrder').outerHeight()) + parseInt($('.header').outerHeight());
-            //
-            // var fileNodes = $('.dataTable tr td');
-            //
-            // var isSelect = true;
-
-            var ev = window.event || arguments[0];
-
-            var sleft = parseInt($(this).scrollLeft());
-
-            var stop = parseInt($(this).scrollTop());
-
-            var oX = ev.clientX + sleft;
-
-            var oY = ev.clientY - disHeight + stop;
-
-            $('.dataTable tr td').off('click');
-
-            var _x = null;
-
-            var _y = null;
-
-            var _text = $('.picked').text();
-
-            var direction;
-
-            $(that.container).on('mousemove', function () {
-
-                var evt = window.event || arguments[0];
-
-                var xArr = [],
-
-                    yArr = [];
-
-                var sleft = $(this).scrollLeft();
-
-                var stop = $(this).scrollTop();
-
-                _x = (evt.x || evt.clientX);
-
-                _y = (evt.y || evt.clientY);
-
-                _x = _x + sleft;
-
-                _y = _y + stop - disHeight;
-
-                if ($('.wBorder').length > 0) {
-
-                    if (Math.abs(_y - oY) > 10 && Math.abs(_x - oX) < 10) {
-
-                        direction = 'vertical';
-
-                        var tdH = 0;
-
-                        var moveH = Math.abs(_y - oY) + Math.min(_y, oY) - oHeight - 2;
-
-                        var t1 = parseInt($('.wBorder').find('div').eq(0).css('top'));
-
-                        var t3 = parseInt($('.wBorder').find('div').eq(3).css('top'));
-
-                        var h2 = parseInt($('.wBorder').find('div').eq(1).css('height'));
-
-                        var topA = [],
-
-                            topB = [];
-
-                        if (t1 >= moveH) {
-
-                            $('.dataTable tr td').each(function () {
-
-                                if ($(this).offset().top <= moveH && $(this).offset().top + $(this).offset().height >= Math.min(_y, oY) && $(this).offset().left >= parseInt($('.wBorder').find('div').eq(1).css('left')) && $(this).offset().left <= parseInt($('.wBorder').find('div').eq(1).css('left')) + 96) {
-
-                                    //
-
-                                    tdH += parseInt($(this)[0].offsetHeight);
-
-                                    topA.push($(this).offset().top);
-
-                                    $('.wrBorder').find('div').eq(1).css('height', tdH);
-
-                                    $('.wrBorder').find('div').eq(2).css('height', tdH);
-
-                                    $('.wrBorder').find('div').eq(0).css('top', t3);
-
-                                    $('.wrBorder').find('div').eq(1).css('top', _.first(_.uniq(topA)) + h2);
-
-                                    $('.wrBorder').find('div').eq(2).css('top', _.first(_.uniq(topA)) + h2);
-
-                                    $('.wrBorder').find('div').eq(3).css('top', _.first(_.uniq(topA)) + h2);
-
-                                    $('.wBorder').find('.corner').css('top', $('.wrBorder').find('div').eq(0).css('top'));
-
-                                }
-
-                            });
-
-                        } else {
-
-                            $('.dataTable tr td').each(function () {
-
-                                if ($(this).offset().top <= moveH && $(this).offset().top + $(this).offset().height >= Math.min(_y, oY) && $(this).offset().left >= parseInt($('.wBorder').find('div').eq(1).css('left')) && $(this).offset().left <= parseInt($('.wBorder').find('div').eq(1).css('left')) + 96) {
-
-                                    tdH += parseInt($(this)[0].Height);
-
-                                    topB.push($(this).offset().top);
-
-                                    $('.wrBorder').find('div').eq(1).css('height', tdH);
-
-                                    $('.wrBorder').find('div').eq(2).css('height', tdH);
-
-                                    $('.wrBorder').find('div').eq(0).css('top', $('.wBorder').find('div').eq(1).css('top'));
-
-                                    $('.wrBorder').find('div').eq(1).css('top', $('.wBorder').find('div').eq(1).css('top'));
-
-                                    $('.wrBorder').find('div').eq(2).css('top', $('.wBorder').find('div').eq(2).css('top'));
-
-                                    var m = parseInt($('.wrBorder').find('div').eq(1).css('top')) + parseInt($('.wrBorder').find('div').eq(1).css('height'));
-
-                                    $('.wrBorder').find('div').eq(3).css('top', m - 2);
-
-                                    $('.wBorder').find('.corner').css('top', m - 2);
-
-                                }
-
-                            });
-
-                        }
-
-                    }
-
-                    if (Math.abs(_x - oX) >= 10 && Math.abs(_y - oY) <= 10) {
-
-                        direction = 'horizontal';
-
-                        var tdW = 0;
-
-                        var moveW = Math.abs(_x - oX) + Math.min(_x, oX) - oWidth + 4;
-
-                        var l1 = parseInt($('.wBorder').find('div').eq(0).css('left'));
-
-                        var l3 = parseInt($('.wBorder').find('div').eq(3).css('left'));
-
-                        var w2 = parseInt($('.wBorder').find('div').eq(1).css('height'));
-
-                        var leftA = [],
-
-                            leftB = [];
-
-                        if (Math.min(_x, oX) < l1) {
-
-                            $('.dataTable tr td').each(function () {
-
-                                var tdL = $(this).offset().left,
-
-                                    _tdW = $(this)[0].offsetWidth,
-
-                                    tdT = $(this).offset().top,
-
-                                    _tdH = $(this)[0].offsetHeight;
-
-                                var w3t = parseInt($('.wBorder').find('div').eq(3).css('top'));
-
-                                var w0t = parseInt($('.wBorder').find('div').eq(0).css('top'));
-
-                                var w1l = parseInt($('.wBorder').find('div').eq(1).css('left'));
-
-                                if (tdL < w1l && tdL >= Math.min(_x, oX) && (tdT + _tdH <= w3t) && (tdT + 4 > w0t)) {
-
-                                    tdW += parseInt($(this)[0].offsetWidth);
-
-                                    leftA.push($(this).offset().left);
-
-                                    $('.wrBorder').find('div').eq(0).css('width', tdW);
-
-                                    $('.wrBorder').find('div').eq(3).css('width', tdW);
-
-                                    $('.wrBorder').find('div').eq(0).css('left', _.first(_.uniq(leftA)));
-
-                                    $('.wrBorder').find('div').eq(3).css('left', _.first(_.uniq(leftA)));
-
-                                    $('.wrBorder').find('div').eq(2).css('left', _.first(_.uniq(leftA)));
-
-                                }
-
-                            });
-
-                        } else {
-
-                            $('.dataTable tr td').each(function () {
-
-                                var tdL = $(this).offset().left,
-
-                                    _tdW = $(this)[0].offsetWidth,
-
-                                    tdT = $(this).offset().top,
-
-                                    _tdH = $(this)[0].offsetHeight;
-
-                                var w3t = parseInt($('.wBorder').find('div').eq(3).css('top'));
-
-                                var w0t = parseInt($('.wBorder').find('div').eq(0).css('top'));
-
-                                var w1l = parseInt($('.wBorder').find('div').eq(1).css('left'));
-
-                                if (tdL > w1l && (tdL) <= (Math.min(_x, oX) + Math.abs(_x - oX)) && (tdT + _tdH <= w3t) && (tdT + 4 > w0t)) {
-
-                                    tdW += parseInt($(this)[0].offsetWidth);
-
-                                    leftB.push($(this).offset().left);
-
-                                    $('.wrBorder').find('div').eq(0).css('width', tdW);
-
-                                    $('.wrBorder').find('div').eq(3).css('width', tdW);
-
-                                    $('.wrBorder').find('div').eq(1).css('left', $('.wBorder').find('div').eq(1).css('left'));
-
-                                    var n = parseInt($('.wrBorder').find('div').eq(0).css('left')) + parseInt($('.wrBorder').find('div').eq(0).css('width'));
-
-                                    $('.wrBorder').find('div').eq(2).css('left', n - 2);
-
-                                    $('.wBorder').find('.corner').css('l', n - 2);
-
-                                }
-
-                            });
-
-                        }
-
-                    }
-
-                }
-
-            });
-
-            $(document).off('mouseup').on('mouseup', function () {
-
-                $(that.container).off('mousemove');
-
-                switch (direction) {
-
-                    case 'vertical':
-
-                        $('.wBorder').find('div').eq(1).css('height', $('.wrBorder').find('div').eq(1).css('height'));
-
-                        $('.wBorder').find('div').eq(2).css('height', $('.wrBorder').find('div').eq(2).css('height'));
-
-                        $('.wBorder').find('div').eq(1).css('top', $('.wrBorder').find('div').eq(1).css('top'));
-
-                        $('.wBorder').find('div').eq(2).css('top', $('.wrBorder').find('div').eq(2).css('top'));
-
-                        $('.wBorder').find('div').eq(3).css('top', $('.wrBorder').find('div').eq(3).css('top'));
-
-                        $('.wBorder').find('div').eq(0).css('top', $('.wrBorder').find('div').eq(0).css('top'));
-
-                        var t3 = parseInt($('.wBorder').find('div').eq(3).css('top'));
-
-                        var t0 = parseInt($('.wBorder').find('div').eq(0).css('top'));
-
-                        var l1 = parseInt($('.wBorder').find('div').eq(1).css('left'));
-
-                        var l2 = parseInt($('.wBorder').find('div').eq(2).css('left'));
-
-                        $('.dataTable tr td').each(function () {
-
-                            if ($(this)[0].offsetTop <= t3 && $(this)[0].offsetTop >= t0 &&
-
-                                $(this)[0].offsetLeft >= l1 && $(this)[0].offsetLeft < l2) {
-
-                                $($(this)[0]).text(_text);
-
-                            }
-
-                        });
-
-                        $(that.container).on('mousedown', areaChoose);
-
-                        break;
-
-                    case 'horizontal':
-
-                        $('.wBorder').find('div').eq(0).css('width', $('.wrBorder').find('div').eq(0).css('width'));
-
-                        $('.wBorder').find('div').eq(3).css('width', $('.wrBorder').find('div').eq(3).css('width'));
-
-                        $('.wBorder').find('div').eq(0).css('left', $('.wrBorder').find('div').eq(0).css('left'));
-
-                        $('.wBorder').find('div').eq(3).css('left', $('.wrBorder').find('div').eq(3).css('left'));
-
-                        $('.wBorder').find('div').eq(1).css('left', $('.wrBorder').find('div').eq(1).css('left'));
-
-                        $('.wBorder').find('div').eq(2).css('left', $('.wrBorder').find('div').eq(2).css('left'));
-
-                        var t3 = parseInt($('.wBorder').find('div').eq(3).css('top'));
-
-                        var t0 = parseInt($('.wBorder').find('div').eq(0).css('top'));
-
-                        var l1 = parseInt($('.wBorder').find('div').eq(1).css('left'));
-
-                        var l2 = parseInt($('.wBorder').find('div').eq(2).css('left'));
-
-                        $('.dataTable tr td').each(function () {
-
-                            if ($(this)[0].offsetTop <= t3 && $(this)[0].offsetTop >= t0 &&
-
-                                $(this)[0].offsetLeft >= l1 && $(this)[0].offsetLeft < l2) {
-
-                                $($(this)[0]).text(_text);
-
-                            }
-
-                        });
-
-                        $(that.container).on('mousedown', areaChoose);
-
-                        break;
-
-                    default:
-
-                        break;
-
-                }
-
-
-
-
-            });
-
-        });
-
-    });
-
-}
-
 iTable.prototype.lightCoor = function (obj) {
 
     var target = obj;
@@ -2912,12 +2143,6 @@ iTable.prototype.lightCoor = function (obj) {
 iTable.prototype.createFooter = function () {
 
     this.footer = $('<div class="footer"></div>');
-
-    this.footer.css({
-
-        'z-index': 102
-
-    })
 
     this.container.after(this.footer);
 
@@ -2995,25 +2220,24 @@ iTable.prototype.fontFamily = function () {
 
     });
 
-    sel_a.mouseover(function () {
-
+    sel_a.on('mouseover',function(){
         $(this).css({
 
             'background': '#ECECEC'
 
         });
-
     });
 
-    sel_a.mouseout(function () {
-
+    sel_a.on('mouseout',function(){
         $(this).css({
 
             'background': '#FFFFFF'
 
         });
-
     });
+
+
+
 
 }
 
@@ -3309,6 +2533,284 @@ iTable.prototype.express = function () {
 
 }
 
+iTable.prototype.fillType = function(){
+    var select = this.createSelection('fillType', this.settings.fillType);
+    var sel_a = $(select).find('ul li a');
+
+    var that = this;
+
+    sel_a.on('click', function () {
+
+        var ways = $(this).attr('class').replace('ft_', '');
+
+        that.setFilltype(ways);
+
+    });
+}
+iTable.prototype.setFilltype=function(ways){
+    switch (ways){
+        case 'normal':
+            ftNormal();
+            break;
+        case 'number':
+            ftNumber();
+            break;
+        case 'date':
+            ftDate();
+            break;
+        case 'account':
+            ftAccount();
+            break;
+        case 'percent':
+            ftPercent();
+            break;
+        case 'text':
+            ftText();
+            break;
+
+    }
+}
+
+function ftNormal(){
+      if($('.picked').length>0){
+          $('.picked').each(function(){
+              var className, curClass;
+
+              var selThem;
+              if(!$(this).hasClass('ftNormal')){
+                  className = 'ftNormal';
+
+                  $('.picked').addClass(className);
+
+                  var reg = new RegExp("(((ft)[A-Za-z0-9_]+\s*)+)", "g");
+
+                  curClass = $('.picked').attr('class');
+
+                  if (!!curClass) {
+
+                      curClass = curClass.replace(reg, className);
+
+                  } else {
+
+                      return;
+
+                  }
+
+                  curClass = _.uniq(curClass.split(' ')).join(' ');
+
+                  selThem = $('.picked');
+
+                  $('.picked').removeAttr('class');
+
+                  selThem.addClass(curClass);
+
+              }
+
+          });
+
+      }
+}
+
+function ftNumber(){
+    if($('.picked').length>0){
+        $('.picked').each(function(){
+            var className, curClass;
+
+            var selThem;
+            if(!$(this).hasClass('ftNumber')){
+                className = 'ftNumber';
+
+                $('.picked').addClass(className);
+
+                var reg = new RegExp("(((ft)[A-Za-z0-9_]+\s*)+)", "g");
+
+                curClass = $('.picked').attr('class');
+
+                if (!!curClass) {
+
+                    curClass = curClass.replace(reg, className);
+
+                } else {
+
+                    return;
+
+                }
+
+                curClass = _.uniq(curClass.split(' ')).join(' ');
+
+                selThem = $('.picked');
+
+                $('.picked').removeAttr('class');
+
+                selThem.addClass(curClass);
+
+            }
+
+        });
+
+    }
+}
+
+function ftDate(){
+    if($('.picked').length>0){
+        $('.picked').each(function(){
+            var className, curClass;
+
+            var selThem;
+            if(!$(this).hasClass('ftDate')){
+                className = 'ftDate';
+
+                $('.picked').addClass(className);
+
+                var reg = new RegExp("(((ft)[A-Za-z0-9_]+\s*)+)", "g");
+
+                curClass = $('.picked').attr('class');
+
+                if (!!curClass) {
+
+                    curClass = curClass.replace(reg, className);
+
+                } else {
+
+                    return;
+
+                }
+
+                curClass = _.uniq(curClass.split(' ')).join(' ');
+
+                selThem = $('.picked');
+
+                $('.picked').removeAttr('class');
+
+                selThem.addClass(curClass);
+
+            }
+
+        });
+
+    }
+}
+
+function ftAccount(){
+    if($('.picked').length>0){
+        $('.picked').each(function(){
+            var className, curClass;
+
+            var selThem;
+            if(!$(this).hasClass('ftAccount')){
+                className = 'ftAccount';
+
+                $('.picked').addClass(className);
+
+                var reg = new RegExp("(((ft)[A-Za-z0-9_]+\s*)+)", "g");
+
+                curClass = $('.picked').attr('class');
+
+                if (!!curClass) {
+
+                    curClass = curClass.replace(reg, className);
+
+                } else {
+
+                    return;
+
+                }
+
+                curClass = _.uniq(curClass.split(' ')).join(' ');
+
+                selThem = $('.picked');
+
+                $('.picked').removeAttr('class');
+
+                selThem.addClass(curClass);
+
+            }
+
+        });
+
+    }
+}
+
+function ftPercent(){
+    if($('.picked').length>0){
+        $('.picked').each(function(){
+            var className, curClass;
+
+            var selThem;
+            if(!$(this).hasClass('ftPercent')){
+                className = 'ftPercent';
+
+                $('.picked').addClass(className);
+
+                var reg = new RegExp("(((ft)[A-Za-z0-9_]+\s*)+)", "g");
+
+                curClass = $('.picked').attr('class');
+
+                if (!!curClass) {
+
+                    curClass = curClass.replace(reg, className);
+
+                } else {
+
+                    return;
+
+                }
+
+                curClass = _.uniq(curClass.split(' ')).join(' ');
+
+                selThem = $('.picked');
+
+                $('.picked').removeAttr('class');
+
+                selThem.addClass(curClass);
+
+            }
+
+        });
+
+    }
+}
+
+function ftText(){
+    if($('.picked').length>0){
+        $('.picked').each(function(){
+            var className, curClass;
+
+            var selThem;
+            if(!$(this).hasClass('ftText')){
+                className = 'ftText';
+
+                $('.picked').addClass(className);
+
+                var reg = new RegExp("(((ft)[A-Za-z0-9_]+\s*)+)", "g");
+
+                curClass = $('.picked').attr('class');
+
+                if (!!curClass) {
+
+                    curClass = curClass.replace(reg, className);
+
+                } else {
+
+                    return;
+
+                }
+
+                curClass = _.uniq(curClass.split(' ')).join(' ');
+
+                selThem = $('.picked');
+
+                $('.picked').removeAttr('class');
+
+                selThem.addClass(curClass);
+
+            }
+
+        });
+
+    }
+}
+
 //列插入
 
 iTable.prototype.insertCol = function () {
@@ -3410,21 +2912,21 @@ iTable.prototype.insertCol = function () {
 
                     if (cols == xIndex) {
 
-                        var cspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
+                        var cSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
 
-                        var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
+                        var rSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
 
-                        if (cspan >= 2) {
+                        if (cSpan >= 2) {
 
-                            $('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cspan + 1);
+                            $('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cSpan + 1);
 
                         } else {
 
-                            if (rspan > 1) {
+                            if (rSpan > 1) {
 
-                                for (var r = i; r < i + rspan; r++) {
+                                for (var r = i; r < i + rSpan; r++) {
 
-                                    $('td[cols=' + (j - cspan) + '][rows=' + r + ']').after('<td style="background:orange"></td>');
+                                    $('td[cols=' + (j - cSpan) + '][rows=' + r + ']').after('<td style="background:orange"></td>');
 
                                 }
 
@@ -3444,17 +2946,17 @@ iTable.prototype.insertCol = function () {
 
                             if (time == 1) {
 
-                                var cspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
+                                var cSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
 
-                                var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
+                                var rSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
 
-                                if (cspan >= 2) {
+                                if (cSpan >= 2) {
 
                                     //不同行拓宽
 
-                                    if (!(i < yIndex && (rspan + i) > yIndex)) {
+                                    if (!(i < yIndex && (rSpan + i) > yIndex)) {
 
-                                        $('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cspan + 1);
+                                        $('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cSpan + 1);
 
                                     }
 
@@ -3586,11 +3088,11 @@ iTable.prototype.insertRow = function () {
 
                         }
 
-                        var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
+                        var rSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
 
-                        if (rspan >= 2) {
+                        if (rSpan >= 2) {
 
-                            $('td[cols=' + j + '][rows=' + i + ']').attr('rowspan', rspan + 1);
+                            $('td[cols=' + j + '][rows=' + i + ']').attr('rowspan', rSpan + 1);
 
                         } else {
 
@@ -3604,15 +3106,15 @@ iTable.prototype.insertRow = function () {
 
                         if ($('td[cols=' + j + '][rows=' + i + ']').length > 0) {
 
-                            var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
+                            var rSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
 
-                            var cspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
+                            var cSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
 
-                            if (rspan >= 2) {
+                            if (rSpan >= 2) {
 
                                 if (parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rows')) + parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) - 1 >= yIndex) {
 
-                                    $('td[cols=' + j + '][rows=' + i + ']').attr('rowspan', rspan + 1);
+                                    $('td[cols=' + j + '][rows=' + i + ']').attr('rowspan', rSpan + 1);
 
                                 }
 
@@ -3702,11 +3204,11 @@ iTable.prototype.deleteCol = function () {
 
                     if (cols == index) {
 
-                        var cspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
+                        var cSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
 
-                        if (cspan >= 2) {
+                        if (cSpan >= 2) {
 
-                            $('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cspan - 1);
+                            $('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cSpan - 1);
 
                         } else {
 
@@ -3722,11 +3224,11 @@ iTable.prototype.deleteCol = function () {
 
                             if (time == 1) {
 
-                                var cspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
+                                var cSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
 
-                                if (cspan >= 2) {
+                                if (cSpan >= 2) {
 
-                                    $('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cspan - 1);
+                                    $('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cSpan - 1);
 
                                 }
 
@@ -3848,73 +3350,95 @@ iTable.prototype.deleteRow = function () {
 
 iTable.prototype.formula = function (ways) {
 
-    var func = ways;
-
-    var target = $('.picked')[0];
-
-    var tmpContent = $(target).text();
-
-    var xCoo = $(target).attr('cols');
-
-    var yCoo = $(target).attr('rows');
-
-    var input = '<input type="text" class="fxInput" onkeyup="this.size=(this.value.length>4?this.value.length:4)";>';
-
-    var width = target.offsetWidth;
-
-    var height = target.offsetHeight;
-
-    var left = target.offsetLeft;
-
-    var top = target.offsetTop;
-
-    var enterDiv = '<div class="fxDiv">';
-
-    enterDiv = enterDiv + ways + '(' + input + ')' + '</div>';
-
-    this.container.append($(enterDiv));
-
-    $('.fxDiv').css({
-
-        'height': height - 2,
-
-        'left': left,
-
-        'top': top,
+    switch (ways){
+        case 'sum':
+            fxSum();
+            break;
+        case 'avg':
+            fxAvg();
+            break;
+        case 'count':
+            fxCount();
+            break;
+        case 'max':
+            fxMax();
+            break;
+        case 'min':
+            fxMin();
+            break;
+    }
 
 
-    });
+}
+function fxSum(){
+       if($('.picked').length>0){
+           var sum=0;
+           $('.picked').each(function(){
+              var val=$(this).text();
+              console.log(typeof val);
+              if(typeof val=='number'){
+                  sum+=val;
+              }
+           });
+       }
+       console.log(sum);
+}
 
-    $('.fxInput').css({
+function fxAvg(){
+    if($('.picked').length>0){
+        var sum=0,pL=$('.picked').length,avg=0;
+        $('.picked').each(function(){
+            var val=$(this).text();
+            if(typeof val=='number'){
+                sum+=val;
+            }
+        });
+        avg=sum/pL;
+    }
+    console.log(avg);
+}
 
-        'height': height - 10,
+function fxCount(){
+    if($('.picked').length>0){
+        var count=0;
+        $('.picked').each(function(){
+            var val=$(this).text();
+            if(typeof val=='number'){
+                count++;
+            }
+        });
 
-        'line-height': height - 10,
+    }
+    console.log(count);
+}
 
-        'border': 'none',
+function fxMax(){
+    if($('.picked').length>0){
+        var arr;
+        $('.picked').each(function(){
+            var val=$(this).text();
+            if(typeof val=='number'){
+                arr.push(val);
+            }
+        });
 
-        'outline': 'none'
+    }
+    console.log(_.max(arr));
+}
 
-    });
 
-    $('.fxInput').keyup(function () {
+function fxMin(){
+    if($('.picked').length>0){
+        var arr;
+        $('.picked').each(function(){
+            var val=$(this).text();
+            if(typeof val=='number'){
+                arr.push(val);
+            }
+        });
 
-        var ev = ev || event;
-
-        var endValue = $(this).val();
-
-        if (ev.keyCode == 13) {
-
-            endValue.split();
-
-            $(this).blur();
-
-            $(this).parent().remove();
-
-        }
-
-    });
-
+    }
+    console.log(_.min(arr));
 }
 
 //合并单元格
@@ -3999,53 +3523,53 @@ iTable.prototype.mergeTd = function () {
 
         });
 
-        var rmin = 10000,
+        var rMin = 10000,
 
-            cmin = 10000;
+            cMin = 10000;
 
-        var rmax = 0,
+        var rMax = 0,
 
-            cmax = 0;
+            cMax = 0;
 
-        var rnum, cnum;
+        var rNum, cNum;
 
         // 计算起始和跨距
 
         $("th,td", $t).filter("." + sigSel).each(function () {
 
-            var ridx = $("tr", $t).index($(this).parent("tr"));
+            var rIdx = $("tr", $t).index($(this).parent("tr"));
 
-            rmin = ridx < rmin ? ridx : rmin;
+            rMin = rIdx < rMin ? rIdx : rMin;
 
-            rmax = ridx > rmax ? ridx : rmax;
+            rMax = rIdx > rMax ? rIdx : rMax;
 
-            var cidx = $(this).parent().children("th,td").index(this);
+            var cIdx = $(this).parent().children("th,td").index(this);
 
-            cmin = cidx < cmin ? cidx : cmin;
+            cMin = cIdx < cMin ? cIdx : cMin;
 
-            cmax = cidx > cmax ? cidx : cmax;
+            cMax = cIdx > cMax ? cIdx : cMax;
 
         });
 
-        rnum = rmax - rmin + 1;
+        rNum = rMax - rMin + 1;
 
-        cnum = cmax - cmin + 1;
+        cNum = cMax - cMin + 1;
 
         // 合并单元格
 
         $("th,td", $t).each(function () {
 
-            var ridx = $("tr", $t).index($(this).parent("tr"));
+            var rIdx = $("tr", $t).index($(this).parent("tr"));
 
-            var cidx = $(this).parent().children("th,td").index(this);
+            var cIdx = $(this).parent().children("th,td").index(this);
 
-            if (rmin <= ridx && ridx <= rmax && cmin <= cidx && cidx <= cmax) $(this).addClass(sigDel);
+            if (rMin <= rIdx && rIdx <= rMax && cMin <= cIdx && cIdx <= cMax) $(this).addClass(sigDel);
 
-            if (ridx == rmin && cidx == cmin) $(this).removeClass(sigDel).attr({
+            if (rIdx == rMin && cIdx == cMin) $(this).removeClass(sigDel).attr({
 
-                rowspan: rnum,
+                rowspan: rNum,
 
-                colspan: cnum
+                colspan: cNum
 
             });
 
@@ -4217,8 +3741,8 @@ iTable.prototype.dataSelection=function(json){
         selectLi = $('<li></li>');
         selectLi.append(aTab);
         selectUl.append(selectLi);
-        var callback=json[index].callback;
-        aTab.on('click',{callback},function(event){
+        var _callBack=json[index].callback;
+        aTab.on('click',{_callBack},function(event){
             event.data.callback();
         });
 
@@ -4279,7 +3803,7 @@ iTable.prototype.createCellMenu = function (dClass, className, menus) {
 
     var selectTr = $('<tr></tr>');
 
-    var selectTd, length = JSONLength(menus);
+    var selectTd;
 
     var arr1 = [],
 
@@ -4531,9 +4055,9 @@ iTable.prototype.setIndex = function () {
 
     // 遍历第一次取出offsetLeft集合
 
-    for (var i = 0; i < objTab.rows.length; i++) {
+    for (var i = 0,l=objTab.rows.length; i < l; i++) {
 
-        for (var j = 0; j < objTab.rows[i].cells.length; j++) {
+        for (var j = 0,_l=objTab.rows[i].cells.length; j < _l; j++) {
 
             cell = objTab.rows[i].cells[j];
 
@@ -4553,9 +4077,9 @@ iTable.prototype.setIndex = function () {
 
     // 遍历第二次生成cellStrArray
 
-    for (var i = 0; i < objTab.rows.length; i++) {
+    for (var i = 0,l = objTab.rows.length; i < l; i++) {
 
-        for (var j = 0; j < objTab.rows[i].cells.length; j++) {
+        for (var j = 0,_l = objTab.rows[i].cells.length; j < _l; j++) {
 
             cell = objTab.rows[i].cells[j];
 
@@ -4565,9 +4089,9 @@ iTable.prototype.setIndex = function () {
 
             cellStrArray.push(cellStr);
 
-            var coo = (i + 1) + ',' + (col + 1);
-
-            var coo = cellStrArray[j];
+            // var coo = (i + 1) + ',' + (col + 1);
+            //
+            // var coo = cellStrArray[j];
 
             cell.setAttribute('rows', i + 1);
 
@@ -5032,32 +4556,19 @@ iTable.prototype.rMenus = function () {
             'left': winW - mW - 20
 
         }));
+        if($('.picked').length>1){
 
+            that.setBlueBorder($('.picked'));
+        }else{
+            $('.picked').removeClass('picked');
+            $(that.moveLast).addClass('picked');
+            that.setBlueBorder(that.moveLast);
+        }
+
+       //  that.setBlueBorder(that.moveLast);
         return false;
 
     });
-
-    $('.dataTable').find('tr td').each(function () {
-
-        $(this).contextmenu(function () {
-
-            var arr = $('.picked');
-
-            var obj = this;
-
-            var has = containsArray(arr, obj);
-
-            if (has == -1) {
-
-                $('.dataTable').find('td').removeClass('picked');
-
-            }
-
-            $(this).addClass('picked');
-
-        });
-
-    })
 
 }
 
@@ -5086,6 +4597,10 @@ iTable.prototype.createRmenus = function () {
     var _delete = this._delete(dataArr);
 
     menus.append(_delete);
+
+    var clearContent = this.clearContent();
+
+    menus.append(clearContent);
 
     $('body').append(menus);
 
@@ -5146,7 +4661,7 @@ iTable.prototype.cut = function (dataArr) {
 iTable.prototype.copy = function () {
 
     var copyDiv = $('<div class="menu-copy">复制</div>');
-
+    var dataArr=[];
     copyDiv.on('click', function () {
 
         var tdLength = $('.picked').length;
@@ -5291,13 +4806,32 @@ iTable.prototype._delete = function () {
 
 }
 
+
+iTable.prototype.clearContent =function(){
+    var clearDiv=$('<div class="menu-delete">清空内容</div>');
+
+    clearDiv.on('click',function(){
+
+            if($('.picked').length<0){
+                return;
+            }else{
+                $('.picked').each(function(){
+                    $(this).html('');
+                });
+            }
+
+
+    });
+    return clearDiv;
+
+}
+
+
 iTable.prototype.tdTofx = function (obj) {
 
     var tdVal = obj.text();
 
-    var fx = $('#ip_fx');
-
-    fx.val(tdVal);
+    $('#ip_fx').val(tdVal);
 
 }
 
@@ -5431,7 +4965,7 @@ iTable.prototype.leftBarHandle = function (callback) {
 
 iTable.prototype.charts = function () {
 
-    var menu = this.createSimpleMenu('charts');
+    this.createSimpleMenu('charts');
 
     this.chartsHandler();
 
@@ -5449,7 +4983,7 @@ iTable.prototype.chartsHandler = function (callback) {
 
 iTable.prototype.dataSource = function () {
 
-    var menu = this.createSimpleMenu('dataSource');
+    this.createSimpleMenu('dataSource');
 
     this.dataSourceHandler();
 
@@ -5467,7 +5001,7 @@ iTable.prototype.dataSourceHandler = function (callback) {
 
 iTable.prototype.dataSet = function () {
 
-    var menu = this.createSimpleMenu('dataSet');
+    this.createSimpleMenu('dataSet');
 
     this.dataSetHandler();
 
@@ -5485,7 +5019,7 @@ iTable.prototype.dataSetHandler = function (callback) {
 
 iTable.prototype.dataSearch = function () {
 
-    var menu = this.createSimpleMenu('dataSearch');
+    this.createSimpleMenu('dataSearch');
 
     this.dataSetHandler();
 
@@ -5500,6 +5034,30 @@ iTable.prototype.dataSearchHandler = function (callback) {
     }
 
 }
+
+iTable.prototype.saveBtn=function(){
+    var btn=$('<input type="button" class="saveBtn" value="保存">');
+    var that=this;
+    this.header.find('.tools').append(btn);
+    btn.css({
+        'float':'right',
+        'margin-right':'10px',
+        'margin-top':'6px'
+    });
+
+    //btn.on('click',that.exportSheet);
+}
+
+iTable.prototype.saveReport = function (callback) {
+
+    if (callback) {
+
+        callback();
+
+    }
+
+}
+
 
 iTable.prototype.iDrag = function (obj) {
 
@@ -5693,23 +5251,6 @@ function stopPropagation(e) {
 
 }
 
-//
-
-function JSONLength(obj) {
-
-    var size = 0,
-
-        key;
-
-    for (key in obj) {
-
-        if (obj.hasOwnProperty(key)) size++;
-
-    }
-
-    return size;
-
-};
 
 //数字转字母 27->AA
 
@@ -5840,6 +5381,10 @@ iTable.prototype.init = function () {
     this.blueBorder();
 
     this.cornerCopy();
+
+    this.saveBtn();
+
+    this.fillType();
 }
 
 var settings = {
@@ -6086,7 +5631,34 @@ var settings = {
 
         'min': 'fx_min'
 
+    },
+    fillType: {
+
+        '常规': 'ft_normal',
+
+        '数字': 'ft_number',
+
+        '日期': 'ft_date',
+
+        '会计专用': 'ft_account',
+
+        '百分比': 'ft_percent',
+
+        '文本': 'ft_text'
+//         case 'normal':
+// break;
+// case 'number':
+// break;
+// case 'date':
+// break;
+// case 'account':
+// break;
+// case 'percent':
+// break;
+// case 'text':
+// break;
     }
+
 
 
 }
@@ -6163,3 +5735,8 @@ function other(){
 //         initSearchConfig(webBasePath);
 //     });
 // });
+t.saveReport(function () {
+    $('.saveBtn').on('click', function () {
+        alert('3');
+    });
+});
