@@ -1944,13 +1944,7 @@ iTable.prototype.setRedBorder=function(obj){
 
             });
 
-            $('.scorner').css({
-
-                'top':  totalHeight - 2,
-
-                'left': totalWidth - 2,
-
-            });
+         //   $('.scorner').hide();
 
         }
 
@@ -1958,6 +1952,12 @@ iTable.prototype.setRedBorder=function(obj){
     }else{
 
     }
+}
+
+
+
+iTable.prototype.hideReadBorder=function(){
+    $('.wrBorder').hide();
 }
 
 
@@ -2102,7 +2102,9 @@ iTable.prototype.cornerCopy=function(){
 
             var ev = window.event || arguments[0];
 
-            var coords=$(that.moveLast);
+            var coords=$('.picked');
+
+            var copyVal=$(coords).html();
 
             var tdWidth=parseInt($(coords).width());
 
@@ -2116,11 +2118,15 @@ iTable.prototype.cornerCopy=function(){
 
             var onRspan = parseInt($(coords).attr('rowspan'))  || 1;
 
-            var expectX = onCols + onCspan-1;
+            var oLeft=$(coords).offset().left;
 
-            var expectY = onRows + onRspan-1;
+            var oTop=$(coords).offset().top+parseInt($('.header').outerHeight());
 
-            var xMin = expectX,yMin = expectY;
+            var oexpectX = onCols + onCspan-1;
+
+            var oexpectY = onRows + onRspan-1;
+
+            var xMin = oexpectX,yMin = oexpectY;
 
             var sleft = parseInt($(this).scrollLeft());
 
@@ -2167,49 +2173,44 @@ iTable.prototype.cornerCopy=function(){
 
                 if(_x-oX>=0){
 
-                    if(_y-oY>=0&&_y-oY<=tdHeight){
+                    if(_y<=oY&&_y>=oY-tdHeight){
                          //E
-                        xMin=onCols,yMin=onRows,yMax=yMin;
-
+                        yMax=yMin;
 
                     }
-                    if(_y-oY>=0&&_y-oY>tdHeight){
+
+                    if(_y<oY&&_y<oY-tdHeight){
+                        //E-N
+                        yMax=yMin;
+                    }
+
+                    if(_y>oY){
                         //E-S
-                       xMin=onCols,yMin=onRows,yMax=yMin;
-
-                    }
-                    if(_y-oY<0&&_y-oY<=tdHeight){
-                        //E-N
-                        xMin=onCols,yMin=onRows,yMax=yMin;
-
+                        yMax=yMin;
                     }
 
-                    if(_y-oY<0&&_y-oY>tdHeight){
-                        //E-N
-                       // console.log('N');
-                    }
                 }else{
-                    if(_y-oY>=0&&_y-oY<=tdHeight){
-                        //E
-                        xMin=onCols,yMin=onRows,yMax=yMin;
-
+                    if(_y<=oY&&_y>=oY-tdHeight&&_x+tdWidth<oX){
+                        //W
+                        yMax=yMin;
                     }
-                    if(_y-oY>=0&&_y-oY>tdHeight){
-                        //E-S
-                        xMin=onCols,yMin=onRows,xMax=xMin;
-
+                    if(_y<oY&&_y<oY-tdHeight&&_x+tdWidth<oX){
+                        //W-N
+                        yMax=yMin;
                     }
-                    if(_y-oY<0&&_y-oY<=tdHeight){
-                        //E-N
-                        xMin=onCols,yMin=onRows,xMax=xMin;
-
+                    if(_y>oY&&_x+tdWidth<oX){
+                        //W-S
+                        yMax=yMin;
+                    }
+                    if(_y<oY&&_y<oY-tdHeight&&_x+tdWidth>oX){
+                        //N
+                        xMax=xMin;
+                    }
+                    if(_y>oY&&_x+tdWidth>=oX){
+                        //S
+                        xMax=xMin;
                     }
 
-                    // if(_y-oY<0&&_y-oY<tdHeight){
-                    //     //E-N
-                    //
-                    //     xMin=onCols,yMin=onRows,xMax=xMin;
-                    // }
                 }
 
 
@@ -2220,8 +2221,6 @@ iTable.prototype.cornerCopy=function(){
                     for(var i = xMin; i <= xMax ; i++) {
                         for(var j = yMin; j <= yMax; j++) {
                             var id='#'+j+'-'+i;
-
-
                             $(id).addClass('picked');
 
                         }
@@ -2261,6 +2260,15 @@ iTable.prototype.cornerCopy=function(){
                 that.setRedBorder($('.picked'));
 
 
+
+            });
+            $(document).off('mouseup').on('mouseup',function(){
+                that.hideReadBorder();
+                $('.picked').text(copyVal);
+                $(this).off('mouseup');
+                $(that.container).off('mousedown');
+                $(that.container).off('mousemove');
+                that.frameSelect();
             });
 
 
