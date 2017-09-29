@@ -357,7 +357,7 @@ iTable.prototype.setTextarea=function(visible){
         var w = $('.picked').width();
         var h = $('.picked').height();
         var x = $('.picked').offset().left+$(this.container).scrollLeft();
-        var y=$('.picked').offset().top+$(this.container).scrollTop()-$('.header').height()-h;
+        var y=$('.picked').offset().top+$(this.container).scrollTop()-parseInt($(this.container).css('margin-top'));
 
         if(visible==1){
             $('.itableInputHolder').show();
@@ -367,7 +367,7 @@ iTable.prototype.setTextarea=function(visible){
 
         $('.itableInputHolder').css({
             'left':x-2,
-            'top':y-6,
+            'top':y-2,
         });
 
         $('.itableInput').css({
@@ -1383,6 +1383,7 @@ iTable.prototype.setCss = function () {
     tHead.css({
         'width': viewWidth,
     });
+
 
     tBody.css({
 
@@ -3714,6 +3715,9 @@ iTable.prototype.createSelection = function (id, menus) {
         selectUl.toggle();
 
     });
+    // $(selectUl).slimScroll({
+    //     height: '100px'
+    // });
 
     selectUl.find('li a').on('click', function () {
 
@@ -5330,7 +5334,7 @@ iTable.prototype.init = function () {
 
     tOption.fontColor && this.fontColor();
 
-    tOption.bgColor && this.bgColor();
+    tOption.fontBgcolor && this.bgColor();
 
     tOption.mergeTd && this.mergeTd();
 
