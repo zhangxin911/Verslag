@@ -2551,28 +2551,36 @@ iTable.prototype.fillType = function(){
 
 iTable.prototype.getFilltype=function(obj){
 
-    $(obj).each(function(){
+    // $(obj).each(function(){
 
-        if($(this).hasClass('ftNormal')){
-             return parseInt($(this).text());
-        }
-        if($(this).hasClass('ftNumber')){
-            return parseInt($(this).text());
-        }
-        if($(this).hasClass('ftDate')){
+        if($(obj).hasClass('ftNormal')){
+
+             return parseInt($(obj).text());
+
+        }else if($(obj).hasClass('ftNumber')){
+
+            return parseInt($(obj).text());
+
+        }else if($(obj).hasClass('ftDate')){
+
             return;
-        }
-        if($(this).hasClass('ftAccount')){
-            return parseInt($(this).text());
-        }
-        if($(this).hasClass('ftPercent')){
 
-        }
-        if($(this).hasClass('ftText')){
+        }else if($(obj).hasClass('ftAccount')){
 
+            return $(obj).text().replace('¥','');
+
+        }else if($(obj).hasClass('ftPercent')){
+
+            return  parseInt($(obj).text());
+
+        }else if($(obj).hasClass('ftText')){
+            return;
+        }else{
+
+            return parseInt($(obj).text());
         }
 
-    });
+    // });
 }
 
 iTable.prototype.setFilltype=function(ways){
@@ -2594,6 +2602,8 @@ iTable.prototype.setFilltype=function(ways){
             break;
         case 'text':
             ftText();
+            break;
+        default:
             break;
 
     }
@@ -2907,23 +2917,27 @@ iTable.prototype.insertCol = function () {
 
 
 
-                    if ($('td[cols=' + xMin + '][rows=' + _y + ']').length > 0) {
+                  //  if ($('td[cols=' + xMin + '][rows=' + _y + ']').length > 0) {
+                    if ($('#' + _y + '-' + xMin ).length > 0) {
 
 
-                        $('td[cols=' + xMin + '][rows=' + _y + ']').before('<td style="background:orange"></td>');
+                        //$('td[cols=' + xMin + '][rows=' + _y + ']').before('<td style="background:orange"></td>');
+                        $('#' + _y + '-' + xMin ).before('<td style="background:orange"></td>');
 
                     } else {
 
                         while (index > -1) {
 
-                            if ($('td[cols=' + index + '][rows=' + _y + ']').length > 0) {
+                          //  if ($('td[cols=' + index + '][rows=' + _y + ']').length > 0) {
+
+                            if ($('#' + _y + '-' + index).length > 0) {
 
                                 time++;
 
                                 if (time == 1) {
 
-                                    $('td[cols=' + index + '][rows=' + _y + ']').after('<td style="background:orange"></td>');
-
+                                //    $('td[cols=' + index + '][rows=' + _y + ']').after('<td style="background:orange"></td>');
+                                    $('#' + _y + '-' + index).after('<td style="background:orange"></td>');
                                 }
 
                             }
@@ -3474,6 +3488,8 @@ iTable.prototype.formula = function (ways) {
         case 'min':
             fxMin();
             break;
+        default:
+            break;
     }
 
 
@@ -3482,8 +3498,10 @@ function fxSum(){
        if($('.picked').length>0){
            var sum=0;
            $('.picked').each(function(){
-              var val=$(this).text();
-              console.log(typeof val);
+               var val=t.getFilltype($(this));
+               if(val==NaN){
+                   val=0;
+               }
               if(typeof val=='number'){
                   sum+=val;
               }
