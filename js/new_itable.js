@@ -366,8 +366,8 @@ iTable.prototype.setTextarea=function(visible){
         }
 
         $('.itableInputHolder').css({
-            'left':x-2,
-            'top':y-2,
+            'left':x,
+            'top':y,
         });
 
         $('.itableInput').css({
@@ -2548,6 +2548,33 @@ iTable.prototype.fillType = function(){
 
     });
 }
+
+iTable.prototype.getFilltype=function(obj){
+
+    $(obj).each(function(){
+
+        if($(this).hasClass('ftNormal')){
+             return parseInt($(this).text());
+        }
+        if($(this).hasClass('ftNumber')){
+            return parseInt($(this).text());
+        }
+        if($(this).hasClass('ftDate')){
+            return;
+        }
+        if($(this).hasClass('ftAccount')){
+            return parseInt($(this).text());
+        }
+        if($(this).hasClass('ftPercent')){
+
+        }
+        if($(this).hasClass('ftText')){
+
+        }
+
+    });
+}
+
 iTable.prototype.setFilltype=function(ways){
     switch (ways){
         case 'normal':
@@ -2581,11 +2608,11 @@ function ftNormal(){
               if(!$(this).hasClass('ftNormal')){
                   className = 'ftNormal';
 
-                  $('.picked').addClass(className);
+                  $(this).addClass(className);
 
                   var reg = new RegExp("(((ft)[A-Za-z0-9_]+\s*)+)", "g");
 
-                  curClass = $('.picked').attr('class');
+                  curClass = $(this).attr('class');
 
                   if (!!curClass) {
 
@@ -2599,11 +2626,13 @@ function ftNormal(){
 
                   curClass = _.uniq(curClass.split(' ')).join(' ');
 
-                  selThem = $('.picked');
+                  selThem = $(this);
 
-                  $('.picked').removeAttr('class');
+                  $(this).removeAttr('class');
 
                   selThem.addClass(curClass);
+
+
 
               }
 
@@ -2621,11 +2650,11 @@ function ftNumber(){
             if(!$(this).hasClass('ftNumber')){
                 className = 'ftNumber';
 
-                $('.picked').addClass(className);
+                $(this).addClass(className);
 
                 var reg = new RegExp("(((ft)[A-Za-z0-9_]+\s*)+)", "g");
 
-                curClass = $('.picked').attr('class');
+                curClass = $(this).attr('class');
 
                 if (!!curClass) {
 
@@ -2639,11 +2668,12 @@ function ftNumber(){
 
                 curClass = _.uniq(curClass.split(' ')).join(' ');
 
-                selThem = $('.picked');
+                selThem = $(this);
 
-                $('.picked').removeAttr('class');
+                $(this).removeAttr('class');
 
                 selThem.addClass(curClass);
+
 
             }
 
@@ -2661,11 +2691,11 @@ function ftDate(){
             if(!$(this).hasClass('ftDate')){
                 className = 'ftDate';
 
-                $('.picked').addClass(className);
+                $(this).addClass(className);
 
                 var reg = new RegExp("(((ft)[A-Za-z0-9_]+\s*)+)", "g");
 
-                curClass = $('.picked').attr('class');
+                curClass = $(this).attr('class');
 
                 if (!!curClass) {
 
@@ -2679,11 +2709,17 @@ function ftDate(){
 
                 curClass = _.uniq(curClass.split(' ')).join(' ');
 
-                selThem = $('.picked');
+                selThem = $(this);
 
-                $('.picked').removeAttr('class');
+                $(this).removeAttr('class');
 
                 selThem.addClass(curClass);
+
+                var date=new Date();
+                var year=date.getFullYear(),month=date.getMonth()+1,day=date.getDate();
+                var time=year+'/'+month+'/'+day;
+                $(this).text(time);
+
 
             }
 
@@ -2701,11 +2737,11 @@ function ftAccount(){
             if(!$(this).hasClass('ftAccount')){
                 className = 'ftAccount';
 
-                $('.picked').addClass(className);
+                $(this).addClass(className);
 
                 var reg = new RegExp("(((ft)[A-Za-z0-9_]+\s*)+)", "g");
 
-                curClass = $('.picked').attr('class');
+                curClass = $(this).attr('class');
 
                 if (!!curClass) {
 
@@ -2719,11 +2755,14 @@ function ftAccount(){
 
                 curClass = _.uniq(curClass.split(' ')).join(' ');
 
-                selThem = $('.picked');
+                selThem = $(this);
 
-                $('.picked').removeAttr('class');
+                $(this).removeAttr('class');
 
                 selThem.addClass(curClass);
+
+                var prefix='¥';
+                $(this).text(prefix);
 
             }
 
@@ -2741,11 +2780,11 @@ function ftPercent(){
             if(!$(this).hasClass('ftPercent')){
                 className = 'ftPercent';
 
-                $('.picked').addClass(className);
+                $(this).addClass(className);
 
                 var reg = new RegExp("(((ft)[A-Za-z0-9_]+\s*)+)", "g");
 
-                curClass = $('.picked').attr('class');
+                curClass = $(this).attr('class');
 
                 if (!!curClass) {
 
@@ -2759,11 +2798,14 @@ function ftPercent(){
 
                 curClass = _.uniq(curClass.split(' ')).join(' ');
 
-                selThem = $('.picked');
+                selThem = $(this);
 
-                $('.picked').removeAttr('class');
+                $(this).removeAttr('class');
 
                 selThem.addClass(curClass);
+
+                var prefix='%';
+                $(this).text(prefix);
 
             }
 
@@ -2781,11 +2823,11 @@ function ftText(){
             if(!$(this).hasClass('ftText')){
                 className = 'ftText';
 
-                $('.picked').addClass(className);
+                $(this).addClass(className);
 
                 var reg = new RegExp("(((ft)[A-Za-z0-9_]+\s*)+)", "g");
 
-                curClass = $('.picked').attr('class');
+                curClass = $(this).attr('class');
 
                 if (!!curClass) {
 
@@ -2799,9 +2841,9 @@ function ftText(){
 
                 curClass = _.uniq(curClass.split(' ')).join(' ');
 
-                selThem = $('.picked');
+                selThem = $(this);
 
-                $('.picked').removeAttr('class');
+                $(this).removeAttr('class');
 
                 selThem.addClass(curClass);
 
@@ -2863,7 +2905,10 @@ iTable.prototype.insertCol = function () {
 
                     var index = xMin;
 
+
+
                     if ($('td[cols=' + xMin + '][rows=' + _y + ']').length > 0) {
+
 
                         $('td[cols=' + xMin + '][rows=' + _y + ']').before('<td style="background:orange"></td>');
 
@@ -2909,17 +2954,26 @@ iTable.prototype.insertCol = function () {
 
                 for (var j = xIndex; j > -1; j--) {
 
-                    var cols = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('cols'));
+                   // var cols = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('cols'));
+
+                    var cols = parseInt($('#'+i+'-'+j).attr('cols'));
+
+                 //   console.log($('#'+i+'-'+j));
 
                     if (cols == xIndex) {
 
-                        var cSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
+                        // var cSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
+                        //
+                        // var rSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
 
-                        var rSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
+                        var cSpan = parseInt($('#'+i+'-'+j).attr('colspan')) || 1;
+
+                        var rSpan = parseInt($('#'+i+'-'+j).attr('rowspan')) || 1;
 
                         if (cSpan >= 2) {
 
-                            $('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cSpan + 1);
+                           // $('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cSpan + 1);
+                            $('#'+i+'-'+j).attr('colspan', cSpan + 1);
 
                         } else {
 
@@ -2927,13 +2981,15 @@ iTable.prototype.insertCol = function () {
 
                                 for (var r = i; r < i + rSpan; r++) {
 
-                                    $('td[cols=' + (j - cSpan) + '][rows=' + r + ']').after('<td style="background:orange"></td>');
+                                   // $('td[cols=' + (j - cSpan) + '][rows=' + r + ']').after('<td style="background:orange"></td>');
+                                    $('#' + r + '-' + (j - cSpan) ).after('<td style="background:orange"></td>');
 
                                 }
 
                             } else {
 
-                                $('td[cols=' + j + '][rows=' + i + ']').before('<td style="background:orange"></td>');
+                              //  $('td[cols=' + j + '][rows=' + i + ']').before('<td style="background:orange"></td>');
+                                $('#' + i + '-' + j ).after('<td style="background:orange"></td>');
 
                             }
 
@@ -2941,15 +2997,21 @@ iTable.prototype.insertCol = function () {
 
                     } else {
 
-                        if ($('td[cols=' + j + '][rows=' + i + ']').length > 0) {
+                    //    if ($('td[cols=' + j + '][rows=' + i + ']').length > 0) {
+
+                        if ($('#' + i + '-' + j).length > 0) {
 
                             time++;
 
                             if (time == 1) {
 
-                                var cSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
+                                // var cSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
+                                //
+                                // var rSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
 
-                                var rSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
+                                var cSpan = parseInt($('#' + i + '-' + j).attr('colspan')) || 1;
+
+                                var rSpan = parseInt($('#' + i + '-' + j).attr('rowspan')) || 1;
 
                                 if (cSpan >= 2) {
 
@@ -2957,7 +3019,10 @@ iTable.prototype.insertCol = function () {
 
                                     if (!(i < yIndex && (rSpan + i) > yIndex)) {
 
-                                        $('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cSpan + 1);
+                                     //   $('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cSpan + 1);
+
+                                        $('#' + i + '-' + j).attr('colspan', cSpan + 1);
+
 
                                     }
 
@@ -3042,7 +3107,8 @@ iTable.prototype.insertRow = function () {
 
                     var th = $('<th></th>');
 
-                    if ($('td[cols=' + _x + '][rows=' + yMin + ']').length > 0) {
+                    //if ($('td[cols=' + _x + '][rows=' + yMin + ']').length > 0) {
+                    if ($('#' + yMin + '-' + _x ).length > 0) {
 
                         if (_x == 0) {
 
@@ -3052,11 +3118,15 @@ iTable.prototype.insertRow = function () {
 
                         tr.append('<td style="background:orange"></td>');
 
-                        $('td[cols=' + _x + '][rows=' + yMin + ']').parent().before(tr);
+                     //   $('td[cols=' + _x + '][rows=' + yMin + ']').parent().before(tr);
+
+                        $('#' + yMin  + '-' + _x).parent().before(tr);
 
                     } else {
 
-                        $('td[cols=' + (_x - 1) + '][rows=' + yMin + ']').parent().after(tr);
+                        //$('td[cols=' + (_x - 1) + '][rows=' + yMin + ']').parent().after(tr);
+
+                        $('#' + yMin + '-' + _x - 1 ).parent().before(tr);
 
                     }
 
@@ -3076,7 +3146,9 @@ iTable.prototype.insertRow = function () {
 
                 for (var j = 0; j < that.cellCount + 2; j++) {
 
-                    var rows = $('td[cols=' + j + '][rows=' + i + ']').attr('rows');
+                //    var rows = $('td[cols=' + j + '][rows=' + i + ']').attr('rows');
+
+                    var rows = $('#' + i + '-' + j ).attr('rows');
 
                     if (rows == yIndex) {
 
@@ -3089,33 +3161,46 @@ iTable.prototype.insertRow = function () {
 
                         }
 
-                        var rSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
+                       // var rSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
+
+                        var rSpan = parseInt($('#' + i + '-' + j ).attr('rowspan')) || 1;
 
                         if (rSpan >= 2) {
 
-                            $('td[cols=' + j + '][rows=' + i + ']').attr('rowspan', rSpan + 1);
+                         //   $('td[cols=' + j + '][rows=' + i + ']').attr('rowspan', rSpan + 1);
+
+                            $('#' + i + '-' + j ).attr('rowspan', rSpan + 1);
 
                         } else {
 
                             tr.append('<td style="background:orange"></td>');
 
-                            $('td[cols=' + j + '][rows=' + i + ']').parent().before(tr);
+                         //   $('td[cols=' + j + '][rows=' + i + ']').parent().before(tr);
+
+                            $('#' + i + '-' + j ).parent().before(tr);
 
                         }
 
                     } else {
 
-                        if ($('td[cols=' + j + '][rows=' + i + ']').length > 0) {
+                       // if ($('td[cols=' + j + '][rows=' + i + ']').length > 0) {
+                            if ($('#' + i + '-' + j ).length > 0) {
 
-                            var rSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
+                            // var rSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
+                            //
+                            // var cSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
 
-                            var cSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
+                                var rSpan = parseInt($('#' + i + '-' + j ).attr('rowspan')) || 1;
+
+                                var cSpan = parseInt($('#' + i + '-' + j ).attr('colspan')) || 1;
 
                             if (rSpan >= 2) {
 
-                                if (parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rows')) + parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) - 1 >= yIndex) {
+                               // if (parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rows')) + parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) - 1 >= yIndex) {
+                                if (parseInt($('#' + i + '-' + j).attr('rows')) + parseInt($('#' + i + '-' + j).attr('rowspan')) - 1 >= yIndex) {
 
-                                    $('td[cols=' + j + '][rows=' + i + ']').attr('rowspan', rSpan + 1);
+                                   // $('td[cols=' + j + '][rows=' + i + ']').attr('rowspan', rSpan + 1);
+                                    $('#' + i + '-' + j).attr('rowspan', rSpan + 1);
 
                                 }
 
@@ -3201,35 +3286,47 @@ iTable.prototype.deleteCol = function () {
 
                 for (var j = index; j > -1; j--) {
 
-                    var cols = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('cols'));
+                    //var cols = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('cols'));
+
+                    var cols = parseInt($('#' + i + '-' + j).attr('cols'));
 
                     if (cols == index) {
 
-                        var cSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
+                     //   var cSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
+
+                        var cSpan = parseInt($('#' + i + '-' + j ).attr('colspan')) || 1;
 
                         if (cSpan >= 2) {
 
-                            $('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cSpan - 1);
+                         //   $('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cSpan - 1);
+                            $('#' + i + '-' + j).attr('colspan', cSpan - 1);
 
                         } else {
 
-                            $('td[cols=' + j + '][rows=' + i + ']').remove();
+                            //$('td[cols=' + j + '][rows=' + i + ']').remove();
+
+                            $('#' + i + '-' + j).remove();
 
                         }
 
                     } else {
 
-                        if ($('td[cols=' + j + '][rows=' + i + ']').length > 0) {
+                        // if ($('td[cols=' + j + '][rows=' + i + ']').length > 0) {
+                            if ($('#' + i + '-' + j).length > 0) {
 
                             time++;
 
                             if (time == 1) {
 
-                                var cSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
+                              //  var cSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
+
+                                var cSpan = parseInt($('#' + i + '-' + j + ']').attr('colspan')) || 1;
 
                                 if (cSpan >= 2) {
 
-                                    $('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cSpan - 1);
+                                   // $('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cSpan - 1);
+
+                                    $('#' + i + '-' + j ).attr('colspan', cSpan - 1);
 
                                 }
 
@@ -3291,33 +3388,43 @@ iTable.prototype.deleteRow = function () {
 
                 for (var j = 0; j < that.cellCount; j++) {
 
-                    var rows = $('td[cols=' + j + '][rows=' + i + ']').attr('rows');
+                  //  var rows = $('td[cols=' + j + '][rows=' + i + ']').attr('rows');
+
+                    var rows = $('#' + i + '-' + j ).attr('rows');
 
                     if (rows == index) {
 
-                        var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
+                      //  var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
+
+                        var rspan = parseInt($('#' + i + '-' + j ).attr('rowspan')) || 1;
 
                         if (rspan >= 2) {
 
-                            $('td[cols=' + j + '][rows=' + i + ']').attr('rowspan', rspan - 1);
+                           // $('td[cols=' + j + '][rows=' + i + ']').attr('rowspan', rspan - 1);
+                            $('#' + i + '-' + j).attr('rowspan', rspan - 1);
 
                         } else {
 
-                            $('td[cols=' + j + '][rows=' + i + ']').parent().remove();
+                           // $('td[cols=' + j + '][rows=' + i + ']').parent().remove();
+                            $('#' + i + '-' + j ).parent().remove();
 
                         }
 
                     } else {
 
-                        if ($('td[cols=' + j + '][rows=' + i + ']').length > 0) {
+                        //if ($('td[cols=' + j + '][rows=' + i + ']').length > 0) {
+                            if ($('#' + i + '-' + j ).length > 0) {
 
-                            var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
+                          //  var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
+                             var rspan = parseInt($('#' + i + '-' + j ).attr('rowspan')) || 1;
 
                             if (rspan >= 2) {
 
-                                if (parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rows')) + parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) - 1 >= yIndex) {
+                               // if (parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rows')) + parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) - 1 >= yIndex) {
+                                if (parseInt($('#' + i + '-' + j ).attr('rows')) + parseInt($('#' + i + '-' + j ).attr('rowspan')) - 1 >= yIndex) {
 
-                                    $('td[cols=' + j + '][rows=' + i + ']').attr('rowspan', rspan - 1);
+                                 //   $('td[cols=' + j + '][rows=' + i + ']').attr('rowspan', rspan - 1);
+                                    $('#' + i + '-' + j).attr('rowspan', rspan - 1);
 
                                 }
 
@@ -5649,18 +5756,7 @@ var settings = {
         '百分比': 'ft_percent',
 
         '文本': 'ft_text'
-//         case 'normal':
-// break;
-// case 'number':
-// break;
-// case 'date':
-// break;
-// case 'account':
-// break;
-// case 'percent':
-// break;
-// case 'text':
-// break;
+
     }
 
 
