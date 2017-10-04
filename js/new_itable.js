@@ -4020,8 +4020,19 @@ iTable.prototype.addSheet = function () {
 
         that.sheetWork();
 
+
+
     });
 
+}
+
+iTable.prototype.saveNewSheet=function(callback){
+
+    if(callback){
+        $('.addSheet').click(callback);
+    }else{
+        return;
+    }
 }
 
 iTable.prototype.sheetWork = function () {
@@ -5164,7 +5175,7 @@ iTable.prototype.dataSearchHandler = function (callback) {
 
 }
 
-iTable.prototype.saveBtn=function(){
+iTable.prototype.saveBtn=function(callback){
     var btn=$('<input type="button" class="saveBtn" value="保存">');
     var that=this;
     this.header.find('.tools').append(btn);
@@ -5173,17 +5184,18 @@ iTable.prototype.saveBtn=function(){
         'margin-right':'10px',
         'margin-top':'6px'
     });
-
-    //btn.on('click',that.exportSheet);
 }
 
+iTable.prototype.saveBtn.save=function(callback){
+    $('.saveBtn').on('click',callback);
+}
 iTable.prototype.saveReport = function (callback) {
+      // $('.saveBtn').on('click',callback);
+    //if (callback) {
 
-    if (callback) {
+    $('.saveBtn').on('click',callback);
 
-        callback();
-
-    }
+   // }
 
 }
 
@@ -5841,6 +5853,8 @@ t.dataSelection({
 function other(){
     console.log('other');
 }
+
+
 //
 // t.chartsHandler(function () {
 //     $('.charts').on('click', function () {
@@ -5853,8 +5867,12 @@ function other(){
 //         initSearchConfig(webBasePath);
 //     });
 // });
-t.saveReport(function () {
-    $('.saveBtn').on('click', function () {
-        alert('3');
-    });
+// t.saveBtn.save(function() {
+//       alert('11');
+// });
+t.saveReport(function() {
+    alert('11');
 });
+t.saveNewSheet(function(){
+    alert('save new sheet');
+})
