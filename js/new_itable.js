@@ -1457,39 +1457,19 @@ iTable.prototype.fillTd = function (tid) {
 }
 
 
-iTable.prototype.tdClick=function(event){
-
-    $('.picked').removeClass('picked');
-    $(this).addClass('picked');
-    event.data.target.setTextarea(0);
-    event.data.target.setBlueBorder($(this));
-
-    var xCoo = Number($(this).attr('cols')) - 1,
-
-        yCoo = Number($(this).attr('rows')) - 1;
-
-    if ($('.disbox').length > 0) {
-
-        $('.disbox').text(IntToChr(xCoo) + String(yCoo + 1));
-
-    }
-
-    event.data.target.tdTofx($(this));
-    event.data.target.lightCoor($(this));
-
-    $('#ip_fx').blur();
-}
-
 iTable.prototype.tdDbclick=function(event){
+    var td=$(this);
+    var tdWidth = $(this).width();
+    var tdHeight = $(this).height();
+    var callz=event.data.target;
+    var tdLeft=$(this).offset().left;
+    var tdTop=$(this).offset().top-$('.header').height()-tdHeight;
 
     var tdText = $(this).text();
     var eType='dblclick';
 
     event.data.target.setTextarea(1);
     event.data.target.fillTextarea(eType,tdText);
-
-
-
 
     $(".itableInput").click(function () {
         return false;
@@ -1498,7 +1478,7 @@ iTable.prototype.tdDbclick=function(event){
     $('#iTable' + event.data.id + ' tr td').not($(this)).click(function (event) {
         $('.itableInput').blur();
     });
-   stopPropagation();
+    stopPropagation();
 }
 
 
