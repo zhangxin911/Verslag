@@ -447,6 +447,7 @@ function typing(event) {
             return;
 
         }
+
         callZ.setTextarea(1);
 
         callZ.fillTextarea('keymove');
@@ -483,7 +484,7 @@ function typing(event) {
 
         if (event.keyCode == '13' || event.keyCode == '40') {
 
-            var tdText = $('picked').text();
+
             if(event.target==$('.itableInput')[0]){
                 $('.picked').html($('.itableInput').val());
                 $('.itableInput').val('');
@@ -1457,14 +1458,14 @@ iTable.prototype.fillTd = function (tid) {
 
 
 iTable.prototype.tdClick=function(event){
-    console.log('3');
+
     $('.itableInputHolder').hide();
+
     $('.itableInput').blur();
 
     $('.picked').removeClass('picked');
+
     $(this).addClass('picked');
-
-
 
     event.data.target.setBlueBorder($(this));
 
@@ -1769,8 +1770,6 @@ iTable.prototype.setRedBorder=function(obj){
 
             });
 
-
-
         }
 
 
@@ -1784,6 +1783,8 @@ iTable.prototype.setRedBorder=function(obj){
 iTable.prototype.hideReadBorder=function(){
     $('.wrBorder').hide();
 }
+
+
 
 
 iTable.prototype.setBlueBorder=function(obj){
@@ -2144,6 +2145,14 @@ iTable.prototype.lightCoor = function (obj) {
 }
 
 
+iTable.prototype.listenHeight=function(){
+
+    for(var j=0;j<this.rowCount;j++){
+        var height=$('.dataTable tr').eq(j).find('th').height()-1;
+        $('.leftTable tr').eq(j).find('td').height(height);
+    }
+
+}
 
 //创建底部容器
 
@@ -2262,6 +2271,8 @@ iTable.prototype.fontSize = function () {
 
     var selThem;
 
+    var that=this;
+
     sel_a.on('click', function () {
 
         className = $(this).attr('class');
@@ -2289,6 +2300,8 @@ iTable.prototype.fontSize = function () {
         $('.picked').removeAttr('class');
 
         selThem.addClass(curClass);
+
+        that.listenHeight();
 
     });
 
@@ -3502,14 +3515,33 @@ iTable.prototype.formula = function (ways) {
 function fxSum(){
        if($('.picked').length>0){
            var sum=0;
+           var rArr=[],cArr=[];
            $('.picked').each(function(){
                var val=t.getFilltype($(this));
+               var nowRow=parseInt($(this).attr('rows')),nowCol=parseInt($(this).attr('cols'));
+               rArr.push(nowRow),cArr.push(nowCol);
                if(val==NaN){
                    val=0;
                }else{
                    sum+=val;
                }
            });
+           if(_.uniq(rArr).length>1){
+               console.log(_.uniq(rArr));
+
+           }else{
+               var id='#'+rArr[0]+'-'+Number(_.last(cArr)+1);
+               $(id).text(sum);
+           }
+
+           if(_.uniq(cArr).length>1){
+               console.log(_.uniq(cArr));
+
+           }else{
+               var id='#'+Number(_.last(rArr)+1)+'-'+cArr[0] ;
+               $(id).text(sum);
+           }
+
            console.log(sum);
        }
 
@@ -5473,6 +5505,8 @@ iTable.prototype.init = function () {
     this.createFooter();
 
     this.createHeader();
+
+    this.listenHeight();
 
     tOption.fontFamily && this.fontFamily();
 
