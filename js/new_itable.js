@@ -42,7 +42,7 @@ iTable.prototype.createContent = function (tid) {
 
         for (var j = 0; j < this.cellCount + 1; j++) {
 
-            var td = this.createTd('','');
+            var td = this.createTd('ftNormal','');
 
             if (j == 0) {
 
@@ -200,16 +200,15 @@ iTable.prototype.frameSelect = function () {
 
     var that=this;
     var coords;
-    //$(this.container).on('mousedown', areaChoose);
 
     $('.dataTable tr td').each(function(){
-        $(this).on('mouseover',function(){
+        $(this).off('mouseover').on('mouseover',function(){
             coords=$(this);
             that.moveLast=$(this);
         });
     });
 
-    $(this.container).on('mousedown',function(event){
+    $(this.container).off('mousedown').on('mousedown',function(event){
 
         var ev = window.event || arguments[0];
 
@@ -238,7 +237,7 @@ iTable.prototype.frameSelect = function () {
         var oY = ev.clientY - disHeight + stop;
 
 
-        $(that.container).on('mousemove',function(){
+        $(that.container).off('mousemove').on('mousemove',function(){
 
             var nCols = parseInt($(coords).attr('cols')) ;
 
@@ -1448,16 +1447,43 @@ iTable.prototype.fillTd = function (tid) {
 
     $('#iTable' + tid).find('tr td').each(function () {
 
-       $(this).on('dblclick',{target:that,id:tid},that.tdDbclick);
+       $(this).off('dblclick').on('dblclick',{target:that,id:tid},that.tdDbClick);
 
-       $(this).on('click',{target:that},that.tdClick);
+       $(this).off('click').on('click',{target:that},that.tdClick);
 
     });
 
 }
 
 
-iTable.prototype.tdDbclick=function(event){
+iTable.prototype.tdClick=function(event){
+    console.log('3');
+    $('.itableInputHolder').hide();
+    $('.itableInput').blur();
+
+    $('.picked').removeClass('picked');
+    $(this).addClass('picked');
+
+
+
+    event.data.target.setBlueBorder($(this));
+
+    var xCoo = Number($(this).attr('cols')) - 1,
+
+        yCoo = Number($(this).attr('rows')) - 1;
+
+    if ($('.disbox').length > 0) {
+
+        $('.disbox').text(IntToChr(xCoo) + String(yCoo + 1));
+
+    }
+    event.data.target.tdTofx($(this));
+    event.data.target.lightCoor($(this));
+    $('#ip_fx').blur();
+}
+
+
+iTable.prototype.tdDbClick=function(event){
     var td=$(this);
     var tdWidth = $(this).width();
     var tdHeight = $(this).height();
@@ -2551,12 +2577,11 @@ iTable.prototype.getFilltype=function(obj){
 
         }else if($(obj).hasClass('ftPercent')){
 
-            return  parseInt($(obj).text());
+            return  parseInt($(obj).text().replace('%','')*100);
 
         }else if($(obj).hasClass('ftText')){
             return;
         }else{
-
             return parseInt($(obj).text());
         }
 
@@ -3481,21 +3506,23 @@ function fxSum(){
                var val=t.getFilltype($(this));
                if(val==NaN){
                    val=0;
+               }else{
+                   sum+=val;
                }
-              if(typeof val=='number'){
-                  sum+=val;
-              }
            });
+           console.log(sum);
        }
-       console.log(sum);
+
 }
 
 function fxAvg(){
     if($('.picked').length>0){
         var sum=0,pL=$('.picked').length,avg=0;
         $('.picked').each(function(){
-            var val=$(this).text();
-            if(typeof val=='number'){
+            var val=t.getFilltype($(this));
+            if(val==NaN){
+                val=0;
+            }else{
                 sum+=val;
             }
         });
@@ -3508,10 +3535,13 @@ function fxCount(){
     if($('.picked').length>0){
         var count=0;
         $('.picked').each(function(){
-            var val=$(this).text();
-            if(typeof val=='number'){
+            var val=Number($(this).text());
+            if(!isNaN(val)&&val!=0){
                 count++;
+            }else{
+               return;
             }
+
         });
 
     }
@@ -3520,12 +3550,15 @@ function fxCount(){
 
 function fxMax(){
     if($('.picked').length>0){
-        var arr;
+        var arr=[];
         $('.picked').each(function(){
-            var val=$(this).text();
-            if(typeof val=='number'){
+            var val=Number($(this).text());
+            if(!isNaN(val)&&val!=0){
                 arr.push(val);
+            }else{
+                return;
             }
+
         });
 
     }
@@ -3535,11 +3568,13 @@ function fxMax(){
 
 function fxMin(){
     if($('.picked').length>0){
-        var arr;
+        var arr=[];
         $('.picked').each(function(){
-            var val=$(this).text();
-            if(typeof val=='number'){
+            var val=Number($(this).text());
+            if(!isNaN(val)&&val!=0){
                 arr.push(val);
+            }else{
+                return;
             }
         });
 
