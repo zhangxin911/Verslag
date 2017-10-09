@@ -395,6 +395,15 @@ iTable.prototype.fillTextarea=function(eType,val){
                 if (event.keyCode == 13) {
                     var content = $('.itableInput').val();
                     $('.picked').html(content);
+                    var pNode=$($('.picked').attr('pnode'));
+                    var ex=pNode.attr('ex');
+                    if(!!ex){
+                        var exArr=ex.split('/');
+                        var type=exArr[0];
+                        var pValue=that.typeFormula(type,exArr);
+                        pNode.text(pValue);
+                    }
+
                     $('.itableInput').blur();
                     that.keyCursor();
                     that.hideTextarea();
@@ -2570,15 +2579,13 @@ iTable.prototype.fillType = function(){
 
 iTable.prototype.getFilltype=function(obj){
 
-    // $(obj).each(function(){
-
         if($(obj).hasClass('ftNormal')){
 
-             return parseInt($(obj).text());
+             return Number($(obj).text());
 
         }else if($(obj).hasClass('ftNumber')){
 
-            return parseInt($(obj).text());
+            return Number($(obj).text());
 
         }else if($(obj).hasClass('ftDate')){
 
@@ -2590,36 +2597,34 @@ iTable.prototype.getFilltype=function(obj){
 
         }else if($(obj).hasClass('ftPercent')){
 
-            return  parseInt($(obj).text().replace('%','')*100);
+            return  Number($(obj).text().replace('%','')*100);
 
         }else if($(obj).hasClass('ftText')){
             return;
         }else{
-            return parseInt($(obj).text());
+            return Number($(obj).text());
         }
-
-    // });
 }
 
 iTable.prototype.setFilltype=function(ways){
     switch (ways){
         case 'normal':
-            ftNormal();
+            this.ftNormal();
             break;
         case 'number':
-            ftNumber();
+            this.ftNumber();
             break;
         case 'date':
-            ftDate();
+            this.ftDate();
             break;
         case 'account':
-            ftAccount();
+            this.ftAccount();
             break;
         case 'percent':
-            ftPercent();
+            this.ftPercent();
             break;
         case 'text':
-            ftText();
+            this.ftText();
             break;
         default:
             break;
@@ -2627,13 +2632,43 @@ iTable.prototype.setFilltype=function(ways){
     }
 }
 
-function ftNormal(){
+iTable.prototype.typeToValue=function(type,value){
+         var value=Number(value);
+         var newClasses=type.split(' ');
+    for(var i=0;i<newClasses.length;i++){
+        if(!!newClasses[i].match(/(((ft)[A-Za-z0-9_]+\s*)+)/g)){
+            var newClass=newClasses[i];
+        }
+    }
+        switch(newClass){
+            case 'ftNormal':
+
+                   return Number(value);
+
+            case 'ftNumber':
+
+                 return value.toFixed(2);
+
+        }
+
+
+}
+
+iTable.prototype.ftNormal=function(){
+    var that=this;
       if($('.picked').length>0){
           $('.picked').each(function(){
               var className, curClass;
-
               var selThem;
+              var oldClasses=($(this).attr('class')).split(' ');
+              for(var i=0;i<oldClasses.length;i++){
+                  if(!!oldClasses[i].match(/(((ft)[A-Za-z0-9_]+\s*)+)/g)){
+                       var oldClass=oldClasses[i];
+                  }
+              }
+
               if(!$(this).hasClass('ftNormal')){
+
                   className = 'ftNormal';
 
                   $(this).addClass(className);
@@ -2647,9 +2682,7 @@ function ftNormal(){
                       curClass = curClass.replace(reg, className);
 
                   } else {
-
                       return;
-
                   }
 
                   curClass = _.uniq(curClass.split(' ')).join(' ');
@@ -2658,6 +2691,11 @@ function ftNormal(){
 
                   $(this).removeAttr('class');
 
+                  var oldVal=selThem.text();
+
+                  var newVal=that.typeToValue(curClass,oldVal);
+                  console.log(newVal);
+                  selThem.text(newVal);
                   selThem.addClass(curClass);
 
 
@@ -2669,12 +2707,20 @@ function ftNormal(){
       }
 }
 
-function ftNumber(){
+iTable.prototype.ftNumber=function(){
+    var that=this;
     if($('.picked').length>0){
         $('.picked').each(function(){
             var className, curClass;
 
             var selThem;
+            var oldClasses=($(this).attr('class')).split(' ');
+            for(var i=0;i<oldClasses.length;i++){
+                if(!!oldClasses[i].match(/(((ft)[A-Za-z0-9_]+\s*)+)/g)){
+                    var oldClass=oldClasses[i];
+                }
+            }
+
             if(!$(this).hasClass('ftNumber')){
                 className = 'ftNumber';
 
@@ -2689,9 +2735,7 @@ function ftNumber(){
                     curClass = curClass.replace(reg, className);
 
                 } else {
-
                     return;
-
                 }
 
                 curClass = _.uniq(curClass.split(' ')).join(' ');
@@ -2699,6 +2743,12 @@ function ftNumber(){
                 selThem = $(this);
 
                 $(this).removeAttr('class');
+
+                var oldVal=selThem.text();
+
+                var newVal=that.typeToValue(curClass,oldVal);
+                console.log(newVal);
+                selThem.text(newVal);
 
                 selThem.addClass(curClass);
 
@@ -2710,7 +2760,7 @@ function ftNumber(){
     }
 }
 
-function ftDate(){
+iTable.prototype.ftDate=function(){
     if($('.picked').length>0){
         $('.picked').each(function(){
             var className, curClass;
@@ -2726,13 +2776,9 @@ function ftDate(){
                 curClass = $(this).attr('class');
 
                 if (!!curClass) {
-
                     curClass = curClass.replace(reg, className);
-
                 } else {
-
                     return;
-
                 }
 
                 curClass = _.uniq(curClass.split(' ')).join(' ');
@@ -2756,7 +2802,7 @@ function ftDate(){
     }
 }
 
-function ftAccount(){
+iTable.prototype.ftAccount=function(){
     if($('.picked').length>0){
         $('.picked').each(function(){
             var className, curClass;
@@ -2799,7 +2845,7 @@ function ftAccount(){
     }
 }
 
-function ftPercent(){
+iTable.prototype.ftPercent=function(){
     if($('.picked').length>0){
         $('.picked').each(function(){
             var className, curClass;
@@ -2832,8 +2878,8 @@ function ftPercent(){
 
                 selThem.addClass(curClass);
 
-                var prefix='%';
-                $(this).text(prefix);
+                var newVal=(Math.round(Number($(this).text()) * 10000)/100).toFixed(2) + '%'
+                $(this).text(newVal);
 
             }
 
@@ -2842,7 +2888,7 @@ function ftPercent(){
     }
 }
 
-function ftText(){
+iTable.prototype.ftText=function(){
     if($('.picked').length>0){
         $('.picked').each(function(){
             var className, curClass;
@@ -3486,38 +3532,95 @@ iTable.prototype.deleteRow = function () {
 
 }
 
-//单元格上的公式区域
+//输入触发公式
+iTable.prototype.typeFormula=function(ways,data){
+    switch (ways){
+        case 'sum':
+            return this.typeSum(data);
+            break;
+        case 'avg':
+            return this.typeAvg(data);
+            break;
+        case 'count':
+           // fxCount();
+            break;
+        case 'max':
+            return this.typeMax(data);
+            break;
+        case 'min':
+            return this.typeMin(data);
+            break;
+        default:
+            break;
+    }
+}
+iTable.prototype.typeSum=function(data){
+    var sum=0;
+    for(var i=1;i<data.length;i++){
+        sum+=this.getFilltype($('#'+data[i]));
+    }
+    return sum;
+}
+
+iTable.prototype.typeAvg=function(data){
+    var sum=0,avg=0;
+    for(var i=1;i<data.length;i++){
+        sum+=this.getFilltype($('#'+data[i]));
+    }
+    avg=sum/(data.length-1);
+    return avg;
+}
+
+iTable.prototype.typeMax=function(data){
+    var arr=[];
+    for(var i=1;i<data.length;i++){
+       arr.push(this.getFilltype($('#'+data[i])));
+    }
+    return _.max(arr);
+}
+
+iTable.prototype.typeMin=function(data){
+    var arr=[];
+    for(var i=1;i<data.length;i++){
+        arr.push(this.getFilltype($('#'+data[i])));
+    }
+    return _.min(arr);
+}
+
+//点击触发公式
 
 iTable.prototype.formula = function (ways) {
 
     switch (ways){
         case 'sum':
-            fxSum();
+            this.fxSum();
             break;
         case 'avg':
-            fxAvg();
+            this.fxAvg();
             break;
         case 'count':
-            fxCount();
+            this.fxCount();
             break;
         case 'max':
-            fxMax();
+            this.fxMax();
             break;
         case 'min':
-            fxMin();
+            this.fxMin();
             break;
         default:
             break;
     }
-
-
 }
-function fxSum(){
+
+
+iTable.prototype.fxSum=function(){
+       var that=this;
        if($('.picked').length>0){
            var sum=0;
            var rArr=[],cArr=[];
+           var pArr=[];
            $('.picked').each(function(){
-               var val=t.getFilltype($(this));
+               var val=that.getFilltype($(this));
                var nowRow=parseInt($(this).attr('rows')),nowCol=parseInt($(this).attr('cols'));
                rArr.push(nowRow),cArr.push(nowCol);
                if(val==NaN){
@@ -3525,6 +3628,8 @@ function fxSum(){
                }else{
                    sum+=val;
                }
+               pArr.push($(this).attr('id'));
+
            });
            if(_.uniq(rArr).length>1){
                console.log(_.uniq(rArr));
@@ -3532,6 +3637,13 @@ function fxSum(){
            }else{
                var id='#'+rArr[0]+'-'+Number(_.last(cArr)+1);
                $(id).text(sum);
+               $(id).attr('ex','sum');
+               _.map(pArr,function(num){
+                   var ex=$(id).attr('ex');
+                   ex+='/'+num;
+                   $('#'+num).attr('pNode',id);
+                   $(id).attr('ex',ex);
+               });
            }
 
            if(_.uniq(cArr).length>1){
@@ -3540,6 +3652,13 @@ function fxSum(){
            }else{
                var id='#'+Number(_.last(rArr)+1)+'-'+cArr[0] ;
                $(id).text(sum);
+               $(id).attr('ex','sum');
+               _.map(pArr,function(num){
+                   var ex=$(id).attr('ex');
+                   ex+='/'+num;
+                   $('#'+num).attr('pNode',id);
+                   $(id).attr('ex',ex);
+               });
            }
 
            console.log(sum);
@@ -3547,27 +3666,67 @@ function fxSum(){
 
 }
 
-function fxAvg(){
+iTable.prototype.fxAvg=function(){
+    var that=this;
     if($('.picked').length>0){
         var sum=0,pL=$('.picked').length,avg=0;
+        var rArr=[],cArr=[];
+        var pArr=[];
         $('.picked').each(function(){
-            var val=t.getFilltype($(this));
+            var val=that.getFilltype($(this));
+            var nowRow=parseInt($(this).attr('rows')),nowCol=parseInt($(this).attr('cols'));
+            rArr.push(nowRow),cArr.push(nowCol);
             if(val==NaN){
                 val=0;
             }else{
                 sum+=val;
             }
+            pArr.push($(this).attr('id'));
         });
         avg=sum/pL;
+
+        if(_.uniq(rArr).length>1){
+            console.log(_.uniq(rArr));
+
+        }else{
+            var id='#'+rArr[0]+'-'+Number(_.last(cArr)+1);
+            $(id).text(avg);
+            $(id).attr('ex','avg');
+            _.map(pArr,function(num){
+                var ex=$(id).attr('ex');
+                ex+='/'+num;
+                $('#'+num).attr('pNode',id);
+                $(id).attr('ex',ex);
+            });
+        }
+
+        if(_.uniq(cArr).length>1){
+            console.log(_.uniq(cArr));
+        }else{
+            var id='#'+Number(_.last(rArr)+1)+'-'+cArr[0] ;
+            $(id).text(avg);
+            $(id).attr('ex','avg');
+            _.map(pArr,function(num){
+                var ex=$(id).attr('ex');
+                ex+='/'+num;
+                $('#'+num).attr('pNode',id);
+                $(id).attr('ex',ex);
+            });
+        }
+
     }
     console.log(avg);
 }
 
-function fxCount(){
+iTable.prototype.fxCount=function(){
+
     if($('.picked').length>0){
         var count=0;
+        var rArr=[],cArr=[];
         $('.picked').each(function(){
             var val=Number($(this).text());
+            var nowRow=parseInt($(this).attr('rows')),nowCol=parseInt($(this).attr('cols'));
+            rArr.push(nowRow),cArr.push(nowCol);
             if(!isNaN(val)&&val!=0){
                 count++;
             }else{
@@ -3576,39 +3735,122 @@ function fxCount(){
 
         });
 
+        if(_.uniq(rArr).length>1){
+            console.log(_.uniq(rArr));
+
+        }else{
+            var id='#'+rArr[0]+'-'+Number(_.last(cArr)+1);
+            $(id).text(count);
+        }
+
+        if(_.uniq(cArr).length>1){
+            console.log(_.uniq(cArr));
+        }else{
+            var id='#'+Number(_.last(rArr)+1)+'-'+cArr[0] ;
+            $(id).text(count);
+        }
+
     }
     console.log(count);
 }
 
-function fxMax(){
+iTable.prototype.fxMax=function(){
     if($('.picked').length>0){
         var arr=[];
+        var rArr=[],cArr=[];
+        var pArr=[];
         $('.picked').each(function(){
             var val=Number($(this).text());
+            var nowRow=parseInt($(this).attr('rows')),nowCol=parseInt($(this).attr('cols'));
+            rArr.push(nowRow),cArr.push(nowCol);
             if(!isNaN(val)&&val!=0){
                 arr.push(val);
             }else{
                 return;
             }
-
+            pArr.push($(this).attr('id'));
         });
+        var maxValue=_.max(arr);
+        if(_.uniq(rArr).length>1){
+            console.log(_.uniq(rArr));
+
+        }else{
+            var id='#'+rArr[0]+'-'+Number(_.last(cArr)+1);
+            $(id).text(maxValue);
+            $(id).attr('ex','max');
+            _.map(pArr,function(num){
+                var ex=$(id).attr('ex');
+                ex+='/'+num;
+                $('#'+num).attr('pNode',id);
+                $(id).attr('ex',ex);
+            });
+        }
+
+        if(_.uniq(cArr).length>1){
+            console.log(_.uniq(cArr));
+        }else{
+            var id='#'+Number(_.last(rArr)+1)+'-'+cArr[0] ;
+            $(id).text(maxValue);
+            $(id).attr('ex','max');
+            _.map(pArr,function(num){
+                var ex=$(id).attr('ex');
+                ex+='/'+num;
+                $('#'+num).attr('pNode',id);
+                $(id).attr('ex',ex);
+            });
+        }
 
     }
-    console.log(_.max(arr));
+
 }
 
 
-function fxMin(){
+iTable.prototype.fxMin=function(){
     if($('.picked').length>0){
         var arr=[];
+        var rArr=[],cArr=[];
+        var pArr=[];
         $('.picked').each(function(){
             var val=Number($(this).text());
+            var nowRow=parseInt($(this).attr('rows')),nowCol=parseInt($(this).attr('cols'));
+            rArr.push(nowRow),cArr.push(nowCol);
+
             if(!isNaN(val)&&val!=0){
                 arr.push(val);
             }else{
                 return;
             }
+            pArr.push($(this).attr('id'));
         });
+        var minValue=_.min(arr);
+        if(_.uniq(rArr).length>1){
+            console.log(_.uniq(rArr));
+
+        }else{
+            var id='#'+rArr[0]+'-'+Number(_.last(cArr)+1);
+            $(id).text(minValue);
+            $(id).attr('ex','min');
+            _.map(pArr,function(num){
+                var ex=$(id).attr('ex');
+                ex+='/'+num;
+                $('#'+num).attr('pNode',id);
+                $(id).attr('ex',ex);
+            });
+        }
+
+        if(_.uniq(cArr).length>1){
+            console.log(_.uniq(cArr));
+        }else{
+            var id='#'+Number(_.last(rArr)+1)+'-'+cArr[0] ;
+            $(id).text(minValue);
+            $(id).attr('ex','min');
+            _.map(pArr,function(num){
+                var ex=$(id).attr('ex');
+                ex+='/'+num;
+                $('#'+num).attr('pNode',id);
+                $(id).attr('ex',ex);
+            });
+        }
 
     }
     console.log(_.min(arr));
