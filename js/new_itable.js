@@ -42,7 +42,7 @@ iTable.prototype.createContent = function (tid) {
 
         for (var j = 0; j < this.cellCount + 1; j++) {
 
-            var td = this.createTd('ftNormal','');
+            var td = this.createTd('ftNormal fsize_14 font_Black','');
 
             if (j == 0) {
 
@@ -84,8 +84,8 @@ iTable.prototype.createTr = function () {
 
 iTable.prototype.createTd = function (className, tdValue) {
 
-    var td = $("<td class=" + className + ">" + tdValue + "</td>");
-
+    var td = $("<td>" + tdValue + "</td>");
+    td.attr('class',className);
     return td;
 
 }
@@ -345,7 +345,7 @@ iTable.prototype.frameSelect = function () {
 
 iTable.prototype.textArea=function(){
      var div=$('<div class="itableInputHolder"></div>');
-     var textArea=$('<textarea class="itableInput"></textarea>');
+     var textArea=$('<input type="text" class="itableInput">');
      div.append(textArea);
      $(this.container).append(div);
 
@@ -394,7 +394,10 @@ iTable.prototype.fillTextarea=function(eType,val){
                 $('#ip_fx').val($(this).val());
                 if (event.keyCode == 13) {
                     var content = $('.itableInput').val();
-                    $('.picked').html(content);
+                    var curClass=$('.picked').attr('class');
+
+                    $('.picked').html(that.typeToValue(curClass,content));
+
                     var pNode=$($('.picked').attr('pnode'));
                     var ex=pNode.attr('ex');
                     if(!!ex){
@@ -495,8 +498,12 @@ function typing(event) {
 
 
             if(event.target==$('.itableInput')[0]){
-                $('.picked').html($('.itableInput').val());
-                $('.itableInput').val('');
+
+                var curClass=$('.picked').attr('class');
+
+                $('.picked').html(callZ.typeToValue(curClass,$('.itableInput').val()));
+
+                $('.itableInput').val(' ');
             }
 
 
@@ -681,8 +688,11 @@ function typing(event) {
         if (event.keyCode == '39') {
 
             if(event.target==$('.itableInput')[0]){
-                $('.picked').html($('.itableInput').val());
-                $('.itableInput').val('');
+                var curClass=$('.picked').attr('class');
+
+                $('.picked').html(callZ.typeToValue(curClass,$('.itableInput').val()));
+
+                $('.itableInput').val(' ');
             }
 
             if ($(event.data.lastTd)[0] != $(sNode)[0]) {
@@ -884,8 +894,11 @@ function typing(event) {
                 r3 = 0;
 
             if(event.target==$('.itableInput')[0]){
-                $('.picked').html($('.itableInput').val());
-                $('.itableInput').val('');
+                var curClass=$('.picked').attr('class');
+
+                $('.picked').html(callZ.typeToValue(curClass,$('.itableInput').val()));
+
+                $('.itableInput').val(' ');
             }
 
             if ($(event.data.lastTd)[0] != $(sNode)[0]) {
@@ -1115,8 +1128,11 @@ function typing(event) {
                 u3 = 0;
 
             if(event.target==$('.itableInput')[0]){
-                $('.picked').html($('.itableInput').val());
-                $('.itableInput').val('');
+                var curClass=$('.picked').attr('class');
+
+                $('.picked').html(callZ.typeToValue(curClass,$('.itableInput').val()));
+
+                $('.itableInput').val(' ');
             }
 
             if ($(event.data.lastTd)[0] != $(sNode)[0]) {
@@ -1494,13 +1510,6 @@ iTable.prototype.tdClick=function(event){
 
 
 iTable.prototype.tdDbClick=function(event){
-    var td=$(this);
-    var tdWidth = $(this).width();
-    var tdHeight = $(this).height();
-    var callz=event.data.target;
-    var tdLeft=$(this).offset().left;
-    var tdTop=$(this).offset().top-$('.header').height()-tdHeight;
-
     var tdText = $(this).text();
     var eType='dblclick';
 
@@ -1516,9 +1525,6 @@ iTable.prototype.tdDbClick=function(event){
     });
     stopPropagation();
 }
-
-
-
 
 
 iTable.prototype.blueBorder=function(){
@@ -2119,9 +2125,92 @@ iTable.prototype.cornerCopy=function(){
 }
 
 
+iTable.prototype.getTdStyle=function(obj){
+    var td=$(obj);
+    if(td.length==1&&td.length>0){
+        var classArr=(td.attr('class')).split(' ');
+
+        for(var i=0;i<classArr.length;i++){
+            if(!!classArr[i].match(/(((fsize_)[A-Za-z0-9_]+s*)+)/g)) {
+                switch (classArr[i]) {
+                    case 'fsize_10':
+                        $('#fontSize').text('10')
+                        break;
+                    case 'fsize_12':
+                        $('#fontSize').text('12')
+                        break;
+                    case 'fsize_14':
+                        $('#fontSize').text('14')
+                        break;
+                    case 'fsize_16':
+                        $('#fontSize').text('16')
+                        break;
+                    case 'fsize_18':
+                        $('#fontSize').text('18')
+                        break;
+                    case 'fsize_20':
+                        $('#fontSize').text('20');
+                        break;
+
+                }
+
+            }else if(!!classArr[i].match(/(((font_)[A-Za-z0-9_]+s*)+)/g)) {
+                switch (classArr[i]) {
+                    case 'font_Song':
+                        $('#fontFamily').text('宋体')
+                        break;
+                    case 'font_Black':
+                        $('#fontFamily').text('黑体')
+                        break;
+                    case 'font_Kai':
+                        $('#fontFamily').text('楷体')
+                        break;
+                    case 'font_Mirco':
+                        $('#fontFamily').text('微软雅黑')
+                        break;
+
+                }
+
+            }else if(!!classArr[i].match(/(((ft)[A-Za-z0-9_]+\s*)+)/g)) {
+                switch (classArr[i]) {
+                    case 'ftNormal':
+                        $('#fillType').text('常规')
+                        break;
+                    case 'ftNumber':
+                        $('#fillType').text('数字')
+                        break;
+                    case 'ftDate':
+                        $('#fillType').text('日期')
+                        break;
+                    case 'ftAccount':
+                        $('#fillType').text('会计专用')
+                        break;
+                    case 'ftPercent':
+                        $('#fillType').text('百分比')
+                        break;
+
+                }
+
+            }else if(!!classArr[i].match(/picked/g)){
+                return;
+            }else{
+                $('#fontFamily').text('黑体');
+                $('#fontSize').text('10');
+                $('#fillType').text('常规');
+            }
+
+        }
+    }else{
+        return;
+    }
+
+}
+
 iTable.prototype.lightCoor = function (obj) {
 
     var target = obj;
+
+    this.getTdStyle(obj);
 
     $('.leftTable tr td').removeClass('lCoo');
 
@@ -2581,7 +2670,7 @@ iTable.prototype.getFilltype=function(obj){
 
         if($(obj).hasClass('ftNormal')){
 
-             return Number($(obj).text());
+             return $(obj).text();
 
         }else if($(obj).hasClass('ftNumber')){
 
@@ -2633,21 +2722,29 @@ iTable.prototype.setFilltype=function(ways){
 }
 
 iTable.prototype.typeToValue=function(type,value){
-         var value=Number(value);
+         var objValue=value,value=Number(value);
          var newClasses=type.split(' ');
-    for(var i=0;i<newClasses.length;i++){
-        if(!!newClasses[i].match(/(((ft)[A-Za-z0-9_]+\s*)+)/g)){
+         for(var i=0;i<newClasses.length;i++){
+             if(!!newClasses[i].match(/(((ft)[A-Za-z0-9_]+\s*)+)/g)){
             var newClass=newClasses[i];
-        }
-    }
+            }
+         }
         switch(newClass){
             case 'ftNormal':
 
-                   return Number(value);
+                 return objValue;
 
             case 'ftNumber':
 
                  return value.toFixed(2);
+
+            case 'ftAccount':
+
+                 return '¥'+ value.toFixed(2);
+
+            case  'ftPercent':
+
+                 return (Math.round(Number(value) * 10000)/100).toFixed(2) + '%';
 
         }
 
@@ -2660,13 +2757,6 @@ iTable.prototype.ftNormal=function(){
           $('.picked').each(function(){
               var className, curClass;
               var selThem;
-              var oldClasses=($(this).attr('class')).split(' ');
-              for(var i=0;i<oldClasses.length;i++){
-                  if(!!oldClasses[i].match(/(((ft)[A-Za-z0-9_]+\s*)+)/g)){
-                       var oldClass=oldClasses[i];
-                  }
-              }
-
               if(!$(this).hasClass('ftNormal')){
 
                   className = 'ftNormal';
@@ -2694,8 +2784,9 @@ iTable.prototype.ftNormal=function(){
                   var oldVal=selThem.text();
 
                   var newVal=that.typeToValue(curClass,oldVal);
-                  console.log(newVal);
+
                   selThem.text(newVal);
+
                   selThem.addClass(curClass);
 
 
@@ -2714,12 +2805,6 @@ iTable.prototype.ftNumber=function(){
             var className, curClass;
 
             var selThem;
-            var oldClasses=($(this).attr('class')).split(' ');
-            for(var i=0;i<oldClasses.length;i++){
-                if(!!oldClasses[i].match(/(((ft)[A-Za-z0-9_]+\s*)+)/g)){
-                    var oldClass=oldClasses[i];
-                }
-            }
 
             if(!$(this).hasClass('ftNumber')){
                 className = 'ftNumber';
@@ -2747,7 +2832,7 @@ iTable.prototype.ftNumber=function(){
                 var oldVal=selThem.text();
 
                 var newVal=that.typeToValue(curClass,oldVal);
-                console.log(newVal);
+
                 selThem.text(newVal);
 
                 selThem.addClass(curClass);
