@@ -503,6 +503,15 @@ function typing(event) {
 
                 $('.picked').html(callZ.typeToValue(curClass,$('.itableInput').val()));
 
+                var pNode=$($('.picked').attr('pnode'));
+                var ex=pNode.attr('ex');
+                if(!!ex){
+                    var exArr=ex.split('/');
+                    var type=exArr[0];
+                    var pValue=callZ.typeFormula(type,exArr);
+                    pNode.text(pValue);
+                }
+
                 $('.itableInput').val(' ');
             }
 
@@ -691,6 +700,15 @@ function typing(event) {
                 var curClass=$('.picked').attr('class');
 
                 $('.picked').html(callZ.typeToValue(curClass,$('.itableInput').val()));
+
+                var pNode=$($('.picked').attr('pnode'));
+                var ex=pNode.attr('ex');
+                if(!!ex){
+                    var exArr=ex.split('/');
+                    var type=exArr[0];
+                    var pValue=callZ.typeFormula(type,exArr);
+                    pNode.text(pValue);
+                }
 
                 $('.itableInput').val(' ');
             }
@@ -897,6 +915,15 @@ function typing(event) {
                 var curClass=$('.picked').attr('class');
 
                 $('.picked').html(callZ.typeToValue(curClass,$('.itableInput').val()));
+
+                var pNode=$($('.picked').attr('pnode'));
+                var ex=pNode.attr('ex');
+                if(!!ex){
+                    var exArr=ex.split('/');
+                    var type=exArr[0];
+                    var pValue=callZ.typeFormula(type,exArr);
+                    pNode.text(pValue);
+                }
 
                 $('.itableInput').val(' ');
             }
@@ -1131,6 +1158,15 @@ function typing(event) {
                 var curClass=$('.picked').attr('class');
 
                 $('.picked').html(callZ.typeToValue(curClass,$('.itableInput').val()));
+
+                var pNode=$($('.picked').attr('pnode'));
+                var ex=pNode.attr('ex');
+                if(!!ex){
+                    var exArr=ex.split('/');
+                    var type=exArr[0];
+                    var pValue=callZ.typeFormula(type,exArr);
+                    pNode.text(pValue);
+                }
 
                 $('.itableInput').val(' ');
             }
@@ -2670,7 +2706,12 @@ iTable.prototype.getFilltype=function(obj){
 
         if($(obj).hasClass('ftNormal')){
 
-             return $(obj).text();
+            if(isNaN(Number($(obj).text()))){
+                return $(obj).text();
+            }else{
+                return Number($(obj).text());
+            }
+
 
         }else if($(obj).hasClass('ftNumber')){
 
@@ -3121,7 +3162,7 @@ iTable.prototype.insertCol = function () {
 
                     var cols = parseInt($('#'+i+'-'+j).attr('cols'));
 
-                 //   console.log($('#'+i+'-'+j));
+
 
                     if (cols == xIndex) {
 
@@ -3700,7 +3741,7 @@ iTable.prototype.formula = function (ways) {
 
 iTable.prototype.fxSum=function(){
        var that=this;
-       if($('.picked').length>0){
+       if($('.picked').length>1){
            var sum=0;
            var rArr=[],cArr=[];
            var pArr=[];
@@ -3746,14 +3787,14 @@ iTable.prototype.fxSum=function(){
                });
            }
 
-           console.log(sum);
+
        }
 
 }
 
 iTable.prototype.fxAvg=function(){
     var that=this;
-    if($('.picked').length>0){
+    if($('.picked').length>1){
         var sum=0,pL=$('.picked').length,avg=0;
         var rArr=[],cArr=[];
         var pArr=[];
@@ -3805,7 +3846,7 @@ iTable.prototype.fxAvg=function(){
 
 iTable.prototype.fxCount=function(){
 
-    if($('.picked').length>0){
+    if($('.picked').length>1){
         var count=0;
         var rArr=[],cArr=[];
         $('.picked').each(function(){
@@ -3840,7 +3881,7 @@ iTable.prototype.fxCount=function(){
 }
 
 iTable.prototype.fxMax=function(){
-    if($('.picked').length>0){
+    if($('.picked').length>1){
         var arr=[];
         var rArr=[],cArr=[];
         var pArr=[];
@@ -3891,7 +3932,7 @@ iTable.prototype.fxMax=function(){
 
 
 iTable.prototype.fxMin=function(){
-    if($('.picked').length>0){
+    if($('.picked').length>1){
         var arr=[];
         var rArr=[],cArr=[];
         var pArr=[];
@@ -6227,7 +6268,7 @@ t.dataSelection({
 });
 
 function other(){
-    console.log('other');
+
 }
 
 
