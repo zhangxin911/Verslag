@@ -275,20 +275,20 @@
 		border: 1px solid #AAAAAA;
 	}
 	
-	.sheetqueue {
+	.sheetQueue {
 		width: 100%;
 		margin-left: 100px;
 	}
 	
-	.sheetqueuedl {
+	.sheetQueueDl {
 		position: absolute;
 	}
 	
-	.sheetqueue dl dd {
+	.sheetQueue dl dd {
 		float: left;
 	}
 	
-	.sheetdefault {
+	.sheetDefault {
 		/*width:80px;*/
 		background-color: #FFFFFF;
 		text-align: center;
@@ -438,16 +438,10 @@
 		background: #A3DE83;
 		/*border-color:#7ab858 !important;*/
 	}
-	
-	.sline {
-		width: 4px;
-		background: #000000;
-		float: right;
-	}
+
 	
 	.lline {
-		width: 1px;
-		border-left: 1px dashed #000000;
+
 		position: absolute;
 		display: block;
 		z-index: 100;
@@ -623,12 +617,12 @@
 
    cursor: pointer;
    }
-   .itableInput{
+   #iTableInput{
 	   resize: none;
 	   overflow-y: hidden;
 
    }
-   .itableInputHolder{
+   #iTableInputHolder{
 	   position: absolute;
    }
    .wBorder{
@@ -645,11 +639,11 @@
 	background: #ffffff
 	}
 
-	.itableInputHolder{
+	#iTableInputHolder{
 		display: none;
 
 	}
-	.itableInput{
+	#iTableInput{
 		border:none;
 		outline: none;
 	}

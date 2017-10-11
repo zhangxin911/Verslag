@@ -16,6 +16,7 @@ function iTable(tContainer, tSettings, tabs) {
 
     this.moveLast;
 
+    this.mergeTds=new Array();
 }
 
 iTable.prototype.createContent = function (tid) {
@@ -44,7 +45,7 @@ iTable.prototype.createContent = function (tid) {
 
             var td = this.createTd('ftNormal fsize_14 font_Black','');
 
-            if (j == 0) {
+            if (j === 0) {
 
                 var col = $('<col style="width:63px">');
 
@@ -56,7 +57,7 @@ iTable.prototype.createContent = function (tid) {
 
             colG.append(col);
 
-            if (i == 0) {
+            if (i === 0) {
 
                 $("#iTable" + tId).append(colG);
 
@@ -116,7 +117,7 @@ iTable.prototype.createXaxis = function () {
 
             var td = $("<td>" + IntToChr(j) + "</td>");
 
-            if (j == 0) {
+            if (j === 0) {
 
                 var col = $('<col style="width:63px">');
 
@@ -128,7 +129,7 @@ iTable.prototype.createXaxis = function () {
 
             colG.append(col);
 
-            if (i == 0) {
+            if (i === 0) {
 
                 xTable.append(colG);
 
@@ -256,6 +257,12 @@ iTable.prototype.frameSelect = function () {
             var evt = window.event || arguments[0];
             var _x,_y;
 
+            var moveCS=isNaN(Number(that.moveLast.attr('colspan')))?1:Number(that.moveLast.attr('colspan'));
+            var moveRS= isNaN(Number(that.moveLast.attr('rowspan')))?1:Number(that.moveLast.attr('rowspan'));
+
+            var moveX=Number(that.moveLast.attr('cols'))+moveCS-1;
+            var moveY=Number(that.moveLast.attr('rows'))+moveRS-1;
+
             _x = (evt.x || evt.clientX);
 
             _y = (evt.y || evt.clientY);
@@ -265,17 +272,55 @@ iTable.prototype.frameSelect = function () {
             _y = _y + stop - disHeight;
 
 
-            if(_x-oX>40){
+            if(_x-oX>20){
 
-                if(_y-oY>40){
+                if(_y-oY>20){
                     //E-S 东南
                     xMin=onCols,yMin=onRows;
+                    // for(var m=0;m<that.mergeTds.length;m++){
+                    //     var mergeCS=isNaN(Number($(that.mergeTds[m]).attr('colspan')))?1:Number($(that.mergeTds[m]).attr('colspan'));
+                    //     var mergeRS= isNaN(Number($(that.mergeTds[m]).attr('rowspan')))?1:Number($(that.mergeTds[m]).attr('rowspan'));
+                    //
+                    //
+                    //     var mergeX=Number($(that.mergeTds[m]).attr('cols'))+mergeCS-1;
+                    //     var mergeY=Number($(that.mergeTds[m]).attr('rows'))+mergeRS-1;
+                    //     //moveX 应该移动到的X位置  mergeX 被检测的合并单元格的X最大位置
+                    //
+                    //
+                    //         if(onCols>Number($(that.mergeTds[m]).attr('cols'))){
+                    //             //起始单元格在合并单元格右边
+                    //
+                    //             if(Number(that.moveLast.attr('cols'))>Number(that.moveLast.attr('cols'))){
+                    //                  //实时移入的单元格在合并单元格右边
+                    //                 xMin=Number($(that.mergeTds[m]).attr('cols')),xMax=moveX;
+                    //             }else{
+                    //                 //实时移入的单元格在合并单元格左边
+                    //                 xMin=Number($(that.mergeTds[m]).attr('cols')),xMax=mergeX;
+                    //             }
+                    //         }else {
+                    //             //起始单元格在合并单元格左边
+                    //             // xMin=Number($(that.mergeTds[m]).attr('cols'));
+                    //             if (Number(that.moveLast.attr('cols')) > Number(that.moveLast.attr('cols'))) {
+                    //                 //实时移入的单元格在合并单元格右边
+                    //                 xMin = onCols, xMax = moveX;
+                    //             } else {
+                    //                 //实时移入的单元格在合并单元格左边
+                    //                 xMin = onCols, xMax = mergeX;
+                    //             }
+                    //
+                    //         }
+                    //
+                    // }
+                    // console.log(xMin,xMax);
+
+
+
                 }else{
                     //E-N 东北
                     xMin=onCols,yMin=onRows + onRspan-1;
                 }
             }else{
-                if(_y-oY>40){
+                if(_y-oY>20){
                     // W-S 西南
                     xMin=onCols+onCspan-1,yMin=onRows;
                 }else{
@@ -285,13 +330,13 @@ iTable.prototype.frameSelect = function () {
 
             }
 
-            $('.dataTable tr td').removeClass('picked');
+             $('.dataTable tr td').removeClass('picked');
+
 
             if(xMin<=xMax&&yMin<=yMax){
                 for(var i = xMin; i <= xMax ; i++) {
                     for(var j = yMin; j <= yMax; j++) {
                         var id='#'+j+'-'+i;
-
 
                         $(id).addClass('picked');
 
@@ -329,7 +374,7 @@ iTable.prototype.frameSelect = function () {
                 }
 
             }
-            that.setBlueBorder($('.picked'));
+         //   that.setBlueBorder($('.picked'));
 
 
 
@@ -344,32 +389,32 @@ iTable.prototype.frameSelect = function () {
 
 
 iTable.prototype.textArea=function(){
-     var div=$('<div class="itableInputHolder"></div>');
-     var textArea=$('<input type="text" class="itableInput">');
+     var div=$('<div class="iTableInputHolder" id="iTableInputHolder"></div>');
+     var textArea=$('<input type="text" class="iTableInput" id="iTableInput">');
      div.append(textArea);
      $(this.container).append(div);
 
 }
 
-iTable.prototype.setTextarea=function(visible){
+iTable.prototype.setTextArea=function(visible){
     if($('.picked').length>0){
         var w = $('.picked').width();
         var h = $('.picked').height();
         var x = $('.picked').offset().left+$(this.container).scrollLeft();
         var y=$('.picked').offset().top+$(this.container).scrollTop()-parseInt($(this.container).css('margin-top'));
 
-        if(visible==1){
-            $('.itableInputHolder').show();
+        if(visible===1){
+            $('#iTableInputHolder').show();
         }else{
-            $('.itableInputHolder').hide();
+            $('#iTableInputHolder').hide();
         }
 
-        $('.itableInputHolder').css({
+        $('#iTableInputHolder').css({
             'left':x,
             'top':y,
         });
 
-        $('.itableInput').css({
+        $('#iTableInput').css({
             'width':w,
             'height':h
         });
@@ -377,23 +422,31 @@ iTable.prototype.setTextarea=function(visible){
 
 
 }
-iTable.prototype.hideTextarea=function(){
-    $('.itableInputHolder').hide();
+
+
+
+iTable.prototype.hideTextArea=function(){
+    $('#iTableInputHolder').hide();
 
 }
+
+iTable.prototype.fillExTextArea=function(eType,val,ex){
+
+}
+
 iTable.prototype.fillTextarea=function(eType,val){
 
     var that=this;
     switch(eType)
     {
         case 'dblclick':
-            $('.itableInput').val('');
+            $('#iTableInput').val('');
             $(document).off('keydown');
-            $('.itableInput').focus().val(val);
-            $(".itableInput").keyup(function (event) {
+            $('#iTableInput').focus().val(val);
+            $("#iTableInput").on('keyup',function(){
                 $('#ip_fx').val($(this).val());
-                if (event.keyCode == 13) {
-                    var content = $('.itableInput').val();
+                if (event.keyCode === 13) {
+                    var content = $('#iTableInput').val();
                     var curClass=$('.picked').attr('class');
 
                     $('.picked').html(that.typeToValue(curClass,content));
@@ -406,17 +459,15 @@ iTable.prototype.fillTextarea=function(eType,val){
                         var pValue=that.typeFormula(type,exArr);
                         pNode.text(pValue);
                     }
-
-                    $('.itableInput').blur();
+                    $('#iTableInput').blur();
                     that.keyCursor();
-                    that.hideTextarea();
+                    that.hideTextArea();
                 }
                 event.stopPropagation();
             });
-
             break;
         case 'keymove':
-            $('.itableInput').focus();
+            $('#iTableInput').focus();
             break;
         default:
             console.log('moren');
@@ -460,7 +511,7 @@ function typing(event) {
 
         }
 
-        callZ.setTextarea(1);
+        callZ.setTextArea(1);
 
         callZ.fillTextarea('keymove');
 
@@ -480,7 +531,7 @@ function typing(event) {
 
         event.data.time = parseInt(event.data.time) + 1;
 
-        if (event.data.time === 1) {
+        if (event.data.time == 1) {
 
             //获取第一次点击的单元格
 
@@ -497,22 +548,38 @@ function typing(event) {
         if (event.keyCode == '13' || event.keyCode == '40') {
 
 
-            if(event.target==$('.itableInput')[0]){
+            if(event.target==$('#iTableInput')[0]){
 
                 var curClass=$('.picked').attr('class');
+                var ex=$('.picked').attr('ex');
+                if(!ex){
+                    $('.picked').html(callZ.typeToValue(curClass,$('#iTableInput').val()));
+                    var pNode=$($('.picked').attr('pnode'));
+                    var pEx=pNode.attr('ex');
+                    if(!!pEx){
+                        var pExArr=pEx.split('/');
+                        var type=pExArr[0];
+                        var pValue=callZ.typeFormula(type,pExArr);
+                        pNode.text(pValue);
+                    }
+                    $('#iTableInput').val(' ');
+                }else{
+                    $('.picked').html(callZ.typeToValue(curClass,$('#iTableInput').val()));
 
-                $('.picked').html(callZ.typeToValue(curClass,$('.itableInput').val()));
-
-                var pNode=$($('.picked').attr('pnode'));
-                var ex=pNode.attr('ex');
-                if(!!ex){
                     var exArr=ex.split('/');
-                    var type=exArr[0];
-                    var pValue=callZ.typeFormula(type,exArr);
-                    pNode.text(pValue);
+
+                    for(var i=1;i<exArr.length;i++){
+                        var id='#'+exArr[i];
+
+                        $(id).removeAttr('pnode');
+                    }
+                    $('.picked').removeAttr('ex');
+                    $('#iTableInput').val(' ');
                 }
 
-                $('.itableInput').val(' ');
+
+
+
             }
 
 
@@ -592,7 +659,7 @@ function typing(event) {
 
                 callZ.setBlueBorder($(id));
 
-                callZ.setTextarea(0);
+                callZ.setTextArea(0);
 
             } else {
 
@@ -626,7 +693,7 @@ function typing(event) {
 
                             callZ.setBlueBorder($(nid));
 
-                            callZ.setTextarea(0);
+                            callZ.setTextArea(0);
 
                         }
 
@@ -642,7 +709,7 @@ function typing(event) {
 
                             callZ.setBlueBorder($(nid));
 
-                            callZ.setTextarea(0);
+                            callZ.setTextArea(0);
 
                         }
 
@@ -657,7 +724,7 @@ function typing(event) {
 
                             callZ.setBlueBorder($(nid));
 
-                            callZ.setTextarea(0);
+                            callZ.setTextArea(0);
 
                         }
 
@@ -672,7 +739,7 @@ function typing(event) {
 
                             callZ.setBlueBorder($(nid));
 
-                            callZ.setTextarea(0);
+                            callZ.setTextArea(0);
 
                         }
 
@@ -696,21 +763,34 @@ function typing(event) {
 
         if (event.keyCode == '39') {
 
-            if(event.target==$('.itableInput')[0]){
+            if(event.target==$('#iTableInput')[0]){
+
                 var curClass=$('.picked').attr('class');
+                var ex=$('.picked').attr('ex');
+                if(!ex){
+                    $('.picked').html(callZ.typeToValue(curClass,$('#iTableInput').val()));
+                    var pNode=$($('.picked').attr('pnode'));
+                    var pEx=pNode.attr('ex');
+                    if(!!pEx){
+                        var pExArr=pEx.split('/');
+                        var type=pExArr[0];
+                        var pValue=callZ.typeFormula(type,pExArr);
+                        pNode.text(pValue);
+                    }
+                    $('#iTableInput').val(' ');
+                }else{
+                    $('.picked').html(callZ.typeToValue(curClass,$('#iTableInput').val()));
 
-                $('.picked').html(callZ.typeToValue(curClass,$('.itableInput').val()));
-
-                var pNode=$($('.picked').attr('pnode'));
-                var ex=pNode.attr('ex');
-                if(!!ex){
                     var exArr=ex.split('/');
-                    var type=exArr[0];
-                    var pValue=callZ.typeFormula(type,exArr);
-                    pNode.text(pValue);
-                }
 
-                $('.itableInput').val(' ');
+                    for(var i=1;i<exArr.length;i++){
+                        var id='#'+exArr[i];
+
+                        $(id).removeAttr('pnode');
+                    }
+                    $('.picked').removeAttr('ex');
+                    $('#iTableInput').val(' ');
+                }
             }
 
             if ($(event.data.lastTd)[0] != $(sNode)[0]) {
@@ -797,7 +877,7 @@ function typing(event) {
 
                 callZ.setBlueBorder($(id));
 
-                callZ.setTextarea(0);
+                callZ.setTextArea(0);
 
             } else {
 
@@ -833,7 +913,7 @@ function typing(event) {
 
                             callZ.setBlueBorder($(nid));
 
-                            callZ.setTextarea(0);
+                            callZ.setTextArea(0);
 
                         }
 
@@ -849,7 +929,7 @@ function typing(event) {
 
                             callZ.setBlueBorder($(nid));
 
-                            callZ.setTextarea(0);
+                            callZ.setTextArea(0);
 
                         }
 
@@ -865,7 +945,7 @@ function typing(event) {
 
                             callZ.setBlueBorder($(nid));
 
-                            callZ.setTextarea(0);
+                            callZ.setTextArea(0);
 
                         }
 
@@ -881,7 +961,7 @@ function typing(event) {
 
                             callZ.setBlueBorder($(nid));
 
-                            callZ.setTextarea(0);
+                            callZ.setTextArea(0);
 
                         }
 
@@ -911,21 +991,34 @@ function typing(event) {
 
                 r3 = 0;
 
-            if(event.target==$('.itableInput')[0]){
+            if(event.target==$('#iTableInput')[0]){
+
                 var curClass=$('.picked').attr('class');
+                var ex=$('.picked').attr('ex');
+                if(!ex){
+                    $('.picked').html(callZ.typeToValue(curClass,$('#iTableInput').val()));
+                    var pNode=$($('.picked').attr('pnode'));
+                    var pEx=pNode.attr('ex');
+                    if(!!pEx){
+                        var pExArr=pEx.split('/');
+                        var type=pExArr[0];
+                        var pValue=callZ.typeFormula(type,pExArr);
+                        pNode.text(pValue);
+                    }
+                    $('#iTableInput').val(' ');
+                }else{
+                    $('.picked').html(callZ.typeToValue(curClass,$('#iTableInput').val()));
 
-                $('.picked').html(callZ.typeToValue(curClass,$('.itableInput').val()));
-
-                var pNode=$($('.picked').attr('pnode'));
-                var ex=pNode.attr('ex');
-                if(!!ex){
                     var exArr=ex.split('/');
-                    var type=exArr[0];
-                    var pValue=callZ.typeFormula(type,exArr);
-                    pNode.text(pValue);
-                }
 
-                $('.itableInput').val(' ');
+                    for(var i=1;i<exArr.length;i++){
+                        var id='#'+exArr[i];
+
+                        $(id).removeAttr('pnode');
+                    }
+                    $('.picked').removeAttr('ex');
+                    $('#iTableInput').val(' ');
+                }
             }
 
             if ($(event.data.lastTd)[0] != $(sNode)[0]) {
@@ -1012,7 +1105,7 @@ function typing(event) {
 
                 callZ.setBlueBorder($(id));
 
-                callZ.setTextarea(0);
+                callZ.setTextArea(0);
 
             } else {
 
@@ -1048,7 +1141,7 @@ function typing(event) {
 
                             callZ.setBlueBorder($(nid));
 
-                            callZ.setTextarea(0);
+                            callZ.setTextArea(0);
 
 
                         }
@@ -1070,7 +1163,7 @@ function typing(event) {
 
                                     callZ.setBlueBorder($(nid));
 
-                                    callZ.setTextarea(0);
+                                    callZ.setTextArea(0);
 
                                 }
 
@@ -1089,14 +1182,12 @@ function typing(event) {
 
                                 if (r2 == 1) {
 
-
-
                               //      $('td[cols=' + nextX + '][rows=' + _nowY + ']').addClass('picked');
                                     $(nid).addClass('picked');
 
                                     callZ.setBlueBorder($(nid));
 
-                                    callZ.setTextarea(0);
+                                    callZ.setTextArea(0);
 
                                 }
 
@@ -1120,7 +1211,7 @@ function typing(event) {
 
                                     callZ.setBlueBorder($(nid));
 
-                                    callZ.setTextarea(0);
+                                    callZ.setTextArea(0);
 
                                 }
 
@@ -1154,21 +1245,34 @@ function typing(event) {
 
                 u3 = 0;
 
-            if(event.target==$('.itableInput')[0]){
+            if(event.target==$('#iTableInput')[0]){
+
                 var curClass=$('.picked').attr('class');
+                var ex=$('.picked').attr('ex');
+                if(!ex){
+                    $('.picked').html(callZ.typeToValue(curClass,$('#iTableInput').val()));
+                    var pNode=$($('.picked').attr('pnode'));
+                    var pEx=pNode.attr('ex');
+                    if(!!pEx){
+                        var pExArr=pEx.split('/');
+                        var type=pExArr[0];
+                        var pValue=callZ.typeFormula(type,pExArr);
+                        pNode.text(pValue);
+                    }
+                    $('#iTableInput').val(' ');
+                }else{
+                    $('.picked').html(callZ.typeToValue(curClass,$('#iTableInput').val()));
 
-                $('.picked').html(callZ.typeToValue(curClass,$('.itableInput').val()));
-
-                var pNode=$($('.picked').attr('pnode'));
-                var ex=pNode.attr('ex');
-                if(!!ex){
                     var exArr=ex.split('/');
-                    var type=exArr[0];
-                    var pValue=callZ.typeFormula(type,exArr);
-                    pNode.text(pValue);
-                }
 
-                $('.itableInput').val(' ');
+                    for(var i=1;i<exArr.length;i++){
+                        var id='#'+exArr[i];
+
+                        $(id).removeAttr('pnode');
+                    }
+                    $('.picked').removeAttr('ex');
+                    $('#iTableInput').val(' ');
+                }
             }
 
             if ($(event.data.lastTd)[0] != $(sNode)[0]) {
@@ -1254,7 +1358,7 @@ function typing(event) {
 
                 callZ.setBlueBorder($(id));
 
-                callZ.setTextarea(0);
+                callZ.setTextArea(0);
 
             } else {
 
@@ -1291,7 +1395,7 @@ function typing(event) {
 
                             callZ.setBlueBorder($(nid));
 
-                            callZ.setTextarea(0);
+                            callZ.setTextArea(0);
 
                         }
 
@@ -1304,7 +1408,7 @@ function typing(event) {
 
                                 u1++;
 
-                                if (u1 == 1) {
+                                if (u1 === 1) {
 
 
 
@@ -1314,7 +1418,7 @@ function typing(event) {
 
                                     callZ.setBlueBorder($(nid));
 
-                                    callZ.setTextarea(0);
+                                    callZ.setTextArea(0);
 
                                 }
 
@@ -1332,7 +1436,7 @@ function typing(event) {
 
                                 u2++;
 
-                                if (u2 == 1) {
+                                if (u2 === 1) {
 
                                    // $('td[cols=' + nextX + '][rows=' + _nowY + ']').addClass('picked');
 
@@ -1340,7 +1444,7 @@ function typing(event) {
 
                                     callZ.setBlueBorder($(nid));
 
-                                    callZ.setTextarea(0);
+                                    callZ.setTextArea(0);
 
                                 }
 
@@ -1358,7 +1462,7 @@ function typing(event) {
 
                                 u3++;
 
-                                if (u3 == 1) {
+                                if (u3 === 1) {
 
 
                                     //$('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked');
@@ -1367,7 +1471,7 @@ function typing(event) {
 
                                     callZ.setBlueBorder($(nid));
 
-                                    callZ.setTextarea(0);
+                                    callZ.setTextArea(0);
 
                                 }
 
@@ -1482,9 +1586,7 @@ iTable.prototype.setCss = function () {
 //滚动
 
 iTable.prototype.tableScroll = function () {
-
-    this.container.scroll(function () {
-
+    this.container.on('scroll',function(){
         var scrollY = $(this).scrollTop();
 
         var scrollX = $(this).scrollLeft();
@@ -1494,6 +1596,7 @@ iTable.prototype.tableScroll = function () {
         $(".xOrder table").css('margin-left', -scrollX);
 
     });
+
 
 }
 
@@ -1520,15 +1623,15 @@ iTable.prototype.fillTd = function (tid) {
 
 iTable.prototype.tdClick=function(event){
 
-    $('.itableInputHolder').hide();
+    $('#iTableInputHolder').hide();
 
-    $('.itableInput').blur();
+    $('#iTableInput').blur();
 
     $('.picked').removeClass('picked');
 
     $(this).addClass('picked');
 
-    event.data.target.setBlueBorder($(this));
+   // event.data.target.setBlueBorder($(this));
 
     var xCoo = Number($(this).attr('cols')) - 1,
 
@@ -1548,16 +1651,25 @@ iTable.prototype.tdClick=function(event){
 iTable.prototype.tdDbClick=function(event){
     var tdText = $(this).text();
     var eType='dblclick';
+    var ex=$(this).attr('ex');
+    console.log(ex);
 
-    event.data.target.setTextarea(1);
-    event.data.target.fillTextarea(eType,tdText);
+    event.data.target.setTextArea(1);
+    if(!!ex){
+        event.data.target.fillExTextArea(eType,tdText,ex);
+    }else{
+        event.data.target.fillTextarea(eType,tdText);
 
-    $(".itableInput").click(function () {
+    }
+
+
+
+    $("#iTableInput").click(function () {
         return false;
     });
 
     $('#iTable' + event.data.id + ' tr td').not($(this)).click(function (event) {
-        $('.itableInput').blur();
+        $('#iTableInput').blur();
     });
     stopPropagation();
 }
@@ -2163,7 +2275,7 @@ iTable.prototype.cornerCopy=function(){
 
 iTable.prototype.getTdStyle=function(obj){
     var td=$(obj);
-    if(td.length==1&&td.length>0){
+    if(td.length===1&&td.length>0){
         var classArr=(td.attr('class')).split(' ');
 
         for(var i=0;i<classArr.length;i++){
@@ -2300,11 +2412,11 @@ iTable.prototype.createFooter = function () {
 
     this.footer.append(addBox);
 
-    var sheetQueue = $('<div class="sheetqueue"><div><dl class="sheetqueuedl"><dd class="sheet sheetdefault" id="sheet1">1</dd></dl></div></div>');
+    var sheetQueue = $('<div class="sheetQueue"><div><dl class="sheetQueueDl"><dd class="sheet sheetDefault" id="sheet1">1</dd></dl></div></div>');
 
     this.footer.append(sheetQueue);
 
-    var sheetFloat = $('<div class="sheetfloat"><span class="lsheet"></span><span class="rsheet"></span></div>');
+    var sheetFloat = $('<div class="sheetFloat"><span class="lSheet"></span><span class="rSheet"></span></div>');
 
     this.footer.append(sheetFloat);
 
@@ -2467,7 +2579,7 @@ iTable.prototype.fontBold = function () {
 
     var simMenu = this.createSimpleMenu('fbold');
 
-    var sel_a = $(simMenu).children(0);
+    var sel_a = simMenu.children(0);
 
     sel_a.on('click', function () {
 
@@ -2483,7 +2595,7 @@ iTable.prototype.fontItalic = function () {
 
     var simMenu = this.createSimpleMenu('fitalic');
 
-    var sel_a = $(simMenu).children(0);
+    var sel_a = simMenu.children(0);
 
     sel_a.on('click', function () {
 
@@ -2499,7 +2611,7 @@ iTable.prototype.fontOverline = function () {
 
     var simMenu = this.createSimpleMenu('foverline');
 
-    var sel_a = $(simMenu).children(0);
+    var sel_a = simMenu.children(0);
 
     sel_a.on('click', function () {
 
@@ -3060,7 +3172,7 @@ iTable.prototype.insertCol = function () {
 
     var simMenu = this.createSimpleMenu('editRowCol insertCol', '');
 
-    var sel_a = $(simMenu).children(0);
+    var sel_a = simMenu.children(0);
 
     var that = this;
 
@@ -3124,7 +3236,7 @@ iTable.prototype.insertCol = function () {
 
                                 time++;
 
-                                if (time == 1) {
+                                if (time === 1) {
 
                                 //    $('td[cols=' + index + '][rows=' + _y + ']').after('<td style="background:orange"></td>');
                                     $('#' + _y + '-' + index).after('<td style="background:orange"></td>');
@@ -3164,7 +3276,7 @@ iTable.prototype.insertCol = function () {
 
 
 
-                    if (cols == xIndex) {
+                    if (cols === xIndex) {
 
                         // var cSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
                         //
@@ -3207,7 +3319,7 @@ iTable.prototype.insertCol = function () {
 
                             time++;
 
-                            if (time == 1) {
+                            if (time === 1) {
 
                                 // var cSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
                                 //
@@ -3265,7 +3377,7 @@ iTable.prototype.insertRow = function () {
 
     var simMenu = this.createSimpleMenu('editRowCol insertRow', '');
 
-    var sel_a = $(simMenu).children(0);
+    var sel_a = simMenu.children(0);
 
     var that = this;
 
@@ -3314,7 +3426,7 @@ iTable.prototype.insertRow = function () {
                     //if ($('td[cols=' + _x + '][rows=' + yMin + ']').length > 0) {
                     if ($('#' + yMin + '-' + _x ).length > 0) {
 
-                        if (_x == 0) {
+                        if (_x === 0) {
 
                             tr.append(th);
 
@@ -3354,10 +3466,10 @@ iTable.prototype.insertRow = function () {
 
                     var rows = $('#' + i + '-' + j ).attr('rows');
 
-                    if (rows == yIndex) {
+                    if (rows === yIndex) {
 
 
-                        if (j == 2) {
+                        if (j === 2) {
 
                             var th = $('<th></th>');
 
@@ -3494,7 +3606,7 @@ iTable.prototype.deleteCol = function () {
 
                     var cols = parseInt($('#' + i + '-' + j).attr('cols'));
 
-                    if (cols == index) {
+                    if (cols === index) {
 
                      //   var cSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
 
@@ -3520,7 +3632,7 @@ iTable.prototype.deleteCol = function () {
 
                             time++;
 
-                            if (time == 1) {
+                            if (time === 1) {
 
                               //  var cSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
 
@@ -3596,7 +3708,7 @@ iTable.prototype.deleteRow = function () {
 
                     var rows = $('#' + i + '-' + j ).attr('rows');
 
-                    if (rows == index) {
+                    if (rows === index) {
 
                       //  var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
 
@@ -3749,7 +3861,7 @@ iTable.prototype.fxSum=function(){
                var val=that.getFilltype($(this));
                var nowRow=parseInt($(this).attr('rows')),nowCol=parseInt($(this).attr('cols'));
                rArr.push(nowRow),cArr.push(nowCol);
-               if(val==NaN){
+               if(val===NaN){
                    val=0;
                }else{
                    sum+=val;
@@ -3802,7 +3914,7 @@ iTable.prototype.fxAvg=function(){
             var val=that.getFilltype($(this));
             var nowRow=parseInt($(this).attr('rows')),nowCol=parseInt($(this).attr('cols'));
             rArr.push(nowRow),cArr.push(nowCol);
-            if(val==NaN){
+            if(val===NaN){
                 val=0;
             }else{
                 sum+=val;
@@ -4026,7 +4138,7 @@ iTable.prototype.mergeTd = function () {
 
                 var arr, $td = $("<td>").addClass(isSel ? sigSel : sigDel);
 
-                if (idx == ridx) {
+                if (idx === ridx) {
 
                     // 本行在 [cidx] 后插入 colspan-1 个
 
@@ -4106,13 +4218,16 @@ iTable.prototype.mergeTd = function () {
 
             if (rMin <= rIdx && rIdx <= rMax && cMin <= cIdx && cIdx <= cMax) $(this).addClass(sigDel);
 
-            if (rIdx == rMin && cIdx == cMin) $(this).removeClass(sigDel).attr({
+            if (rIdx == rMin && cIdx == cMin){
+                $(this).removeClass(sigDel).attr({
 
-                rowspan: rNum,
+                    rowspan: rNum,
 
-                colspan: cNum
+                    colspan: cNum
 
-            });
+                });
+                that.mergeTds.push($(this));
+            }
 
             if ($(this).attr("rowspan") == 1) $(this).removeAttr("rowspan");
 
@@ -4285,8 +4400,8 @@ iTable.prototype.dataSelection=function(json){
         selectLi = $('<li></li>');
         selectLi.append(aTab);
         selectUl.append(selectLi);
-        var _callBack=json[index].callback;
-        aTab.on('click',{_callBack},function(event){
+        var cb=json[index].callback
+        aTab.on('click',{cb},function(event){
             event.data.callback();
         });
 
@@ -4367,7 +4482,7 @@ iTable.prototype.createCellMenu = function (dClass, className, menus) {
 
         selectTr.append(selectTd);
 
-        if ((i + 1) % 5 == 0 && (i + 1) != 0) {
+        if ((i + 1) % 5 === 0 && (i + 1) != 0) {
 
             selectTb.append(selectTr);
 
@@ -4413,19 +4528,19 @@ iTable.prototype.addSheet = function () {
 
         box.empty();
 
-        var dd = $("<dd class='sheet sheetdefault' id=sheet" + i + ">sheet" + i + "</dd>");
+        var dd = $("<dd class='sheet sheetDefault' id=sheet" + i + ">sheet" + i + "</dd>");
 
-        var curId = $(".sheetdefault").attr('id');
+        var curId = $(".sheetDefault").attr('id');
 
         curId = curId.replace('sheet', '');
 
         curId = parseInt(curId);
 
-        $("#sheet" + curId).removeClass('sheetdefault');
+        $("#sheet" + curId).removeClass('sheetDefault');
 
         var neId = parseInt(curId) + 1;
 
-        $('.sheetqueuedl').append(dd);
+        $('.sheetQueueDl').append(dd);
 
         that.createContent(neId);
 
@@ -4468,7 +4583,7 @@ iTable.prototype.sheetWork = function () {
 
         that.fillTd(dId);
 
-        $(this).addClass('sheetdefault').siblings().removeClass('sheetdefault');
+        $(this).addClass('sheetDefault').siblings().removeClass('sheetDefault');
 
         return false;
 
@@ -4518,7 +4633,7 @@ iTable.prototype.sheetWork = function () {
 
         $(".stInput").keyup(function (ev) {
 
-            if (ev.keyCode == 13) {
+            if (ev.keyCode === 13) {
 
                 $('.stInput').blur();
 
@@ -4534,17 +4649,17 @@ iTable.prototype.sheetWork = function () {
 
 iTable.prototype.sheetMove = function () {
 
-    var lsheet = $('.lsheet');
+    var lsheet = $('.lSheet');
 
-    var rsheet = $('.rsheet');
+    var rsheet = $('.rSheet');
 
-    var sDl = $(".sheetqueuedl");
+    var sDl = $(".sheetQueuedDl");
 
     var num = 0;
 
     rsheet.click(function () {
 
-        num == sDl.find('dd').length - 1 ? num = sDl.find('dd').length - 1 : num++;
+        num === sDl.find('dd').length - 1 ? num = sDl.find('dd').length - 1 : num++;
 
         toNavRPos();
 
@@ -4552,7 +4667,7 @@ iTable.prototype.sheetMove = function () {
 
     lsheet.click(function () {
 
-        num == 0 ? num = 0 : num--;
+        num === 0 ? num = 0 : num--;
 
         toNavRPos();
 
@@ -4616,7 +4731,7 @@ iTable.prototype.setIndex = function () {
 
             cell = objTab.rows[i].cells[j];
 
-            if (offsetLeftArray.contains(cell.offsetLeft) == -1)
+            if (offsetLeftArray.contains(cell.offsetLeft) === -1)
 
                 offsetLeftArray.push(cell.offsetLeft);
 
@@ -4668,7 +4783,7 @@ iTable.prototype.updateLeft = function (index) {
 
     for (var j = index; j < this.rowCount; j++) {
 
-        var td = $("<td>" + IntToChr(j) + "</td>");
+        //var td = $("<td>" + IntToChr(j) + "</td>");
 
         $('.titleTable tbody tr').eq(j).find('td').text(IntToChr(j));
 
@@ -4688,7 +4803,7 @@ iTable.prototype.updateTop = function (index) {
 
     for (var j = index; j < this.cellCount - 1; j++) {
 
-        var td = $("<td>" + IntToChr(j) + "</td>");
+        //var td = $("<td>" + IntToChr(j) + "</td>");
 
         $('.titleTable tbody tr').find('td').eq(j).text(IntToChr(j));
 
@@ -4710,73 +4825,89 @@ iTable.prototype.largeCol = function () {
 
     $('.titleTable tr td').each(function (event) {
 
-        $(this).off('mousedown').on('mousedown', function (event) {
-
-            var index = $(this).index();
-
-            var sline = $('<div class="sline"></div>');
-
-            var lline = $('<div class="lline"></div>');
-
-            var h = $(this).height();
+        $(this).off('mousemove').on('mousemove',function(event){
 
             var w = $(this).width();
 
             var x = event.clientX - exW;
 
-            sline.css({
+            if($(this).offset().left+w-exW<x+20){
+                $(this).css({
+                    cursor:'col-resize'
+                });
 
-                'left': x,
+                $(this).off('mousedown').on('mousedown', function (event) {
 
-                'height': h
+                    var index = $(this).index();
 
-            });
+                    var lLine = $('<div class="lline"></div>');
 
-            $(this).append(sline);
+                    var sL=Number($(that.container).scrollLeft());
 
-            $('body').mousemove(function (event) {
+                    var w = $(this).width()+sL;
 
-                var allH = $('.dataTable').outerHeight();
+                    var x = event.clientX - exW+sL;
 
-                var l = event.clientX - exW;
+                    if($(this).offset().left+w-exW<x+20){
 
-                var move = l - x;
+                        $('body').mousemove(function (event) {
 
-                if (w + move < 20) {
+                            var allH = $('.dataTable').outerHeight();
 
-                    return;
+                            var l = event.clientX - exW;
 
-                } else {
+                            var move = l - x;
 
-                    lline.css({
+                            if (w + move < 20) {
 
-                        'height': allH,
+                                return;
 
-                        'left': event.clientX
+                            } else {
+
+                                lLine.css({
+
+                                    'height': allH,
+
+                                    'left': event.clientX+sL,
+
+                                    'width':'1px',
+
+                                    'border-left':'1px dashed #000'
+
+                                });
+
+                                $('.dataTable colgroup col').eq(index).css('width', w + move);
+
+                                $('.titleTable colgroup col').eq(index).css('width', w + move);
+
+                                $(container).append(lLine);
+
+                            }
+
+                        });
+                    }
+                    $('body').mouseup(function (event) {
+
+                        $('body').off('mousemove');
+
+                        lLine.remove();
 
                     });
 
-                    $('.dataTable colgroup col').eq(index).css('width', w + move);
+                });
 
-                    $('.titleTable colgroup col').eq(index).css('width', w + move);
+            }else{
 
-                    $(container).append(lline);
 
-                }
-
-            });
-
-            $('body').mouseup(function (event) {
-
-                $('body').off('mousemove');
-
-                $(lline).remove();
-
-                $(sline).remove();
-
-            });
+                $(this).css({
+                    cursor:'default'
+                })
+            }
 
         });
+
+
+
 
     });
 
@@ -4792,81 +4923,99 @@ iTable.prototype.largeRow = function () {
 
     var event = window.event || arguments[0];
 
-    var exH = $('.yOrder').outerHeight();
+    var exH = $('.yOrder').outerHeight(),headerH=parseInt($(container).css('marginTop'));
 
     $('.leftTable tr td').each(function (event) {
 
-        $(this).off('mousedown').on('mousedown', function (event) {
-
-            var index = $(this).parent().index();
-
-            var sline = $('<div class="sline"></div>');
-
-            var lline = $('<div class="rline"></div>');
+        $(this).off('mousemove').on('mousemove',function(event){
 
             var h = $(this).height();
 
-            var w = $(this).width();
-
             var y = event.clientY - exH;
 
-            sline.css({
+            if($(this).offset().top+h-exH<y+6) {
 
-                'top': y,
+                $(this).css({
+                    cursor: 'row-resize'
+                });
 
-                'height': 1,
+                $(this).off('mousedown').on('mousedown', function (event) {
 
-                'float': 'none',
+                    var index = $(this).parent().index();
 
-                'width': w
+                    var lLine = $('<div class="rline"></div>');
 
-            });
+                    var sT=Number($(that.container).scrollTop());
 
-            $(this).append(sline);
+                    var h = $(this).height()+sT;
 
-            $('body').mousemove(function (event) {
+                    var y = event.clientY - exH+sT;
 
-                var allW = $('.dataTable').outerWidth();
 
-                var l = event.clientY - exH;
+                    if($(this).offset().top+h-exH<y+10) {
 
-                var move = l - y;
+                        $('body').mousemove(function (event) {
 
-                if (h + move < 20) {
+                            var allW = $('.dataTable').outerWidth();
 
-                    return;
+                            var l = event.clientY - exH;
 
-                } else {
+                            var move = l - y;
 
-                    lline.css({
+                            if (h + move < 20) {
 
-                        'width': allW,
+                                return;
 
-                        'top': event.clientY
+                            } else {
+
+                                lLine.css({
+
+                                    'width': allW,
+
+                                    'top': event.clientY+sT-headerH,
+
+                                    'border-top':'1px dashed #000',
+
+                                    'height':1
+
+
+                                });
+
+                                $('.dataTable tr th').eq(index).css('height', h + move + 1);
+
+                                $('.leftTable td').eq(index).css('height', h + move);
+
+                                $(container).append(lLine);
+
+                            }
+
+                        });
+                    }
+
+
+
+                    $('body').mouseup(function (event) {
+
+                        $('body').off('mousemove');
+
+                        lLine.remove();
+
 
                     });
 
-                    $('.dataTable tr th').eq(index).css('height', h + move + 1);
+                });
 
-                    $('.leftTable td').eq(index).css('height', h + move);
 
-                    $(container).append(lline);
 
-                }
 
-            });
-
-            $('body').mouseup(function (event) {
-
-                $('body').off('mousemove');
-
-                $(lline).remove();
-
-                $(sline).remove();
-
-            });
-
+            }else{
+                $(this).css({
+                    cursor: 'default'
+                });
+            }
         });
+
+
 
     });
 
@@ -4962,71 +5111,71 @@ iTable.prototype.fillWork = function () {
 
         //删除
 
-        if ((ev.keyCode == 8)) {
+        // if ((ev.keyCode === 8)) {
+        //
+        //     delRes = nValue.match(/([a-zA-Z]([1-9]\d*))(((\-|\+|\*|\\){1}([a-zA-Z]{1})(([1-9]\d*){1})))*/);
+        //
+        //     if (!!nValue) {
+        //
+        //         dArr = nValue.split(flReg);
+        //
+        //         cArr = pValue.split(flReg);
+        //
+        //         delTmp = getUniqueSet(cArr, dArr);
+        //
+        //         if (!!delTmp[1]) {
+        //
+        //             cLightTd(delTmp[1]);
+        //
+        //         }
+        //
+        //     }
+        //
+        // }
+        //
+        // if ((ev.keyCode === 13)) {
+        //
+        //     this.blur();
+        //
+        //     var allValue = pValue;
+        //
+        //     calRes = allValue.match(reg);
+        //
+        //     if ((!!calRes) && (!!calRes[0])) {
+        //
+        //         fText = calRes[0].toString();
+        //
+        //         allArr = fText.split(flReg);
+        //
+        //         for (var i = 0; i < allArr.length; i++) {
+        //
+        //             if (!!allArr[i]) {
+        //
+        //                 var tmp = allArr[i];
+        //
+        //                 var tmpVal = String(that.getValue(allArr[i]));
+        //
+        //                 allValue = allValue.replace(tmp, tmpVal);
+        //
+        //             }
+        //
+        //         }
+        //
+        //         calText = allValue;
+        //
+        //         calText = calText.substring(1);
+        //
+        //         var result = dal2Rpn(calText);
+        //
+        //         $('.picked').text(result);
+        //
+        //         $('.mask').remove();
+        //
+        //     }
+        //
+        // }
 
-            delRes = nValue.match(/([a-zA-Z]([1-9]\d*))(((\-|\+|\*|\\){1}([a-zA-Z]{1})(([1-9]\d*){1})))*/);
-
-            if (!!nValue) {
-
-                dArr = nValue.split(flReg);
-
-                cArr = pValue.split(flReg);
-
-                delTmp = getUniqueSet(cArr, dArr);
-
-                if (!!delTmp[1]) {
-
-                    cLightTd(delTmp[1]);
-
-                }
-
-            }
-
-        }
-
-        if ((ev.keyCode == 13)) {
-
-            this.blur();
-
-            var allValue = pValue;
-
-            calRes = allValue.match(reg);
-
-            if ((!!calRes) && (!!calRes[0])) {
-
-                fText = calRes[0].toString();
-
-                allArr = fText.split(flReg);
-
-                for (var i = 0; i < allArr.length; i++) {
-
-                    if (!!allArr[i]) {
-
-                        var tmp = allArr[i];
-
-                        var tmpVal = String(that.getValue(allArr[i]));
-
-                        allValue = allValue.replace(tmp, tmpVal);
-
-                    }
-
-                }
-
-                calText = allValue;
-
-                calText = calText.substring(1);
-
-                var result = dal2Rpn(calText);
-
-                $('.picked').text(result);
-
-                $('.mask').remove();
-
-            }
-
-        }
-
-        ifx.keydown(function (ev) {
+        ifx.onkeydown(function (ev) {
 
             nValue = ifx.val();
 
@@ -5072,7 +5221,7 @@ iTable.prototype.rMenus = function () {
 
     var that = this;
 
-    var rMenus = this.createRmenus();
+    var rMenus = this.createRMenus();
 
     var winH = $(window).height() - $(this.footer).outerHeight();
 
@@ -5080,7 +5229,7 @@ iTable.prototype.rMenus = function () {
 
     $('.dataTable').contextmenu(function () {
 
-        var ev = ev || window.event;
+        var ev = event || window.event;
 
         var oX = ev.clientX;
 
@@ -5127,7 +5276,7 @@ iTable.prototype.rMenus = function () {
 
 }
 
-iTable.prototype.createRmenus = function () {
+iTable.prototype.createRMenus = function () {
 
     var menus = $('<div class="rmenu"></div>');
 
@@ -5311,7 +5460,7 @@ iTable.prototype._insert = function () {
 
     insertDiv.on('click', function () {
 
-        var ev = ev || window.event;
+        var ev = event || window.event;
 
         var winW = $(window).width();
 
@@ -5665,7 +5814,7 @@ function lightTd(tmp) {
 
     posX = posX.toString() - 1;
 
-    if (posY == null || posX == null || posY.length == 0 || String(posY).length == 0) {
+    if (posY === null || posX === null || posY.length === 0 || String(posY).length === 0) {
 
         return;
 
@@ -5705,7 +5854,7 @@ function cLightTd(tmp) {
 
     posY = posY.toLocaleLowerCase().charCodeAt(0) - 96;
 
-    if (posY == null || posX == null || posY.length == 0 || String(posX).length == 0) {
+    if (posY === null || posX === null || posY.length === 0 || String(posX).length === 0) {
 
         return;
 
@@ -5761,27 +5910,27 @@ function getUniqueSet(setA, setB) {
 
 //Input光标
 
-function set_text_value_position(spos) {
+function set_text_value_position(sPos) {
 
-    var tobj = document.getElementById('tdInput');
+    var tObj = document.getElementById('tdInput');
 
-    if (spos < 0) spos = tobj.value.length;
+    if (sPos < 0) sPos = tObj.value.length;
 
-    if (tobj.setSelectionRange) { //兼容火狐,谷歌
+    if (tObj.setSelectionRange) { //兼容火狐,谷歌
 
         setTimeout(function () {
 
-            tobj.setSelectionRange(spos, spos);
+            tObj.setSelectionRange(sPos, sPos);
 
-            tobj.focus();
+            tObj.focus();
 
         }, 0);
 
-    } else if (tobj.createTextRange) { //兼容IE
+    } else if (tObj.createTextRange) { //兼容IE
 
-        var rng = tobj.createTextRange();
+        var rng = tObj.createTextRange();
 
-        rng.move('character', spos);
+        rng.move('character', sPos);
 
         rng.select();
 
@@ -5884,11 +6033,11 @@ iTable.prototype.init = function () {
 
     tOption.fontItalic && this.fontItalic();
 
-    tOption.fontOverline && this.fontOverline();
+    tOption.fontOverLine && this.fontOverline();
 
     tOption.fontColor && this.fontColor();
 
-    tOption.fontBgcolor && this.bgColor();
+    tOption.fontBgColor && this.bgColor();
 
     tOption.mergeTd && this.mergeTd();
 
@@ -6224,9 +6373,9 @@ var tabs = {
 
     fontItalic: true,
 
-    fontOverline: true,
+    fontOverLine: true,
 
-    fontBgcolor: true,
+    fontBgColor: true,
 
     mergeTd: true,
 
