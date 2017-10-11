@@ -271,6 +271,22 @@ iTable.prototype.frameSelect = function () {
 
             _y = _y + stop - disHeight;
 
+            var startX= onCols,endX=expectX,startY=onRows,endY=expectY;
+
+            for(var m=0;m<that.mergeTds.length;m++){
+                var mergeCS=isNaN(Number($(that.mergeTds[m]).attr('colspan')))?1:Number($(that.mergeTds[m]).attr('colspan'));
+                var mergeRS= isNaN(Number($(that.mergeTds[m]).attr('rowspan')))?1:Number($(that.mergeTds[m]).attr('rowspan'));
+                var mergeX=Number($(that.mergeTds[m]).attr('cols'))+mergeCS-1;
+                var mergeY=Number($(that.mergeTds[m]).attr('rows'))+mergeRS-1;
+
+                if(startX<Number($(that.mergeTds[m]).attr('cols'))||startX<mergeX){
+                    console.log($(that.mergeTds[m]));
+                }
+                if(startY<Number($(that.mergeTds[m]).attr('rows'))||startY<mergeY){
+                    console.log($(that.mergeTds[m]));
+                }
+            }
+
 
             if(_x-oX>20){
 
