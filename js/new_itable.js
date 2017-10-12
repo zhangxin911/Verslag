@@ -221,11 +221,7 @@ iTable.prototype.frameSelect = function () {
 
         var onRspan = parseInt($(coords).attr('rowspan'))  || 1;
 
-        var expectX = onCols + onCspan-1;
-
-        var expectY = onRows + onRspan-1;
-
-        var xMin = expectX,yMin = expectY;
+        var xMin = onCols,yMin = onRows;
 
         var sleft = parseInt($(this).scrollLeft());
 
@@ -271,84 +267,114 @@ iTable.prototype.frameSelect = function () {
 
             _y = _y + stop - disHeight;
 
-            var startX= onCols,endX=expectX,startY=onRows,endY=expectY;
+            var startX,endX,startY,endY;
+
+
+
+            if(onCols<moveX){
+                startX=onCols;
+                endX=moveX;
+            }else{
+                startX=Number(that.moveLast.attr('cols'));
+                endX=onCols;
+            }
+            if(onRows<moveY){
+                startY=onRows;
+                endY=moveY;
+            }else{
+                startY=Number(that.moveLast.attr('rows'));
+                endY=onRows;
+            }
+
+           $('.dataTable tr td').removeClass('picked');
 
             for(var m=0;m<that.mergeTds.length;m++){
                 var mergeCS=isNaN(Number($(that.mergeTds[m]).attr('colspan')))?1:Number($(that.mergeTds[m]).attr('colspan'));
                 var mergeRS= isNaN(Number($(that.mergeTds[m]).attr('rowspan')))?1:Number($(that.mergeTds[m]).attr('rowspan'));
+
+                var mergeCol=Number($(that.mergeTds[m]).attr('cols'));
+                var mergeRow=Number($(that.mergeTds[m]).attr('rows'));
                 var mergeX=Number($(that.mergeTds[m]).attr('cols'))+mergeCS-1;
                 var mergeY=Number($(that.mergeTds[m]).attr('rows'))+mergeRS-1;
+                if(((startX<mergeCol&&mergeCol<endX)||(startX<mergeX&&mergeX<endX))||((startY<mergeRow&&mergeRow<endY)||(startY<mergeY&&mergeY<endY))){
 
-                if(startX<Number($(that.mergeTds[m]).attr('cols'))||startX<mergeX){
-                    console.log($(that.mergeTds[m]));
+                    if($(that.mergeTds[m]).attr('id')===$(coords).attr('id')){
+
+                        if(startX<Number($(that.mergeTds[m]).attr('cols'))){
+                            xMin=startX;
+                        }else{
+                            xMin=Number($(that.mergeTds[m]).attr('cols'));
+
+                        }
+                        if(startY<Number($(that.mergeTds[m]).attr('rows'))){
+                            yMin=startY;
+
+                        }else{
+                            yMin=Number($(that.mergeTds[m]).attr('rows'));
+                        }
+
+                        if(endX<=mergeX){
+                            xMax=mergeX;
+
+                        }else{
+                            xMax=endX;
+                        }
+                        if(startY<=mergeY){
+                            yMax=mergeY;
+                        }else{
+
+                            yMax=endX;
+
+                        }
+
+                    }
+
+                }else{
+
+
                 }
-                if(startY<Number($(that.mergeTds[m]).attr('rows'))||startY<mergeY){
-                    console.log($(that.mergeTds[m]));
-                }
+
+              console.log('x最小'+xMin,'x最大'+xMax,'y最小'+yMin,'y最大'+yMax);
+
             }
 
 
-            if(_x-oX>20){
-
-                if(_y-oY>20){
-                    //E-S 东南
-                    xMin=onCols,yMin=onRows;
-                    // for(var m=0;m<that.mergeTds.length;m++){
-                    //     var mergeCS=isNaN(Number($(that.mergeTds[m]).attr('colspan')))?1:Number($(that.mergeTds[m]).attr('colspan'));
-                    //     var mergeRS= isNaN(Number($(that.mergeTds[m]).attr('rowspan')))?1:Number($(that.mergeTds[m]).attr('rowspan'));
-                    //
-                    //
-                    //     var mergeX=Number($(that.mergeTds[m]).attr('cols'))+mergeCS-1;
-                    //     var mergeY=Number($(that.mergeTds[m]).attr('rows'))+mergeRS-1;
-                    //     //moveX 应该移动到的X位置  mergeX 被检测的合并单元格的X最大位置
-                    //
-                    //
-                    //         if(onCols>Number($(that.mergeTds[m]).attr('cols'))){
-                    //             //起始单元格在合并单元格右边
-                    //
-                    //             if(Number(that.moveLast.attr('cols'))>Number(that.moveLast.attr('cols'))){
-                    //                  //实时移入的单元格在合并单元格右边
-                    //                 xMin=Number($(that.mergeTds[m]).attr('cols')),xMax=moveX;
-                    //             }else{
-                    //                 //实时移入的单元格在合并单元格左边
-                    //                 xMin=Number($(that.mergeTds[m]).attr('cols')),xMax=mergeX;
-                    //             }
-                    //         }else {
-                    //             //起始单元格在合并单元格左边
-                    //             // xMin=Number($(that.mergeTds[m]).attr('cols'));
-                    //             if (Number(that.moveLast.attr('cols')) > Number(that.moveLast.attr('cols'))) {
-                    //                 //实时移入的单元格在合并单元格右边
-                    //                 xMin = onCols, xMax = moveX;
-                    //             } else {
-                    //                 //实时移入的单元格在合并单元格左边
-                    //                 xMin = onCols, xMax = mergeX;
-                    //             }
-                    //
-                    //         }
-                    //
-                    // }
-                    // console.log(xMin,xMax);
 
 
+            // for(var i = startX; i <= endX ; i++) {
+            //     for(var j = startY; j <= endY; j++) {
+            //                 var id='#'+j+'-'+i;
+            //                 $(id).addClass('picked');
+            //
+            //     }
+            //
+            // }
 
-                }else{
-                    //E-N 东北
-                    xMin=onCols,yMin=onRows + onRspan-1;
-                }
-            }else{
-                if(_y-oY>20){
-                    // W-S 西南
-                    xMin=onCols+onCspan-1,yMin=onRows;
-                }else{
-                    //W-N  西北
-                    xMin=onCols+onCspan-1,yMin=onRows+onRspan-1;
-                }
-
-            }
-
-             $('.dataTable tr td').removeClass('picked');
-
-
+            // if(_x-oX>20){
+            //
+            //     if(_y-oY>20){
+            //         //E-S 东南
+            //         xMin=onCols,yMin=onRows;
+            //
+            //     }else{
+            //         //E-N 东北
+            //        xMin=onCols,yMin=onRows + onRspan-1;
+            //
+            //     }
+            // }else{
+            //     if(_y-oY>20){
+            //         // W-S 西南
+            //         xMin=onCols+onCspan-1,yMin=onRows;
+            //     }else{
+            //         //W-N  西北
+            //         xMin=onCols+onCspan-1,yMin=onRows+onRspan-1;
+            //     }
+            //
+            // }
+            //
+            //
+            //
+            //
             if(xMin<=xMax&&yMin<=yMax){
                 for(var i = xMin; i <= xMax ; i++) {
                     for(var j = yMin; j <= yMax; j++) {
