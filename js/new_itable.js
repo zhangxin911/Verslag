@@ -406,8 +406,6 @@ iTable.prototype.frameSelect = function () {
             //
             that.setBlueBorder($('.picked'));
 
-
-
         });
         $(that.container).on('mouseup',function(){
             $(this).off('mousemove');
@@ -1661,7 +1659,7 @@ iTable.prototype.tdClick=function(event){
 
     $(this).addClass('picked');
 
-   // event.data.target.setBlueBorder($(this));
+     event.data.target.setBlueBorder($(this));
 
     var xCoo = Number($(this).attr('cols')) - 1,
 
@@ -1972,13 +1970,9 @@ iTable.prototype.setRedBorder=function(obj){
 }
 
 
-
 iTable.prototype.hideReadBorder=function(){
     $('.wrBorder').hide();
 }
-
-
-
 
 iTable.prototype.setBlueBorder=function(obj){
 
@@ -2745,7 +2739,7 @@ iTable.prototype.textAlign = function () {
 
     var select = this.createCellMenu('f_align', 'textAlign', this.settings.textAlign);
 
-    var td = $(select).find('table tr td');
+    var td  = $(select).find('table tr td');
 
     var className, curClass;
 
