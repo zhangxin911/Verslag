@@ -286,6 +286,7 @@ iTable.prototype.frameSelect = function () {
                 endY=onRows;
             }
 
+
            $('.dataTable tr td').removeClass('picked');
 
             for(var m=0;m<that.mergeTds.length;m++){
@@ -296,59 +297,45 @@ iTable.prototype.frameSelect = function () {
                 var mergeRow=Number($(that.mergeTds[m]).attr('rows'));
                 var mergeX=Number($(that.mergeTds[m]).attr('cols'))+mergeCS-1;
                 var mergeY=Number($(that.mergeTds[m]).attr('rows'))+mergeRS-1;
-                if(((startX<mergeCol&&mergeCol<endX)||(startX<mergeX&&mergeX<endX))||((startY<mergeRow&&mergeRow<endY)||(startY<mergeY&&mergeY<endY))){
 
-                    if($(that.mergeTds[m]).attr('id')===$(coords).attr('id')){
-
-                        if(startX<Number($(that.mergeTds[m]).attr('cols'))){
-                            xMin=startX;
+                if(startX>mergeX){
+                    //out 开始点在右边
+                }else{
+                    //开始点在左边
+                    if(endX<mergeCol){
+                        //out 终止点在上边
+                    }else{
+                        if(startY>mergeY){
+                               //out  开始点在下面
                         }else{
-                            xMin=Number($(that.mergeTds[m]).attr('cols'));
-
-                        }
-                        if(startY<Number($(that.mergeTds[m]).attr('rows'))){
-                            yMin=startY;
-
-                        }else{
-                            yMin=Number($(that.mergeTds[m]).attr('rows'));
-                        }
-
-                        if(endX<=mergeX){
-                            xMax=mergeX;
-
-                        }else{
-                            xMax=endX;
-                        }
-                        if(startY<=mergeY){
-                            yMax=mergeY;
-                        }else{
-
-                            yMax=endX;
+                              if(endY<mergeY&&startY<mergeRow){
+                                  //out
+                              }else{
+                              startX<Number($(that.mergeTds[m]).attr('cols'))?startX=startX:startX=Number($(that.mergeTds[m]).attr('cols'));
+                              startY<Number($(that.mergeTds[m]).attr('rows'))?startY=startY:startY=Number($(that.mergeTds[m]).attr('rows'));
+                              endX<mergeX?endX=mergeX:endX=endX;
+                              endY<mergeY?endY=mergeY:endY=endY;
+                              }
 
                         }
 
                     }
 
-                }else{
-
-
                 }
 
-              console.log('x最小'+xMin,'x最大'+xMax,'y最小'+yMin,'y最大'+yMax);
 
             }
 
 
 
+            for(var i = startX; i <= endX ; i++) {
+                for(var j = startY; j <= endY; j++) {
+                            var id='#'+j+'-'+i;
+                            $(id).addClass('picked');
 
-            // for(var i = startX; i <= endX ; i++) {
-            //     for(var j = startY; j <= endY; j++) {
-            //                 var id='#'+j+'-'+i;
-            //                 $(id).addClass('picked');
-            //
-            //     }
-            //
-            // }
+                }
+
+            }
 
             // if(_x-oX>20){
             //
@@ -375,48 +362,49 @@ iTable.prototype.frameSelect = function () {
             //
             //
             //
-            if(xMin<=xMax&&yMin<=yMax){
-                for(var i = xMin; i <= xMax ; i++) {
-                    for(var j = yMin; j <= yMax; j++) {
-                        var id='#'+j+'-'+i;
-
-                        $(id).addClass('picked');
-
-                    }
-
-                }
-            }else if(xMin<=xMax&&yMin>yMax){
-                for(var i = xMin; i <= xMax ; i++) {
-                    for(var j = yMax; j <= yMin; j++) {
-                        var id='#'+j+'-'+i;
-                        $(id).addClass('picked');
-
-                    }
-
-                }
-            }else if(xMin>xMax&&yMin<yMax){
-                for(var i = xMax; i <= xMin ; i++) {
-                    for(var j = yMin; j <= yMax; j++) {
-                        var id='#'+j+'-'+i;
-
-                        $(id).addClass('picked');
-
-                    }
-
-                }
-            }else{
-                for(var i = xMax; i <= xMin ; i++) {
-                    for(var j = yMax; j <= yMin; j++) {
-                        var id='#'+j+'-'+i;
-
-                        $(id).addClass('picked');
-
-                    }
-
-                }
-
-            }
-         //   that.setBlueBorder($('.picked'));
+            // if(xMin<=xMax&&yMin<=yMax){
+            //     for(var i = xMin; i <= xMax ; i++) {
+            //         for(var j = yMin; j <= yMax; j++) {
+            //             var id='#'+j+'-'+i;
+            //
+            //             $(id).addClass('picked');
+            //
+            //         }
+            //
+            //     }
+            // }else if(xMin<=xMax&&yMin>yMax){
+            //     for(var i = xMin; i <= xMax ; i++) {
+            //         for(var j = yMax; j <= yMin; j++) {
+            //             var id='#'+j+'-'+i;
+            //             $(id).addClass('picked');
+            //
+            //         }
+            //
+            //     }
+            // }else if(xMin>xMax&&yMin<yMax){
+            //     for(var i = xMax; i <= xMin ; i++) {
+            //         for(var j = yMin; j <= yMax; j++) {
+            //             var id='#'+j+'-'+i;
+            //
+            //             $(id).addClass('picked');
+            //
+            //         }
+            //
+            //     }
+            // }else{
+            //     for(var i = xMax; i <= xMin ; i++) {
+            //         for(var j = yMax; j <= yMin; j++) {
+            //             var id='#'+j+'-'+i;
+            //
+            //             $(id).addClass('picked');
+            //
+            //         }
+            //
+            //     }
+            //
+            // }
+            //
+            that.setBlueBorder($('.picked'));
 
 
 
