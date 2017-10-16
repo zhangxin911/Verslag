@@ -97,7 +97,7 @@ iTable.prototype.createXaxis = function () {
 
     xAxis.empty();
 
-    var xTable = $("<table class='titleTable'></table>");
+    var xTable = $("<table class='titleTable' id='titleTable'></table>");
 
     var th = $('<th></th>');
 
@@ -149,7 +149,7 @@ iTable.prototype.createYaxis = function () {
 
     var yAxis = $("<div class='yOrder'></div>");
 
-    var yTable = $("<table class='leftTable'></table>");
+    var yTable = $("<table class='leftTable' id='leftTable'></table>");
 
     yAxis.empty();
 
@@ -332,7 +332,6 @@ iTable.prototype.frameSelect = function () {
                 for(var j = startY; j <= endY; j++) {
                             var id='#'+j+'-'+i;
                             $(id).addClass('picked');
-
                 }
 
             }
@@ -471,8 +470,27 @@ iTable.prototype.fillTextarea=function(eType,val){
             $('#iTableInput').val('');
             $(document).off('keydown');
             $('#iTableInput').focus().val(val);
+
+
             $("#iTableInput").on('keyup',function(){
                 $('#ip_fx').val($(this).val());
+                if(event.keyCode===187){
+                   $('.dataTable tr td').off('click');
+                   $('.dataTable tr td').off('dblclick');
+                   $(that.container).off('mousedown');
+                   $('.dataTable tr td').on('click',function(){
+                       var tdId=$(this).attr('id');
+                       var x=Number(tdId.split('-')[1])-2;
+                       x=IntToChr(x);
+                       var y=tdId.split('-')[0];
+                       $('#iTableInput').val($('#iTableInput').val()+x+y);
+                       var testVal=$('#iTableInput').val();
+                        testVal.split(/\=\-\+\*\//g);
+
+                        console.log(testVal);
+                   });
+                }
+
                 if (event.keyCode === 13) {
                     var content = $('#iTableInput').val();
                     var curClass=$('.picked').attr('class');
@@ -493,6 +511,7 @@ iTable.prototype.fillTextarea=function(eType,val){
                 }
                 event.stopPropagation();
             });
+
             break;
         case 'keymove':
             $('#iTableInput').focus();
@@ -1680,7 +1699,7 @@ iTable.prototype.tdDbClick=function(event){
     var tdText = $(this).text();
     var eType='dblclick';
     var ex=$(this).attr('ex');
-    console.log(ex);
+
 
     event.data.target.setTextArea(1);
     if(!!ex){
@@ -2293,6 +2312,105 @@ iTable.prototype.cornerCopy=function(){
 
 
         });
+    });
+}
+
+
+iTable.prototype.chooseRow=function(){
+    var that=this;
+    $('#leftTable tr td').on('click',function(){
+        var index=$(this).parent().index()+1;
+
+        var startYArr=[],endYArr=[];
+        $('.picked').removeClass('picked');
+
+        if(that.mergeTds.length>=1){
+
+            // for(var j=0;j<that.mergeTds.length;j++){
+            //
+            //     var tdStartRow=Number($(that.mergeTds[j]).attr('rows'));
+            //     var tdEndRow=Number($(that.mergeTds[j]).attr('rows'))+Number($(that.mergeTds[j]).attr('rowspan'));
+            //
+            //
+            //     if(tdStartRow<=index&&tdEndRow>=index){
+            //         startYArr.push(tdStartRow);
+            //         endYArr.push(tdEndRow);
+            //     }
+            //
+            // }
+            // var minY=_.min(startYArr),maxY=_.max(endYArr);
+            // for(var n=minY;n<maxY;n++){
+            //     for(var m=0;m<that.cellCount;m++){
+            //         var id='#'+n+'-'+m;
+            //         $(id).addClass('picked');
+            //     }
+            //
+            // }
+
+        }else{
+            // for(var i=0;i<that.cellCount;i++){
+            //     var id='#'+index+'-'+i;
+            //     $(id).addClass('picked');
+            //
+            // }
+        }
+        for(var i=0;i<that.cellCount;i++){
+            var id='#'+index+'-'+i;
+            $(id).addClass('picked');
+
+        }
+
+
+
+
+
+
+    });
+}
+
+iTable.prototype.chooseCol=function(){
+    var that=this;
+    $('#titleTable tr td').on('click',function(){
+        var index=Number($(this).index())+1;
+        var startXArr=[],endXArr=[];
+
+        $('.picked').removeClass('picked');
+
+        if(that.mergeTds.length>=1){
+
+            // for(var j=0;j<that.mergeTds.length;j++){
+            //
+            //     var tdStartCol=Number($(that.mergeTds[j]).attr('cols'));
+            //     var tdEndCol=Number($(that.mergeTds[j]).attr('cols'))+Number($(that.mergeTds[j]).attr('colspan'));
+            //
+            //     if(tdStartCol<=index&&tdEndCol>=index){
+            //         startXArr.push(tdStartCol);
+            //         endXArr.push(tdEndCol);
+            //     }
+            //
+            // }
+            // var minX=_.min(startXArr),maxX=_.max(endXArr);
+            //
+            // for(var m=0;m<that.rowCount;m++){
+            //     for(var n=minX;n<maxX;n++){
+            //         var id='#'+m+'-'+n;
+            //
+            //         $(id).addClass('picked');
+            //     }
+            //
+            // }
+        }else{
+            // for(var l=0;l<that.rowCount;l++){
+            //     var id='#'+l+'-'+index;
+            //     $(id).addClass('picked');
+            // }
+        }
+        for(var l=0;l<that.rowCount;l++){
+            var id='#'+l+'-'+index;
+            $(id).addClass('picked');
+        }
+
+
     });
 }
 
@@ -6116,6 +6234,10 @@ iTable.prototype.init = function () {
     this.saveBtn();
 
     this.fillType();
+
+    this.chooseCol();
+
+    this.chooseRow();
 }
 
 var settings = {
