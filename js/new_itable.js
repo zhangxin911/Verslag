@@ -470,26 +470,57 @@ iTable.prototype.fillTextarea=function(eType,val){
             $('#iTableInput').val('');
             $(document).off('keydown');
             $('#iTableInput').focus().val(val);
-
-
+            var testArr=[];
             $("#iTableInput").on('keyup',function(){
                 $('#ip_fx').val($(this).val());
+
                 if(event.keyCode===187){
                    $('.dataTable tr td').off('click');
                    $('.dataTable tr td').off('dblclick');
                    $(that.container).off('mousedown');
+
                    $('.dataTable tr td').on('click',function(){
                        var tdId=$(this).attr('id');
                        var x=Number(tdId.split('-')[1])-2;
                        x=IntToChr(x);
                        var y=tdId.split('-')[0];
-                       $('#iTableInput').val($('#iTableInput').val()+x+y);
-                       var testVal=$('#iTableInput').val();
-                        testVal.split(/\=\-\+\*\//g);
 
-                        console.log(testVal);
+                       $("#iTableInput").focus();
+
+                     //  console.log(locatePoint($('#iTableInput')));
+
+                       // if($('#iTableInput').val().match(/^\=((((\(*([a-zA-Z]([1-9]\d*))\)*|([1-9]\d*))(\+|-|\/|\*))*(([1-9]\d*)|([a-zA-Z]([1-9]\d*))*\)*))|([a-zA-Z]([1-9]\d*)))/).length>=2){
+                       //     console.log($('#iTableInput').val().match(/^\={1}\({0,1}|\*|\+|\-|\//g));
+                       //     $('#iTableInput').val($('#iTableInput').val()+x+y);
+                       //
+                       // }else{
+                       //     console.log($('#iTableInput').val().match(/^\={1}\({0,1}|\*|\+|\-|\//g));
+                       //     $('#iTableInput').val('='+x+y);
+                       // }
+                       if($('#iTableInput').val().match(/(\=|\+|\-|\*|\/)([a-z]|[A-Z])+([1-9]*)/g)){
+
+                           var lastValueArr=$('#iTableInput').val().split(/\=\+\-\*\//);
+                           console.log($('#iTableInput').val());
+                           $('#iTableInput').val($('#iTableInput').val()+x+y);
+
+                       }else{
+
+                           $('#iTableInput').val('='+x+y);
+                       }
+
+
+
+
+
+
+
+
+
                    });
+
                 }
+
+
 
                 if (event.keyCode === 13) {
                     var content = $('#iTableInput').val();
@@ -518,6 +549,21 @@ iTable.prototype.fillTextarea=function(eType,val){
             break;
         default:
             console.log('moren');
+    }
+}
+
+function locatePoint(obj){
+    var aCtrl = obj;
+    if (aCtrl.setSelectionRange) {
+        setTimeout(function() {
+            aCtrl.setSelectionRange(0, 0); //将光标定位在textarea的开头，需要定位到其他位置的请自行修改
+            aCtrl.focus();
+        }, 0);
+    }else if (aCtrl.createTextRange) {
+        var textArea=document.getElementById("txtContent");
+        var tempText=textArea.createTextRange();
+        tempText.moveEnd("character",0-tempText.text.length);
+        tempText.select();
     }
 }
 
