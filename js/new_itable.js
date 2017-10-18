@@ -461,7 +461,7 @@ iTable.prototype.fillExTextArea=function(eType,val,ex){
 
 }
 
-iTable.prototype.fillTextarea=function(eType,val){
+iTable.prototype.fillTextArea=function(eType,val){
 
     var that=this;
     switch(eType)
@@ -474,53 +474,7 @@ iTable.prototype.fillTextarea=function(eType,val){
             $("#iTableInput").on('keyup',function(){
                 $('#ip_fx').val($(this).val());
 
-                if(event.keyCode===187){
-                   $('.dataTable tr td').off('click');
-                   $('.dataTable tr td').off('dblclick');
-                   $(that.container).off('mousedown');
-
-                   $('.dataTable tr td').on('click',function(){
-                       var tdId=$(this).attr('id');
-                       var x=Number(tdId.split('-')[1])-2;
-                       x=IntToChr(x);
-                       var y=tdId.split('-')[0];
-
-                       $("#iTableInput").focus();
-
-                     //  console.log(locatePoint($('#iTableInput')));
-
-                       // if($('#iTableInput').val().match(/^\=((((\(*([a-zA-Z]([1-9]\d*))\)*|([1-9]\d*))(\+|-|\/|\*))*(([1-9]\d*)|([a-zA-Z]([1-9]\d*))*\)*))|([a-zA-Z]([1-9]\d*)))/).length>=2){
-                       //     console.log($('#iTableInput').val().match(/^\={1}\({0,1}|\*|\+|\-|\//g));
-                       //     $('#iTableInput').val($('#iTableInput').val()+x+y);
-                       //
-                       // }else{
-                       //     console.log($('#iTableInput').val().match(/^\={1}\({0,1}|\*|\+|\-|\//g));
-                       //     $('#iTableInput').val('='+x+y);
-                       // }
-                       if($('#iTableInput').val().match(/(\=|\+|\-|\*|\/)([a-z]|[A-Z])+([1-9]*)/g)){
-
-                           var lastValueArr=$('#iTableInput').val().split(/\=\+\-\*\//);
-                           console.log($('#iTableInput').val());
-                           $('#iTableInput').val($('#iTableInput').val()+x+y);
-
-                       }else{
-
-                           $('#iTableInput').val('='+x+y);
-                       }
-
-
-
-
-
-
-
-
-
-                   });
-
-                }
-
-
+                 that.isExpress($('#iTableInput').val());
 
                 if (event.keyCode === 13) {
                     var content = $('#iTableInput').val();
@@ -552,20 +506,52 @@ iTable.prototype.fillTextarea=function(eType,val){
     }
 }
 
-function locatePoint(obj){
-    var aCtrl = obj;
-    if (aCtrl.setSelectionRange) {
-        setTimeout(function() {
-            aCtrl.setSelectionRange(0, 0); //将光标定位在textarea的开头，需要定位到其他位置的请自行修改
-            aCtrl.focus();
-        }, 0);
-    }else if (aCtrl.createTextRange) {
-        var textArea=document.getElementById("txtContent");
-        var tempText=textArea.createTextRange();
-        tempText.moveEnd("character",0-tempText.text.length);
-        tempText.select();
+iTable.prototype.isExpress=function(val){
+    var textVal=val;
+    if(textVal.match(/^=/g)){
+        //    /(\=|\+|\-|\*|\/)([a-z]|[A-Z])+([1-9]*)/g
+
+        $('.dataTable tr td').off('click');
+        $('.dataTable tr td').off('dblclick');
+        $(this.container).off('mousedown');
+        var coordinates;
+        var lastVal= $('#iTableInput').val();
+
+            $('.dataTable tr td').on('click',{coordinate:coordinates},function(event){
+                var nowVal=$('#iTableInput').val();
+
+                 if(lastVal===nowVal){
+                     event.data.coordinate=IntToChr(Number($(this).attr('cols')))+$(this).attr('rows');
+                     var lastCoo=_.last(_.compact(nowVal.split(/\=|\+|\-|\*|\//g)));
+
+                     if(nowVal.slice(-1)==='+'||nowVal.slice(-1)==='-'||nowVal.slice(-1)==='*'||nowVal.slice(-1)==='/'){
+                         $('#iTableInput').val($('#iTableInput').val()+event.data.coordinate);
+                     }else{
+                         if(!!lastCoo){
+                             $('#iTableInput').val($('#iTableInput').val().substring(0,$('#iTableInput').val().length-lastCoo.length)+event.data.coordinate);
+                             lastVal=$('#iTableInput').val();
+                         }else{
+                             $('#iTableInput').val('='+event.data.coordinate);
+                         }
+                     }
+
+
+
+                 }else{
+                     lastVal=$('#iTableInput').val();
+                 }
+
+
+
+            });
+
+
+    }else{
+        console.log('not express');
     }
 }
+
+
 
 
 iTable.prototype.keyCursor = function () {
@@ -606,7 +592,7 @@ function typing(event) {
 
         callZ.setTextArea(1);
 
-        callZ.fillTextarea('keymove');
+        callZ.fillTextArea('keymove');
 
 
         var nowX = parseInt($(sNode).attr('cols'));
@@ -1751,7 +1737,7 @@ iTable.prototype.tdDbClick=function(event){
     if(!!ex){
         event.data.target.fillExTextArea(eType,tdText,ex);
     }else{
-        event.data.target.fillTextarea(eType,tdText);
+        event.data.target.fillTextArea(eType,tdText);
 
     }
 
@@ -2400,12 +2386,13 @@ iTable.prototype.chooseRow=function(){
             //
             // }
         }
-        for(var i=0;i<that.cellCount;i++){
+        for(var i=0;i<=that.cellCount;i++){
             var id='#'+index+'-'+i;
             $(id).addClass('picked');
 
         }
 
+        that.lightCoor($('.picked'));
 
 
 
@@ -2451,11 +2438,11 @@ iTable.prototype.chooseCol=function(){
             //     $(id).addClass('picked');
             // }
         }
-        for(var l=0;l<that.rowCount;l++){
+        for(var l=0;l<=that.rowCount;l++){
             var id='#'+l+'-'+index;
             $(id).addClass('picked');
         }
-
+        that.lightCoor($('.picked'));
 
     });
 }
@@ -5801,6 +5788,94 @@ iTable.prototype.modal = function (_style, _content) {
 
 }
 
+
+
+
+iTable.prototype.freezeBtn=function(){
+   var btn=this.createSimpleMenu('fbold');
+   this.tools.append(btn);
+   var that=this;
+   btn.on('click',{callZ:this},this.freezeTds);
+}
+
+iTable.prototype.freezeTd=function(){
+    var colBox=$('<div id="fColBox"><div></div><table><colgroup></colgroup><tbody></tbody></table></div>');
+    var rowBox=$('<div id="fRowBox"></div>');
+    var bothBox=$('<div id="fBothBox"></div>');
+
+    this.container.append(colBox);
+    this.container.append(rowBox);
+    this.container.append(bothBox);
+    this.freezeBtn();
+}
+
+
+iTable.prototype.freezeTds=function(event){
+    if($('.picked').length>0){
+        var xArr=[],yArr=[],xMin,xMax,yMin,yMax;
+        var fColTotalWidth=0,fColSingleWidth=0;
+        $('.picked').each(function(){
+            xArr.push(Number($(this).attr('cols')));
+            yArr.push(Number($(this).attr('rows')));
+        });
+        xMin=_.min(xArr),xMax=_.max(xArr),yMin=_.min(yArr),yMax=_.max(yArr);
+
+        // for(var i=xMin;i<xMax;i++){
+        //     for(var j=yMin;j<yMax;j++){
+        //      var id='#'+j+'-'+i;
+        //      var cloneTd=$(id).clone();
+        //         console.log(cloneTd);
+        //     }
+        // }
+
+
+             for(var j=0;j<=event.data.callZ.rowCount;j++){
+                 var tr=$('<tr></tr>');
+                 for(var i=0;i<xMin;i++){
+                     var id='#'+j+'-'+i;
+
+                     if(j>0){
+                         tr.append($('.dataTable').find(id).clone());
+
+
+                     }else{
+                         tr.append($('.dataTable').find(id).clone());
+                         $('#fColBox').find('colgroup').append($('.dataTable').find('colgroup col').eq(i).clone());
+                         if(i>1){
+                             fColTotalWidth+=parseInt($('.dataTable').find('colgroup col').eq(i).width());
+                         }
+
+                     }
+
+                 }
+
+                 $('#fColBox').find('div').append($('#leftTable tr').eq(j).clone());
+                 $('#fColBox').find('tbody').append(tr);
+             }
+
+
+             $('#fColBox').css({
+                'position':'fixed',
+                'top':94,
+                'width':fColTotalWidth,
+
+                'z-index':290,
+                'height':$(event.data.callZ.container).css('height')
+             });
+
+             $('#fColBox td').css({
+                'height':'20px'
+             });
+
+
+
+    }else{
+        return;
+    }
+
+}
+
+
 iTable.prototype.leftBar = function () {
 
     var box = $('<div class="leftbar"></div>');
@@ -6284,6 +6359,8 @@ iTable.prototype.init = function () {
     this.chooseCol();
 
     this.chooseRow();
+
+   // this.freezeTd();
 }
 
 var settings = {
