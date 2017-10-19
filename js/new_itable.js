@@ -326,8 +326,6 @@ iTable.prototype.frameSelect = function () {
 
             }
 
-
-
             for(var i = startX; i <= endX ; i++) {
                 for(var j = startY; j <= endY; j++) {
                             var id='#'+j+'-'+i;
@@ -470,11 +468,13 @@ iTable.prototype.fillTextArea=function(eType,val){
             $('#iTableInput').val('');
             $(document).off('keydown');
             $('#iTableInput').focus().val(val);
-            var testArr=[];
+            var testArr=[],nowVal;
             $("#iTableInput").on('keyup',function(){
                 $('#ip_fx').val($(this).val());
 
-                 that.isExpress($('#iTableInput').val());
+                that.isExpress($('#iTableInput').val(),nowVal);
+
+                nowVal=$('#iTableInput').val();
 
                 if (event.keyCode === 13) {
                     var content = $('#iTableInput').val();
@@ -506,8 +506,9 @@ iTable.prototype.fillTextArea=function(eType,val){
     }
 }
 
-iTable.prototype.isExpress=function(val){
+iTable.prototype.isExpress=function(val,nowVal){
     var textVal=val;
+    var typePosition=$('#iTableInput').iGetFieldPos();
     if(textVal.match(/^=/g)){
         //    /(\=|\+|\-|\*|\/)([a-z]|[A-Z])+([1-9]*)/g
 
@@ -515,30 +516,69 @@ iTable.prototype.isExpress=function(val){
         $('.dataTable tr td').off('dblclick');
         $(this.container).off('mousedown');
         var coordinates;
-        var lastVal= $('#iTableInput').val();
+        var lastVal= val;
+
+        // if(!!lastVal&&!!nowVal){
+        //     if(lastVal.length>=nowVal){
+        //         for(var m=0;m<lastVal.length;m++){
+        //             if(lastVal.charAt(m)!==nowVal.charAt(m)){
+        //                 console.log(m);
+        //             }
+        //         }
+        //         console.log(lastVal,nowVal);
+        //     }else{
+        //         for(var m=0;m<nowVal.length;m++){
+        //             if(nowVal.charAt(m)!==lastVal.charAt(m)){
+        //                 console.log(m);
+        //             }
+        //         }
+        //         console.log(lastVal,nowVal);
+        //     }
+        //
+        //
+        // }
 
             $('.dataTable tr td').on('click',{coordinate:coordinates},function(event){
-                var nowVal=$('#iTableInput').val();
+                $('#iTableInput').focus();
+
+                if(($('#iTableInput').iGetFieldPos())===$('#iTableInput').val().length){
+                        console.log($('#iTableInput').val().length)
+                }
+
+                event.data.coordinate=IntToChr(Number($(this).attr('cols'))-2)+$(this).attr('rows');
+               // $('#iTableInput').iAddField(event.data.coordinate);
 
                  if(lastVal===nowVal){
-                     event.data.coordinate=IntToChr(Number($(this).attr('cols')))+$(this).attr('rows');
-                     var lastCoo=_.last(_.compact(nowVal.split(/\=|\+|\-|\*|\//g)));
 
-                     if(nowVal.slice(-1)==='+'||nowVal.slice(-1)==='-'||nowVal.slice(-1)==='*'||nowVal.slice(-1)==='/'){
-                         $('#iTableInput').val($('#iTableInput').val()+event.data.coordinate);
+                 }else{
+
+                     var lastCoo=_.last(_.compact(lastVal.split(/\=|\+|\-|\*|\//g)));
+
+
+
+                     if(lastVal.slice(-1)==='+'||lastVal.slice(-1)==='-'||lastVal.slice(-1)==='*'||lastVal.slice(-1)==='/'){
+                        // $('#iTableInput').val($('#iTableInput').val()+event.data.coordinate);
+                         $('#iTableInput').iAddField(event.data.coordinate);
+
+                         nowVal=$('#iTableInput').val();
+
+
                      }else{
                          if(!!lastCoo){
-                             $('#iTableInput').val($('#iTableInput').val().substring(0,$('#iTableInput').val().length-lastCoo.length)+event.data.coordinate);
-                             lastVal=$('#iTableInput').val();
+
+                            // $('#iTableInput').val( $('#iTableInput').val().substring(0,$('#iTableInput').val().length-lastCoo.length)+event.data.coordinate);
+                             //lastVal=$('#iTableInput').val();
+                             $('#iTableInput').iAddField(event.data.coordinate);
+
+                             nowVal=$('#iTableInput').val();
+
                          }else{
-                             $('#iTableInput').val('='+event.data.coordinate);
+                             console.log(lastVal,nowVal);
+                            $('#iTableInput').val('='+event.data.coordinate);
+                             nowVal=$('#iTableInput').val();
                          }
                      }
 
-
-
-                 }else{
-                     lastVal=$('#iTableInput').val();
                  }
 
 
@@ -547,9 +587,12 @@ iTable.prototype.isExpress=function(val){
 
 
     }else{
-        console.log('not express');
+        this.fillTd();
+        this.frameSelect();
     }
 }
+
+
 
 
 
@@ -575,6 +618,9 @@ iTable.prototype.keyCursor = function () {
     }, typing);
 
 }
+
+
+
 
 function typing(event) {
 
@@ -6708,6 +6754,9 @@ function other(){
 t.saveReport(function() {
     alert('11');
 });
-t.saveNewSheet(function(){
-    alert('save new sheet');
-})
+// t.saveNewSheet(function(){
+//     alert('save new sheet');
+// })
+
+
+
