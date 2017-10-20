@@ -326,13 +326,97 @@ iTable.prototype.frameSelect = function () {
 
             }
 
+            var totalWidth=0,totalHeight=0;
+            var widthArr=[],heightArr=[];
+
             for(var i = startX; i <= endX ; i++) {
                 for(var j = startY; j <= endY; j++) {
                             var id='#'+j+'-'+i;
                             $(id).addClass('picked');
+
+                            if(i==startX){
+                                totalHeight+=$('#'+j+'-'+startX).height();
+                            }
+                            if(j==startY){
+                                totalWidth+=$('#'+startY+'-'+i).width();
+                            }
+
                 }
 
             }
+
+            console.log(totalWidth,totalHeight);
+
+            var top=$('#'+startY+'-'+startX).offset().top+$(this.container).scrollTop();
+            var left=$('#'+startY+'-'+startX).offset().left+$(this.container).scrollLeft();
+
+            console.log(top,left);
+            $('.wBorder').css({
+
+                'top': top,
+
+                'left': left,
+
+                'display': 'block'
+            });
+
+            $('.wBorder').find('div').eq(0).css({
+
+                'width': totalWidth,
+
+                'height': '2px',
+
+                'left': 0,
+
+                'top': 0,
+
+            });
+
+            $('.wBorder').find('div').eq(1).css({
+                'width': totalWidth,
+
+                'height': '2px',
+
+                'left': 0,
+
+                'top': totalHeight,
+            });
+
+            $('.wBorder').find('div').eq(2).css({
+
+                'width': '2px',
+
+                'height': totalHeight,
+
+                'left': 0,
+
+                'top': 0,
+
+            });
+
+            $('.wBorder').find('div').eq(3).css({
+                'width': '2px',
+
+                'height': totalHeight,
+
+                'left': totalWidth,
+
+                'top': 0,
+
+            });
+
+            $('.scorner').css({
+
+                'top':  totalHeight - 2,
+
+                'left': totalWidth - 2,
+
+            });
+
+           // that.setBlueBorder($('.picked'));
+
+
+
 
             // if(_x-oX>20){
             //
@@ -401,7 +485,7 @@ iTable.prototype.frameSelect = function () {
             //
             // }
             //
-            that.setBlueBorder($('.picked'));
+
 
         });
         $(that.container).on('mouseup',function(){
@@ -468,14 +552,12 @@ iTable.prototype.fillTextArea=function(eType,val){
             $('#iTableInput').val('');
             $(document).off('keydown');
             $('#iTableInput').focus().val(val);
-            var testArr=[],nowVal;
-            $("#iTableInput").on('keyup',function(){
+            $("#iTableInput").on('change',function(){
                 $('#ip_fx').val($(this).val());
-
-                that.isExpress($('#iTableInput').val(),nowVal);
-
-                nowVal=$('#iTableInput').val();
-
+                that.isExpress($('#iTableInput').val());
+                event.stopPropagation();
+            });
+            $('#iTableInput').off('keyup').on('keyup',function(){
                 if (event.keyCode === 13) {
                     var content = $('#iTableInput').val();
                     var curClass=$('.picked').attr('class');
@@ -491,12 +573,12 @@ iTable.prototype.fillTextArea=function(eType,val){
                         pNode.text(pValue);
                     }
                     $('#iTableInput').blur();
+                    that.fillTd();
+                    that.frameSelect();
                     that.keyCursor();
                     that.hideTextArea();
                 }
-                event.stopPropagation();
             });
-
             break;
         case 'keymove':
             $('#iTableInput').focus();
@@ -506,81 +588,42 @@ iTable.prototype.fillTextArea=function(eType,val){
     }
 }
 
-iTable.prototype.isExpress=function(val,nowVal){
+iTable.prototype.isExpress=function(val){
     var textVal=val;
-    var typePosition=$('#iTableInput').iGetFieldPos();
-    if(textVal.match(/^=/g)){
-        //    /(\=|\+|\-|\*|\/)([a-z]|[A-Z])+([1-9]*)/g
 
-        $('.dataTable tr td').off('click');
+    if(textVal.match(/^\=/g)||textVal.match(/^\+/g)||textVal.match(/^\-/g)){
+        //    /(\=|\+|\-|\*|\/)([a-z]|[A-Z])+([1-9]*)/g
         $('.dataTable tr td').off('dblclick');
         $(this.container).off('mousedown');
         var coordinates;
-        var lastVal= val;
+            $('.dataTable tr td').off('click').on('click',{coordinate:coordinates},function(event){
 
-        // if(!!lastVal&&!!nowVal){
-        //     if(lastVal.length>=nowVal){
-        //         for(var m=0;m<lastVal.length;m++){
-        //             if(lastVal.charAt(m)!==nowVal.charAt(m)){
-        //                 console.log(m);
-        //             }
-        //         }
-        //         console.log(lastVal,nowVal);
-        //     }else{
-        //         for(var m=0;m<nowVal.length;m++){
-        //             if(nowVal.charAt(m)!==lastVal.charAt(m)){
-        //                 console.log(m);
-        //             }
-        //         }
-        //         console.log(lastVal,nowVal);
-        //     }
-        //
-        //
-        // }
-
-            $('.dataTable tr td').on('click',{coordinate:coordinates},function(event){
                 $('#iTableInput').focus();
-
-                if(($('#iTableInput').iGetFieldPos())===$('#iTableInput').val().length){
-                        console.log($('#iTableInput').val().length)
-                }
-
+                var typePosition=Number($('#iTableInput').iGetFieldPos());
                 event.data.coordinate=IntToChr(Number($(this).attr('cols'))-2)+$(this).attr('rows');
-               // $('#iTableInput').iAddField(event.data.coordinate);
+                if(typePosition===$('#iTableInput').val().length){
+                      console.log(1);
+                    if($('#iTableInput').val().slice(-1)==='+'||$('#iTableInput').val().slice(-1)==='-'||$('#iTableInput').val().slice(-1)==='*'||$('#iTableInput').val().slice(-1)==='/'){
 
-                 if(lastVal===nowVal){
+                        $('#iTableInput').val($('#iTableInput').val()+event.data.coordinate);
 
-                 }else{
+                    }else{
 
-                     var lastCoo=_.last(_.compact(lastVal.split(/\=|\+|\-|\*|\//g)));
+                        var lastLength=String(_.last($('#iTableInput').val().split(/\=|\+|\-|\*|\//g))).length;
+                        $('#iTableInput').iDelField(lastLength);
+                        $('#iTableInput').iAddField(event.data.coordinate);
 
+                    }
+                }else{
+                    if(($('#iTableInput').val()).charAt(typePosition+1).match(/\=|\+|\-|\*|\//g)){
+                        console.log($('#iTableInput').val().charAt(typePosition));
+                    }
+                    // var v=$('#iTableInput').val();
+                    // v=v.replace(getSelectionText(),event.data.coordinate);
+                  //  $('#iTableInput').val(v);
 
-
-                     if(lastVal.slice(-1)==='+'||lastVal.slice(-1)==='-'||lastVal.slice(-1)==='*'||lastVal.slice(-1)==='/'){
-                        // $('#iTableInput').val($('#iTableInput').val()+event.data.coordinate);
-                         $('#iTableInput').iAddField(event.data.coordinate);
-
-                         nowVal=$('#iTableInput').val();
-
-
-                     }else{
-                         if(!!lastCoo){
-
-                            // $('#iTableInput').val( $('#iTableInput').val().substring(0,$('#iTableInput').val().length-lastCoo.length)+event.data.coordinate);
-                             //lastVal=$('#iTableInput').val();
-                             $('#iTableInput').iAddField(event.data.coordinate);
-
-                             nowVal=$('#iTableInput').val();
-
-                         }else{
-                             console.log(lastVal,nowVal);
-                            $('#iTableInput').val('='+event.data.coordinate);
-                             nowVal=$('#iTableInput').val();
-                         }
-                     }
-
-                 }
-
+                    $('#iTableInput').iAddField(event.data.coordinate);
+                }
 
 
             });
@@ -1777,8 +1820,6 @@ iTable.prototype.tdDbClick=function(event){
     var tdText = $(this).text();
     var eType='dblclick';
     var ex=$(this).attr('ex');
-
-
     event.data.target.setTextArea(1);
     if(!!ex){
         event.data.target.fillExTextArea(eType,tdText,ex);
@@ -1786,8 +1827,6 @@ iTable.prototype.tdDbClick=function(event){
         event.data.target.fillTextArea(eType,tdText);
 
     }
-
-
 
     $("#iTableInput").click(function () {
         return false;
@@ -2719,9 +2758,6 @@ iTable.prototype.fontFamily = function () {
         });
     });
 
-
-
-
 }
 
 //字体大小
@@ -3162,8 +3198,6 @@ iTable.prototype.ftNormal=function(){
                   selThem.text(newVal);
 
                   selThem.addClass(curClass);
-
-
 
               }
 
@@ -4870,15 +4904,15 @@ iTable.prototype.sheetWork = function () {
 
 iTable.prototype.sheetMove = function () {
 
-    var lsheet = $('.lSheet');
+    var lSheet = $('.lSheet');
 
-    var rsheet = $('.rSheet');
+    var rSheet = $('.rSheet');
 
     var sDl = $(".sheetQueuedDl");
 
     var num = 0;
 
-    rsheet.click(function () {
+    rSheet.click(function () {
 
         num === sDl.find('dd').length - 1 ? num = sDl.find('dd').length - 1 : num++;
 
@@ -4886,7 +4920,7 @@ iTable.prototype.sheetMove = function () {
 
     });
 
-    lsheet.click(function () {
+    lSheet.click(function () {
 
         num === 0 ? num = 0 : num--;
 
@@ -6105,6 +6139,15 @@ iTable.prototype.iDrag = function (obj) {
 
 }
 
+//input鼠标选中
+function getSelectionText() {
+    if(window.getSelection) {
+        return window.getSelection().toString();
+    } else if(document.selection && document.selection.createRange) {
+        return document.selection.createRange().text;
+    }
+    return '';
+}
 
 
 //高亮单元格
