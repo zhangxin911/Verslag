@@ -335,22 +335,23 @@ iTable.prototype.frameSelect = function () {
                             $(id).addClass('picked');
 
                             if(i==startX){
-                                totalHeight+=$('#'+j+'-'+startX).height();
+                                totalHeight+=$('#'+j+'-'+startX).outerHeight();
                             }
                             if(j==startY){
-                                totalWidth+=$('#'+startY+'-'+i).width();
+                                totalWidth+=$('#'+startY+'-'+i).outerWidth();
                             }
 
                 }
 
             }
 
-            console.log(totalWidth,totalHeight);
+            var sTop=$(this).scrollTop()-96;
+            var sLeft=$(this).scrollLeft()-4;
 
-            var top=$('#'+startY+'-'+startX).offset().top+$(this.container).scrollTop();
-            var left=$('#'+startY+'-'+startX).offset().left+$(this.container).scrollLeft();
+            var top=$('#'+startY+'-'+startX).offset().top+sTop;
+            var left=$('#'+startY+'-'+startX).offset().left+sLeft;
 
-            console.log(top,left);
+
             $('.wBorder').css({
 
                 'top': top,
