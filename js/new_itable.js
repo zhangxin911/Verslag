@@ -270,7 +270,6 @@ iTable.prototype.frameSelect = function () {
             var startX,endX,startY,endY;
 
 
-
             if(onCols<moveX){
                 startX=onCols;
                 endX=moveX;
@@ -291,7 +290,7 @@ iTable.prototype.frameSelect = function () {
 
             for(var m=0;m<that.mergeTds.length;m++){
                 var mergeCS=isNaN(Number($(that.mergeTds[m]).attr('colspan')))?1:Number($(that.mergeTds[m]).attr('colspan'));
-                var mergeRS= isNaN(Number($(that.mergeTds[m]).attr('rowspan')))?1:Number($(that.mergeTds[m]).attr('rowspan'));
+                var mergeRS=isNaN(Number($(that.mergeTds[m]).attr('rowspan')))?1:Number($(that.mergeTds[m]).attr('rowspan'));
 
                 var mergeCol=Number($(that.mergeTds[m]).attr('cols'));
                 var mergeRow=Number($(that.mergeTds[m]).attr('rows'));
@@ -351,68 +350,7 @@ iTable.prototype.frameSelect = function () {
             var top=$('#'+startY+'-'+startX).offset().top+sTop;
             var left=$('#'+startY+'-'+startX).offset().left+sLeft;
 
-
-            $('.wBorder').css({
-
-                'top': top,
-
-                'left': left,
-
-                'display': 'block'
-            });
-
-            $('.wBorder').find('div').eq(0).css({
-
-                'width': totalWidth,
-
-                'height': '2px',
-
-                'left': 0,
-
-                'top': 0,
-
-            });
-
-            $('.wBorder').find('div').eq(1).css({
-                'width': totalWidth,
-
-                'height': '2px',
-
-                'left': 0,
-
-                'top': totalHeight,
-            });
-
-            $('.wBorder').find('div').eq(2).css({
-
-                'width': '2px',
-
-                'height': totalHeight,
-
-                'left': 0,
-
-                'top': 0,
-
-            });
-
-            $('.wBorder').find('div').eq(3).css({
-                'width': '2px',
-
-                'height': totalHeight,
-
-                'left': totalWidth,
-
-                'top': 0,
-
-            });
-
-            $('.scorner').css({
-
-                'top':  totalHeight - 2,
-
-                'left': totalWidth - 2,
-
-            });
+            that._setBlueBorder(top,left,totalWidth,totalHeight);
 
            // that.setBlueBorder($('.picked'));
 
@@ -820,105 +758,97 @@ function typing(event) {
 
                 $(sNode).removeClass('picked');
 
-               // var id='#'+nextY+'-'+nextX;
-
                 $(id).addClass('picked');
-
-              //  $('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('picked');
 
                 callZ.setBlueBorder($(id));
 
                 callZ.setTextArea(0);
 
             } else {
+                for(var i=0;i<callZ.mergeTds.length;i++){
 
-                var _nowY = nowY + 1;
-
-                var _nowX = nowX + 1;
-
-                while (_nowY >= 0) {
-
-                    while (_nowX >= 0) {
-                        var nid='#'+_nowY+'-'+_nowX;
-
-                        // var nextRowspan = parseInt($('td[cols=' + _nowX + '][rows=' + _nowY + ']').attr('rowspan'));
-
-                        var nextRowspan = parseInt($(nid).attr('rowspan'));
-
-                        // var nextColspan = parseInt($('td[cols=' + _nowX + '][rows=' + _nowY + ']').attr('colspan'));
-
-                        var nextColspan = parseInt($(nid).attr('colspan'));
-
-
-                        $(sNode).removeClass('picked');
-
-                        //下一个单元格行列不合并
-
-                        if (!nextRowspan && !nextColspan) {
-                            var nid='#'+nextY+'-'+nextX;
-
-                            // $('td[cols=' + nextX + '][rows=' + nextY + ']').addClass('picked');
-                            $(nid).addClass('picked');
-
-                            callZ.setBlueBorder($(nid));
-
-                            callZ.setTextArea(0);
-
-                        }
-
-                        //下一个单元格只列合并
-
-                        if (!nextRowspan && nextColspan) {
-
-                            var nid='#'+nextY+'-'+_nowX;
-
-                            // $('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('picked');
-
-                            $(nid).addClass('picked');
-
-                            callZ.setBlueBorder($(nid));
-
-                            callZ.setTextArea(0);
-
-                        }
-
-                        //下一个单元格只行合并
-
-                        if (nextRowspan && !nextColspan) {
-
-                            var nid='#'+nextY+'-'+_nowX;
-
-                            // $('td[cols=' + _nowX + '][rows=' + nextY + ']').addClass('picked');
-                            $(nid).addClass('picked');
-
-                            callZ.setBlueBorder($(nid));
-
-                            callZ.setTextArea(0);
-
-                        }
-
-                        //下一个单元格行列合并
-
-                        if (nextRowspan && nextColspan) {
-                            var nid='#'+_nowY+'-'+_nowX;
-
-                            // $('td[cols=' + _nowX + '][rows=' + _nowY + ']').addClass('picked');
-
-                            $(nid).addClass('picked');
-
-                            callZ.setBlueBorder($(nid));
-
-                            callZ.setTextArea(0);
-
-                        }
-
-                        _nowX--;
-
-                    }
-
-                    _nowY--;
 
                 }
+
+
+
+                // var _nowY = nowY + 1;
+                //
+                // var _nowX = nowX + 1;
+                //
+                // while (_nowY >= 0) {
+                //
+                //     while (_nowX >= 0) {
+                //         var nid='#'+_nowY+'-'+_nowX;
+                //
+                //         var nextRowspan = parseInt($(nid).attr('rowspan'));
+                //
+                //         var nextColspan = parseInt($(nid).attr('colspan'));
+                //
+                //
+                //         $(sNode).removeClass('picked');
+                //
+                //         //下一个单元格行列不合并
+                //
+                //         if (!nextRowspan && !nextColspan) {
+                //             var nid='#'+nextY+'-'+nextX;
+                //
+                //             $(nid).addClass('picked');
+                //
+                //             callZ.setBlueBorder($(nid));
+                //
+                //             callZ.setTextArea(0);
+                //
+                //         }
+                //
+                //         //下一个单元格只列合并
+                //
+                //         if (!nextRowspan && nextColspan) {
+                //
+                //             var nid='#'+nextY+'-'+_nowX;
+                //
+                //             $(nid).addClass('picked');
+                //
+                //             callZ.setBlueBorder($(nid));
+                //
+                //             callZ.setTextArea(0);
+                //
+                //         }
+                //
+                //         //下一个单元格只行合并
+                //
+                //         if (nextRowspan && !nextColspan) {
+                //
+                //             var nid='#'+nextY+'-'+_nowX;
+                //
+                //             $(nid).addClass('picked');
+                //
+                //             callZ.setBlueBorder($(nid));
+                //
+                //             callZ.setTextArea(0);
+                //
+                //         }
+                //
+                //         //下一个单元格行列合并
+                //
+                //         if (nextRowspan && nextColspan) {
+                //             var nid='#'+_nowY+'-'+_nowX;
+                //
+                //             $(nid).addClass('picked');
+                //
+                //             callZ.setBlueBorder($(nid));
+                //
+                //             callZ.setTextArea(0);
+                //
+                //         }
+                //
+                //         _nowX--;
+                //
+                //     }
+                //
+                //     _nowY--;
+                //
+                // }
 
             }
 
@@ -2111,6 +2041,70 @@ iTable.prototype.hideReadBorder=function(){
     $('.wrBorder').hide();
 }
 
+iTable.prototype._setBlueBorder=function(top,left,totalWidth,totalHeight){
+    $('.wBorder').css({
+
+        'top': top,
+
+        'left': left,
+
+        'display': 'block'
+    });
+
+    $('.wBorder').find('div').eq(0).css({
+
+        'width': totalWidth,
+
+        'height': '2px',
+
+        'left': 0,
+
+        'top': 0,
+
+    });
+
+    $('.wBorder').find('div').eq(1).css({
+        'width': totalWidth,
+
+        'height': '2px',
+
+        'left': 0,
+
+        'top': totalHeight,
+    });
+
+    $('.wBorder').find('div').eq(2).css({
+
+        'width': '2px',
+
+        'height': totalHeight,
+
+        'left': 0,
+
+        'top': 0,
+
+    });
+
+    $('.wBorder').find('div').eq(3).css({
+        'width': '2px',
+
+        'height': totalHeight,
+
+        'left': totalWidth,
+
+        'top': 0,
+
+    });
+
+    $('.scorner').css({
+
+        'top':  totalHeight - 2,
+
+        'left': totalWidth - 2,
+
+    });
+}
+
 iTable.prototype.setBlueBorder=function(obj){
 
        if($(obj).length>0){
@@ -2474,7 +2468,11 @@ iTable.prototype.chooseRow=function(){
         }
         for(var i=0;i<=that.cellCount;i++){
             var id='#'+index+'-'+i;
-            $(id).addClass('picked');
+            if(Number($(id).attr('rowspan'))>=2&&Number($(id).attr('colspan'))>=2){
+
+            }else{
+                $(id).addClass('picked');
+            }
 
         }
 
@@ -2526,7 +2524,12 @@ iTable.prototype.chooseCol=function(){
         }
         for(var l=0;l<=that.rowCount;l++){
             var id='#'+l+'-'+index;
-            $(id).addClass('picked');
+            if(Number($(id).attr('rowspan'))>=2&&Number($(id).attr('colspan'))>=2){
+
+            }else{
+                $(id).addClass('picked');
+            }
+
         }
         that.lightCoor($('.picked'));
 
@@ -5147,6 +5150,8 @@ iTable.prototype.largeCol = function () {
                         $('body').off('mousemove');
 
                         lLine.remove();
+
+
 
                     });
 
