@@ -12,7 +12,7 @@ function iTable(tContainer, tSettings, tabs,mergeArray) {
 
     this.tabs = tabs;
 
-    var header, footer, curIndex, tools;
+    this.header, this.footer,this.tools;
 
     this.moveLast;
 
@@ -73,7 +73,7 @@ iTable.prototype.createContent = function (tid) {
 
     this.setIndex();
 
-}
+};
 
 iTable.prototype.createTr = function () {
 
@@ -81,7 +81,7 @@ iTable.prototype.createTr = function () {
 
     return tr;
 
-}
+};
 
 iTable.prototype.createTd = function (className, tdValue) {
 
@@ -89,7 +89,7 @@ iTable.prototype.createTd = function (className, tdValue) {
     td.attr('class',className);
     return td;
 
-}
+};
 
 iTable.prototype.createXAxis = function () {
 
@@ -143,7 +143,7 @@ iTable.prototype.createXAxis = function () {
 
     }
 
-}
+};
 
 iTable.prototype.createYAxis = function () {
 
@@ -173,7 +173,7 @@ iTable.prototype.createYAxis = function () {
 
     }
 
-}
+};
 
 iTable.prototype.createTip = function () {
 
@@ -195,7 +195,7 @@ iTable.prototype.createTip = function () {
 
     $(this.container).append(content);
 
-}
+};
 
 iTable.prototype.frameSelect = function () {
 
@@ -211,7 +211,7 @@ iTable.prototype.frameSelect = function () {
 
     $(this.container).off('mousedown').on('mousedown',function(event){
 
-        var ev = window.event || arguments[0];
+        // var ev = window.event || arguments[0];
 
         var onCols = parseInt($(coords).attr('cols')) ;
 
@@ -485,7 +485,7 @@ iTable.prototype.frameSelect = function () {
         });
 
     });
-}
+};
 
 
 
@@ -495,7 +495,7 @@ iTable.prototype.textArea=function(){
      div.append(textArea);
      $(this.container).append(div);
 
-}
+};
 
 iTable.prototype.setTextArea=function(visible){
     if($('.picked').length>0){
@@ -522,18 +522,18 @@ iTable.prototype.setTextArea=function(visible){
     }
 
 
-}
+};
 
 
 
 iTable.prototype.hideTextArea=function(){
     $('#iTableInputHolder').hide();
 
-}
+};
 
 iTable.prototype.fillExTextArea=function(eType,val,ex){
 
-}
+};
 
 iTable.prototype.fillTextArea=function(eType,val){
 
@@ -578,7 +578,7 @@ iTable.prototype.fillTextArea=function(eType,val){
         default:
             console.log('moren');
     }
-}
+};
 
 iTable.prototype.isExpress=function(val){
     var textVal=val;
@@ -625,7 +625,7 @@ iTable.prototype.isExpress=function(val){
         this.fillTd();
         this.frameSelect();
     }
-}
+};
 
 
 
@@ -652,7 +652,7 @@ iTable.prototype.keyCursor = function () {
 
     }, typing);
 
-}
+};
 
 
 
@@ -1276,7 +1276,7 @@ function typing(event) {
 
                 yCoo = Number($('.picked').attr('rows')) - 1;
 
-            $('.disbox').text(IntToChr(xCoo) + String(yCoo + 1));
+            $('#disbox').text(IntToChr(xCoo) + String(yCoo + 1));
 
         }
 
@@ -1286,17 +1286,7 @@ function typing(event) {
 
     }
 
-}
-
-// iTable.prototype.getCurTable = function () {
-//
-//     var t;
-//
-//     t = this.container.find('table:visible');
-//
-//     return t
-//
-// }
+};
 
 iTable.prototype.setCss = function () {
 
@@ -1349,11 +1339,11 @@ iTable.prototype.setCss = function () {
 
         that.height(viewHeight - bTop - 113);
 
-        $('.yOrder').height(viewHeight - bTop - 92);
+        $('.yOrder').height(viewHeight - 153);
 
     });
 
-}
+};
 
 //滚动
 
@@ -1370,7 +1360,7 @@ iTable.prototype.tableScroll = function () {
     });
 
 
-}
+};
 
 //填写表格
 
@@ -1390,14 +1380,19 @@ iTable.prototype.fillTd = function (tid) {
 
     });
 
-}
+};
 
 
 iTable.prototype.tdClick=function(event){
 
-    $('#iTableInputHolder').hide();
+    if($('#iTableInputHolder').css('display')==='block'){
 
-    $('#iTableInput').blur();
+        $('.picked').text($('#iTableInput').val());
+
+        $('#iTableInputHolder').hide();
+
+        $('#iTableInput').blur();
+    }
 
     $('.picked').removeClass('picked');
 
@@ -1409,15 +1404,17 @@ iTable.prototype.tdClick=function(event){
 
         yCoo = Number($(this).attr('rows')) - 1;
 
-    if ($('.disbox').length > 0) {
+    if ($('#disbox').length > 0) {
 
-        $('.disbox').text(IntToChr(xCoo) + String(yCoo + 1));
+        $('#disbox').text(IntToChr(xCoo) + String(yCoo + 1));
 
     }
-    event.data.target.tdTofx($(this));
+
+
+    event.data.target.tdToFx($(this));
     event.data.target.lightCoor($(this));
     $('#ip_fx').blur();
-}
+};
 
 
 iTable.prototype.tdDbClick=function(event){
@@ -1440,11 +1437,11 @@ iTable.prototype.tdDbClick=function(event){
         $('#iTableInput').blur();
     });
     stopPropagation();
-}
+};
 
 
 iTable.prototype.blueBorder=function(){
-    var wBorder = $('<div class="wBorder" id="wBorder"</div>');
+    var wBorder = $('<div class="wBorder" id="wBorder"></div>');
     wBorder.css({
         'top': 0,
         'left': 0,
@@ -1587,7 +1584,7 @@ iTable.prototype.blueBorder=function(){
     this.container.append(wrBorder);
 
 
-}
+};
 
 
 iTable.prototype.setRedBorder=function(obj){
@@ -1707,12 +1704,12 @@ iTable.prototype.setRedBorder=function(obj){
     }else{
 
     }
-}
+};
 
 
 iTable.prototype.hideReadBorder=function(){
     $('.wrBorder').hide();
-}
+};
 
 iTable.prototype.setBlueBorder=function(obj){
 
@@ -1841,7 +1838,7 @@ iTable.prototype.setBlueBorder=function(obj){
 
        }
 
-}
+};
 
 iTable.prototype.cornerCopy=function(){
     var that=this;
@@ -2034,7 +2031,7 @@ iTable.prototype.cornerCopy=function(){
 
         });
     });
-}
+};
 
 
 iTable.prototype.chooseRow=function(){
@@ -2087,12 +2084,8 @@ iTable.prototype.chooseRow=function(){
 
         that.lightCoor($('.picked'));
 
-
-
-
-
     });
-}
+};
 
 iTable.prototype.chooseCol=function(){
     var that=this;
@@ -2143,7 +2136,7 @@ iTable.prototype.chooseCol=function(){
         that.lightCoor($('.picked'));
 
     });
-}
+};
 
 
 iTable.prototype.getTdStyle=function(obj){
@@ -2155,19 +2148,19 @@ iTable.prototype.getTdStyle=function(obj){
             if(!!classArr[i].match(/(((fsize_)[A-Za-z0-9_]+s*)+)/g)) {
                 switch (classArr[i]) {
                     case 'fsize_10':
-                        $('#fontSize').text('10')
+                        $('#fontSize').text('10');
                         break;
                     case 'fsize_12':
-                        $('#fontSize').text('12')
+                        $('#fontSize').text('12');
                         break;
                     case 'fsize_14':
-                        $('#fontSize').text('14')
+                        $('#fontSize').text('14');
                         break;
                     case 'fsize_16':
-                        $('#fontSize').text('16')
+                        $('#fontSize').text('16');
                         break;
                     case 'fsize_18':
-                        $('#fontSize').text('18')
+                        $('#fontSize').text('18');
                         break;
                     case 'fsize_20':
                         $('#fontSize').text('20');
@@ -2178,16 +2171,16 @@ iTable.prototype.getTdStyle=function(obj){
             }else if(!!classArr[i].match(/(((font_)[A-Za-z0-9_]+s*)+)/g)) {
                 switch (classArr[i]) {
                     case 'font_Song':
-                        $('#fontFamily').text('宋体')
+                        $('#fontFamily').text('宋体');
                         break;
                     case 'font_Black':
-                        $('#fontFamily').text('黑体')
+                        $('#fontFamily').text('黑体');
                         break;
                     case 'font_Kai':
-                        $('#fontFamily').text('楷体')
+                        $('#fontFamily').text('楷体');
                         break;
                     case 'font_Mirco':
-                        $('#fontFamily').text('微软雅黑')
+                        $('#fontFamily').text('微软雅黑');
                         break;
 
                 }
@@ -2195,19 +2188,19 @@ iTable.prototype.getTdStyle=function(obj){
             }else if(!!classArr[i].match(/(((ft)[A-Za-z0-9_]+\s*)+)/g)) {
                 switch (classArr[i]) {
                     case 'ftNormal':
-                        $('#fillType').text('常规')
+                        $('#fillType').text('常规');
                         break;
                     case 'ftNumber':
-                        $('#fillType').text('数字')
+                        $('#fillType').text('数字');
                         break;
                     case 'ftDate':
-                        $('#fillType').text('日期')
+                        $('#fillType').text('日期');
                         break;
                     case 'ftAccount':
-                        $('#fillType').text('会计专用')
+                        $('#fillType').text('会计专用');
                         break;
                     case 'ftPercent':
-                        $('#fillType').text('百分比')
+                        $('#fillType').text('百分比');
                         break;
 
                 }
@@ -2225,7 +2218,7 @@ iTable.prototype.getTdStyle=function(obj){
         return;
     }
 
-}
+};
 
 iTable.prototype.lightCoor = function (obj) {
 
@@ -2261,7 +2254,7 @@ iTable.prototype.lightCoor = function (obj) {
 
     }
 
-}
+};
 
 
 iTable.prototype.listenHeight=function(){
@@ -2271,7 +2264,7 @@ iTable.prototype.listenHeight=function(){
         $('.leftTable tr').eq(j).find('td').height(height);
     }
 
-}
+};
 
 //创建底部容器
 
@@ -2295,7 +2288,7 @@ iTable.prototype.createFooter = function () {
 
     this.sheetWork();
 
-}
+};
 
 //创建头部容器
 
@@ -2309,7 +2302,7 @@ iTable.prototype.createHeader = function () {
 
     this.header.insertBefore(this.container);
 
-}
+};
 
 //字体类型
 
@@ -2371,7 +2364,7 @@ iTable.prototype.fontFamily = function () {
         });
     });
 
-}
+};
 
 //字体大小
 
@@ -2421,27 +2414,26 @@ iTable.prototype.fontSize = function () {
 
     });
 
-    sel_a.mouseover(function () {
-
+    sel_a.on('mouseover',function(){
         $(this).css({
 
             'background': '#ECECEC'
 
         });
+    })
 
-    });
-
-    sel_a.mouseout(function () {
-
+    sel_a.on('mouseout',function(){
         $(this).css({
 
             'background': '#FFFFFF'
 
         });
+    })
 
-    });
 
-}
+
+
+};
 
 //字体粗细
 
@@ -2457,7 +2449,7 @@ iTable.prototype.fontBold = function () {
 
     });
 
-}
+};
 
 //字体倾斜
 
@@ -2473,7 +2465,7 @@ iTable.prototype.fontItalic = function () {
 
     });
 
-}
+};
 
 //字体下划线
 
@@ -2489,7 +2481,7 @@ iTable.prototype.fontOverline = function () {
 
     });
 
-}
+};
 
 //字体颜色
 
@@ -2533,7 +2525,7 @@ iTable.prototype.fontColor = function () {
 
     });
 
-}
+};
 
 //表格背景
 
@@ -2577,7 +2569,7 @@ iTable.prototype.bgColor = function () {
 
     });
 
-}
+};
 
 //字符对齐
 
@@ -2627,27 +2619,24 @@ iTable.prototype.textAlign = function () {
 
     });
 
-    td.mouseover(function () {
-
+    td.on('mouseover',function(){
         $(this).css({
 
             'background': '#ECECEC'
 
         });
-
     });
 
-    td.mouseout(function () {
-
+    td.on('mouseout',function(){
         $(this).css({
 
             'background': '#FFFFFF'
 
         });
-
     });
 
-}
+
+};
 
 //公式选择
 
@@ -2667,7 +2656,7 @@ iTable.prototype.express = function () {
 
     });
 
-}
+};
 
 iTable.prototype.fillType = function(){
     var select = this.createSelection('fillType', this.settings.fillType);
@@ -2679,12 +2668,12 @@ iTable.prototype.fillType = function(){
 
         var ways = $(this).attr('class').replace('ft_', '');
 
-        that.setFilltype(ways);
+        that.setFillType(ways);
 
     });
-}
+};
 
-iTable.prototype.getFilltype=function(obj){
+iTable.prototype.getFillType=function(obj){
 
         if($(obj).hasClass('ftNormal')){
 
@@ -2716,9 +2705,9 @@ iTable.prototype.getFilltype=function(obj){
         }else{
             return Number($(obj).text());
         }
-}
+};
 
-iTable.prototype.setFilltype=function(ways){
+iTable.prototype.setFillType=function(ways){
     switch (ways){
         case 'normal':
             this.ftNormal();
@@ -2742,7 +2731,7 @@ iTable.prototype.setFilltype=function(ways){
             break;
 
     }
-}
+};
 
 iTable.prototype.typeToValue=function(type,value){
          var objValue=value,value=Number(value);
@@ -2772,7 +2761,7 @@ iTable.prototype.typeToValue=function(type,value){
         }
 
 
-}
+};
 
 iTable.prototype.ftNormal=function(){
     var that=this;
@@ -2817,7 +2806,7 @@ iTable.prototype.ftNormal=function(){
           });
 
       }
-}
+};
 
 iTable.prototype.ftNumber=function(){
     var that=this;
@@ -2864,7 +2853,7 @@ iTable.prototype.ftNumber=function(){
         });
 
     }
-}
+};
 
 iTable.prototype.ftDate=function(){
     if($('.picked').length>0){
@@ -2906,7 +2895,7 @@ iTable.prototype.ftDate=function(){
         });
 
     }
-}
+};
 
 iTable.prototype.ftAccount=function(){
     if($('.picked').length>0){
@@ -2949,7 +2938,7 @@ iTable.prototype.ftAccount=function(){
         });
 
     }
-}
+};
 
 iTable.prototype.ftPercent=function(){
     if($('.picked').length>0){
@@ -2992,7 +2981,7 @@ iTable.prototype.ftPercent=function(){
         });
 
     }
-}
+};
 
 iTable.prototype.ftText=function(){
     if($('.picked').length>0){
@@ -3032,7 +3021,7 @@ iTable.prototype.ftText=function(){
         });
 
     }
-}
+};
 
 //列插入
 
@@ -3237,7 +3226,7 @@ iTable.prototype.insertCol = function () {
 
     });
 
-}
+};
 
 //行插入
 
@@ -3414,7 +3403,7 @@ iTable.prototype.insertRow = function () {
 
     });
 
-}
+};
 
 //列删除
 
@@ -3538,7 +3527,7 @@ iTable.prototype.deleteCol = function () {
 
     });
 
-}
+};
 
 //行删除
 
@@ -3636,7 +3625,7 @@ iTable.prototype.deleteRow = function () {
 
     });
 
-}
+};
 
 //输入触发公式
 iTable.prototype.typeFormula=function(ways,data){
@@ -3659,39 +3648,39 @@ iTable.prototype.typeFormula=function(ways,data){
         default:
             break;
     }
-}
+};
 iTable.prototype.typeSum=function(data){
     var sum=0;
     for(var i=1;i<data.length;i++){
-        sum+=this.getFilltype($('#'+data[i]));
+        sum+=this.getFillType($('#'+data[i]));
     }
     return sum;
-}
+};
 
 iTable.prototype.typeAvg=function(data){
     var sum=0,avg=0;
     for(var i=1;i<data.length;i++){
-        sum+=this.getFilltype($('#'+data[i]));
+        sum+=this.getFillType($('#'+data[i]));
     }
     avg=sum/(data.length-1);
     return avg;
-}
+};
 
 iTable.prototype.typeMax=function(data){
     var arr=[];
     for(var i=1;i<data.length;i++){
-       arr.push(this.getFilltype($('#'+data[i])));
+       arr.push(this.getFillType($('#'+data[i])));
     }
     return _.max(arr);
-}
+};
 
 iTable.prototype.typeMin=function(data){
     var arr=[];
     for(var i=1;i<data.length;i++){
-        arr.push(this.getFilltype($('#'+data[i])));
+        arr.push(this.getFillType($('#'+data[i])));
     }
     return _.min(arr);
-}
+};
 
 //点击触发公式
 
@@ -3716,7 +3705,7 @@ iTable.prototype.formula = function (ways) {
         default:
             break;
     }
-}
+};
 
 
 iTable.prototype.fxSum=function(){
@@ -3726,7 +3715,7 @@ iTable.prototype.fxSum=function(){
            var rArr=[],cArr=[];
            var pArr=[];
            $('.picked').each(function(){
-               var val=that.getFilltype($(this));
+               var val=that.getFillType($(this));
                var nowRow=parseInt($(this).attr('rows')),nowCol=parseInt($(this).attr('cols'));
                rArr.push(nowRow),cArr.push(nowCol);
                if(val===NaN){
@@ -3770,7 +3759,7 @@ iTable.prototype.fxSum=function(){
 
        }
 
-}
+};
 
 iTable.prototype.fxAvg=function(){
     var that=this;
@@ -3779,7 +3768,7 @@ iTable.prototype.fxAvg=function(){
         var rArr=[],cArr=[];
         var pArr=[];
         $('.picked').each(function(){
-            var val=that.getFilltype($(this));
+            var val=that.getFillType($(this));
             var nowRow=parseInt($(this).attr('rows')),nowCol=parseInt($(this).attr('cols'));
             rArr.push(nowRow),cArr.push(nowCol);
             if(val===NaN){
@@ -3822,7 +3811,7 @@ iTable.prototype.fxAvg=function(){
 
     }
     console.log(avg);
-}
+};
 
 iTable.prototype.fxCount=function(){
 
@@ -3858,7 +3847,7 @@ iTable.prototype.fxCount=function(){
 
     }
     console.log(count);
-}
+};
 
 iTable.prototype.fxMax=function(){
     if($('.picked').length>1){
@@ -3908,7 +3897,7 @@ iTable.prototype.fxMax=function(){
 
     }
 
-}
+};
 
 
 iTable.prototype.fxMin=function(){
@@ -3960,7 +3949,7 @@ iTable.prototype.fxMin=function(){
 
     }
     console.log(_.min(arr));
-}
+};
 
 //合并单元格
 
@@ -4094,7 +4083,8 @@ iTable.prototype.mergeTd = function () {
                     colspan: cNum
 
                 });
-                that.mergeTds.push($(this));
+                that.mergeTds.push(this);
+                console.log(that.mergeTds);
             }
 
             if ($(this).attr("rowspan") == 1) $(this).removeAttr("rowspan");
@@ -4107,7 +4097,7 @@ iTable.prototype.mergeTd = function () {
 
     });
 
-}
+};
 
 //拆分单元格
 
@@ -4147,7 +4137,13 @@ iTable.prototype.splitTd = function () {
 
             if (rowspan <= 1 && colspan <= 1) return;
 
-            if (isSel) $(this).removeAttr("colspan").removeAttr("rowspan");
+            if (isSel){
+                $(this).removeAttr("colspan").removeAttr("rowspan");
+
+                that.mergeTds=_.without(that.mergeTds,this);
+
+                console.log(that.mergeTds);
+            }
 
             // 跨格开插
 
@@ -4199,7 +4195,7 @@ iTable.prototype.splitTd = function () {
 
     });
 
-}
+};
 
 //创建工具栏下拉菜单
 
@@ -4252,7 +4248,7 @@ iTable.prototype.createSelection = function (id, menus) {
 
     return selectionBox;
 
-}
+};
 
 // iTable.prototype.dataSelection=function(json){
 //     var selectionBox = $('<div class="toolBox"></div>');
@@ -4316,7 +4312,7 @@ iTable.prototype.createSimpleMenu = function (className, text) {
 
     return menus;
 
-}
+};
 
 //创建工具栏格子菜单
 
@@ -4380,7 +4376,7 @@ iTable.prototype.createCellMenu = function (dClass, className, menus) {
 
     return selectionBox;
 
-}
+};
 
 //增加sheet
 
@@ -4422,7 +4418,7 @@ iTable.prototype.addSheet = function () {
 
     });
 
-}
+};
 
 iTable.prototype.saveNewSheet=function(callback){
 
@@ -4431,7 +4427,7 @@ iTable.prototype.saveNewSheet=function(callback){
     }else{
         return;
     }
-}
+};
 
 iTable.prototype.sheetWork = function () {
 
@@ -4511,7 +4507,7 @@ iTable.prototype.sheetWork = function () {
 
     });
 
-}
+};
 
 //sheet移动
 
@@ -4553,7 +4549,7 @@ iTable.prototype.sheetMove = function () {
 
 
 
-}
+};
 
 //设置坐标
 
@@ -4625,7 +4621,7 @@ iTable.prototype.setIndex = function () {
 
     }
 
-}
+};
 
 //y轴更新
 
@@ -4641,13 +4637,12 @@ iTable.prototype.updateLeft = function (index) {
 
     }
 
-}
+};
 
 //x轴更新
 
 iTable.prototype.updateTop = function (index) {
 
-    var that = this;
 
     $('.titleTable colgroup').find('col').eq(index).after('<col style="width:100px">');
 
@@ -4661,7 +4656,7 @@ iTable.prototype.updateTop = function (index) {
 
     }
 
-}
+};
 
 //拖拽放宽列
 
@@ -4744,8 +4739,6 @@ iTable.prototype.largeCol = function () {
 
                         lLine.remove();
 
-
-
                     });
 
                 });
@@ -4765,7 +4758,7 @@ iTable.prototype.largeCol = function () {
 
     });
 
-}
+};
 
 //拖拽放宽行
 
@@ -4873,7 +4866,7 @@ iTable.prototype.largeRow = function () {
 
     });
 
-}
+};
 
 //创建公式输入框
 
@@ -4883,7 +4876,7 @@ iTable.prototype.fillBlank = function () {
 
     var fxInput = $('<input type="text" id="ip_fx">');
 
-    var dis = $('<span class="disbox"></span>');
+    var dis = $('<span class="disbox" id="disbox"></span>');
 
     fxBox.append(dis);
 
@@ -4893,7 +4886,7 @@ iTable.prototype.fillBlank = function () {
 
     this.fillWork();
 
-}
+};
 
 //输入操作
 
@@ -5037,7 +5030,7 @@ iTable.prototype.fillWork = function () {
 
     });
 
-}
+};
 
 //高亮蒙版
 
@@ -5069,7 +5062,7 @@ iTable.prototype.createMask = function (left, top, width, height, posX, posY) {
 
     this.container.append(mask);
 
-}
+};
 
 iTable.prototype.rMenus = function () {
 
@@ -5128,7 +5121,7 @@ iTable.prototype.rMenus = function () {
 
     });
 
-}
+};
 
 iTable.prototype.createRMenus = function () {
 
@@ -5172,7 +5165,7 @@ iTable.prototype.createRMenus = function () {
 
     return menus;
 
-}
+};
 
 iTable.prototype.cut = function (dataArr) {
 
@@ -5214,7 +5207,7 @@ iTable.prototype.cut = function (dataArr) {
 
     return cutDiv;
 
-}
+};
 
 iTable.prototype.copy = function () {
 
@@ -5252,7 +5245,7 @@ iTable.prototype.copy = function () {
 
     return copyDiv;
 
-}
+};
 
 iTable.prototype.paste = function (dataArr) {
 
@@ -5296,7 +5289,7 @@ iTable.prototype.paste = function (dataArr) {
 
     return pasteDiv;
 
-}
+};
 
 iTable.prototype._insert = function () {
 
@@ -5346,7 +5339,7 @@ iTable.prototype._insert = function () {
 
     return insertDiv;
 
-}
+};
 
 iTable.prototype._delete = function () {
 
@@ -5362,7 +5355,7 @@ iTable.prototype._delete = function () {
 
     return deleteDiv;
 
-}
+};
 
 
 iTable.prototype.clearContent =function(){
@@ -5382,16 +5375,16 @@ iTable.prototype.clearContent =function(){
     });
     return clearDiv;
 
-}
+};
 
 
-iTable.prototype.tdTofx = function (obj) {
+iTable.prototype.tdToFx = function (obj) {
 
     var tdVal = obj.text();
 
     $('#ip_fx').val(tdVal);
 
-}
+};
 
 
 
@@ -5424,14 +5417,13 @@ iTable.prototype.getValue = function (arr) {
 
     return value;
 
-}
+};
 
 iTable.prototype.freezeBtn=function(){
    var btn=this.createSimpleMenu('fbold');
    this.tools.append(btn);
-   var that=this;
    btn.on('click',{callZ:this},this.freezeTds);
-}
+};
 
 iTable.prototype.freezeTd=function(){
     var colBox=$('<div id="fColBox"><div></div><table><colgroup></colgroup><tbody></tbody></table></div>');
@@ -5442,7 +5434,7 @@ iTable.prototype.freezeTd=function(){
     this.container.append(rowBox);
     this.container.append(bothBox);
     this.freezeBtn();
-}
+};
 
 
 iTable.prototype.freezeTds=function(event){
@@ -5508,7 +5500,7 @@ iTable.prototype.freezeTds=function(event){
         return;
     }
 
-}
+};
 
 
 iTable.prototype.leftBar = function () {
@@ -5553,7 +5545,7 @@ iTable.prototype.leftBar = function () {
 
     //callback();
 
-}
+};
 
 iTable.prototype.leftBarHandle = function (callback) {
 
@@ -5563,7 +5555,7 @@ iTable.prototype.leftBarHandle = function (callback) {
 
     }
 
-}
+};
 
 iTable.prototype.charts = function () {
 
@@ -5571,7 +5563,7 @@ iTable.prototype.charts = function () {
 
     this.chartsHandler();
 
-}
+};
 
 iTable.prototype.chartsHandler = function (callback) {
 
@@ -5581,7 +5573,7 @@ iTable.prototype.chartsHandler = function (callback) {
 
     }
 
-}
+};
 
 iTable.prototype.dataSource = function () {
 
@@ -5589,7 +5581,7 @@ iTable.prototype.dataSource = function () {
 
     this.dataSourceHandler();
 
-}
+};
 
 iTable.prototype.dataSourceHandler = function (callback) {
 
@@ -5599,7 +5591,7 @@ iTable.prototype.dataSourceHandler = function (callback) {
 
     }
 
-}
+};
 
 iTable.prototype.dataSet = function () {
 
@@ -5607,7 +5599,7 @@ iTable.prototype.dataSet = function () {
 
     this.dataSetHandler();
 
-}
+};
 
 iTable.prototype.dataSetHandler = function (callback) {
 
@@ -5617,7 +5609,7 @@ iTable.prototype.dataSetHandler = function (callback) {
 
     }
 
-}
+};
 
 iTable.prototype.dataSearch = function () {
 
@@ -5625,7 +5617,7 @@ iTable.prototype.dataSearch = function () {
 
     this.dataSetHandler();
 
-}
+};
 
 iTable.prototype.dataSearchHandler = function (callback) {
 
@@ -5635,64 +5627,31 @@ iTable.prototype.dataSearchHandler = function (callback) {
 
     }
 
-}
+};
 
-iTable.prototype.saveBtn=function(callback){
-    var btn=$('<input type="button" class="saveBtn" value="保存">');
-    var that=this;
-    this.header.find('.tools').append(btn);
-    btn.css({
-        'float':'right',
-        'margin-right':'10px',
-        'margin-top':'6px'
-    });
-}
-
-iTable.prototype.saveBtn.save=function(callback){
-    $('.saveBtn').on('click',callback);
-}
-iTable.prototype.saveReport = function (callback) {
-      // $('.saveBtn').on('click',callback);
-    //if (callback) {
-
-    $('.saveBtn').on('click',callback);
-
-   // }
-
-}
-
-
-iTable.prototype.iDrag = function (obj) {
-
-    var event = window.event || arguments[0];
-
-    obj.on('mousedown', function (event) {
-
-        var disX = event.clientX - this.offsetLeft;
-
-        var disY = event.clientY - this.offsetTop;
-
-        obj.on('mousemove', function (event) {
-
-            obj.css({
-
-                'left': event.clientX - disX,
-
-                'top': event.clientY - disY
-
-            });
-
-        });
-
-    });
-
-    obj.on('mouseup', function () {
-
-        obj.off('mousemove');
-
-    });
-
-}
+// iTable.prototype.saveBtn=function(callback){
+//     var btn=$('<input type="button" class="saveBtn" value="保存">');
+//     var that=this;
+//     this.header.find('.tools').append(btn);
+//     btn.css({
+//         'float':'right',
+//         'margin-right':'10px',
+//         'margin-top':'6px'
+//     });
+// };
+//
+// iTable.prototype.saveBtn.save=function(callback){
+//     $('.saveBtn').on('click',callback);
+// };
+// iTable.prototype.saveReport = function (callback) {
+//       // $('.saveBtn').on('click',callback);
+//     //if (callback) {
+//
+//     $('.saveBtn').on('click',callback);
+//
+//    // }
+//
+// };
 
 //input鼠标选中
 function getSelectionText() {
@@ -5906,7 +5865,7 @@ Array.prototype.contains = function (obj) {
 
     return containsArray(this, obj);
 
-}
+};
 
 iTable.prototype.init = function () {
 
@@ -5996,7 +5955,7 @@ iTable.prototype.init = function () {
 
     this.cornerCopy();
 
-    this.saveBtn();
+    // this.saveBtn();
 
     this.fillType();
 
@@ -6005,7 +5964,7 @@ iTable.prototype.init = function () {
     this.chooseRow();
 
    // this.freezeTd();
-}
+};
 
 var settings = {
 
@@ -6270,7 +6229,7 @@ var settings = {
 
 
 
-}
+};
 
 var box = $('.box');
 
@@ -6296,7 +6255,7 @@ var tabs = {
 
     textAlign: true,
 
-}
+};
 
 var t = new iTable(box, settings, tabs);
 
@@ -6329,11 +6288,6 @@ t.leftBarHandle(function () {
 //     }
 // });
 
-function other(){
-
-}
-
-
 //
 // t.chartsHandler(function () {
 //     $('.charts').on('click', function () {
@@ -6349,9 +6303,9 @@ function other(){
 // t.saveBtn.save(function() {
 //       alert('11');
 // });
-t.saveReport(function() {
-    alert('11');
-});
+// t.saveReport(function() {
+//     alert('11');
+// });
 // t.saveNewSheet(function(){
 //     alert('save new sheet');
 // })
