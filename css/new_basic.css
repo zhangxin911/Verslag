@@ -548,12 +548,7 @@
    	position: absolute;
    	z-index: 999;
    }
-    .scorner{
-   	width:5px;
-   	height:5px;
-   	background:rgb(82, 146, 247);
-   	position: absolute;
-   }
+
    .wtBorder{
    	position: absolute;
    }
