@@ -2987,66 +2987,66 @@ iTable.prototype.insertCol = function () {
 
         if (sNode.length >= 2) {
 
-            for (var i = 0; i < sNode.length; i++) {
-
-                var cols = parseInt(sNode.eq(i).attr('cols'));
-
-                var rows = parseInt(sNode.eq(i).attr('rows'));
-
-                var cAdd = parseInt(sNode.eq(i).attr('colspan')) || 1;
-
-                var rAdd = parseInt(sNode.eq(i).attr('rowspan')) || 1;
-
-                cols = cols + cAdd - 1;
-
-                rows = rows + rAdd - 1;
-
-                xArr.push(cols);
-
-                yArr.push(rows);
-
-                xMax = _.max(xArr), xMin = _.min(xArr), yMax = _.max(yArr), yMin = _.min(yArr);
-            }
-
-            for (var _y = 0; _y < that.rowCount + 1; _y++) {
-
-                var time = 0;
-
-                for (var _x = xMin; _x < xMax + 1; _x++) {
-
-                    var index = xMin;
-
-                    if ($('#' + _y + '-' + xMin ).length > 0) {
-
-                        $('#' + _y + '-' + xMin ).before('<td style="background:orange"></td>');
-
-                    } else {
-
-                        while (index > -1) {
-
-                            if ($('#' + _y + '-' + index).length > 0) {
-
-                                time++;
-
-                                if (time === 1) {
-                                    $('#' + _y + '-' + index).after('<td style="background:orange"></td>');
-                                }
-
-                            }
-
-                            index--;
-
-                        }
-
-                    }
-
-                }
-
-            }
-
-            that.cellCount = that.cellCount + xMax - xMin + 1;
-
-            that.updateTop(index,'add');
+            // for (var i = 0; i < sNode.length; i++) {
+            //
+            //     var cols = parseInt(sNode.eq(i).attr('cols'));
+            //
+            //     var rows = parseInt(sNode.eq(i).attr('rows'));
+            //
+            //     var cAdd = parseInt(sNode.eq(i).attr('colspan')) || 1;
+            //
+            //     var rAdd = parseInt(sNode.eq(i).attr('rowspan')) || 1;
+            //
+            //     cols = cols + cAdd - 1;
+            //
+            //     rows = rows + rAdd - 1;
+            //
+            //     xArr.push(cols);
+            //
+            //     yArr.push(rows);
+            //
+            //     xMax = _.max(xArr), xMin = _.min(xArr), yMax = _.max(yArr), yMin = _.min(yArr);
+            // }
+            //
+            // for (var _y = 0; _y < that.rowCount + 1; _y++) {
+            //
+            //     var time = 0;
+            //
+            //     for (var _x = xMin; _x < xMax + 1; _x++) {
+            //
+            //         var index = xMin;
+            //
+            //         if ($('#' + _y + '-' + xMin ).length > 0) {
+            //
+            //             $('#' + _y + '-' + xMin ).before('<td style="background:orange"></td>');
+            //
+            //         } else {
+            //
+            //             while (index > -1) {
+            //
+            //                 if ($('#' + _y + '-' + index).length > 0) {
+            //
+            //                     time++;
+            //
+            //                     if (time === 1) {
+            //                         $('#' + _y + '-' + index).after('<td style="background:orange"></td>');
+            //                     }
+            //
+            //                 }
+            //
+            //                 index--;
+            //
+            //             }
+            //
+            //         }
+            //
+            //     }
+            //
+            // }
+            //
+            // that.cellCount = that.cellCount + xMax - xMin + 1;
+            //
+            // that.updateTop(index,'add');
 
         } else {
 
@@ -3126,63 +3126,63 @@ iTable.prototype.insertRow = function () {
         var xMax, xMin, yMax, yMin;
 
         if (sNode.length >= 2) {
-
-            for (var i = 0; i < sNode.length; i++) {
-
-                var cols = parseInt(sNode.eq(i).attr('cols'));
-
-                var rows = parseInt(sNode.eq(i).attr('rows'));
-
-                var cAdd = parseInt(sNode.eq(i).attr('colspan')) || 1;
-
-                var rAdd = parseInt(sNode.eq(i).attr('rowspan')) || 1;
-
-                cols = cols + cAdd - 1;
-
-                rows = rows + rAdd - 1;
-
-                xArr.push(cols);
-
-                yArr.push(rows);
-
-                xMax = _.max(xArr), xMin = _.min(xArr), yMax = _.max(yArr), yMin = _.min(yArr);
-
-            }
-
-            for (var _y = yMin; _y < yMax + 1; _y++) {
-
-                var tr = $('<tr></tr>');
-
-                for (var _x = 0; _x < that.cellCount + 1; _x++) {
-
-                    var th = $('<th></th>');
-
-                    //if ($('td[cols=' + _x + '][rows=' + yMin + ']').length > 0) {
-                    if ($('#' + yMin + '-' + _x ).length > 0) {
-
-                        if (_x === 0) {
-
-                            tr.append(th);
-
-                        }
-
-                        tr.append('<td style="background:orange"></td>');
-
-                     //   $('td[cols=' + _x + '][rows=' + yMin + ']').parent().before(tr);
-
-                        $('#' + yMin  + '-' + _x).parent().before(tr);
-
-                    } else {
-
-                        //$('td[cols=' + (_x - 1) + '][rows=' + yMin + ']').parent().after(tr);
-
-                        $('#' + yMin + '-' + _x - 1 ).parent().before(tr);
-
-                    }
-
-                }
-
-            }
+            //
+            // for (var i = 0; i < sNode.length; i++) {
+            //
+            //     var cols = parseInt(sNode.eq(i).attr('cols'));
+            //
+            //     var rows = parseInt(sNode.eq(i).attr('rows'));
+            //
+            //     var cAdd = parseInt(sNode.eq(i).attr('colspan')) || 1;
+            //
+            //     var rAdd = parseInt(sNode.eq(i).attr('rowspan')) || 1;
+            //
+            //     cols = cols + cAdd - 1;
+            //
+            //     rows = rows + rAdd - 1;
+            //
+            //     xArr.push(cols);
+            //
+            //     yArr.push(rows);
+            //
+            //     xMax = _.max(xArr), xMin = _.min(xArr), yMax = _.max(yArr), yMin = _.min(yArr);
+            //
+            // }
+            //
+            // for (var _y = yMin; _y < yMax + 1; _y++) {
+            //
+            //     var tr = $('<tr></tr>');
+            //
+            //     for (var _x = 0; _x < that.cellCount + 1; _x++) {
+            //
+            //         var th = $('<th></th>');
+            //
+            //         //if ($('td[cols=' + _x + '][rows=' + yMin + ']').length > 0) {
+            //         if ($('#' + yMin + '-' + _x ).length > 0) {
+            //
+            //             if (_x === 0) {
+            //
+            //                 tr.append(th);
+            //
+            //             }
+            //
+            //             tr.append('<td style="background:orange"></td>');
+            //
+            //          //   $('td[cols=' + _x + '][rows=' + yMin + ']').parent().before(tr);
+            //
+            //             $('#' + yMin  + '-' + _x).parent().before(tr);
+            //
+            //         } else {
+            //
+            //             //$('td[cols=' + (_x - 1) + '][rows=' + yMin + ']').parent().after(tr);
+            //
+            //             $('#' + yMin + '-' + _x - 1 ).parent().before(tr);
+            //
+            //         }
+            //
+            //     }
+            //
+            // }
 
         } else {
 
@@ -3267,27 +3267,6 @@ iTable.prototype.deleteCol = function () {
 
         if (sNode.length >= 2) {
 
-            for (var i = 0; i < sNode.length; i++) {
-
-                var cols = parseInt(sNode.eq(i).attr('cols'));
-
-                var rows = parseInt(sNode.eq(i).attr('rows'));
-
-                var cAdd = parseInt(sNode.eq(i).attr('colspan')) || 1;
-
-                var rAdd = parseInt(sNode.eq(i).attr('rowspan')) || 1;
-
-                cols = cols + cAdd - 1;
-
-                rows = rows + rAdd - 1;
-
-                xArr.push(cols);
-
-                yArr.push(rows);
-
-                xMax = _.max(xArr), xMin = _.min(xArr), yMax = _.max(yArr), yMin = _.min(yArr);
-
-            }
 
         } else {
 
