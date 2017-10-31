@@ -39,31 +39,34 @@ iTable.prototype.createContent = function (tid) {
 
         var colG = $('<colgroup></colgroup>');
 
-        tr.append(th);
 
-        for (var j = 0; j < this.cellCount + 1; j++) {
+
+        for (var j = 0; j <= this.cellCount; j++) {
 
             var td = this.createTd('ftNormal fsize_14 font_Black','');
 
             if (j === 0) {
 
-                var col = $('<col style="width:63px">');
+                var col = $('<col style="width:63px" id="t0">');
+
+                tr.append(th);
 
             } else {
 
-                var col = $('<col style="width:100px">');
+                var col = $('<col style="width:100px" id="t'+j+'">');
 
+                tr.append(td);
             }
 
             colG.append(col);
 
             if (i === 0) {
 
-                $("#iTable" + tId).append(colG);
+                tb.append(colG);
 
             }
 
-            tr.append(td);
+
 
         }
 
@@ -113,17 +116,21 @@ iTable.prototype.createXAxis = function () {
 
         var colG = $('<colgroup></colgroup>');
 
-        for (var j = 0; j < this.cellCount + 1; j++) {
+        for (var j = 0; j <= this.cellCount; j++) {
 
-            var td = $("<td>" + IntToChr(j) + "</td>");
+            var td = $("<td>" + IntToChr(j-1) + "</td>");
 
             if (j === 0) {
 
                 var col = $('<col style="width:63px">');
 
+                tr.append(th);
+
             } else {
 
-                var col = $('<col style="width:100px">');
+                var col = $('<col style="width:100px" id="c'+j+'">');
+
+                tr.append(td);
 
             }
 
@@ -135,7 +142,7 @@ iTable.prototype.createXAxis = function () {
 
             }
 
-            tr.append(td);
+
 
         }
 
@@ -1822,9 +1829,9 @@ iTable.prototype.cornerCopy=function(){
 
             var onRspan = parseInt($(coords).attr('rowspan'))  || 1;
 
-            var oLeft=$(coords).offset().left;
-
-            var oTop=$(coords).offset().top+parseInt($('.header').outerHeight());
+            // var oLeft=$(coords).offset().left;
+            //
+            // var oTop=$(coords).offset().top+parseInt($('.header').outerHeight());
 
             var oexpectX = onCols + onCspan-1;
 
@@ -2974,9 +2981,7 @@ iTable.prototype.insertCol = function () {
 
         var sNode = $('.picked');
 
-        var xArr = [],
-
-            yArr = [];
+        var xArr = [], yArr = [];
 
         var xMax, xMin, yMax, yMin;
 
@@ -3011,28 +3016,19 @@ iTable.prototype.insertCol = function () {
 
                     var index = xMin;
 
-
-
-                  //  if ($('td[cols=' + xMin + '][rows=' + _y + ']').length > 0) {
                     if ($('#' + _y + '-' + xMin ).length > 0) {
 
-
-                        //$('td[cols=' + xMin + '][rows=' + _y + ']').before('<td style="background:orange"></td>');
                         $('#' + _y + '-' + xMin ).before('<td style="background:orange"></td>');
 
                     } else {
 
                         while (index > -1) {
 
-                          //  if ($('td[cols=' + index + '][rows=' + _y + ']').length > 0) {
-
                             if ($('#' + _y + '-' + index).length > 0) {
 
                                 time++;
 
                                 if (time === 1) {
-
-                                //    $('td[cols=' + index + '][rows=' + _y + ']').after('<td style="background:orange"></td>');
                                     $('#' + _y + '-' + index).after('<td style="background:orange"></td>');
                                 }
 
@@ -3050,98 +3046,42 @@ iTable.prototype.insertCol = function () {
 
             that.cellCount = that.cellCount + xMax - xMin + 1;
 
-            that.updateTop(index);
+            that.updateTop(index,'add');
 
         } else {
 
             var xIndex = parseInt(sNode.attr('cols'));
 
-            var yIndex = parseInt(sNode.attr('rows'));
+            var col = $('<col style="width:100px">');
 
-            for (var i = 0; i < that.rowCount + 1; i++) {
-
-                var time = 0;
-
-                for (var j = xIndex; j > -1; j--) {
-
-                   // var cols = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('cols'));
-
-                    var cols = parseInt($('#'+i+'-'+j).attr('cols'));
-
-
-
-                    if (cols === xIndex) {
-
-                        // var cSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
-                        //
-                        // var rSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
-
-                        var cSpan = parseInt($('#'+i+'-'+j).attr('colspan')) || 1;
-
-                        var rSpan = parseInt($('#'+i+'-'+j).attr('rowspan')) || 1;
-
-                        if (cSpan >= 2) {
-
-                           // $('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cSpan + 1);
-                            $('#'+i+'-'+j).attr('colspan', cSpan + 1);
-
-                        } else {
-
-                            if (rSpan > 1) {
-
-                                for (var r = i; r < i + rSpan; r++) {
-
-                                   // $('td[cols=' + (j - cSpan) + '][rows=' + r + ']').after('<td style="background:orange"></td>');
-                                    $('#' + r + '-' + (j - cSpan) ).after('<td style="background:orange"></td>');
-
-                                }
-
-                            } else {
-
-                              //  $('td[cols=' + j + '][rows=' + i + ']').before('<td style="background:orange"></td>');
-                                $('#' + i + '-' + j ).after('<td style="background:orange"></td>');
-
-                            }
-
-                        }
-
+            for (var i = 1; i < that.rowCount + 1;) {
+                if ($('#' + i + '-' + xIndex).length > 0) {
+                    var cSpan = Number($('#' + i + '-' + xIndex).attr('colspan'));
+                    var rSpan = Number($('#' + i + '-' + xIndex).attr('rowspan'));
+                    if (cSpan >= 2) {
+                        $('#' + i + '-' + xIndex).attr('colspan', cSpan + 1);
+                        $('.dataTable').find('col').eq(xIndex).after(col);
+                        i+=rSpan;
                     } else {
+                        $('#' + i + '-' + xIndex).after('<td style="background:orange"></td>');
+                        $('.dataTable').find('col').eq(xIndex).after(col);
+                        i++;
+                    }
+                } else {
 
-                    //    if ($('td[cols=' + j + '][rows=' + i + ']').length > 0) {
-
-                        if ($('#' + i + '-' + j).length > 0) {
-
-                            time++;
-
-                            if (time === 1) {
-
-                                // var cSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
-                                //
-                                // var rSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
-
-                                var cSpan = parseInt($('#' + i + '-' + j).attr('colspan')) || 1;
-
-                                var rSpan = parseInt($('#' + i + '-' + j).attr('rowspan')) || 1;
-
-                                if (cSpan >= 2) {
-
-                                    //不同行拓宽
-
-                                    if (!(i < yIndex && (rSpan + i) > yIndex)) {
-
-                                     //   $('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cSpan + 1);
-
-                                        $('#' + i + '-' + j).attr('colspan', cSpan + 1);
+                    for (var j = 0; j <= that.mergeTds.length; j++) {
+                        var mStartX = Number($(that.mergeTds).eq(j).attr('cols'));
+                        var mStartY = Number($(that.mergeTds).eq(j).attr('rows'));
+                        var mCspan = Number($(that.mergeTds).eq(j).attr('colspan'));
+                        var mRspan = Number($(that.mergeTds).eq(j).attr('rowspan'));
+                        var mEndX = mStartX + mCspan;
 
 
-                                    }
-
-                                }
-
-                            }
-
+                        if (mStartX <= xIndex && mEndX >= xIndex && mStartY === i) {
+                             $(that.mergeTds).eq(j).attr('colspan',mCspan+1);
+                             $('.dataTable').find('col').eq(xIndex).after(col);
+                             i += mRspan;
                         }
-
                     }
 
                 }
@@ -3150,7 +3090,7 @@ iTable.prototype.insertCol = function () {
 
             that.cellCount++;
 
-            that.updateTop(xIndex);
+            that.updateTop(xIndex,'add');
 
         }
 
@@ -3247,86 +3187,49 @@ iTable.prototype.insertRow = function () {
         } else {
 
             var yIndex = parseInt(sNode.attr('rows'));
+            var tr = $('<tr></tr>');
 
-           // var xIndex = parseInt(sNode.attr('cols'));
+            for (var i = 0; i <= that.cellCount;) {
 
-            for (var i = yIndex; i > -1; i--) {
+                 if(i===0){
+                     var th = $('<th></th>');
+                     tr.append(th);
+                     i++;
+                 }else{
+                     if ($('#' + yIndex + '-' + i).length > 0) {
+                         var cSpan = Number($('#' + yIndex + '-' + i).attr('colspan'));
+                         var rSpan = Number($('#' + yIndex + '-' + i).attr('rowspan'));
+                         if (rSpan >= 2) {
+                             $('#' + yIndex + '-' + i).attr('rowspan', rSpan + 1);
+                             i+=cSpan;
+                         } else {
+                             tr.append('<td style="background:orange"></td>');
+                             $('#' + yIndex + '-' + i).parent().after(tr);
+                             i++;
+                         }
+                     }else{
+                         for (var j = 0; j <= that.mergeTds.length; j++) {
+                             var mStartX = Number($(that.mergeTds).eq(j).attr('cols'));
+                             var mStartY = Number($(that.mergeTds).eq(j).attr('rows'));
+                             var mCspan = Number($(that.mergeTds).eq(j).attr('colspan'));
+                             var mRspan = Number($(that.mergeTds).eq(j).attr('rowspan'));
 
-                var tr = $('<tr></tr>');
+                             var mEndY = mStartY + mRspan;
 
-                for (var j = 0; j < that.cellCount + 2; j++) {
-
-                //    var rows = $('td[cols=' + j + '][rows=' + i + ']').attr('rows');
-
-                    var rows = $('#' + i + '-' + j ).attr('rows');
-
-                    if (rows === yIndex) {
+                             if (mStartY <= yIndex && mEndY >= yIndex && mStartX === i) {
+                                 $(that.mergeTds).eq(j).attr('rowspan',mRspan+1);
+                                 i += mCspan;
+                             }
+                         }
 
 
-                        if (j === 2) {
-
-                            var th = $('<th></th>');
-
-                            tr.append(th);
-
-                        }
-
-                       // var rSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
-
-                        var rSpan = parseInt($('#' + i + '-' + j ).attr('rowspan')) || 1;
-
-                        if (rSpan >= 2) {
-
-                         //   $('td[cols=' + j + '][rows=' + i + ']').attr('rowspan', rSpan + 1);
-
-                            $('#' + i + '-' + j ).attr('rowspan', rSpan + 1);
-
-                        } else {
-
-                            tr.append('<td style="background:orange"></td>');
-
-                         //   $('td[cols=' + j + '][rows=' + i + ']').parent().before(tr);
-
-                            $('#' + i + '-' + j ).parent().before(tr);
-
-                        }
-
-                    } else {
-
-                       // if ($('td[cols=' + j + '][rows=' + i + ']').length > 0) {
-                            if ($('#' + i + '-' + j ).length > 0) {
-
-                            // var rSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
-                            //
-                            // var cSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
-
-                                var rSpan = parseInt($('#' + i + '-' + j ).attr('rowspan')) || 1;
-
-                               // var cSpan = parseInt($('#' + i + '-' + j ).attr('colspan')) || 1;
-
-                            if (rSpan >= 2) {
-
-                               // if (parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rows')) + parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) - 1 >= yIndex) {
-                                if (parseInt($('#' + i + '-' + j).attr('rows')) + parseInt($('#' + i + '-' + j).attr('rowspan')) - 1 >= yIndex) {
-
-                                   // $('td[cols=' + j + '][rows=' + i + ']').attr('rowspan', rSpan + 1);
-                                    $('#' + i + '-' + j).attr('rowspan', rSpan + 1);
-
-                                }
-
-                            }
-
-                        }
-
-                    }
-
-                }
+                     }
+                 }
 
             }
-
             that.rowCount++;
 
-            that.updateLeft(yIndex);
+            that.updateLeft(yIndex,'add');
 
         }
 
@@ -3388,71 +3291,51 @@ iTable.prototype.deleteCol = function () {
 
         } else {
 
-            var index = parseInt(sNode.attr('cols'));
 
-            for (var i = 0; i < that.rowCount + 1; i++) {
+            var xIndex = parseInt(sNode.attr('cols'));
 
-                var time = 0;
-
-                for (var j = index; j > -1; j--) {
-
-                    //var cols = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('cols'));
-
-                    var cols = parseInt($('#' + i + '-' + j).attr('cols'));
-
-                    if (cols === index) {
-
-                     //   var cSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
-
-                        var cSpan = parseInt($('#' + i + '-' + j ).attr('colspan')) || 1;
-
-                        if (cSpan >= 2) {
-
-                         //   $('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cSpan - 1);
-                            $('#' + i + '-' + j).attr('colspan', cSpan - 1);
-
-                        } else {
-
-                            //$('td[cols=' + j + '][rows=' + i + ']').remove();
-
-                            $('#' + i + '-' + j).remove();
-
-                        }
-
+            for (var i = 1; i < that.rowCount + 1;) {
+                if ($('#' + i + '-' + xIndex).length > 0) {
+                    var cSpan = Number($('#' + i + '-' + xIndex).attr('colspan'));
+                    var rSpan = Number($('#' + i + '-' + xIndex).attr('rowspan'));
+                    if (cSpan >= 2) {
+                        $('#' + i + '-' + xIndex).attr('colspan', cSpan - 1);
+                        $('#' + 't' + xIndex).remove();
+                        i+=rSpan;
                     } else {
+                        console.log(i,xIndex);
+                        $('#' + i + '-' + xIndex).remove();
+                        $('#' + 't' + xIndex).remove();
+                        i++;
+                    }
+                } else {
 
-                        // if ($('td[cols=' + j + '][rows=' + i + ']').length > 0) {
-                            if ($('#' + i + '-' + j).length > 0) {
+                    for (var j = 0; j <= that.mergeTds.length; j++) {
+                        var mStartX = Number($(that.mergeTds).eq(j).attr('cols'));
+                        var mStartY = Number($(that.mergeTds).eq(j).attr('rows'));
+                        var mCspan = Number($(that.mergeTds).eq(j).attr('colspan'));
+                        var mRspan = Number($(that.mergeTds).eq(j).attr('rowspan'));
+                        var mEndX = mStartX + mCspan;
 
-                            time++;
 
-                            if (time === 1) {
+                        if (mStartX <= xIndex && mEndX >= xIndex && mStartY === i) {
+                            $(that.mergeTds).eq(j).attr('colspan',mCspan-1);
+                            $('#' + 't' + xIndex).remove();
 
-                              //  var cSpan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('colspan')) || 1;
-
-                                var cSpan = parseInt($('#' + i + '-' + j + ']').attr('colspan')) || 1;
-
-                                if (cSpan >= 2) {
-
-                                   // $('td[cols=' + j + '][rows=' + i + ']').attr('colspan', cSpan - 1);
-
-                                    $('#' + i + '-' + j ).attr('colspan', cSpan - 1);
-
-                                }
-
-                            }
-
+                            i += mRspan;
                         }
-
                     }
 
                 }
 
             }
 
+
             that.cellCount--;
 
-            that.updateLeft(index);
+            that.updateTableCol();
+
+            that.updateTop(xIndex,'delete');
 
         }
 
@@ -3484,73 +3367,52 @@ iTable.prototype.deleteRow = function () {
 
         } else {
 
-            var index = parseInt(sNode.attr('rows'));
-
             var yIndex = parseInt(sNode.attr('rows'));
 
-            // var xIndex = parseInt($(obj).attr('cols'));
+            for (var i = 1; i <= that.cellCount+1;) {
 
-            for (var i = index; i > -1; i--) {
-
-                //var tr=$('<tr></tr>');
-
-                //var time = 0;
-
-                for (var j = 0; j < that.cellCount; j++) {
-
-                  //  var rows = $('td[cols=' + j + '][rows=' + i + ']').attr('rows');
-
-                    var rows = $('#' + i + '-' + j ).attr('rows');
-
-                    if (rows === index) {
-
-                      //  var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
-
-                        var rspan = parseInt($('#' + i + '-' + j ).attr('rowspan')) || 1;
-
-                        if (rspan >= 2) {
-
-                           // $('td[cols=' + j + '][rows=' + i + ']').attr('rowspan', rspan - 1);
-                            $('#' + i + '-' + j).attr('rowspan', rspan - 1);
-
+                    if ($('#' + yIndex + '-' + i).length > 0) {
+                        var cSpan = Number($('#' + yIndex + '-' + i).attr('colspan'));
+                        var rSpan = Number($('#' + yIndex + '-' + i).attr('rowspan'));
+                        if (rSpan >= 2) {
+                            $('#' + yIndex + '-' + i).attr('rowspan', rSpan - 1);
+                            i+=cSpan;
                         } else {
 
-                           // $('td[cols=' + j + '][rows=' + i + ']').parent().remove();
-                            $('#' + i + '-' + j ).parent().remove();
-
+                            $('#' + yIndex + '-' + i).remove();
+                            i++;
                         }
+                    }else{
 
-                    } else {
+                        for (var j = 0; j <= that.mergeTds.length; j++) {
+                            var mStartX = Number($(that.mergeTds).eq(j).attr('cols'));
+                            var mStartY = Number($(that.mergeTds).eq(j).attr('rows'));
+                            var mCspan = Number($(that.mergeTds).eq(j).attr('colspan'));
+                            var mRspan = Number($(that.mergeTds).eq(j).attr('rowspan'));
 
-                        //if ($('td[cols=' + j + '][rows=' + i + ']').length > 0) {
-                            if ($('#' + i + '-' + j ).length > 0) {
+                            var mEndY = mStartY + mRspan;
 
-                          //  var rspan = parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) || 1;
-                             var rspan = parseInt($('#' + i + '-' + j ).attr('rowspan')) || 1;
-
-                            if (rspan >= 2) {
-
-                               // if (parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rows')) + parseInt($('td[cols=' + j + '][rows=' + i + ']').attr('rowspan')) - 1 >= yIndex) {
-                                if (parseInt($('#' + i + '-' + j ).attr('rows')) + parseInt($('#' + i + '-' + j ).attr('rowspan')) - 1 >= yIndex) {
-
-                                 //   $('td[cols=' + j + '][rows=' + i + ']').attr('rowspan', rspan - 1);
-                                    $('#' + i + '-' + j).attr('rowspan', rspan - 1);
-
-                                }
-
+                            if (mStartY <= yIndex && mEndY >= yIndex && mStartX === i) {
+                                $(that.mergeTds).eq(j).attr('rowspan',mRspan-1);
+                                i += mCspan;
                             }
-
                         }
+
 
                     }
 
-                }
 
             }
+            $('.dataTable tr').each(function(){
+                if($(this).html()===''){
+                    $(this).remove();
+                }
+
+            });
 
             that.rowCount--;
 
-            that.updateLeft(index);
+            that.updateLeft(yIndex,'delete');
 
         }
 
@@ -3563,6 +3425,8 @@ iTable.prototype.deleteRow = function () {
     });
 
 };
+
+
 
 //输入触发公式
 iTable.prototype.typeFormula=function(ways,data){
@@ -4535,10 +4399,6 @@ iTable.prototype.setIndex = function () {
 
             cellStrArray.push(cellStr);
 
-            // var coo = (i + 1) + ',' + (col + 1);
-            //
-            // var coo = cellStrArray[j];
-
             cell.setAttribute('rows', i + 1);
 
             cell.setAttribute('cols', col + 1);
@@ -4551,36 +4411,79 @@ iTable.prototype.setIndex = function () {
 
 };
 
-//y轴更新
+//col更新
+iTable.prototype.updateTableCol=function(){
 
-iTable.prototype.updateLeft = function (index) {
+    for (var j = 0; j <= this.cellCount; j++) {
 
-    $('#titleTable tbody tr').eq(index).find('td').append('<td></td>');
-
-    for (var j = index; j < this.rowCount; j++) {
-
-        //var td = $("<td>" + IntToChr(j) + "</td>");
-
-        $('#titleTable tbody tr').eq(j).find('td').text(IntToChr(j));
+        $('.dataTable col').eq(j).attr('id','t'+j);
 
     }
+}
 
+
+//y轴更新
+
+iTable.prototype.updateLeft = function (index,type) {
+
+    switch (type){
+        case 'add':
+
+            $('#leftTable').find('tr').eq(index).after('<tr><td></td></tr>');
+
+            for (var j = index; j < this.rowCount; j++) {
+
+                $('#leftTable tbody tr').eq(j).find('td').text(j+1);
+
+            }
+            break;
+        case 'delete':
+            $('#leftTable').find('tr').eq(index).remove();
+
+            for (var j = 0; j < this.rowCount; j++) {
+
+                $('#leftTable tbody tr').eq(j).find('td').text(j+1);
+
+            }
+
+            break;
+    }
+
+
+
+    this.largeRow();
 };
 
 //x轴更新
 
-iTable.prototype.updateTop = function (index) {
+iTable.prototype.updateTop = function (index,type) {
+    switch (type) {
+        case 'add':
+            $('#titleTable colgroup').find('col').eq(index).after('<col style="width:100px">');
 
-    $('#titleTable colgroup').find('col').eq(index).after('<col style="width:100px">');
+            $('#titleTable tbody tr').find('td').eq(index).after('<td></td>');
 
-    $('#titleTable tbody tr').find('td').eq(index).after('<td></td>');
+            for (var j = index; j <= this.cellCount; j++) {
 
-    for (var j = index; j < this.cellCount - 1; j++) {
+                $('#titleTable tbody tr').find('td').eq(j).text(IntToChr(j));
 
-        $('#titleTable tbody tr').find('td').eq(j).text(IntToChr(j));
+            }
 
+            break;
+        case 'delete':
+            $('#titleTable colgroup').find('col').eq(index).remove();
+
+            $('#titleTable tbody tr').find('td').eq(index).remove();
+
+            for (var j = 1; j <= this.cellCount; j++) {
+
+                $('#titleTable tbody tr').find('td').eq(j).text(IntToChr(j));
+
+            }
+            break;
     }
 
+    this.largeCol();
 };
 
 //拖拽放宽列
@@ -5906,7 +5809,7 @@ var settings = {
 
             'tdclass': 'ffc_yellow',
 
-            'fclass': 'fc_yellow',
+            'fclass': 'fc_yellow'
 
         },
 
@@ -5914,7 +5817,7 @@ var settings = {
 
             'tdclass': 'ffc_green',
 
-            'fclass': 'fc_green',
+            'fclass': 'fc_green'
 
         },
 
@@ -5922,7 +5825,7 @@ var settings = {
 
             'tdclass': 'ffc_orange',
 
-            'fclass': 'fc_orange',
+            'fclass': 'fc_orange'
 
         },
 
@@ -5930,7 +5833,7 @@ var settings = {
 
             'tdclass': 'ffc_blue',
 
-            'fclass': 'fc_blue',
+            'fclass': 'fc_blue'
 
         },
 
@@ -5938,7 +5841,7 @@ var settings = {
 
             'tdclass': 'ffc_aqua',
 
-            'fclass': 'fc_aqua',
+            'fclass': 'fc_aqua'
 
         },
 
@@ -5946,7 +5849,7 @@ var settings = {
 
             'tdclass': 'ffc_purple',
 
-            'fclass': 'fc_purple',
+            'fclass': 'fc_purple'
 
         },
 
@@ -5954,7 +5857,7 @@ var settings = {
 
             'tdclass': 'ffc_black',
 
-            'fclass': 'fc_black',
+            'fclass': 'fc_black'
 
         },
 
@@ -5962,7 +5865,7 @@ var settings = {
 
             'tdclass': 'ffc_white',
 
-            'fclass': 'fc_white',
+            'fclass': 'fc_white'
 
         },
 
@@ -5970,7 +5873,7 @@ var settings = {
 
             'tdclass': 'ffc_grey',
 
-            'fclass': 'fc_grey',
+            'fclass': 'fc_grey'
 
         }
 
@@ -5990,7 +5893,7 @@ var settings = {
 
             'tdclass': 'ffill_yellow',
 
-            'fclass': 'fill_yellow',
+            'fclass': 'fill_yellow'
 
         },
 
@@ -5998,7 +5901,7 @@ var settings = {
 
             'tdclass': 'ffill_green',
 
-            'fclass': 'fill_green',
+            'fclass': 'fill_green'
 
         },
 
@@ -6006,7 +5909,7 @@ var settings = {
 
             'tdclass': 'ffill_orange',
 
-            'fclass': 'fill_orange',
+            'fclass': 'fill_orange'
 
         },
 
@@ -6014,7 +5917,7 @@ var settings = {
 
             'tdclass': 'ffill_blue',
 
-            'fclass': 'fill_blue',
+            'fclass': 'fill_blue'
 
         },
 
@@ -6022,7 +5925,7 @@ var settings = {
 
             'tdclass': 'ffill_aqua',
 
-            'fclass': 'fill_aqua',
+            'fclass': 'fill_aqua'
 
         },
 
@@ -6030,7 +5933,7 @@ var settings = {
 
             'tdclass': 'ffill_purple',
 
-            'fclass': 'fill_purple',
+            'fclass': 'fill_purple'
 
         },
 
@@ -6038,7 +5941,7 @@ var settings = {
 
             'tdclass': 'ffill_black',
 
-            'fclass': 'fill_black',
+            'fclass': 'fill_black'
 
         },
 
@@ -6046,7 +5949,7 @@ var settings = {
 
             'tdclass': 'ffill_white',
 
-            'fclass': 'fill_white',
+            'fclass': 'fill_white'
 
         },
 
@@ -6054,7 +5957,7 @@ var settings = {
 
             'tdclass': 'ffill_grey',
 
-            'fclass': 'fill_grey',
+            'fclass': 'fill_grey'
 
         }
 
@@ -6066,7 +5969,7 @@ var settings = {
 
             'tdclass': 'falign_left',
 
-            'fclass': 'ffalign_left',
+            'fclass': 'ffalign_left'
 
         },
 
@@ -6074,7 +5977,7 @@ var settings = {
 
             'tdclass': 'falign_center',
 
-            'fclass': 'ffalign_center',
+            'fclass': 'ffalign_center'
 
         },
 
@@ -6082,7 +5985,7 @@ var settings = {
 
             'tdclass': 'falign_right',
 
-            'fclass': 'ffalign_right',
+            'fclass': 'ffalign_right'
 
         }
 
