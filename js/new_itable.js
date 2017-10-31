@@ -2987,26 +2987,26 @@ iTable.prototype.insertCol = function () {
 
         if (sNode.length >= 2) {
 
-            // for (var i = 0; i < sNode.length; i++) {
-            //
-            //     var cols = parseInt(sNode.eq(i).attr('cols'));
-            //
-            //     var rows = parseInt(sNode.eq(i).attr('rows'));
-            //
-            //     var cAdd = parseInt(sNode.eq(i).attr('colspan')) || 1;
-            //
-            //     var rAdd = parseInt(sNode.eq(i).attr('rowspan')) || 1;
-            //
-            //     cols = cols + cAdd - 1;
-            //
-            //     rows = rows + rAdd - 1;
-            //
-            //     xArr.push(cols);
-            //
-            //     yArr.push(rows);
-            //
-            //     xMax = _.max(xArr), xMin = _.min(xArr), yMax = _.max(yArr), yMin = _.min(yArr);
-            // }
+            for (var i = 0; i < sNode.length; i++) {
+
+                var cols = parseInt(sNode.eq(i).attr('cols'));
+
+                var rows = parseInt(sNode.eq(i).attr('rows'));
+
+                var cAdd = parseInt(sNode.eq(i).attr('colspan')) || 1;
+
+                var rAdd = parseInt(sNode.eq(i).attr('rowspan')) || 1;
+
+                cols = cols + cAdd - 1;
+
+                rows = rows + rAdd - 1;
+
+                xArr.push(cols);
+
+                yArr.push(rows);
+
+                xMax = _.max(xArr), xMin = _.min(xArr), yMax = _.max(yArr), yMin = _.min(yArr);
+            }
             //
             // for (var _y = 0; _y < that.rowCount + 1; _y++) {
             //
@@ -3126,28 +3126,28 @@ iTable.prototype.insertRow = function () {
         var xMax, xMin, yMax, yMin;
 
         if (sNode.length >= 2) {
-            //
-            // for (var i = 0; i < sNode.length; i++) {
-            //
-            //     var cols = parseInt(sNode.eq(i).attr('cols'));
-            //
-            //     var rows = parseInt(sNode.eq(i).attr('rows'));
-            //
-            //     var cAdd = parseInt(sNode.eq(i).attr('colspan')) || 1;
-            //
-            //     var rAdd = parseInt(sNode.eq(i).attr('rowspan')) || 1;
-            //
-            //     cols = cols + cAdd - 1;
-            //
-            //     rows = rows + rAdd - 1;
-            //
-            //     xArr.push(cols);
-            //
-            //     yArr.push(rows);
-            //
-            //     xMax = _.max(xArr), xMin = _.min(xArr), yMax = _.max(yArr), yMin = _.min(yArr);
-            //
-            // }
+
+            for (var i = 0; i < sNode.length; i++) {
+
+                var cols = parseInt(sNode.eq(i).attr('cols'));
+
+                var rows = parseInt(sNode.eq(i).attr('rows'));
+
+                var cAdd = parseInt(sNode.eq(i).attr('colspan')) || 1;
+
+                var rAdd = parseInt(sNode.eq(i).attr('rowspan')) || 1;
+
+                cols = cols + cAdd - 1;
+
+                rows = rows + rAdd - 1;
+
+                xArr.push(cols);
+
+                yArr.push(rows);
+
+                xMax = _.max(xArr), xMin = _.min(xArr), yMax = _.max(yArr), yMin = _.min(yArr);
+
+            }
             //
             // for (var _y = yMin; _y < yMax + 1; _y++) {
             //
