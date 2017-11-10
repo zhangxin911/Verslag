@@ -3911,11 +3911,10 @@ iTable.prototype.splitTd = function () {
             if (rowspan <= 1 && colspan <= 1) return;
 
             if (isSel){
+
                 $(this).removeAttr("colspan").removeAttr("rowspan");
 
                 that.mergeTds=_.without(that.mergeTds,this);
-
-
             }
 
             // 跨格开插
@@ -4023,49 +4022,6 @@ iTable.prototype.createSelection = function (id, menus) {
 
 };
 
-// iTable.prototype.dataSelection=function(json){
-//     var selectionBox = $('<div class="toolBox"></div>');
-//
-//     var selectHead = $('<div></div>');
-//
-//     var selectUl = $('<ul></ul>');
-//
-//     var selectLi, aTab;
-//     for(var index in json){
-//         selectHead.text('配置菜单');
-//         aTab=$('<a class="dTab" id="'+json[index].id +'">'+ json[index].name + '</a></li>');
-//         selectLi = $('<li></li>');
-//         selectLi.append(aTab);
-//         selectUl.append(selectLi);
-//         var cb=json[index].callback
-//         aTab.on('click',{cb},function(event){
-//             event.data.callback();
-//         });
-//
-//     }
-//     selectHead.after(selectUl);
-//     selectionBox.append(selectHead);
-//
-//     this.tools.append(selectionBox);
-//
-//     selectUl.hide();
-//
-//     selectHead.on('click', function () {
-//
-//         selectUl.toggle();
-//
-//     });
-//
-//     selectUl.find('li a').on('click', function () {
-//
-//         $(selectHead[0]).text($(this).text());
-//
-//         $(selectHead[0]).attr('curClass', $(this).attr('class'));
-//
-//     });
-//
-//     // return selectionBox;
-// }
 
 //创建工具栏单个菜单
 
@@ -4350,7 +4306,8 @@ iTable.prototype.setIndex = function () {
 
             cell = objTab.rows[i].cells[j];
 
-            if (offsetLeftArray.contains(cell.offsetLeft) === -1)
+            //if (offsetLeftArray.contains(cell.offsetLeft) === -1)
+            if (containsArray(offsetLeftArray,cell.offsetLeft) === -1)
 
                 offsetLeftArray.push(cell.offsetLeft);
 
@@ -4372,7 +4329,9 @@ iTable.prototype.setIndex = function () {
 
             cell = objTab.rows[i].cells[j];
 
-            col = offsetLeftArray.contains(cell.offsetLeft);
+            // col = offsetLeftArray.contains(cell.offsetLeft);
+
+            col = containsArray(offsetLeftArray,cell.offsetLeft);
 
             cellStr = i + ',' + col;
 
@@ -5229,12 +5188,12 @@ iTable.prototype.freezeBtn=function(){
 };
 
 iTable.prototype.freezeTd=function(){
-    var colBox=$('<div id="fColBox"><div></div><table><colgroup></colgroup><tbody></tbody></table></div>');
-    var rowBox=$('<div id="fRowBox"></div>');
+    // var colBox=$('<div id="fColBox"><div></div><table><colgroup></colgroup><tbody></tbody></table></div>');
+    // var rowBox=$('<div id="fRowBox"></div>');
     var bothBox=$('<div id="fBothBox"></div>');
 
-    this.container.append(colBox);
-    this.container.append(rowBox);
+    // this.container.append(colBox);
+    // this.container.append(rowBox);
     this.container.append(bothBox);
     this.freezeBtn();
 };
@@ -5254,7 +5213,7 @@ iTable.prototype.freezeTds=function(event){
         //     for(var j=yMin;j<yMax;j++){
         //      var id='#'+j+'-'+i;
         //      var cloneTd=$(id).clone();
-        //         console.log(cloneTd);
+        //         console.log(cloneTd);  
         //     }
         // }
 
@@ -5633,11 +5592,11 @@ function containsArray(array, obj) {
 
 }
 
-Array.prototype.contains = function (obj) {
-
-    return containsArray(this, obj);
-
-};
+// Array.prototype.contains = function (obj) {
+//
+//     return containsArray(this, obj);
+//
+// };
 
 iTable.prototype.init = function () {
 
@@ -5735,7 +5694,7 @@ iTable.prototype.init = function () {
 
     this.chooseRow();
 
-   // this.freezeTd();
+    this.freezeTd();
 };
 
 var settings = {
