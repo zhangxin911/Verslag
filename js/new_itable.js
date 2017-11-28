@@ -654,9 +654,9 @@ function typing(event) {
 
 
 
-        event.data.time = parseInt(event.data.time) + 1;
+        event.data.time = Number(event.data.time) + 1;
 
-        if (event.data.time == 1) {
+        if (event.data.time === 1) {
 
             //获取第一次点击的单元格
 
@@ -713,7 +713,7 @@ function typing(event) {
 
             if ($(event.data.lastTd)[0] != $(sNode)[0]) {
 
-                if (event.data.fixX != nowX) {
+                if (event.data.fixX !== nowX) {
 
                     //不同单元格x坐标不同
 
@@ -847,7 +847,7 @@ function typing(event) {
 
             if ($(event.data.lastTd)[0] != $(sNode)[0]) {
 
-                if (event.data.fixY != nowY) {
+                if (event.data.fixY !== nowY) {
 
                     //不同单元格x坐标不同
 
@@ -989,7 +989,7 @@ function typing(event) {
 
             if ($(event.data.lastTd)[0] != $(sNode)[0]) {
 
-                if (event.data.fixX != nowX) {
+                if (event.data.fixX !== nowX) {
 
                     //不同单元格x坐标不同
 
@@ -1131,7 +1131,7 @@ function typing(event) {
 
             if ($(event.data.lastTd)[0] != $(sNode)[0]) {
 
-                if (event.data.fixX != nowX) {
+                if (event.data.fixX !== nowX) {
 
                     //不同单元格x坐标不同
 
@@ -1558,13 +1558,13 @@ iTable.prototype.setRedBorder=function(obj){
 
         for (var i = 0; i < obj.length; i++) {
 
-            var top = obj[i].offsetTop,
+            var top = Number(obj[i].offsetTop),
 
-                left = obj[i].offsetLeft,
+                left = Number(obj[i].offsetLeft),
 
-                width = obj[i].offsetWidth,
+                width = Number(obj[i].offsetWidth),
 
-                height = obj[i].offsetHeight;
+                height = Numver(obj[i].offsetHeight);
 
             if (top < _.min(topArr)) {
 
@@ -1592,13 +1592,13 @@ iTable.prototype.setRedBorder=function(obj){
 
             topMin = _.min(topArr), leftMin = _.min(leftArr);
 
-            if (top == _.min(topArr)) {
+            if (top === _.min(topArr)) {
 
                 totalWidth += width;
 
             }
 
-            if (left == _.min(leftArr)) {
+            if (left === _.min(leftArr)) {
 
                 totalHeight += height;
 
@@ -1681,13 +1681,13 @@ iTable.prototype.setBlueBorder=function(obj){
 
            for (var i = 0; i < obj.length; i++) {
 
-               var top = obj[i].offsetTop,
+               var top = Number(obj[i].offsetTop),
 
-                   left = obj[i].offsetLeft,
+                   left = Number(obj[i].offsetLeft),
 
-                   width = obj[i].offsetWidth,
+                   width = Number(obj[i].offsetWidth),
 
-                   height = obj[i].offsetHeight;
+                   height = Number(obj[i].offsetHeight);
 
                if (top < _.min(topArr)) {
 
@@ -1717,13 +1717,13 @@ iTable.prototype.setBlueBorder=function(obj){
 
                topMin = _.min(topArr), leftMin = _.min(leftArr);
 
-               if (top == _.min(topArr)) {
+               if (top === _.min(topArr)) {
 
                    totalWidth += width;
 
                }
 
-               if (left == _.min(leftArr)) {
+               if (left === _.min(leftArr)) {
 
                    totalHeight += height;
 
@@ -3848,7 +3848,7 @@ iTable.prototype.mergeTd = function () {
 
             if (rMin <= rIdx && rIdx <= rMax && cMin <= cIdx && cIdx <= cMax) $(this).addClass(sigDel);
 
-            if (rIdx == rMin && cIdx == cMin){
+            if (rIdx === rMin && cIdx === cMin){
                 $(this).removeClass(sigDel).attr({
 
                     rowspan: rNum,
@@ -3927,7 +3927,7 @@ iTable.prototype.splitTd = function () {
 
                 if (!isSel) $td.addClass(sigDel);
 
-                if (idx == ridx) {
+                if (idx === ridx) {
 
                     // 本行在 [cidx] 后插入 colspan-1 个
 
@@ -4206,7 +4206,7 @@ iTable.prototype.sheetWork = function () {
 
             var content = $('.stInput').val();
 
-            if (tdText == content) {
+            if (tdText === content) {
 
                 $(this).parent().html(content);
 
@@ -5578,7 +5578,7 @@ function containsArray(array, obj) {
 
     for (var i = 0; i < array.length; i++) {
 
-        if (array[i] == obj) {
+        if (array[i] === obj) {
 
             return i;
 
