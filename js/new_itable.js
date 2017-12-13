@@ -1377,7 +1377,7 @@ iTable.prototype.TdClick=function(event){
     }
 
 
-    event.data.target.tdToFx($(this));
+    event.data.target.TdToFx($(this));
     event.data.target.LightCoor($(this));
     $('#ip_fx').blur();
 };
@@ -3090,7 +3090,7 @@ iTable.prototype.InsertCol = function () {
 
             that.cellCount++;
 
-            that.updateTop(xIndex,'add');
+            that.UpdateTop(xIndex,'add');
 
         }
 
@@ -3229,7 +3229,7 @@ iTable.prototype.InsertRow = function () {
             }
             that.rowCount++;
 
-            that.updateLeft(yIndex,'add');
+            that.UpdateLeft(yIndex,'add');
 
         }
 
@@ -3312,9 +3312,9 @@ iTable.prototype.DeleteCol = function () {
 
             that.cellCount--;
 
-            that.updateTableCol();
+            that.UpdateTableCol();
 
-            that.updateTop(xIndex,'delete');
+            that.UpdateTop(xIndex,'delete');
 
         }
 
@@ -3391,7 +3391,7 @@ iTable.prototype.DeleteRow = function () {
 
             that.rowCount--;
 
-            that.updateLeft(yIndex,'delete');
+            that.UpdateLeft(yIndex,'delete');
 
         }
 
@@ -4350,7 +4350,7 @@ iTable.prototype.SetIndex = function () {
 };
 
 //col更新
-iTable.prototype.updateTableCol=function(){
+iTable.prototype.UpdateTableCol=function(){
 
     for (var j = 0; j <= this.cellCount; j++) {
 
@@ -4362,7 +4362,7 @@ iTable.prototype.updateTableCol=function(){
 
 //y轴更新
 
-iTable.prototype.updateLeft = function (index,type) {
+iTable.prototype.UpdateLeft = function (index,type) {
 
     switch (type){
         case 'add':
@@ -4389,12 +4389,12 @@ iTable.prototype.updateLeft = function (index,type) {
 
 
 
-    this.largeRow();
+    this.LargeRow();
 };
 
 //x轴更新
 
-iTable.prototype.updateTop = function (index,type) {
+iTable.prototype.UpdateTop = function (index,type) {
     switch (type) {
         case 'add':
             $('#titleTable colgroup').find('col').eq(index).after('<col style="width:100px">');
@@ -4421,12 +4421,12 @@ iTable.prototype.updateTop = function (index,type) {
             break;
     }
 
-    this.largeCol();
+    this.LargeCol();
 };
 
 //拖拽放宽列
 
-iTable.prototype.largeCol = function () {
+iTable.prototype.LargeCol = function () {
 
     var container = this.container;
 
@@ -4526,7 +4526,7 @@ iTable.prototype.largeCol = function () {
 
 //拖拽放宽行
 
-iTable.prototype.largeRow = function () {
+iTable.prototype.LargeRow = function () {
 
     var container = this.container;
 
@@ -4633,7 +4633,7 @@ iTable.prototype.largeRow = function () {
 
 //创建公式输入框
 
-iTable.prototype.fillBlank = function () {
+iTable.prototype.FillBlank = function () {
 
     var fxBox = $('<div class="fx"></div>');
 
@@ -4647,13 +4647,13 @@ iTable.prototype.fillBlank = function () {
 
     this.header.append(fxBox);
 
-    this.fillWork();
+    this.FillWork();
 
 };
 
 //输入操作
 
-iTable.prototype.fillWork = function () {
+iTable.prototype.FillWork = function () {
 
     var ev = window.event || arguments[0];
 
@@ -4797,7 +4797,7 @@ iTable.prototype.fillWork = function () {
 
 //高亮蒙版
 
-iTable.prototype.createMask = function (left, top, width, height, posX, posY) {
+iTable.prototype.CreateMask = function (left, top, width, height, posX, posY) {
 
     var mask = $('<div class="mask"></div>');
 
@@ -4831,7 +4831,7 @@ iTable.prototype.rMenus = function () {
 
     var that = this;
 
-    var rMenus = this.createRMenus();
+    var rMenus = this.CreateRMenus();
 
     var winH = $(window).height() - $(this.footer).outerHeight();
 
@@ -4886,21 +4886,21 @@ iTable.prototype.rMenus = function () {
 
 };
 
-iTable.prototype.createRMenus = function () {
+iTable.prototype.CreateRMenus = function () {
 
     var menus = $('<div class="rmenu"></div>');
 
     var dataArr = [];
 
-    var cut = this.cut(dataArr);
+    var cut = this.Cut(dataArr);
 
     menus.append(cut);
 
-    var copy = this.copy();
+    var copy = this.Copy();
 
     menus.append(copy);
 
-    var paste = this.paste(dataArr);
+    var paste = this.Paste(dataArr);
 
     menus.append(paste);
 
@@ -4912,7 +4912,7 @@ iTable.prototype.createRMenus = function () {
 
     menus.append(_delete);
 
-    var clearContent = this.clearContent();
+    var clearContent = this.ClearContent();
 
     menus.append(clearContent);
 
@@ -4930,7 +4930,7 @@ iTable.prototype.createRMenus = function () {
 
 };
 
-iTable.prototype.cut = function (dataArr) {
+iTable.prototype.Cut = function (dataArr) {
 
     var cutDiv = $('<div class="menu-cut">剪切</div>');
 
@@ -4972,7 +4972,7 @@ iTable.prototype.cut = function (dataArr) {
 
 };
 
-iTable.prototype.copy = function () {
+iTable.prototype.Copy = function () {
 
     var copyDiv = $('<div class="menu-copy">复制</div>');
     var dataArr=[];
@@ -5010,7 +5010,7 @@ iTable.prototype.copy = function () {
 
 };
 
-iTable.prototype.paste = function (dataArr) {
+iTable.prototype.Paste = function (dataArr) {
 
     var pasteDiv = $('<div class="menu-paste">粘贴</div>');
 
@@ -5121,7 +5121,7 @@ iTable.prototype._delete = function () {
 };
 
 
-iTable.prototype.clearContent =function(){
+iTable.prototype.ClearContent =function(){
     var clearDiv=$('<div class="menu-delete">清空内容</div>');
 
     clearDiv.on('click',function(){
@@ -5140,7 +5140,7 @@ iTable.prototype.clearContent =function(){
 };
 
 
-iTable.prototype.tdToFx = function (obj) {
+iTable.prototype.TdToFx = function (obj) {
 
     var tdVal = obj.text();
 
@@ -5264,7 +5264,7 @@ iTable.prototype.freezeTds=function(event){
 };
 
 
-iTable.prototype.leftBar = function () {
+iTable.prototype.LeftBar = function () {
 
     var box = $('<div class="leftbar"></div>');
 
@@ -5308,7 +5308,7 @@ iTable.prototype.leftBar = function () {
 
 };
 
-iTable.prototype.leftBarHandle = function (callback) {
+iTable.prototype.LeftBarHandle = function (callback) {
 
     if (callback) {
 
@@ -5457,7 +5457,7 @@ function lightTd(tmp) {
 
         top = lTd[0].offsetTop;
 
-    t.createMask(left, top, width, height, posX, posY);
+    t.CreateMask(left, top, width, height, posX, posY);
 
 }
 
@@ -5598,7 +5598,7 @@ function containsArray(array, obj) {
 //
 // };
 
-iTable.prototype.init = function () {
+iTable.prototype.Init = function () {
 
     var tOption = this.tabs;
 
@@ -5660,7 +5660,7 @@ iTable.prototype.init = function () {
 
     this.SetIndex();
 
-    this.fillBlank();
+    this.FillBlank();
 
     this.rMenus();
 
@@ -5668,7 +5668,7 @@ iTable.prototype.init = function () {
 
     this.KeyCursor();
 
-    this.leftBar();
+    this.LeftBar();
 
     this.charts();
 
@@ -5678,9 +5678,9 @@ iTable.prototype.init = function () {
 
     this.dataSearch();
 
-    this.largeCol();
+    this.LargeCol();
 
-    this.largeRow();
+    this.LargeRow();
 
     this.BlueBorder();
 
@@ -5990,9 +5990,9 @@ var tabs = {
 
 var t = new iTable(box, settings, tabs);
 
-t.init();
+t.Init();
 
-t.leftBarHandle(function () {
+t.LeftBarHandle(function () {
 
 });
 
