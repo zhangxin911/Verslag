@@ -39,8 +39,6 @@ iTable.prototype.CreateContent = function (tid) {
 
         var colG = $('<colgroup></colgroup>');
 
-
-
         for (var j = 0; j <= this.cellCount; j++) {
 
             var td = this.CreateTd('ftNormal fsize_14 font_Black','');
@@ -209,7 +207,7 @@ iTable.prototype.FrameSelect = function () {
     var that=this;
     var coords;
 
-    $('.dataTable tr td').each(function(){
+    $('.dataTable').find('tr').find('td').each(function(){
         $(this).off('mouseover').on('mouseover',function(){
             coords=$(this);
             that.moveLast=$(this);
@@ -253,9 +251,9 @@ iTable.prototype.FrameSelect = function () {
             }
 
 
-           $('.dataTable tr td').removeClass('picked');
+           $('.dataTable').find('td').removeClass('picked');
 
-            for(var m=0;m<that.mergeTds.length;m++){
+            for(var m=0,len=that.mergeTds.length;m<len;m++){
                 var mergeCS=isNaN(Number($(that.mergeTds[m]).attr('colspan')))?1:Number($(that.mergeTds[m]).attr('colspan'));
                 var mergeRS=isNaN(Number($(that.mergeTds[m]).attr('rowspan')))?1:Number($(that.mergeTds[m]).attr('rowspan'));
 
@@ -532,9 +530,9 @@ iTable.prototype.FillTextArea=function(eType,val){
                         pNode.text(pValue);
                     }
                     $('#iTableInput').blur();
-                    that.fillTd();
+                    that.FillTd();
                     that.FrameSelect();
-                    that.keyCursor();
+                    that.KeyCursor();
                     that.HideTextArea();
                 }
             });
@@ -552,10 +550,10 @@ iTable.prototype.IsExpress=function(val){
 
     if(textVal.match(/^\=/g)||textVal.match(/^\+/g)||textVal.match(/^\-/g)){
         //    /(\=|\+|\-|\*|\/)([a-z]|[A-Z])+([1-9]*)/g
-        $('.dataTable tr td').off('dblclick');
+        $('.dataTable').find('tr').find('td').off('dblclick');
         $(this.container).off('mousedown');
         var coordinates;
-            $('.dataTable tr td').off('click').on('click',{coordinate:coordinates},function(event){
+            $('.dataTable').find('tr').find('td').off('click').on('click',{coordinate:coordinates},function(event){
 
                 $('#iTableInput').focus();
                 var typePosition=Number($('#iTableInput').iGetFieldPos());
@@ -589,7 +587,7 @@ iTable.prototype.IsExpress=function(val){
 
 
     }else{
-        this.fillTd();
+        this.FillTd();
         this.FrameSelect();
     }
 };
@@ -696,7 +694,7 @@ function typing(event) {
 
                     var exArr=ex.split('/');
 
-                    for(var i=1;i<exArr.length;i++){
+                    for(var i=1,len=exArr.length;i<len;i++){
                         var id='#'+exArr[i];
 
                         $(id).removeAttr('pnode');
@@ -788,7 +786,7 @@ function typing(event) {
             } else {
                 $('.picked').removeClass('picked');
 
-                for(var i=0;i<callZ.mergeTds.length;i++){
+                for(var i=0,len=callZ.mergeTds.length;i<len;i++){
                      var mStartX=Number(callZ.mergeTds[i].attr('cols')),mEndX=mStartX+Number(callZ.mergeTds[i].attr('colspan'));
                      var mStartY=Number(callZ.mergeTds[i].attr('rows')),mEndY=mStartY+Number(callZ.mergeTds[i].attr('rowspan'));
                      if(mStartX<=nextX&&mEndX>nextX&&mStartY<=nextY&&mEndY>nextY){
@@ -835,7 +833,7 @@ function typing(event) {
 
                     var exArr=ex.split('/');
 
-                    for(var i=1;i<exArr.length;i++){
+                    for(var i=1,len=exArr.length;i<len;i++){
                         var id='#'+exArr[i];
 
                         $(id).removeAttr('pnode');
@@ -932,7 +930,7 @@ function typing(event) {
             }   else {
                 $('.picked').removeClass('picked');
 
-                for(var i=0;i<callZ.mergeTds.length;i++){
+                for(var i=0,len=callZ.mergeTds.length;i<len;i++){
                     var mStartX=Number(callZ.mergeTds[i].attr('cols')),mEndX=mStartX+Number(callZ.mergeTds[i].attr('colspan'));
                     var mStartY=Number(callZ.mergeTds[i].attr('rows')),mEndY=mStartY+Number(callZ.mergeTds[i].attr('rowspan'));
                     if(mStartX<=nextX&&mEndX>nextX&&mStartY<=nextY&&mEndY>nextY){
@@ -977,7 +975,7 @@ function typing(event) {
 
                     var exArr=ex.split('/');
 
-                    for(var i=1;i<exArr.length;i++){
+                    for(var i=1,len=exArr.length;i<len;i++){
                         var id='#'+exArr[i];
 
                         $(id).removeAttr('pnode');
@@ -1075,7 +1073,7 @@ function typing(event) {
 
                 $('.picked').removeClass('picked');
 
-                for(var i=0;i<callZ.mergeTds.length;i++){
+                for(var i=0,len=callZ.mergeTds.length;i<len;i++){
                     var mStartX=Number(callZ.mergeTds[i].attr('cols')),mEndX=mStartX+Number(callZ.mergeTds[i].attr('colspan'));
                     var mStartY=Number(callZ.mergeTds[i].attr('rows')),mEndY=mStartY+Number(callZ.mergeTds[i].attr('rowspan'));
                     if(mStartX<nextX&&mEndX>=nextX&&mStartY<nextY&&mEndY>=nextY){
@@ -1119,7 +1117,7 @@ function typing(event) {
 
                     var exArr=ex.split('/');
 
-                    for(var i=1;i<exArr.length;i++){
+                    for(var i=1,len=exArr.length;i<len;i++){
                         var id='#'+exArr[i];
 
                         $(id).removeAttr('pnode');
@@ -1216,7 +1214,7 @@ function typing(event) {
             } else {
                 $('.picked').removeClass('picked');
 
-                for(var i=0;i<callZ.mergeTds.length;i++){
+                for(var i=0,len=callZ.mergeTds.length;i<len;i++){
                     var mStartX=Number(callZ.mergeTds[i].attr('cols')),mEndX=mStartX+Number(callZ.mergeTds[i].attr('colspan'));
                     var mStartY=Number(callZ.mergeTds[i].attr('rows')),mEndY=mStartY+Number(callZ.mergeTds[i].attr('rowspan'));
                     if(mStartX<=nextX&&mEndX>nextX&&mStartY<=nextY&&mEndY>nextY){
@@ -1319,9 +1317,9 @@ iTable.prototype.TableScroll = function () {
 
         var scrollX = this.scrollLeft;
 
-        $(".yOrder table").css('margin-top', -scrollY);
+        $(".yOrder").find("table").css('margin-top', -scrollY);
 
-        $(".xOrder table").css('margin-left', -scrollX);
+        $(".xOrder").find("table").css('margin-left', -scrollX);
 
     });
 
@@ -1338,7 +1336,7 @@ iTable.prototype.FillTd = function (tid) {
 
     var that = this;
 
-    $('#iTable' + tid).find('tr td').each(function () {
+    $('#iTable' + tid).find('td').each(function () {
 
        $(this).off('dblclick').on('dblclick',{target:that,id:tid},that.TdDbClick);
 
@@ -1564,7 +1562,7 @@ iTable.prototype.SetRedBorder=function(obj){
 
                 width = Number(obj[i].offsetWidth),
 
-                height = Numver(obj[i].offsetHeight);
+                height = Number(obj[i].offsetHeight);
 
             if (top < _.min(topArr)) {
 
@@ -1825,29 +1823,27 @@ iTable.prototype.CornerCopy=function(){
 
             var onRows = parseInt($(coords).attr('rows')) ;
 
-            var onCspan = parseInt($(coords).attr('colspan'))  || 1;
+            var onCSpan = parseInt($(coords).attr('colspan'))  || 1;
 
-            var onRspan = parseInt($(coords).attr('rowspan'))  || 1;
+            var onRSpan = parseInt($(coords).attr('rowspan'))  || 1;
 
-            // var oLeft=$(coords).offset().left;
-            //
-            // var oTop=$(coords).offset().top+parseInt($('.header').outerHeight());
 
-            var oexpectX = onCols + onCspan-1;
 
-            var oexpectY = onRows + onRspan-1;
+            var oExpectX = onCols + onCSpan-1;
 
-            var xMin = oexpectX,yMin = oexpectY;
+            var oExpectY = onRows + onRSpan-1;
 
-            var sleft = parseInt(this.scrollLeft);
+            var xMin = oExpectX,yMin = oExpectY;
 
-            var stop = parseInt(this.scrollTop);
+            var sLeft = parseInt(this.scrollLeft);
+
+            var sTop = parseInt(this.scrollTop);
 
             var disHeight = parseInt($('.xOrder').outerHeight()) + parseInt($('.header').outerHeight());
 
-            var oX = ev.clientX + sleft;
+            var oX = ev.clientX + sLeft;
 
-            var oY = ev.clientY - disHeight + stop;
+            var oY = ev.clientY - disHeight + sTop;
 
             if($(coords).length>1){
                 that.HideReadBorder();
@@ -1862,18 +1858,18 @@ iTable.prototype.CornerCopy=function(){
 
                 var nRows = parseInt($(coords).attr('rows')) ;
 
-                var nCspan = parseInt($(coords).attr('colspan'))  || 1;
+                var nCSpan = parseInt($(coords).attr('colspan'))  || 1;
 
-                var nRspan = parseInt($(coords).attr('rowspan'))  || 1;
+                var nRSpan = parseInt($(coords).attr('rowspan'))  || 1;
 
-                if(nCspan>1||nRspan>1){
+                if(nCSpan>1||nRSpan>1){
                     that.HideReadBorder();
                     return;
                 }
 
-                var expectX = nCols + nCspan-1;
+                var expectX = nCols + nCSpan-1;
 
-                var expectY = nRows + nRspan-1;
+                var expectY = nRows + nRSpan-1;
 
                 var xMax=expectX,yMax=expectY;
 
@@ -1884,9 +1880,9 @@ iTable.prototype.CornerCopy=function(){
 
                 _y = (evt.y || evt.clientY);
 
-                _x = _x + sleft;
+                _x = _x + sLeft;
 
-                _y = _y + stop - disHeight;
+                _y = _y + sTop - disHeight;
 
 
                 if(_x-oX>=0){
@@ -2033,7 +2029,7 @@ iTable.prototype.ChooseRow=function(){
             //
             // }
         }
-        for(var i=0;i<=that.cellCount;i++){
+        for(var i=0,len=that.cellCount;i<=len;i++){
             var id='#'+index+'-'+i;
             if(Number($(id).attr('rowspan'))>=2&&Number($(id).attr('colspan'))>=2){
 
@@ -2085,7 +2081,7 @@ iTable.prototype.ChooseCol=function(){
             //     $(id).addClass('picked');
             // }
         }
-        for(var l=0;l<=that.rowCount;l++){
+        for(var l=0,len=that.rowCount;l<=len;l++){
             var id='#'+l+'-'+index;
             if(Number($(id).attr('rowspan'))>=2&&Number($(id).attr('colspan'))>=2){
 
@@ -2104,8 +2100,8 @@ iTable.prototype.GetTdStyle=function(obj){
     var td=$(obj);
     if(td.length===1&&td.length>0){
         var classArr=(td.attr('class')).split(' ');
-
-        for(var i=0;i<classArr.length;i++){
+        var len=classArr.length;
+        for(var i=0;i<len;i++){
             if(!!classArr[i].match(/(((fsize_)[A-Za-z0-9_]+s*)+)/g)) {
                 switch (classArr[i]) {
                     case 'fsize_10':
@@ -2219,8 +2215,8 @@ iTable.prototype.LightCoor = function (obj) {
 
 
 iTable.prototype.ListenHeight=function(){
-
-    for(var j=0;j<this.rowCount;j++){
+    var len=this.rowCount;
+    for(var j=0;j<len;j++){
         var height=$('.dataTable tr').eq(j).find('th').height()-1;
         $('#leftTable tr').eq(j).find('td').height(height);
     }
@@ -2680,7 +2676,7 @@ iTable.prototype.SetFillType=function(ways){
 iTable.prototype.TypeToValue=function(type,value){
          var objValue=value,value=Number(value);
          var newClasses=type.split(' ');
-         for(var i=0;i<newClasses.length;i++){
+         for(var i=0,len=newClasses.length;i<len;i++){
              if(!!newClasses[i].match(/(((ft)[A-Za-z0-9_]+\s*)+)/g)){
             var newClass=newClasses[i];
             }
@@ -3072,15 +3068,15 @@ iTable.prototype.InsertCol = function () {
                     for (var j = 0; j <= that.mergeTds.length; j++) {
                         var mStartX = Number($(that.mergeTds).eq(j).attr('cols'));
                         var mStartY = Number($(that.mergeTds).eq(j).attr('rows'));
-                        var mCspan = Number($(that.mergeTds).eq(j).attr('colspan'));
-                        var mRspan = Number($(that.mergeTds).eq(j).attr('rowspan'));
-                        var mEndX = mStartX + mCspan;
+                        var mCSpan = Number($(that.mergeTds).eq(j).attr('colspan'));
+                        var mRSpan = Number($(that.mergeTds).eq(j).attr('rowspan'));
+                        var mEndX = mStartX + mCSpan;
 
 
                         if (mStartX <= xIndex && mEndX >= xIndex && mStartY === i) {
-                             $(that.mergeTds).eq(j).attr('colspan',mCspan+1);
+                             $(that.mergeTds).eq(j).attr('colspan',mCSpan+1);
                              $('.dataTable').find('col').eq(xIndex).after(col);
-                             i += mRspan;
+                             i += mRSpan;
                         }
                     }
 
@@ -3211,14 +3207,14 @@ iTable.prototype.InsertRow = function () {
                          for (var j = 0; j <= that.mergeTds.length; j++) {
                              var mStartX = Number($(that.mergeTds).eq(j).attr('cols'));
                              var mStartY = Number($(that.mergeTds).eq(j).attr('rows'));
-                             var mCspan = Number($(that.mergeTds).eq(j).attr('colspan'));
-                             var mRspan = Number($(that.mergeTds).eq(j).attr('rowspan'));
+                             var mCSpan = Number($(that.mergeTds).eq(j).attr('colspan'));
+                             var mRSpan = Number($(that.mergeTds).eq(j).attr('rowspan'));
 
-                             var mEndY = mStartY + mRspan;
+                             var mEndY = mStartY + mRSpan;
 
                              if (mStartY <= yIndex && mEndY >= yIndex && mStartX === i) {
-                                 $(that.mergeTds).eq(j).attr('rowspan',mRspan+1);
-                                 i += mCspan;
+                                 $(that.mergeTds).eq(j).attr('rowspan',mRSpan+1);
+                                 i += mCSpan;
                              }
                          }
 
@@ -3251,7 +3247,7 @@ iTable.prototype.DeleteCol = function () {
 
     var simMenu = this.CreateSimpleMenu('editRowCol delCol', '');
 
-    var sel_a = $(simMenu).children(0);
+    var sel_a = simMenu.children(0);
 
     var that = this;
 
@@ -3292,16 +3288,16 @@ iTable.prototype.DeleteCol = function () {
                     for (var j = 0; j <= that.mergeTds.length; j++) {
                         var mStartX = Number($(that.mergeTds).eq(j).attr('cols'));
                         var mStartY = Number($(that.mergeTds).eq(j).attr('rows'));
-                        var mCspan = Number($(that.mergeTds).eq(j).attr('colspan'));
-                        var mRspan = Number($(that.mergeTds).eq(j).attr('rowspan'));
-                        var mEndX = mStartX + mCspan;
+                        var mCSpan = Number($(that.mergeTds).eq(j).attr('colspan'));
+                        var mRSpan = Number($(that.mergeTds).eq(j).attr('rowspan'));
+                        var mEndX = mStartX + mCSpan;
 
 
                         if (mStartX <= xIndex && mEndX >= xIndex && mStartY === i) {
-                            $(that.mergeTds).eq(j).attr('colspan',mCspan-1);
+                            $(that.mergeTds).eq(j).attr('colspan',mCSpan-1);
                             $('#' + 't' + xIndex).remove();
 
-                            i += mRspan;
+                            i += mRSpan;
                         }
                     }
 
@@ -3334,7 +3330,7 @@ iTable.prototype.DeleteRow = function () {
 
     var simMenu = this.CreateSimpleMenu('editRowCol delRow', '');
 
-    var sel_a = $(simMenu).children(0);
+    var sel_a = simMenu.children(0);
 
     var that = this;
 
@@ -3366,14 +3362,14 @@ iTable.prototype.DeleteRow = function () {
                         for (var j = 0; j <= that.mergeTds.length; j++) {
                             var mStartX = Number($(that.mergeTds).eq(j).attr('cols'));
                             var mStartY = Number($(that.mergeTds).eq(j).attr('rows'));
-                            var mCspan = Number($(that.mergeTds).eq(j).attr('colspan'));
-                            var mRspan = Number($(that.mergeTds).eq(j).attr('rowspan'));
+                            var mCSpan = Number($(that.mergeTds).eq(j).attr('colspan'));
+                            var mRSpan = Number($(that.mergeTds).eq(j).attr('rowspan'));
 
-                            var mEndY = mStartY + mRspan;
+                            var mEndY = mStartY + mRSpan;
 
                             if (mStartY <= yIndex && mEndY >= yIndex && mStartX === i) {
-                                $(that.mergeTds).eq(j).attr('rowspan',mRspan-1);
-                                i += mCspan;
+                                $(that.mergeTds).eq(j).attr('rowspan',mRSpan-1);
+                                i += mCSpan;
                             }
                         }
 
@@ -3439,7 +3435,7 @@ iTable.prototype.TypeSum=function(data){
 
 iTable.prototype.TypeAvg=function(data){
     var sum=0,avg=0;
-    for(var i=1;i<data.length;i++){
+    for(var i=1,len=data.length;i<len;i++){
         sum+=this.GetFillType($('#'+data[i]));
     }
     avg=sum/(data.length-1);
@@ -3448,7 +3444,7 @@ iTable.prototype.TypeAvg=function(data){
 
 iTable.prototype.TypeMax=function(data){
     var arr=[];
-    for(var i=1;i<data.length;i++){
+    for(var i=1,len=data.length;i<len;i++){
        arr.push(this.GetFillType($('#'+data[i])));
     }
     return _.max(arr);
@@ -3456,7 +3452,7 @@ iTable.prototype.TypeMax=function(data){
 
 iTable.prototype.TypeMin=function(data){
     var arr=[];
-    for(var i=1;i<data.length;i++){
+    for(var i=1,len=data.length;i<len;i++){
         arr.push(this.GetFillType($('#'+data[i])));
     }
     return _.min(arr);
@@ -3683,7 +3679,8 @@ iTable.prototype.FxMin=function(){
         $('.picked').each(function(){
             var val=Number($(this).text());
             var nowRow=parseInt($(this).attr('rows')),nowCol=parseInt($(this).attr('cols'));
-            rArr.push(nowRow),cArr.push(nowCol);
+            rArr.push(nowRow);
+            cArr.push(nowCol);
 
             if(!isNaN(val)&&val!=0){
                 arr.push(val);
@@ -3750,17 +3747,17 @@ iTable.prototype.MergeTd = function () {
 
         $("th,td", $t).each(function () {
 
-            var ridx = $("tr", $t).index($(this).parent("tr"));
+            var rIdx = $("tr", $t).index($(this).parent("tr"));
 
-            var cidx = $(this).parent().children("th,td").index(this);
+            var cIdx = $(this).parent().children("th,td").index(this);
 
-            var rowspan = Number($(this).attr("rowspan")) || 1;
+            var rowSpan = Number($(this).attr("rowspan")) || 1;
 
-            var colspan = Number($(this).attr("colspan")) || 1;
+            var colSpan = Number($(this).attr("colspan")) || 1;
 
             var isSel = $(this).hasClass(sigSel);
 
-            if (rowspan <= 1 && colspan <= 1) return;
+            if (rowSpan <= 1 && colSpan <= 1) return;
 
             $("tr", $t).each(function () {
 
@@ -3768,35 +3765,35 @@ iTable.prototype.MergeTd = function () {
 
                 var arr, $td = $("<td>").addClass(isSel ? sigSel : sigDel);
 
-                if (idx === ridx) {
+                if (idx === rIdx) {
 
                     // 本行在 [cidx] 后插入 colspan-1 个
 
                     arr = $(); // 准备待插单元格
 
-                    for (var i = 0; i < colspan - 1; i++)
+                    for (var i = 0; i < colSpan - 1; i++)
 
                         arr = arr.add($td.clone());
 
                     // 插入
 
-                    $("th,td", this).eq(cidx).after(arr);
+                    $("th,td", this).eq(cIdx).after(arr);
 
-                } else if (ridx < idx && idx < ridx + rowspan) {
+                } else if (rIdx < idx && idx < rIdx + rowSpan) {
 
                     // 以下行在 [cidx] 前插入 colspan 个
 
                     arr = $(); // 准备待插单元格
 
-                    for (var i = 0; i < colspan; i++)
+                    for (var i = 0; i < colSpan; i++)
 
                         arr = arr.add($td.clone());
 
                     // 插入
 
-                    if (cidx > 0 && $("th,td", this).eq(cidx - 1).length > 0) $("th,td", this).eq(cidx - 1).after(arr);
+                    if (cIdx > 0 && $("th,td", this).eq(cIdx - 1).length > 0) $("th,td", this).eq(cIdx - 1).after(arr);
 
-                    else if ($("th,td", this).eq(cidx).length > 0) $("th,td", this).eq(cidx).before(arr);
+                    else if ($("th,td", this).eq(cIdx).length > 0) $("th,td", this).eq(cIdx).before(arr);
 
                     else $(this).prepend(arr);
 
@@ -3898,17 +3895,17 @@ iTable.prototype.SplitTd = function () {
 
         $("th,td", $t).each(function () {
 
-            var ridx = $("tr", $t).index($(this).parent("tr"));
+            var rIdx = $("tr", $t).index($(this).parent("tr"));
 
-            var cidx = $(this).parent().children("th,td").index(this);
+            var cIdx = $(this).parent().children("th,td").index(this);
 
-            var rowspan = Number($(this).attr("rowspan")) || 1;
+            var rowSpan = Number($(this).attr("rowspan")) || 1;
 
-            var colspan = Number($(this).attr("colspan")) || 1;
+            var colSpan = Number($(this).attr("colspan")) || 1;
 
             var isSel = $(this).hasClass(sigSel);
 
-            if (rowspan <= 1 && colspan <= 1) return;
+            if (rowSpan <= 1 && colSpan <= 1) return;
 
             if (isSel){
 
@@ -3927,31 +3924,31 @@ iTable.prototype.SplitTd = function () {
 
                 if (!isSel) $td.addClass(sigDel);
 
-                if (idx === ridx) {
+                if (idx === rIdx) {
 
                     // 本行在 [cidx] 后插入 colspan-1 个
 
                     arr = $(); // 准备待插单元格
 
-                    for (var i = 0; i < colspan - 1; i++)
+                    for (var i = 0; i < colSpan - 1; i++)
 
                         arr = arr.add($td.clone());
 
-                    $("th,td", this).eq(cidx).after(arr);
+                    $("th,td", this).eq(cIdx).after(arr);
 
-                } else if (ridx < idx && idx < ridx + rowspan) {
+                } else if (rIdx < idx && idx < rIdx + rowSpan) {
 
                     // 以下行在 [cidx] 前插入 colspan 个
 
                     arr = $(); // 准备待插单元格
 
-                    for (var i = 0; i < colspan; i++)
+                    for (var i = 0; i < colSpan; i++)
 
                         arr = arr.add($td.clone());
 
-                    if (cidx > 0 && $("th,td", this).eq(cidx - 1).length > 0) $("th,td", this).eq(cidx - 1).after(arr);
+                    if (cIdx > 0 && $("th,td", this).eq(cIdx - 1).length > 0) $("th,td", this).eq(cIdx - 1).after(arr);
 
-                    else if ($("th,td", this).eq(cidx).length > 0) $("th,td", this).eq(cidx).before(arr);
+                    else if ($("th,td", this).eq(cIdx).length > 0) $("th,td", this).eq(cIdx).before(arr);
 
                     else $(this).prepend(arr);
 
@@ -4012,9 +4009,9 @@ iTable.prototype.CreateSelection = function (id, menus) {
 
     selectUl.find('li a').on('click', function () {
 
-        $(selectHead[0]).text($(this).text());
+        selectHead.text($(this).text());
 
-        $(selectHead[0]).attr('curClass', $(this).attr('class'));
+        selectHead.attr('curClass', $(this).attr('class'));
 
     });
 
@@ -4147,14 +4144,6 @@ iTable.prototype.AddSheet = function () {
 
 };
 
-iTable.prototype.saveNewSheet=function(callback){
-
-    if(callback){
-        $('.addSheet').click(callback);
-    }else{
-        return;
-    }
-};
 
 iTable.prototype.SheetWork = function () {
 
@@ -4306,7 +4295,6 @@ iTable.prototype.SetIndex = function () {
 
             cell = objTab.rows[i].cells[j];
 
-            //if (offsetLeftArray.contains(cell.offsetLeft) === -1)
             if (containsArray(offsetLeftArray,cell.offsetLeft) === -1)
 
                 offsetLeftArray.push(cell.offsetLeft);
@@ -4337,7 +4325,7 @@ iTable.prototype.SetIndex = function () {
 
             cellStrArray.push(cellStr);
 
-            cell.setAttribute('rows', i + 1);
+            cell.setAttribute('rows', i+1);
 
             cell.setAttribute('cols', col + 1);
 
@@ -4352,7 +4340,7 @@ iTable.prototype.SetIndex = function () {
 //col更新
 iTable.prototype.UpdateTableCol=function(){
 
-    for (var j = 0; j <= this.cellCount; j++) {
+    for (var j = 0,len=this.cellCount; j <= len; j++) {
 
         $('.dataTable col').eq(j).attr('id','t'+j);
 
@@ -4369,7 +4357,7 @@ iTable.prototype.UpdateLeft = function (index,type) {
 
             $('#leftTable').find('tr').eq(index).after('<tr><td></td></tr>');
 
-            for (var j = index; j < this.rowCount; j++) {
+            for (var j = index,len=this.rowCount; j < len; j++) {
 
                 $('#leftTable tbody tr').eq(j).find('td').text(j+1);
 
@@ -4378,7 +4366,7 @@ iTable.prototype.UpdateLeft = function (index,type) {
         case 'delete':
             $('#leftTable').find('tr').eq(index).remove();
 
-            for (var j = 0; j < this.rowCount; j++) {
+            for (var j = 0,len=this.rowCount; j < len; j++) {
 
                 $('#leftTable tbody tr').eq(j).find('td').text(j+1);
 
@@ -4397,25 +4385,27 @@ iTable.prototype.UpdateLeft = function (index,type) {
 iTable.prototype.UpdateTop = function (index,type) {
     switch (type) {
         case 'add':
-            $('#titleTable colgroup').find('col').eq(index).after('<col style="width:100px">');
+            $('#titleTable').find('colgroup').find('col').eq(index).after('<col style="width:100px">');
 
-            $('#titleTable tbody tr').find('td').eq(index).after('<td></td>');
+            $('#titleTable').find('tbody').find('tr').find('td').eq(index).after('<td></td>');
+            var len=this.cellCount;
+            for (var j = index; j <= len; j++) {
 
-            for (var j = index; j <= this.cellCount; j++) {
-
-                $('#titleTable tbody tr').find('td').eq(j).text(IntToChr(j));
+                $('#titleTable').find('tbody').find('tr').find('td').eq(j).text(IntToChr(j));
 
             }
 
             break;
         case 'delete':
-            $('#titleTable colgroup').find('col').eq(index).remove();
+            $('#titleTabl').find('colgroup').find('col').eq(index).remove();
 
-            $('#titleTable tbody tr').find('td').eq(index).remove();
+            $('#titleTable').find('tbody').find('tr').find('td').eq(index).remove();
 
-            for (var j = 1; j <= this.cellCount; j++) {
+            var len=this.cellCount;
 
-                $('#titleTable tbody tr').find('td').eq(j).text(IntToChr(j));
+            for (var j = 1; j <= len; j++) {
+
+                $('#titleTable').find('tbody').find('tr').find('td').eq(j).text(IntToChr(j));
 
             }
             break;
@@ -4489,7 +4479,7 @@ iTable.prototype.LargeCol = function () {
 
                                 });
 
-                                $('.dataTable colgroup col').eq(index).css('width', w + move);
+                                $('.dataTable').find('colgroup').find('col').eq(index).css('width', w + move);
 
                                 $('#titleTable').find('colgroup').find('col').eq(index).css('width', w + move);
 
@@ -4536,7 +4526,7 @@ iTable.prototype.LargeRow = function () {
 
     var exH = $('.yOrder').outerHeight(),headerH=parseInt($(container).css('marginTop'));
 
-    $('#leftTable tr td').each(function (event) {
+    $('#leftTable').find('tr').find('td').each(function (event) {
 
         $(this).off('mousemove').on('mousemove',function(event){
 
@@ -4591,9 +4581,11 @@ iTable.prototype.LargeRow = function () {
 
                                 });
 
-                                $('.dataTable tr th').eq(index).css('height', h + move + 1);
+                                var tempMove=h + move + 1,tempMove_1=h+move;
 
-                                $('#leftTable td').eq(index).css('height', h + move);
+                                $('.dataTable').find('tr').find('th').eq(index).css('height',tempMove);
+
+                                $('#leftTable').find('td').eq(index).css('height', tempMove_1);
 
                                 $(container).append(lLine);
 
@@ -5218,7 +5210,7 @@ iTable.prototype.freezeTds=function(event){
         // }
 
 
-             for(var j=0;j<=event.data.callZ.rowCount;j++){
+             for(var j=0,len=event.data.callZ.rowCount;j<=len;j++){
                  var tr=$('<tr></tr>');
                  for(var i=0;i<xMin;i++){
                      var id='#'+j+'-'+i;
@@ -5302,7 +5294,7 @@ iTable.prototype.LeftBar = function () {
 
     });
 
-    this.leftBarHandle();
+    this.LeftBarHandle();
 
     //callback();
 
