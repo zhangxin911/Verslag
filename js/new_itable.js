@@ -1397,7 +1397,7 @@ iTable.prototype.TdDbClick=function(event){
         return false;
     });
 
-    $('#iTable' + event.data.id + ' tr td').not($(this)).click(function () {
+    $('#iTable' + event.data.id).find('tr').find('td').not($(this)).click(function () {
         $('#iTableInput').blur();
     });
     stopPropagation();
@@ -1929,7 +1929,7 @@ iTable.prototype.CornerCopy=function(){
 
 
 
-                $('.dataTable tr td').removeClass('picked');
+                $('.dataTable').find('td').removeClass('picked');
 
                 if(xMin<=xMax&&yMin<=yMax){
                     for(var i = xMin; i <= xMax ; i++) {
@@ -1993,7 +1993,7 @@ iTable.prototype.CornerCopy=function(){
 
 iTable.prototype.ChooseRow=function(){
     var that=this;
-    $('#leftTable tr td').on('click',function(){
+    $('#leftTable').find('td').on('click',function(){
         var index=$(this).parent().index()+1;
 
        // var startYArr=[],endYArr=[];
@@ -2217,8 +2217,8 @@ iTable.prototype.LightCoor = function (obj) {
 iTable.prototype.ListenHeight=function(){
     var len=this.rowCount;
     for(var j=0;j<len;j++){
-        var height=$('.dataTable tr').eq(j).find('th').height()-1;
-        $('#leftTable tr').eq(j).find('td').height(height);
+        var height=$('.dataTable').find('tr').eq(j).find('th').height()-1;
+        $('#leftTable').find('tr').eq(j).find('td').height(height);
     }
 
 };
@@ -2435,7 +2435,7 @@ iTable.prototype.FontColor = function () {
 
     var select = this.CreateCellMenu('d_fcolor', 'fontColor', this.settings.fontColor);
 
-    var td = $(select).find('table tr td');
+    var td = $(select).find('td');
 
     var className, curClass;
 
@@ -2479,7 +2479,7 @@ iTable.prototype.BgColor = function () {
 
     var select = this.CreateCellMenu('d_fill', 'bgColor', this.settings.bgColor);
 
-    var td = $(select).find('table tr td');
+    var td = $(select).find('td');
 
     var className, curClass;
 
@@ -2523,7 +2523,7 @@ iTable.prototype.TextAlign = function () {
 
     var select = this.CreateCellMenu('f_align', 'textAlign', this.settings.textAlign);
 
-    var td  = $(select).find('table tr td');
+    var td  = $(select).find('td');
 
     var className, curClass;
 
@@ -3378,7 +3378,7 @@ iTable.prototype.DeleteRow = function () {
 
 
             }
-            $('.dataTable tr').each(function(){
+            $('.dataTable').find('tr').each(function(){
                 if($(this).html()===''){
                     $(this).remove();
                 }
@@ -4066,7 +4066,7 @@ iTable.prototype.CreateCellMenu = function (dClass, className, menus) {
 
     }
 
-    for (var i = 0; i < arr1.length + 1; i++) {
+    for (var i = 0,len=arr1.length+1; i < len; i++) {
 
         selectTd = $('<td class="' + arr1[i] + '"><a class="' + arr2[i] + '"></a></td>');
 
@@ -4342,7 +4342,7 @@ iTable.prototype.UpdateTableCol=function(){
 
     for (var j = 0,len=this.cellCount; j <= len; j++) {
 
-        $('.dataTable col').eq(j).attr('id','t'+j);
+        $('.dataTable').find('col').eq(j).attr('id','t'+j);
 
     }
 }
@@ -4359,7 +4359,7 @@ iTable.prototype.UpdateLeft = function (index,type) {
 
             for (var j = index,len=this.rowCount; j < len; j++) {
 
-                $('#leftTable tbody tr').eq(j).find('td').text(j+1);
+                $('#leftTable').find('tbody').find('tr').eq(j).find('td').text(j+1);
 
             }
             break;
@@ -4368,7 +4368,7 @@ iTable.prototype.UpdateLeft = function (index,type) {
 
             for (var j = 0,len=this.rowCount; j < len; j++) {
 
-                $('#leftTable tbody tr').eq(j).find('td').text(j+1);
+                $('#leftTable').find('tbody').find('tr').eq(j).find('td').text(j+1);
 
             }
 
@@ -4936,7 +4936,7 @@ iTable.prototype.Cut = function (dataArr) {
 
             dataArr.length = 0;
 
-            var td = $('.picked')[0];
+            var td = $('.picked').eq(0);
 
             dataArr.push($(td).text());
 
@@ -4948,7 +4948,7 @@ iTable.prototype.Cut = function (dataArr) {
 
             for (var i = 0; i < tdLength; i++) {
 
-                var tds = $('.picked')[i];
+                var tds = $('.picked').eq(i);
 
                 dataArr.push($(tds));
 
@@ -4978,7 +4978,7 @@ iTable.prototype.Copy = function () {
 
             dataArr.length = 0;
 
-            var td = $('.picked')[0];
+            var td = $('.picked').eq(0);
 
             dataArr.push($(td).text());
 
@@ -4988,7 +4988,7 @@ iTable.prototype.Copy = function () {
 
             for (var i = 0; i < tdLength; i++) {
 
-                var tds = $('.picked')[i];
+                var tds = $('.picked').eq(i);
 
                 dataArr.push($(tds));
 
@@ -5221,16 +5221,16 @@ iTable.prototype.freezeTds=function(event){
 
                      }else{
                          tr.append($('.dataTable').find(id).clone());
-                         $('#fColBox').find('colgroup').append($('.dataTable').find('colgroup col').eq(i).clone());
+                         $('#fColBox').find('colgroup').append($('.dataTable').find('colgroup').find('col').eq(i).clone());
                          if(i>1){
-                             fColTotalWidth+=parseInt($('.dataTable').find('colgroup col').eq(i).width());
+                             fColTotalWidth+=parseInt($('.dataTable').find('colgroup').find('col').eq(i).width());
                          }
 
                      }
 
                  }
 
-                 $('#fColBox').find('div').append($('#leftTable tr').eq(j).clone());
+                 $('#fColBox').find('div').append($('#leftTable').find('tr').eq(j).clone());
                  $('#fColBox').find('tbody').append(tr);
              }
 
