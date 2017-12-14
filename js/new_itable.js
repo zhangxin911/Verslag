@@ -12,22 +12,20 @@ function ITable(tContainer, tSettings, tabs,mergeArray) {
 
     this.tabs = tabs;
 
-
-
     this.header=null;
     this.footer=null;
     this.tools=null;
     this.moveLast=null;
     this.table=null;
 
-    this.mergeTds=mergeArray || new Array();
+    this.mergeTds=mergeArray || [];
 }
 
 ITable.prototype.CreateContent = function (tid) {
 
-    var tId = tid || 1;
+    var tId = tid || 1,
 
-    var myContainer = this.container;
+        myContainer = this.container;
 
     myContainer.empty();
 
@@ -97,19 +95,19 @@ ITable.prototype.CreateTd = function (className, tdValue) {
 
 ITable.prototype.CreateXAxis = function () {
 
-    var xAxis = $("<div class='xOrder'></div>");
+    var xAxis = $("<div class='xOrder'></div>"),
 
-    var xTable = $("<table class='titleTable' id='titleTable'></table>");
+        xTable = $("<table class='titleTable' id='titleTable'></table>"),
 
-    var th = $("<th></th>");
+        th = $("<th></th>"),
 
-    var col;
+        col,
+
+        tr = $("<tr></tr>");
 
     this.container.before(xAxis);
 
     xAxis.append(xTable);
-
-    var tr = $("<tr></tr>");
 
     tr.append(th);
 
@@ -155,9 +153,9 @@ ITable.prototype.CreateXAxis = function () {
 
 ITable.prototype.CreateYAxis = function () {
 
-    var yAxis = $("<div class='yOrder'></div>");
+    var yAxis = $("<div class='yOrder'></div>"),
 
-    var yTable = $("<table class='leftTable' id='leftTable'></table>");
+        yTable = $("<table class='leftTable' id='leftTable'></table>");
 
     this.container.before(yAxis);
 
@@ -187,9 +185,9 @@ ITable.prototype.CreateTip = function () {
 
         tLeft = $('.yOrder'),
 
-        tHead = $('.xOrder');
+        tHead = $('.xOrder'),
 
-    var bLeft = tLeft.find('table tr:first td:first').outerWidth(),
+        bLeft = tLeft.find('table tr:first td:first').outerWidth(),
 
         bTop = tHead.find('table tr:first td:first').outerHeight();
 
@@ -205,10 +203,9 @@ ITable.prototype.CreateTip = function () {
 
 ITable.prototype.FrameSelect = function () {
 
-    var that=this;
-    var coords;
-
-    var wB1=$('#wBorder').find('div').eq(0),
+    var that=this,
+        coords,
+        wB1=$('#wBorder').find('div').eq(0),
         wB2= $('#wBorder').find('div').eq(1),
         wB3= $('#wBorder').find('div').eq(2),
         wB4=$('#wBorder').find('div').eq(3);
@@ -222,25 +219,25 @@ ITable.prototype.FrameSelect = function () {
 
     $(this.container).off('mousedown').on('mousedown',function(){
 
-        var onCols = parseInt($(coords).attr('cols')) ;
+        var onCols = parseInt($(coords).attr('cols')) ,
 
-        var onRows = parseInt($(coords).attr('rows')) ;
+            onRows = parseInt($(coords).attr('rows')) ,
 
-        var sTop,sLeft,top,left;
+            sTop,sLeft,top,left;
 
 
 
         $(that.container).off('mousemove').on('mousemove',function(){
 
-            var moveCS=isNaN(Number(that.moveLast.attr('colspan')))?1:Number(that.moveLast.attr('colspan'));
+            var moveCS=isNaN(Number(that.moveLast.attr('colspan')))?1:Number(that.moveLast.attr('colspan')),
 
-            var moveRS=isNaN(Number(that.moveLast.attr('rowspan')))?1:Number(that.moveLast.attr('rowspan'));
+                moveRS=isNaN(Number(that.moveLast.attr('rowspan')))?1:Number(that.moveLast.attr('rowspan')),
 
-            var moveX=Number(that.moveLast.attr('cols'))+moveCS-1;
+                moveX=Number(that.moveLast.attr('cols'))+moveCS-1,
 
-            var moveY=Number(that.moveLast.attr('rows'))+moveRS-1;
+                moveY=Number(that.moveLast.attr('rows'))+moveRS-1,
 
-            var startX,endX,startY,endY;
+                startX,endX,startY,endY;
 
             if(onCols<moveX){
                 startX=onCols;
@@ -258,17 +255,16 @@ ITable.prototype.FrameSelect = function () {
                 endY=onRows;
             }
 
-
             that.table.find('td').removeClass('picked');
 
             for(var m=0,len=that.mergeTds.length;m<len;m++){
-                var mergeCS=isNaN(Number($(that.mergeTds[m]).attr('colspan')))?1:Number($(that.mergeTds[m]).attr('colspan'));
-                var mergeRS=isNaN(Number($(that.mergeTds[m]).attr('rowspan')))?1:Number($(that.mergeTds[m]).attr('rowspan'));
+                var mergeCS=isNaN(Number($(that.mergeTds[m]).attr('colspan')))?1:Number($(that.mergeTds[m]).attr('colspan')),
+                    mergeRS=isNaN(Number($(that.mergeTds[m]).attr('rowspan')))?1:Number($(that.mergeTds[m]).attr('rowspan')),
 
-                var mergeCol=Number($(that.mergeTds[m]).attr('cols'));
-                var mergeRow=Number($(that.mergeTds[m]).attr('rows'));
-                var mergeX=Number($(that.mergeTds[m]).attr('cols'))+mergeCS-1;
-                var mergeY=Number($(that.mergeTds[m]).attr('rows'))+mergeRS-1;
+                    mergeCol=Number($(that.mergeTds[m]).attr('cols')),
+                    mergeRow=Number($(that.mergeTds[m]).attr('rows')),
+                    mergeX=Number($(that.mergeTds[m]).attr('cols'))+mergeCS-1,
+                    mergeY=Number($(that.mergeTds[m]).attr('rows'))+mergeRS-1;
 
                 if(startX>mergeX){
                     //out 开始点在右边
@@ -315,13 +311,15 @@ ITable.prototype.FrameSelect = function () {
 
             }
 
-            sTop=Number(this.scrollTop) ;
-            sLeft=Number(this.scrollLeft) ;
+            sTop=Number(this.scrollTop)-96;
+            sLeft=Number(this.scrollLeft)-4;
 
-            // top=Number($('#'+startY+'-'+startX).offset().top)+sTop;
-            top=Number(document.getElementById(startY+'-'+startX).offsetTop)+sTop;
-            // left=Number($('#'+startY+'-'+startX).offset().left)+sLeft;
-            left=Number(document.getElementById(startY+'-'+startX).offsetLeft)+sLeft;
+             top=Number($('#'+startY+'-'+startX).offset().top)+sTop;
+            //top=Number(document.getElementById(startY+'-'+startX).offsetTop)+sTop;
+             left=Number($('#'+startY+'-'+startX).offset().left)+sLeft;
+           // left=Number(document.getElementById(startY+'-'+startX).offsetLeft)+sLeft;
+            $('#wBorder').hide();
+            wB1.hide();wB2.hide();wB3.hide();wB4.hide();
 
             $('#wBorder').css({
 
@@ -329,7 +327,7 @@ ITable.prototype.FrameSelect = function () {
 
                 'left': left,
 
-                'display': 'block'
+
             });
 
             wB1.css({
@@ -384,6 +382,8 @@ ITable.prototype.FrameSelect = function () {
                 'left': totalWidth - 2
 
             });
+            $('#wBorder').show();
+            wB1.show();wB2.show();wB3.show();wB4.show();
 
         });
         $(that.container).on('mouseup',function(){
@@ -396,8 +396,8 @@ ITable.prototype.FrameSelect = function () {
 
 
 ITable.prototype.TextArea=function(){
-     var div=$('<div class="iTableInputHolder" id="iTableInputHolder"></div>');
-     var textArea=$('<input type="text" class="iTableInput" id="iTableInput">');
+     var div=$('<div class="iTableInputHolder" id="iTableInputHolder"></div>'),
+         textArea=$('<input type="text" class="iTableInput" id="iTableInput">');
      div.append(textArea);
      $(this.container).append(div);
 
@@ -405,10 +405,10 @@ ITable.prototype.TextArea=function(){
 
 ITable.prototype.SetTextArea=function(visible){
     if($('.picked').length>0){
-        var w = $('.picked').width();
-        var h = $('.picked').height();
-        var x = $('.picked').offset().left+this.container.scrollLeft();
-        var y=$('.picked').offset().top+this.container.scrollTop()-parseInt($(this.container).css('margin-top'));
+        var w = $('.picked').width(),
+            h = $('.picked').height(),
+            x = $('.picked').offset().left+this.container.scrollLeft(),
+            y = $('.picked').offset().top+this.container.scrollTop()-parseInt($(this.container).css('margin-top'));
 
         if(visible===1){
             $('#iTableInputHolder').show();
@@ -562,9 +562,9 @@ ITable.prototype.KeyCursor = function () {
 
 function typing(event) {
 
-    var sNode = $('.picked');
+    var sNode = $('.picked'),
 
-    var callZ = event.data.callZ;
+        callZ = event.data.callZ;
 
     if ($('.picked').length === 1) {
 
@@ -579,13 +579,13 @@ function typing(event) {
         callZ.FillTextArea('keymove');
 
 
-        var nowX = parseInt($(sNode).attr('cols'));
+        var nowX = parseInt($(sNode).attr('cols')),
 
-        var nowY = parseInt($(sNode).attr('rows'));
+            nowY = parseInt($(sNode).attr('rows')),
 
-        var colAdd = parseInt($(sNode).attr('colspan')) - 1 || 0;
+            colAdd = parseInt($(sNode).attr('colspan')) - 1 || 0,
 
-        var rowAdd = parseInt($(sNode).attr('rowspan')) - 1 || 0;
+            rowAdd = parseInt($(sNode).attr('rowspan')) - 1 || 0;
 
 
         event.data.time = Number(event.data.time) + 1;
@@ -703,11 +703,11 @@ function typing(event) {
 
             }
 
-            var nextX = event.data.fixX;
+            var nextX = event.data.fixX,
 
-            var nextY = nowY + 1;
+                nextY = nowY + 1,
 
-            var id='#'+nextY+'-'+nextX;
+                id='#'+nextY+'-'+nextX;
 
             if ($(id).length > 0) {
 
@@ -846,11 +846,11 @@ function typing(event) {
 
             }
 
-            var nextX = nowX + 1;
+            var nextX = nowX + 1,
 
-            var nextY = event.data.fixY;
+                nextY = event.data.fixY,
 
-            var id='#'+nextY+'-'+nextX;
+                id='#'+nextY+'-'+nextX;
 
             if ($(id).length > 0) {
 
@@ -986,11 +986,11 @@ function typing(event) {
 
             }
 
-            var nextX = nowX-1;
+            var nextX = nowX-1,
 
-            var nextY = parseInt(event.data.fixY);
+                nextY = parseInt(event.data.fixY),
 
-            var id='#'+nextY+'-'+nextX;
+                id='#'+nextY+'-'+nextX;
 
             if ($(id).length > 0) {
 
@@ -1127,11 +1127,11 @@ function typing(event) {
 
             }
 
-            var nextX = event.data.fixX;
+            var nextX = event.data.fixX,
 
-            var nextY = nowY - 1;
+                nextY = nowY - 1,
 
-            var id='#'+nextY+'-'+nextX;
+                id='#'+nextY+'-'+nextX;
 
             if ($(id).length > 0) {
 
@@ -1186,19 +1186,19 @@ function typing(event) {
 
 ITable.prototype.SetCss = function () {
 
-    var thatContainer = this.container;
+    var thatContainer = this.container,
 
-    var viewWidth = $(window).width(),
+        viewWidth = $(window).width(),
 
-        viewHeight = $(window).height();
+        viewHeight = $(window).height(),
 
-    var tBody = this.table.parent(),
+        tBody = this.table.parent(),
 
         tLeft = $('.yOrder'),
 
-        tHead = $('.xOrder');
+        tHead = $('.xOrder'),
 
-    var bTop = tHead.find('table tr:first td:first').outerHeight() + 1;
+        bTop = tHead.find('table tr:first td:first').outerHeight() + 1;
 
     tLeft.css({
         'height': viewHeight-153
@@ -1229,9 +1229,9 @@ ITable.prototype.SetCss = function () {
 
     $(window).resize(function () {
 
-        var viewWidth = $(window).width();
+        var viewWidth = $(window).width(),
 
-        var viewHeight = $(window).height();
+            viewHeight = $(window).height();
 
         thatContainer.width(viewWidth - 4);
 
@@ -1247,9 +1247,9 @@ ITable.prototype.SetCss = function () {
 
 ITable.prototype.TableScroll = function () {
     this.container.on('scroll',function(){
-        var scrollY = this.scrollTop;
+        var scrollY = this.scrollTop,
 
-        var scrollX = this.scrollLeft;
+            scrollX = this.scrollLeft;
 
         $(".yOrder").find("table").css('margin-top', -scrollY);
 
@@ -1264,9 +1264,9 @@ ITable.prototype.TableScroll = function () {
 
 ITable.prototype.FillTd = function (tid) {
 
-    var tid = tid || 1;
+    var tid = tid || 1,
 
-    var that = this;
+        that = this;
 
     this.table.find('td').each(function () {
 
@@ -1314,9 +1314,10 @@ ITable.prototype.TdClick=function(event){
 
 
 ITable.prototype.TdDbClick=function(event){
-    var tdText = $(this).text();
-    var eType='dblclick';
-    var ex=$(this).attr('ex');
+    var tdText = $(this).text(),
+        eType='dblclick',
+        ex=$(this).attr('ex');
+
     event.data.target.SetTextArea(1);
     if(!!ex){
         event.data.target.fillExTextArea(eType,tdText,ex);
@@ -1741,41 +1742,39 @@ ITable.prototype.CornerCopy=function(){
         $(this).on('mousedown', function () {
             $(that.container).off('mousedown');
 
-            var ev = window.event || arguments[0];
+            var ev = window.event || arguments[0],
 
-            var coords=$('.picked');
+                coords=$('.picked'),
 
-            var copyVal=$(coords).html();
+                copyVal=$(coords).html(),
 
-            var tdWidth=parseInt($(coords).width());
+                tdWidth=parseInt($(coords).width()),
 
-            var tdHeight=parseInt($(coords).height());
+                tdHeight=parseInt($(coords).height()),
 
-            var onCols = parseInt($(coords).attr('cols')) ;
+                onCols = parseInt($(coords).attr('cols')) ,
 
-            var onRows = parseInt($(coords).attr('rows')) ;
+                onRows = parseInt($(coords).attr('rows')) ,
 
-            var onCSpan = parseInt($(coords).attr('colspan'))  || 1;
+                onCSpan = parseInt($(coords).attr('colspan'))  || 1,
 
-            var onRSpan = parseInt($(coords).attr('rowspan'))  || 1;
+                onRSpan = parseInt($(coords).attr('rowspan'))  || 1,
 
+                oExpectX = onCols + onCSpan-1,
 
+                oExpectY = onRows + onRSpan-1,
 
-            var oExpectX = onCols + onCSpan-1;
+                xMin = oExpectX,yMin = oExpectY,
 
-            var oExpectY = onRows + onRSpan-1;
+                sLeft = parseInt(this.scrollLeft),
 
-            var xMin = oExpectX,yMin = oExpectY;
+                sTop = parseInt(this.scrollTop),
 
-            var sLeft = parseInt(this.scrollLeft);
+                disHeight = parseInt($('.xOrder').outerHeight()) + parseInt($('.header').outerHeight()),
 
-            var sTop = parseInt(this.scrollTop);
+                oX = ev.clientX + sLeft,
 
-            var disHeight = parseInt($('.xOrder').outerHeight()) + parseInt($('.header').outerHeight());
-
-            var oX = ev.clientX + sLeft;
-
-            var oY = ev.clientY - disHeight + sTop;
+                oY = ev.clientY - disHeight + sTop;
 
             if($(coords).length>1){
                 that.HideReadBorder();
@@ -2031,8 +2030,8 @@ ITable.prototype.ChooseCol=function(){
 ITable.prototype.GetTdStyle=function(obj){
     var td=$(obj);
     if(td.length===1&&td.length>0){
-        var classArr=(td.attr('class')).split(' ');
-        var len=classArr.length;
+        var classArr=(td.attr('class')).split(' '),
+            len=classArr.length;
         for(var i=0;i<len;i++){
             if(!!classArr[i].match(/(((fsize_)[A-Za-z0-9_]+s*)+)/g)) {
                 switch (classArr[i]) {
@@ -2121,13 +2120,13 @@ ITable.prototype.LightCooR = function (obj) {
 
     for (var t = 0; t < target.length; t++) {
 
-        var cols = parseInt($(target).eq(t).attr('cols')) - 1;
+        var cols = parseInt($(target).eq(t).attr('cols')) - 1,
 
-        var rows = parseInt($(target).eq(t).attr('rows')) - 1;
+            rows = parseInt($(target).eq(t).attr('rows')) - 1,
 
-        var cSpan = parseInt($(target).eq(t).attr('colspan')) - 1 || 0;
+            cSpan = parseInt($(target).eq(t).attr('colspan')) - 1 || 0,
 
-        var rSpan = parseInt($(target).eq(t).attr('rowspan')) - 1 || 0;
+            rSpan = parseInt($(target).eq(t).attr('rowspan')) - 1 || 0;
 
         for (var i = rows,iLen=rows+rSpan+1; i < iLen; i++) {
 
@@ -2203,9 +2202,7 @@ ITable.prototype.FontFamily = function () {
 
     $(menu).find('#fontFamily').attr('defaultClass', sel_a.eq(0).attr('class'));
 
-    var className, curClass;
-
-    var selThem;
+    var className, curClass, selThem;
 
     sel_a.on('click', function () {
 
@@ -2261,11 +2258,7 @@ ITable.prototype.FontSize = function () {
 
     $(menu).find('#fontFamily').attr('defaultClass', sel_a.eq(0).attr('class'));
 
-    var className, curClass;
-
-    var selThem;
-
-    var that=this;
+    var className, curClass, selThem ,that=this;
 
     sel_a.on('click', function () {
 
@@ -2317,9 +2310,9 @@ ITable.prototype.FontSize = function () {
 
 ITable.prototype.FontBold = function () {
 
-    var simMenu = this.CreateSimpleMenu('fbold');
+    var simMenu = this.CreateSimpleMenu('fbold'),
 
-    var sel_a = simMenu.children(0);
+        sel_a = simMenu.children(0);
 
     sel_a.on('click', function () {
 
@@ -2333,9 +2326,9 @@ ITable.prototype.FontBold = function () {
 
 ITable.prototype.FontItalic = function () {
 
-    var simMenu = this.CreateSimpleMenu('fitalic');
+    var simMenu = this.CreateSimpleMenu('fitalic'),
 
-    var sel_a = simMenu.children(0);
+        sel_a = simMenu.children(0);
 
     sel_a.on('click', function () {
 
@@ -2349,9 +2342,9 @@ ITable.prototype.FontItalic = function () {
 
 ITable.prototype.FontOverLine = function () {
 
-    var simMenu = this.CreateSimpleMenu('foverline');
+    var simMenu = this.CreateSimpleMenu('foverline'),
 
-    var sel_a = simMenu.children(0);
+        sel_a = simMenu.children(0);
 
     sel_a.on('click', function () {
 
@@ -2365,13 +2358,13 @@ ITable.prototype.FontOverLine = function () {
 
 ITable.prototype.FontColor = function () {
 
-    var select = this.CreateCellMenu('d_fcolor', 'fontColor', this.settings.fontColor);
+    var select = this.CreateCellMenu('d_fcolor', 'fontColor', this.settings.fontColor),
 
-    var td = $(select).find('td');
+        td = $(select).find('td'),
 
-    var className, curClass;
+        className, curClass,
 
-    var selThem;
+        selThem;
 
     td.on('click', function () {
 
@@ -2409,13 +2402,13 @@ ITable.prototype.FontColor = function () {
 
 ITable.prototype.BgColor = function () {
 
-    var select = this.CreateCellMenu('d_fill', 'bgColor', this.settings.bgColor);
+    var select = this.CreateCellMenu('d_fill', 'bgColor', this.settings.bgColor),
 
-    var td = $(select).find('td');
+        td = $(select).find('td'),
 
-    var className, curClass;
+        className, curClass,
 
-    var selThem;
+        selThem;
 
     td.on('click', function () {
 
@@ -2453,13 +2446,13 @@ ITable.prototype.BgColor = function () {
 
 ITable.prototype.TextAlign = function () {
 
-    var select = this.CreateCellMenu('f_align', 'textAlign', this.settings.textAlign);
+    var select = this.CreateCellMenu('f_align', 'textAlign', this.settings.textAlign),
 
-    var td  = $(select).find('td');
+        td  = $(select).find('td'),
 
-    var className, curClass;
+        className, curClass,
 
-    var selThem;
+        selThem;
 
     td.css({
         'background': '#FFFFFF'
@@ -2514,11 +2507,11 @@ ITable.prototype.TextAlign = function () {
 
 ITable.prototype.Express = function () {
 
-    var select = this.CreateSelection('express', this.settings.express);
+    var select = this.CreateSelection('express', this.settings.express),
 
-    var sel_a = $(select).find('ul li a');
+        sel_a = $(select).find('ul li a'),
 
-    var that = this;
+        that = this;
 
     sel_a.on('click', function () {
 
@@ -2531,10 +2524,11 @@ ITable.prototype.Express = function () {
 };
 
 ITable.prototype.FillType = function(){
-    var select = this.CreateSelection('fillType', this.settings.fillType);
-    var sel_a = $(select).find('ul li a');
+    var select = this.CreateSelection('fillType', this.settings.fillType),
 
-    var that = this;
+        sel_a = $(select).find('ul li a'),
+
+        that = this;
 
     sel_a.on('click', function () {
 
@@ -2606,8 +2600,10 @@ ITable.prototype.SetFillType=function(ways){
 };
 
 ITable.prototype.TypeToValue=function(type,value){
-         var objValue=value,value=Number(value);
-         var newClasses=type.split(' ');
+         var objValue=value,value=Number(value),
+
+             newClasses=type.split(' ');
+
          for(var i=0,len=newClasses.length;i<len;i++){
              if(!!newClasses[i].match(/(((ft)[A-Za-z0-9_]+\s*)+)/g)){
             var newClass=newClasses[i];
@@ -2640,8 +2636,7 @@ ITable.prototype.FtNormal=function(){
     var that=this;
       if($('.picked').length>0){
           $('.picked').each(function(){
-              var className, curClass;
-              var selThem;
+              var className, curClass, selThem;
               if(!$(this).hasClass('ftNormal')){
 
                   className = 'ftNormal';
@@ -2685,9 +2680,7 @@ ITable.prototype.FtNumber=function(){
     var that=this;
     if($('.picked').length>0){
         $('.picked').each(function(){
-            var className, curClass;
-
-            var selThem;
+            var className, curClass,selThem;
 
             if(!$(this).hasClass('ftNumber')){
                 className = 'ftNumber';
@@ -2731,9 +2724,7 @@ ITable.prototype.FtNumber=function(){
 ITable.prototype.FtDate=function(){
     if($('.picked').length>0){
         $('.picked').each(function(){
-            var className, curClass;
-
-            var selThem;
+            var className, curClass,selThem;
             if(!$(this).hasClass('ftDate')){
                 className = 'ftDate';
 
@@ -2773,9 +2764,7 @@ ITable.prototype.FtDate=function(){
 ITable.prototype.FtAccount=function(){
     if($('.picked').length>0){
         $('.picked').each(function(){
-            var className, curClass;
-
-            var selThem;
+            var className, curClass,selThem;
             if(!$(this).hasClass('ftAccount')){
                 className = 'ftAccount';
 
@@ -2816,9 +2805,7 @@ ITable.prototype.FtAccount=function(){
 ITable.prototype.FtPercent=function(){
     if($('.picked').length>0){
         $('.picked').each(function(){
-            var className, curClass;
-
-            var selThem;
+            var className, curClass,selThem;
             if(!$(this).hasClass('ftPercent')){
                 className = 'ftPercent';
 
@@ -2859,9 +2846,7 @@ ITable.prototype.FtPercent=function(){
 ITable.prototype.FtText=function(){
     if($('.picked').length>0){
         $('.picked').each(function(){
-            var className, curClass;
-
-            var selThem;
+            var className, curClass,selThem;
             if(!$(this).hasClass('ftText')){
                 className = 'ftText';
 
@@ -2900,11 +2885,7 @@ ITable.prototype.FtText=function(){
 
 ITable.prototype.InsertCol = function () {
 
-    var simMenu = this.CreateSimpleMenu('editRowCol insertCol', '');
-
-    var sel_a = simMenu.children(0);
-
-    var that = this;
+    var simMenu = this.CreateSimpleMenu('editRowCol insertCol', ''), sel_a = simMenu.children(0), that = this;
 
     sel_a.on('click', function () {
 
@@ -2999,16 +2980,14 @@ ITable.prototype.InsertCol = function () {
                 } else {
 
                     for (var j = 0; j <= that.mergeTds.length; j++) {
-                        var mStartX = Number($(that.mergeTds).eq(j).attr('cols'));
-                        var mStartY = Number($(that.mergeTds).eq(j).attr('rows'));
-                        var mCSpan = Number($(that.mergeTds).eq(j).attr('colspan'));
-                        var mRSpan = Number($(that.mergeTds).eq(j).attr('rowspan'));
-                        var mEndX = mStartX + mCSpan;
+                        var mStartX = Number($(that.mergeTds).eq(j).attr('cols')), mStartY = Number($(that.mergeTds).eq(j).attr('rows')),
+                            mCSpan = Number($(that.mergeTds).eq(j).attr('colspan')), mRSpan = Number($(that.mergeTds).eq(j).attr('rowspan')),
+                            mEndX = mStartX + mCSpan;
 
 
                         if (mStartX <= xIndex && mEndX >= xIndex && mStartY === i) {
                              $(that.mergeTds).eq(j).attr('colspan',mCSpan+1);
-                            that.table.find('col').eq(xIndex).after(col);
+                             that.table.find('col').eq(xIndex).after(col);
                              i += mRSpan;
                         }
                     }
@@ -3038,33 +3017,21 @@ ITable.prototype.InsertCol = function () {
 
 ITable.prototype.InsertRow = function () {
 
-    var simMenu = this.CreateSimpleMenu('editRowCol insertRow', '');
-
-    var sel_a = simMenu.children(0);
-
-    var that = this;
+    var simMenu = this.CreateSimpleMenu('editRowCol insertRow', ''), sel_a = simMenu.children(0), that = this;
 
     sel_a.on('click', function () {
 
         var sNode = $('.picked');
 
-        var xArr = [],
-
-            yArr = [];
-
-        var xMax, xMin, yMax, yMin;
+        var xArr = [], yArr = [],xMax, xMin, yMax, yMin;
 
         if (sNode.length >= 2) {
 
             for (var i = 0; i < sNode.length; i++) {
 
-                var cols = parseInt(sNode.eq(i).attr('cols'));
+                var cols = parseInt(sNode.eq(i).attr('cols')),rows = parseInt(sNode.eq(i).attr('rows'));
 
-                var rows = parseInt(sNode.eq(i).attr('rows'));
-
-                var cAdd = parseInt(sNode.eq(i).attr('colspan')) || 1;
-
-                var rAdd = parseInt(sNode.eq(i).attr('rowspan')) || 1;
+                var cAdd = parseInt(sNode.eq(i).attr('colspan')) || 1,rAdd = parseInt(sNode.eq(i).attr('rowspan')) || 1;
 
                 cols = cols + cAdd - 1;
 
@@ -3126,8 +3093,7 @@ ITable.prototype.InsertRow = function () {
                      i++;
                  }else{
                      if ($('#' + yIndex + '-' + i).length > 0) {
-                         var cSpan = Number($('#' + yIndex + '-' + i).attr('colspan'));
-                         var rSpan = Number($('#' + yIndex + '-' + i).attr('rowspan'));
+                         var cSpan = Number($('#' + yIndex + '-' + i).attr('colspan')),rSpan = Number($('#' + yIndex + '-' + i).attr('rowspan'));
                          if (rSpan >= 2) {
                              $('#' + yIndex + '-' + i).attr('rowspan', rSpan + 1);
                              i+=cSpan;
@@ -3138,10 +3104,8 @@ ITable.prototype.InsertRow = function () {
                          }
                      }else{
                          for (var j = 0; j <= that.mergeTds.length; j++) {
-                             var mStartX = Number($(that.mergeTds).eq(j).attr('cols'));
-                             var mStartY = Number($(that.mergeTds).eq(j).attr('rows'));
-                             var mCSpan = Number($(that.mergeTds).eq(j).attr('colspan'));
-                             var mRSpan = Number($(that.mergeTds).eq(j).attr('rowspan'));
+                             var mStartX = Number($(that.mergeTds).eq(j).attr('cols')), mStartY = Number($(that.mergeTds).eq(j).attr('rows')),
+                                 mCSpan = Number($(that.mergeTds).eq(j).attr('colspan')), mRSpan = Number($(that.mergeTds).eq(j).attr('rowspan'));
 
                              var mEndY = mStartY + mRSpan;
 
@@ -3178,24 +3142,18 @@ ITable.prototype.InsertRow = function () {
 
 ITable.prototype.DeleteCol = function () {
 
-    var simMenu = this.CreateSimpleMenu('editRowCol delCol', '');
-
-    var sel_a = simMenu.children(0);
-
-    var that = this;
+    var simMenu = this.CreateSimpleMenu('editRowCol delCol', ''),sel_a = simMenu.children(0),that = this;
 
     sel_a.on('click', function () {
 
-        var xArr = [],
-
-            yArr = [];
-
-        var xMax, xMin, yMax, yMin;
+        // var xArr = [],
+        //
+        //     yArr = [];
+        //
+        // var xMax, xMin, yMax, yMin;
 
         var sNode = $('.picked');
-
         if (sNode.length >= 2) {
-
 
         } else {
 
@@ -3204,8 +3162,7 @@ ITable.prototype.DeleteCol = function () {
 
             for (var i = 1; i < that.rowCount + 1;) {
                 if ($('#' + i + '-' + xIndex).length > 0) {
-                    var cSpan = Number($('#' + i + '-' + xIndex).attr('colspan'));
-                    var rSpan = Number($('#' + i + '-' + xIndex).attr('rowspan'));
+                    var cSpan = Number($('#' + i + '-' + xIndex).attr('colspan')), rSpan = Number($('#' + i + '-' + xIndex).attr('rowspan'));
                     if (cSpan >= 2) {
                         $('#' + i + '-' + xIndex).attr('colspan', cSpan - 1);
                         $('#' + 't' + xIndex).remove();
@@ -3219,11 +3176,9 @@ ITable.prototype.DeleteCol = function () {
                 } else {
 
                     for (var j = 0; j <= that.mergeTds.length; j++) {
-                        var mStartX = Number($(that.mergeTds).eq(j).attr('cols'));
-                        var mStartY = Number($(that.mergeTds).eq(j).attr('rows'));
-                        var mCSpan = Number($(that.mergeTds).eq(j).attr('colspan'));
-                        var mRSpan = Number($(that.mergeTds).eq(j).attr('rowspan'));
-                        var mEndX = mStartX + mCSpan;
+                        var mStartX = Number($(that.mergeTds).eq(j).attr('cols')), mStartY = Number($(that.mergeTds).eq(j).attr('rows')),
+                            mCSpan = Number($(that.mergeTds).eq(j).attr('colspan')), mRSpan = Number($(that.mergeTds).eq(j).attr('rowspan')),
+                            mEndX = mStartX + mCSpan;
 
 
                         if (mStartX <= xIndex && mEndX >= xIndex && mStartY === i) {
@@ -3261,11 +3216,7 @@ ITable.prototype.DeleteCol = function () {
 
 ITable.prototype.DeleteRow = function () {
 
-    var simMenu = this.CreateSimpleMenu('editRowCol delRow', '');
-
-    var sel_a = simMenu.children(0);
-
-    var that = this;
+    var simMenu = this.CreateSimpleMenu('editRowCol delRow', ''), sel_a = simMenu.children(0), that = this;
 
     sel_a.on('click', function () {
 
@@ -3280,8 +3231,7 @@ ITable.prototype.DeleteRow = function () {
             for (var i = 1; i <= that.cellCount+1;) {
 
                     if ($('#' + yIndex + '-' + i).length > 0) {
-                        var cSpan = Number($('#' + yIndex + '-' + i).attr('colspan'));
-                        var rSpan = Number($('#' + yIndex + '-' + i).attr('rowspan'));
+                        var cSpan = Number($('#' + yIndex + '-' + i).attr('colspan')), rSpan = Number($('#' + yIndex + '-' + i).attr('rowspan'));
                         if (rSpan >= 2) {
                             $('#' + yIndex + '-' + i).attr('rowspan', rSpan - 1);
                             i+=cSpan;
@@ -3293,10 +3243,8 @@ ITable.prototype.DeleteRow = function () {
                     }else{
 
                         for (var j = 0; j <= that.mergeTds.length; j++) {
-                            var mStartX = Number($(that.mergeTds).eq(j).attr('cols'));
-                            var mStartY = Number($(that.mergeTds).eq(j).attr('rows'));
-                            var mCSpan = Number($(that.mergeTds).eq(j).attr('colspan'));
-                            var mRSpan = Number($(that.mergeTds).eq(j).attr('rowspan'));
+                            var mStartX = Number($(that.mergeTds).eq(j).attr('cols')),mStartY = Number($(that.mergeTds).eq(j).attr('rows')),
+                                mCSpan = Number($(that.mergeTds).eq(j).attr('colspan')),mRSpan = Number($(that.mergeTds).eq(j).attr('rowspan'));
 
                             var mEndY = mStartY + mRSpan;
 
@@ -3420,9 +3368,7 @@ ITable.prototype.Formula = function (ways) {
 ITable.prototype.FxSum=function(){
        var that=this;
        if($('.picked').length>1){
-           var sum=0;
-           var rArr=[],cArr=[];
-           var pArr=[];
+           var sum=0,rArr=[],cArr=[],pArr=[];
            $('.picked').each(function(){
                var val=that.GetFillType($(this));
                var nowRow=parseInt($(this).attr('rows')),nowCol=parseInt($(this).attr('cols'));
@@ -3472,8 +3418,7 @@ ITable.prototype.FxAvg=function(){
     var that=this;
     if($('.picked').length>1){
         var sum=0,pL=$('.picked').length,avg=0;
-        var rArr=[],cArr=[];
-        var pArr=[];
+        var rArr=[],cArr=[],pArr=[];
         $('.picked').each(function(){
             var val=that.GetFillType($(this));
             var nowRow=parseInt($(this).attr('rows')),nowCol=parseInt($(this).attr('cols'));
@@ -3522,8 +3467,7 @@ ITable.prototype.FxAvg=function(){
 ITable.prototype.FxCount=function(){
 
     if($('.picked').length>1){
-        var count=0;
-        var rArr=[],cArr=[];
+        var count=0,rArr=[],cArr=[];
         $('.picked').each(function(){
             var val=Number($(this).text());
             var nowRow=parseInt($(this).attr('rows')),nowCol=parseInt($(this).attr('cols'));
@@ -3556,9 +3500,7 @@ ITable.prototype.FxCount=function(){
 
 ITable.prototype.FxMax=function(){
     if($('.picked').length>1){
-        var arr=[];
-        var rArr=[],cArr=[];
-        var pArr=[];
+        var arr=[],rArr=[],cArr=[],pArr=[];
         $('.picked').each(function(){
             var val=Number($(this).text());
             var nowRow=parseInt($(this).attr('rows')),nowCol=parseInt($(this).attr('cols'));
@@ -3606,9 +3548,7 @@ ITable.prototype.FxMax=function(){
 
 ITable.prototype.FxMin=function(){
     if($('.picked').length>1){
-        var arr=[];
-        var rArr=[],cArr=[];
-        var pArr=[];
+        var arr=[],rArr=[],cArr=[],pArr=[];
         $('.picked').each(function(){
             var val=Number($(this).text());
             var nowRow=parseInt($(this).attr('rows')),nowCol=parseInt($(this).attr('cols'));
@@ -3658,9 +3598,7 @@ ITable.prototype.FxMin=function(){
 
 ITable.prototype.MergeTd = function () {
 
-    var mergeBtn = this.CreateSimpleMenu('mergeBtn');
-
-    var that = this;
+    var mergeBtn = this.CreateSimpleMenu('mergeBtn'),that = this;
 
     mergeBtn.on('click', function () {
 
@@ -3674,21 +3612,15 @@ ITable.prototype.MergeTd = function () {
 
         }
 
-        var sigDel = "sign4delete";
-
-        var sigSel = "picked";
+        var sigDel = "sign4delete", sigSel = "picked";
 
         $("th,td", $t).each(function () {
 
-            var rIdx = $("tr", $t).index($(this).parent("tr"));
+            var rIdx = $("tr", $t).index($(this).parent("tr")), cIdx = $(this).parent().children("th,td").index(this),
 
-            var cIdx = $(this).parent().children("th,td").index(this);
+                rowSpan = Number($(this).attr("rowspan")) || 1, colSpan = Number($(this).attr("colspan")) || 1,
 
-            var rowSpan = Number($(this).attr("rowspan")) || 1;
-
-            var colSpan = Number($(this).attr("colspan")) || 1;
-
-            var isSel = $(this).hasClass(sigSel);
+                isSel = $(this).hasClass(sigSel);
 
             if (rowSpan <= 1 && colSpan <= 1) return;
 
@@ -3736,15 +3668,7 @@ ITable.prototype.MergeTd = function () {
 
         });
 
-        var rMin = 10000,
-
-            cMin = 10000;
-
-        var rMax = 0,
-
-            cMax = 0;
-
-        var rNum, cNum;
+        var rMin = 10000, cMin = 10000, rMax = 0, cMax = 0, rNum, cNum;
 
         // 计算起始和跨距
 
@@ -3772,9 +3696,7 @@ ITable.prototype.MergeTd = function () {
 
         $("th,td", $t).each(function () {
 
-            var rIdx = $("tr", $t).index($(this).parent("tr"));
-
-            var cIdx = $(this).parent().children("th,td").index(this);
+            var rIdx = $("tr", $t).index($(this).parent("tr")),cIdx = $(this).parent().children("th,td").index(this);
 
             if (rMin <= rIdx && rIdx <= rMax && cMin <= cIdx && cIdx <= cMax) $(this).addClass(sigDel);
 
@@ -3806,9 +3728,7 @@ ITable.prototype.MergeTd = function () {
 
 ITable.prototype.SplitTd = function () {
 
-    var splitBtn = this.CreateSimpleMenu('splitBtn');
-
-    var that = this;
+    var splitBtn = this.CreateSimpleMenu('splitBtn'),that = this;
 
     splitBtn.on('click', function () {
 
@@ -3822,21 +3742,19 @@ ITable.prototype.SplitTd = function () {
 
         }
 
-        var sigDel = "sign4delete";
-
-        var sigSel = "picked";
+        var sigDel = "sign4delete",sigSel = "picked";
 
         $("th,td", $t).each(function () {
 
-            var rIdx = $("tr", $t).index($(this).parent("tr"));
+            var rIdx = $("tr", $t).index($(this).parent("tr")),
 
-            var cIdx = $(this).parent().children("th,td").index(this);
+                cIdx = $(this).parent().children("th,td").index(this),
 
-            var rowSpan = Number($(this).attr("rowspan")) || 1;
+                rowSpan = Number($(this).attr("rowspan")) || 1,
 
-            var colSpan = Number($(this).attr("colspan")) || 1;
+                colSpan = Number($(this).attr("colspan")) || 1,
 
-            var isSel = $(this).hasClass(sigSel);
+                isSel = $(this).hasClass(sigSel);
 
             if (rowSpan <= 1 && colSpan <= 1) return;
 
@@ -3903,13 +3821,13 @@ ITable.prototype.SplitTd = function () {
 
 ITable.prototype.CreateSelection = function (id, menus) {
 
-    var selectionBox = $('<div class="toolBox"></div>');
+    var selectionBox = $('<div class="toolBox"></div>'),
 
-    var selectHead = $('<div id="' + id + '"></div>');
+        selectHead = $('<div id="' + id + '"></div>'),
 
-    var selectUl = $('<ul></ul>');
+        selectUl = $('<ul></ul>'),
 
-    var selectLi, arr = [];
+        selectLi, arr = [];
 
     for (var index in menus) {
 
@@ -3936,9 +3854,6 @@ ITable.prototype.CreateSelection = function (id, menus) {
         selectUl.toggle();
 
     });
-    // $(selectUl).slimScroll({
-    //     height: '100px'
-    // });
 
     selectUl.find('li a').on('click', function () {
 
@@ -3957,13 +3872,13 @@ ITable.prototype.CreateSelection = function (id, menus) {
 
 ITable.prototype.CreateSimpleMenu = function (className, text) {
 
-    var menus = $('<div class="toolBox"></div>');
+    var menus = $('<div class="toolBox"></div>'),
 
-    var mText = text || '';
+        mText = text || '',
 
-    var mClass = className;
+        mClass = className,
 
-    var simTool = $('<span class="' + mClass + '">' + mText + '</span>');
+        simTool = $('<span class="' + mClass + '">' + mText + '</span>');
 
     menus.append(simTool);
 
@@ -3977,13 +3892,13 @@ ITable.prototype.CreateSimpleMenu = function (className, text) {
 
 ITable.prototype.CreateCellMenu = function (dClass, className, menus) {
 
-    var selectionBox = $('<div class="toolBox"></div>');
+    var selectionBox = $('<div class="toolBox"></div>'),
 
-    var selectHead = $('<div class="' + dClass + '"></div>');
+        selectHead = $('<div class="' + dClass + '"></div>'),
 
-    var selectTb = $('<table class="' + className + '"></table>');
+        selectTb = $('<table class="' + className + '"></table>'),
 
-    var selectTr = $('<tr></tr>');
+        selectTr = $('<tr></tr>');
 
     var selectTd;
 
@@ -3999,13 +3914,13 @@ ITable.prototype.CreateCellMenu = function (dClass, className, menus) {
 
     }
 
-    for (var i = 0,len=arr1.length+1; i < len; i++) {
+    for (var i = 0, len =arr1.length+1; i < len; i++) {
 
         selectTd = $('<td class="' + arr1[i] + '"><a class="' + arr2[i] + '"></a></td>');
 
         selectTr.append(selectTd);
 
-        if ((i + 1) % 5 === 0 && (i + 1) != 0) {
+        if ((i + 1) % 5 === 0 && (i + 1) !== 0) {
 
             selectTb.append(selectTr);
 
@@ -4041,11 +3956,7 @@ ITable.prototype.CreateCellMenu = function (dClass, className, menus) {
 
 ITable.prototype.AddSheet = function () {
 
-    var i = 2;
-
-    var box = this.container;
-
-    var that = this;
+    var i = 2, box = this.container, that = this;
 
     $('.addSheet').click(function () {
 
@@ -4086,9 +3997,9 @@ ITable.prototype.SheetWork = function () {
 
         box.empty();
 
-        var dId = $(this).attr('id');
+        var dId = $(this).attr('id').replace('sheet', '');
 
-        dId = dId.replace('sheet', '');
+        // dId = dId.replace('sheet', '');
 
         dId = parseInt(dId);
 
@@ -4162,13 +4073,9 @@ ITable.prototype.SheetWork = function () {
 
 ITable.prototype.SheetMove = function () {
 
-    var lSheet = $('.lSheet');
+    var lSheet = $('.lSheet'), rSheet = $('.rSheet');
 
-    var rSheet = $('.rSheet');
-
-    var sDl = $(".sheetQueuedDl");
-
-    var num = 0;
+    var sDl = $(".sheetQueuedDl"),num = 0;
 
     rSheet.click(function () {
 
@@ -4250,8 +4157,6 @@ ITable.prototype.SetIndex = function () {
 
             cell = objTab.rows[i].cells[j];
 
-            // col = offsetLeftArray.contains(cell.offsetLeft);
-
             col = containsArray(offsetLeftArray,cell.offsetLeft);
 
             cellStr = i + ',' + col;
@@ -4286,6 +4191,7 @@ ITable.prototype.UpdateTableCol=function(){
 ITable.prototype.UpdateLeft = function (index,type) {
 
     switch (type){
+
         case 'add':
 
             $('#leftTable').find('tr').eq(index).after('<tr><td></td></tr>');
@@ -4296,7 +4202,9 @@ ITable.prototype.UpdateLeft = function (index,type) {
 
             }
             break;
+
         case 'delete':
+
             $('#leftTable').find('tr').eq(index).remove();
 
             for (var j = 0,len=this.rowCount; j < len; j++) {
@@ -4321,7 +4229,9 @@ ITable.prototype.UpdateTop = function (index,type) {
             $('#titleTable').find('colgroup').find('col').eq(index).after('<col style="width:100px">');
 
             $('#titleTable').find('tbody').find('tr').find('td').eq(index).after('<td></td>');
+
             var len=this.cellCount;
+
             for (var j = index; j <= len; j++) {
 
                 $('#titleTable').find('tbody').find('tr').find('td').eq(j).text(IntToChr(j));
@@ -4351,15 +4261,9 @@ ITable.prototype.UpdateTop = function (index,type) {
 
 ITable.prototype.LargeCol = function () {
 
-    var container = this.container;
+    var container = this.container,that = this, event = window.event || arguments[0], exW = $('.yOrder').outerWidth();
 
-    var that = this;
-
-    var event = window.event || arguments[0];
-
-    var exW = $('.yOrder').outerWidth();
-
-    $('#titleTable').find('tr').find('td').each(function (event) {
+    $('#titleTable').find('td').each(function (event) {
 
         $(this).off('mousemove').on('mousemove',function(event){
 
@@ -4451,13 +4355,9 @@ ITable.prototype.LargeCol = function () {
 
 ITable.prototype.LargeRow = function () {
 
-    var container = this.container;
+    var container = this.container, that = this , exH = $('.yOrder').outerHeight(), headerH=parseInt($(container).css('marginTop'));
 
-    var that = this;
-
-    var exH = $('.yOrder').outerHeight(),headerH=parseInt($(container).css('marginTop'));
-
-    $('#leftTable').find('tr').find('td').each(function () {
+    $('#leftTable').find('td').each(function () {
 
         // var event = window.event || arguments[0];
 
@@ -4560,11 +4460,11 @@ ITable.prototype.LargeRow = function () {
 
 ITable.prototype.FillBlank = function () {
 
-    var fxBox = $('<div class="fx"></div>');
+    var fxBox = $('<div class="fx"></div>'),
 
-    var fxInput = $('<input type="text" id="ip_fx">');
+        fxInput = $('<input type="text" id="ip_fx">'),
 
-    var dis = $('<span class="disbox" id="disbox"></span>');
+        dis = $('<span class="disbox" id="disbox"></span>');
 
     fxBox.append(dis);
 
@@ -4724,9 +4624,7 @@ ITable.prototype.FillWork = function () {
 
 ITable.prototype.CreateMask = function (left, top, width, height, posX, posY) {
 
-    var mask = $('<div class="mask"></div>');
-
-    var color = getRandomColor();
+    var mask = $('<div class="mask"></div>'), color = getRandomColor();
 
     mask.css({
 
@@ -4754,25 +4652,21 @@ ITable.prototype.CreateMask = function (left, top, width, height, posX, posY) {
 
 ITable.prototype.rMenus = function () {
 
-    var that = this;
+    var that = this,
 
-    var rMenus = this.CreateRMenus();
+       rMenus = this.CreateRMenus(),
 
-    var winH = $(window).height() - $(this.footer).outerHeight();
+       winH = $(window).height() - $(this.footer).outerHeight(),
 
-    var winW = $(window).width();
+       winW = $(window).width();
 
     this.table.contextmenu(function () {
 
-        var ev = event || window.event;
+        var ev = event || window.event,
 
-        var oX = ev.clientX;
+            oX = ev.clientX , oY = ev.clientY,
 
-        var oY = ev.clientY;
-
-        var mH = $(rMenus).height();
-
-        var mW = $(rMenus).width();
+            mH = $(rMenus).height(), mW = $(rMenus).width();
 
         $(rMenus).css({
 
@@ -4899,8 +4793,7 @@ ITable.prototype.Cut = function (dataArr) {
 
 ITable.prototype.Copy = function () {
 
-    var $copyDiv = $('<div class="menu-copy">复制</div>');
-    var dataArr=[];
+    var $copyDiv = $('<div class="menu-copy">复制</div>'),dataArr=[];
     $copyDiv.on('click', function () {
 
         var tdLength = $('.picked').length;
@@ -4983,7 +4876,7 @@ ITable.prototype._insert = function () {
 
     var $insertDiv = $('<div class="menu-insert">插入</div>');
 
-    var that = this;
+    // var that = this;
 
     $insertDiv.css({
 
@@ -5047,6 +4940,7 @@ ITable.prototype._delete = function () {
 
 
 ITable.prototype.ClearContent =function(){
+
     var clearDiv=$('<div class="menu-delete">清空内容</div>');
 
     clearDiv.on('click',function(){
@@ -5079,9 +4973,7 @@ ITable.prototype.getValue = function (arr) {
 
     arr = arr.toString();
 
-    var xCoo = arr.replace(/[a-zA-Z]*/, ' '),
-
-        yCoo = arr.replace(/[1-9]\d*/, ' ');
+    var xCoo = arr.replace(/[a-zA-Z]*/, ' '), yCoo = arr.replace(/[1-9]\d*/, ' ');
 
     yCoo = yCoo.charCodeAt(0) - 96;
 
@@ -5187,159 +5079,6 @@ ITable.prototype.freezeTds=function(event){
     }
 
 };
-
-
-ITable.prototype.LeftBar = function () {
-
-    var box = $('<div class="leftbar"></div>');
-
-    var span = $('<span class="ltoggle tl"></span>');
-
-    box.append(span);
-
-    $('body').append(box);
-
-    span.on('click', function () {
-
-        var l = parseInt($('.leftbar').css('left'));
-
-        if (l < 0) {
-
-            $('.leftbar').stop().animate({
-
-                left: "0px"
-
-            });
-
-            $('.ltoggle').removeClass('tr').addClass('tl')
-
-        } else {
-
-            $('.leftbar').stop().animate({
-
-                left: "-400px"
-
-            });
-
-            $('.ltoggle').removeClass('tl').addClass('tr')
-
-        }
-
-    });
-
-    this.LeftBarHandle();
-
-    //callback();
-
-};
-
-ITable.prototype.LeftBarHandle = function (callback) {
-
-    if (callback) {
-
-        callback();
-
-    }
-
-};
-
-ITable.prototype.charts = function () {
-
-    this.CreateSimpleMenu('charts');
-
-    this.chartsHandler();
-
-};
-
-ITable.prototype.chartsHandler = function (callback) {
-
-    if (callback) {
-
-        callback();
-
-    }
-
-};
-
-ITable.prototype.dataSource = function () {
-
-    this.CreateSimpleMenu('dataSource');
-
-    this.dataSourceHandler();
-
-};
-
-ITable.prototype.dataSourceHandler = function (callback) {
-
-    if (callback) {
-
-        callback();
-
-    }
-
-};
-
-ITable.prototype.dataSet = function () {
-
-    this.CreateSimpleMenu('dataSet');
-
-    this.dataSetHandler();
-
-};
-
-ITable.prototype.dataSetHandler = function (callback) {
-
-    if (callback) {
-
-        callback();
-
-    }
-
-};
-
-ITable.prototype.dataSearch = function () {
-
-    this.CreateSimpleMenu('dataSearch');
-
-    this.dataSetHandler();
-
-};
-
-
-
-// iTable.prototype.saveBtn=function(callback){
-//     var btn=$('<input type="button" class="saveBtn" value="保存">');
-//     var that=this;
-//     this.header.find('.tools').append(btn);
-//     btn.css({
-//         'float':'right',
-//         'margin-right':'10px',
-//         'margin-top':'6px'
-//     });
-// };
-//
-// iTable.prototype.saveBtn.save=function(callback){
-//     $('.saveBtn').on('click',callback);
-// };
-// iTable.prototype.saveReport = function (callback) {
-//       // $('.saveBtn').on('click',callback);
-//     //if (callback) {
-//
-//     $('.saveBtn').on('click',callback);
-//
-//    // }
-//
-// };
-
-//input鼠标选中
-function getSelectionText() {
-    if(window.getSelection) {
-        return window.getSelection().toString();
-    } else if(document.selection && document.selection.createRange) {
-        return document.selection.createRange().text;
-    }
-    return '';
-}
 
 
 //高亮单元格
@@ -5587,25 +5326,11 @@ ITable.prototype.Init = function () {
 
     this.KeyCursor();
 
-    this.LeftBar();
-
-    this.charts();
-
-    this.dataSource();
-
-    this.dataSet();
-
-    this.dataSearch();
-
     this.LargeCol();
 
     this.LargeRow();
 
-
-
     this.CornerCopy();
-
-    // this.saveBtn();
 
     this.FillType();
 
