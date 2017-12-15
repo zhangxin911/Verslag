@@ -602,16 +602,7 @@
        border:1px solid #2aa4e3;
 	   z-index:999;
    }
-   .menu-cut{
-   padding: 2px 10px;
 
-   cursor: pointer;
-   }
-   .menu-copy{
-   padding: 2px 10px;
-
-   cursor: pointer;
-   }
    #iTableInput{
 	   resize: none;
 	   overflow-y: hidden;
@@ -646,4 +637,8 @@
 		border:1px solid #50a732;
 		background:#6abc4e;
 		color:#ffffff;
+	}
+	.menu-paste,.menu-insert,.menu-delete,.menu-cut,.menu-copy{
+	  padding: 2px 10px;
+	  cursor: pointer
 	}

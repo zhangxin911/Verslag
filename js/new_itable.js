@@ -184,6 +184,7 @@ ITable.prototype.FrameSelect = function () {
     });
 
     $(document).off('mousedown').on('mousedown',function(){
+        var event=event||arguments[0];
 
         var onCols = parseInt($(coords).attr('cols')) , onRows = parseInt($(coords).attr('rows')) , sTop,sLeft,top,left;
 
@@ -1501,13 +1502,9 @@ ITable.prototype.SetBlueBorder=function(obj){
 
            for (var i = 0; i < obj.length; i++) {
 
-               var top = Number(obj[i].offsetTop),
+               var top = Number(obj[i].offsetTop), left = Number(obj[i].offsetLeft),
 
-                   left = Number(obj[i].offsetLeft),
-
-                   width = Number(obj[i].offsetWidth),
-
-                   height = Number(obj[i].offsetHeight);
+                   width = Number(obj[i].offsetWidth), height = Number(obj[i].offsetHeight);
 
                if (top < _.min(topArr)) {
 
@@ -1631,27 +1628,17 @@ ITable.prototype.CornerCopy=function(){
         $(this).on('mousedown', function () {
             $(that.container).off('mousedown');
 
-            var ev = window.event || arguments[0],
+            var ev = window.event || arguments[0], coords=$('.picked'), copyVal=$(coords).html(),
 
-                coords=$('.picked'),
+                tdWidth=parseInt($(coords).width()), tdHeight=parseInt($(coords).height()),
 
-                copyVal=$(coords).html(),
-
-                tdWidth=parseInt($(coords).width()),
-
-                tdHeight=parseInt($(coords).height()),
-
-                onCols = parseInt($(coords).attr('cols')) ,
-
-                onRows = parseInt($(coords).attr('rows')) ,
+                onCols = parseInt($(coords).attr('cols')) , onRows = parseInt($(coords).attr('rows')) ,
 
                 onCSpan = parseInt($(coords).attr('colspan'))  || 1,
 
                 onRSpan = parseInt($(coords).attr('rowspan'))  || 1,
 
-                oExpectX = onCols + onCSpan-1,
-
-                oExpectY = onRows + onRSpan-1,
+                oExpectX = onCols + onCSpan-1, oExpectY = onRows + onRSpan-1,
 
                 xMin = oExpectX,yMin = oExpectY,
 
@@ -1661,9 +1648,7 @@ ITable.prototype.CornerCopy=function(){
 
                 disHeight = parseInt($('.xOrder').outerHeight()) + parseInt($('.header').outerHeight()),
 
-                oX = ev.clientX + sLeft,
-
-                oY = ev.clientY - disHeight + sTop;
+                oX = ev.clientX + sLeft, oY = ev.clientY - disHeight + sTop;
 
             if($(coords).length>1){
                 that.HideReadBorder();
@@ -1815,7 +1800,6 @@ ITable.prototype.ChooseRow=function(){
     var that=this;
     $('#leftTable').find('td').on('click',function(){
         var index=$(this).parent().index()+1;
-
        // var startYArr=[],endYArr=[];
         $('.picked').removeClass('picked');
 
@@ -1869,7 +1853,6 @@ ITable.prototype.ChooseCol=function(){
     $('#titleTable').find('td').on('click',function(){
         var index=Number($(this).index())+1;
        // var startXArr=[],endXArr=[];
-
         $('.picked').removeClass('picked');
 
         if(that.mergeTds.length>=1){
@@ -1919,8 +1902,7 @@ ITable.prototype.ChooseCol=function(){
 ITable.prototype.GetTdStyle=function(obj){
     var td=$(obj);
     if(td.length===1&&td.length>0){
-        var classArr=(td.attr('class')).split(' '),
-            len=classArr.length;
+        var classArr=(td.attr('class')).split(' '),len=classArr.length;
         for(var i=0;i<len;i++){
             if(!!classArr[i].match(/(((fsize_)[A-Za-z0-9_]+s*)+)/g)) {
                 switch (classArr[i]) {
@@ -2007,7 +1989,7 @@ ITable.prototype.LightCooR = function (obj) {
 
     $('#titleTable').find('tr').find('td').removeClass('lCoo');
 
-    for (var t = 0; t < target.length; t++) {
+    for (var t = 0 , len=target.length; t < len; t++) {
 
         var cols = parseInt($(target).eq(t).attr('cols')) - 1, rows = parseInt($(target).eq(t).attr('rows')) - 1,
 
@@ -2087,8 +2069,6 @@ ITable.prototype.FontFamily = function () {
 
     $(menu).find('#fontFamily').attr('defaultClass', sel_a.eq(0).attr('class'));
 
-
-
     sel_a.on('click', function () {
 
         className = $(this).attr('class');
@@ -2143,8 +2123,6 @@ ITable.prototype.FontSize = function () {
 
     $(menu).find('#fontFamily').attr('defaultClass', sel_a.eq(0).attr('class'));
 
-
-
     sel_a.on('click', function () {
 
         className = $(this).attr('class');
@@ -2178,15 +2156,11 @@ ITable.prototype.FontSize = function () {
     });
 
     sel_a.on('mouseover',function(){
-        $(this).css({
-            'background': '#ECECEC'
-        });
+        $(this).css('background','#ECECEC');
     });
 
     sel_a.on('mouseout',function(){
-        $(this).css({
-            'background': '#FFFFFF'
-        });
+        $(this).css('background', '#FFFFFF');
     });
 
 };
@@ -2317,13 +2291,9 @@ ITable.prototype.BgColor = function () {
 
 ITable.prototype.TextAlign = function () {
 
-    var select = this.CreateCellMenu('f_align', 'textAlign', this.settings.textAlign),
+    var select = this.CreateCellMenu('f_align', 'textAlign', this.settings.textAlign), td  = $(select).find('td'), className, curClass, selThem;
 
-        td  = $(select).find('td'), className, curClass, selThem;
-
-    td.css({
-        'background': '#FFFFFF'
-    });
+    td.css('background', '#FFFFFF');
 
     td.on('click', function () {
 
@@ -2374,9 +2344,7 @@ ITable.prototype.TextAlign = function () {
 
 ITable.prototype.Express = function () {
 
-    var select = this.CreateSelection('express', this.settings.express),
-
-        sel_a = $(select).find('ul li a'), that = this;
+    var select = this.CreateSelection('express', this.settings.express), sel_a = $(select).find('ul li a'), that = this;
 
     sel_a.on('click', function () {
 
@@ -2389,9 +2357,7 @@ ITable.prototype.Express = function () {
 };
 
 ITable.prototype.FillType = function(){
-    var select = this.CreateSelection('fillType', this.settings.fillType),
-
-        sel_a = $(select).find('ul li a'), that = this;
+    var select = this.CreateSelection('fillType', this.settings.fillType), sel_a = $(select).find('ul li a'), that = this;
 
     sel_a.on('click', function () {
 
@@ -2404,18 +2370,23 @@ ITable.prototype.FillType = function(){
 
 ITable.prototype.GetFillType=function(obj){
 
+        var newValue;
+
         if($(obj).hasClass('ftNormal')){
 
             if(isNaN(Number($(obj).text()))){
-                return $(obj).text();
+                newValue= $(obj).text();
+                return newValue;
             }else{
-                return Number($(obj).text());
+                newValue= Number($(obj).text());
+                return newValue;
             }
 
 
         }else if($(obj).hasClass('ftNumber')){
 
-            return Number($(obj).text());
+            newValue= Number($(obj).text());
+            return newValue;
 
         }else if($(obj).hasClass('ftDate')){
 
@@ -2423,16 +2394,21 @@ ITable.prototype.GetFillType=function(obj){
 
         }else if($(obj).hasClass('ftAccount')){
 
-            return $(obj).text().replace('¥','');
+            newValue=$(obj).text().replace('¥','');
+
+            return newValue;
 
         }else if($(obj).hasClass('ftPercent')){
 
-            return  Number($(obj).text().replace('%','')*100);
+            newValue=Number($(obj).text().replace('%','')*100);
+
+            return  newValue;
 
         }else if($(obj).hasClass('ftText')){
             return;
         }else{
-            return Number($(obj).text());
+            newValue=Number($(obj).text());
+            return newValue;
         }
 };
 
@@ -2463,8 +2439,7 @@ ITable.prototype.SetFillType=function(ways){
 };
 
 ITable.prototype.TypeToValue=function(type,value){
-         var objValue=value,value=Number(value), newClasses=type.split(' ');
-         var newClass,newValue;
+         var objValue=value , value=Number(value) , newClasses=type.split(' ') , newClass , newValue;
 
          for(var i=0,len=newClasses.length;i<len;i++){
              if(!!newClasses[i].match(/(((ft)[A-Za-z0-9_]+\s*)+)/g)){
@@ -3160,7 +3135,7 @@ ITable.prototype.TypeFormula=function(ways,data){
 };
 ITable.prototype.TypeSum=function(data){
     var sum=0;
-    for(var i=1;i<data.length;i++){
+    for(var i=1,len=data.length;i<len;i++){
         sum+=this.GetFillType($('#'+data[i]));
     }
     return sum;
@@ -3268,8 +3243,7 @@ ITable.prototype.FxSum=function(){
 ITable.prototype.FxAvg=function(){
     var that=this;
     if($('.picked').length>1){
-        var sum=0,pL=$('.picked').length,avg=0;
-        var rArr=[],cArr=[],pArr=[];
+        var sum=0,pL=$('.picked').length,avg=0,rArr=[],cArr=[],pArr=[];
         $('.picked').each(function(){
             var val=that.GetFillType($(this)),nowRow=parseInt($(this).attr('rows')),nowCol=parseInt($(this).attr('cols'));
             rArr.push(nowRow),cArr.push(nowCol);
@@ -3668,9 +3642,7 @@ ITable.prototype.SplitTd = function () {
 
 ITable.prototype.CreateSelection = function (id, menus) {
 
-    var selectionBox = $('<div class="toolBox"></div>'),
-
-        selectHead = $('<div id="' + id + '"></div>'),
+    var selectionBox = $('<div class="toolBox"></div>'), selectHead = $('<div id="' + id + '"></div>'),
 
         selectUl = $('<ul></ul>'), selectLi, arr = [];
 
@@ -3717,9 +3689,7 @@ ITable.prototype.CreateSelection = function (id, menus) {
 
 ITable.prototype.CreateSimpleMenu = function (className, text) {
 
-    var menus = $('<div class="toolBox"></div>'), mText = text || '', mClass = className,
-
-        simTool = $('<span class="' + mClass + '">' + mText + '</span>');
+    var menus = $('<div class="toolBox"></div>'), mText = text || '', mClass = className, simTool = $('<span class="' + mClass + '">' + mText + '</span>');
 
     menus.append(simTool);
 
@@ -3733,13 +3703,9 @@ ITable.prototype.CreateSimpleMenu = function (className, text) {
 
 ITable.prototype.CreateCellMenu = function (dClass, className, menus) {
 
-    var selectionBox = $('<div class="toolBox"></div>'),
+    var selectionBox = $('<div class="toolBox"></div>'), selectHead = $('<div class="' + dClass + '"></div>'), selectTb = $('<table class="' + className + '"></table>'),
 
-        selectHead = $('<div class="' + dClass + '"></div>'), selectTb = $('<table class="' + className + '"></table>'),
-
-        selectTr = $('<tr></tr>'), selectTd;
-
-    var arr1 = [], arr2 = [];
+        selectTr = $('<tr></tr>'), selectTd , arr1 = [], arr2 = [];
 
     for (var index in menus) {
 
@@ -3850,7 +3816,7 @@ ITable.prototype.SheetWork = function () {
 
     $('.sheet').on('dblclick', function () {
 
-        var that = $(this),ev = event || window.event,tdWidth = that.width(),tdHeight = that.height(),tdText = that.text();
+        var that = $(this), ev = event || window.event , tdWidth = that.width() , tdHeight = that.height() , tdText = that.text();
 
         var stInput = $("<input type=\'text' class='stInput'  value='" + tdText + "'>");
 
@@ -3948,7 +3914,7 @@ ITable.prototype.SetIndex = function () {
 
     var t = this.table;
 
-    var id = (t.attr('id')).replace('iTable', ''),objTab = document.getElementById('iTable' + id);
+    var id = (t.attr('id')).replace('iTable', ''), objTab = document.getElementById('iTable' + id);
 
     // 遍历第一次取出offsetLeft集合
 
@@ -4060,8 +4026,8 @@ ITable.prototype.UpdateTop = function (index,type) {
                 $('#titleTable').find('tbody').find('tr').find('td').eq(j).text(IntToChr(j));
 
             }
-
             break;
+
         case 'delete':
             $('#titleTable').find('colgroup').find('col').eq(index).remove();
 
@@ -4086,89 +4052,173 @@ ITable.prototype.LargeCol = function () {
 
     var container = this.container,that = this, event = window.event || arguments[0], exW = $('.yOrder').outerWidth();
 
-    $('#titleTable').find('td').each(function (event) {
+    // $('#titleTable').find('td').each(function () {
+    //
+    //     $(this).off('mousemove').on('mousemove',function(event){
+    //
+    //         var w = $(this).width();
+    //
+    //         var x = event.clientX - exW;
+    //
+    //         if($(this).offset().left+w-exW<x+20){
+    //             $(this).css({
+    //                 cursor:'col-resize'
+    //             });
+    //
+    //             $(this).off('mousedown').on('mousedown', function (event) {
+    //
+    //                 var index = $(this).index();
+    //
+    //                 var lLine = $('<div class="lline"></div>');
+    //
+    //                 var sL=Number($(that.container).scrollLeft());
+    //
+    //                 var w = $(this).width()+sL;
+    //
+    //                 var x = event.clientX - exW+sL;
+    //
+    //                 if($(this).offset().left+w-exW<x+20){
+    //
+    //                     $('body').mousemove(function (event) {
+    //
+    //                         var allH = that.table.outerHeight();
+    //
+    //                         var l = event.clientX - exW;
+    //
+    //                         var move = l - x;
+    //
+    //                         if (w + move < 20) {
+    //
+    //                             return;
+    //
+    //                         } else {
+    //
+    //                             lLine.css({
+    //
+    //                                 'height': allH,
+    //
+    //                                 'left': event.clientX+sL,
+    //
+    //                                 'width':'1px',
+    //
+    //                                 'border-left':'1px dashed #000'
+    //
+    //                             });
+    //
+    //                             that.table.find('colgroup').find('col').eq(index).css('width', w + move);
+    //
+    //                             $('#titleTable').find('colgroup').find('col').eq(index).css('width', w + move);
+    //
+    //                             $(container).append(lLine);
+    //
+    //                         }
+    //
+    //                     });
+    //                 }
+    //                 $('body').mouseup(function () {
+    //
+    //                     $('body').off('mousemove');
+    //
+    //                     lLine.remove();
+    //
+    //                 });
+    //
+    //             });
+    //
+    //         }else{
+    //             $(this).css({
+    //                 cursor:'default'
+    //             })
+    //         }
+    //
+    //     });
+    //
+    //
+    //
+    //
+    // });
 
-        $(this).off('mousemove').on('mousemove',function(event){
 
-            var w = $(this).width();
+    $('#titleTable').off('mousemove').on('mousemove',function(){
+         var event = window.event || arguments[0];
 
-            var x = event.clientX - exW;
+         var w = $(event.target).width();
 
-            if($(this).offset().left+w-exW<x+20){
-                $(this).css({
-                    cursor:'col-resize'
-                });
+        var x = event.clientX - exW;
 
-                $(this).off('mousedown').on('mousedown', function (event) {
+        if($(event.target).offset().left+w-exW<x+20){
+            $(event.target).css({
+                cursor:'col-resize'
+            });
 
-                    var index = $(this).index();
+            $(event.target).off('mousedown').on('mousedown', function (event) {
 
-                    var lLine = $('<div class="lline"></div>');
+                $(document).off('mousedown');
 
-                    var sL=Number($(that.container).scrollLeft());
+                var index = $(this).index();
 
-                    var w = $(this).width()+sL;
+                var lLine = $('<div class="lline"></div>');
 
-                    var x = event.clientX - exW+sL;
+                var sL=Number($(that.container).scrollLeft());
 
-                    if($(this).offset().left+w-exW<x+20){
+                var w = $(this).width()+sL;
 
-                        $('body').mousemove(function (event) {
+                var x = event.clientX - exW+sL;
 
-                            var allH = that.table.outerHeight();
+                if($(this).offset().left+w-exW<x+20){
 
-                            var l = event.clientX - exW;
+                    $('body').mousemove(function (event) {
 
-                            var move = l - x;
+                        var allH = that.table.outerHeight();
 
-                            if (w + move < 20) {
+                        var l = event.clientX - exW;
 
-                                return;
+                        var move = l - x;
 
-                            } else {
+                        if (w + move < 20) {
 
-                                lLine.css({
+                            return;
 
-                                    'height': allH,
+                        } else {
 
-                                    'left': event.clientX+sL,
+                            lLine.css({
 
-                                    'width':'1px',
+                                'height': allH,
 
-                                    'border-left':'1px dashed #000'
+                                'left': event.clientX+sL,
 
-                                });
+                                'width':'1px',
 
-                                that.table.find('colgroup').find('col').eq(index).css('width', w + move);
+                                'border-left':'1px dashed #000'
 
-                                $('#titleTable').find('colgroup').find('col').eq(index).css('width', w + move);
+                            });
 
-                                $(container).append(lLine);
+                            that.table.find('colgroup').find('col').eq(index).css('width', w + move);
 
-                            }
+                            $('#titleTable').find('colgroup').find('col').eq(index).css('width', w + move);
 
-                        });
-                    }
-                    $('body').mouseup(function () {
+                            $(container).append(lLine);
 
-                        $('body').off('mousemove');
-
-                        lLine.remove();
+                        }
 
                     });
+                }
+                $('body').mouseup(function () {
 
+                    $('body').off('mousemove');
+
+                    lLine.remove();
+
+                    that.FrameSelect();
                 });
 
-            }else{
-                $(this).css({
-                    cursor:'default'
-                })
-            }
+            });
 
-        });
-
-
-
+        }else{
+            $(event.target).css({
+                cursor:'default'
+            });
+        }
 
     });
 
@@ -4180,101 +4230,190 @@ ITable.prototype.LargeRow = function () {
 
     var container = this.container, that = this , exH = $('.yOrder').outerHeight(), headerH=parseInt($(container).css('marginTop'));
 
-    $('#leftTable').find('td').each(function () {
+    // $('#leftTable').find('td').each(function () {
+    //
+    //     // var event = window.event || arguments[0];
+    //
+    //     $(this).off('mousemove').on('mousemove',function(event){
+    //
+    //         var h = $(this).height(),y = event.clientY - exH;
+    //
+    //         if($(this).offset().top+h-exH<y+6) {
+    //
+    //             $(this).css({
+    //                 cursor: 'row-resize'
+    //             });
+    //
+    //             $(this).off('mousedown').on('mousedown', function (event) {
+    //
+    //                 var index = $(this).parent().index();
+    //
+    //                 var lLine = $('<div class="rline"></div>');
+    //
+    //                 var sT=Number($(that.container).scrollTop());
+    //
+    //                 var h = $(this).height()+sT;
+    //
+    //                 var y = event.clientY - exH+sT;
+    //
+    //
+    //                 if($(this).offset().top+h-exH<y+10) {
+    //
+    //                     $('body').mousemove(function (event) {
+    //
+    //                         var allW = that.table.outerWidth();
+    //
+    //                         var l = event.clientY - exH;
+    //
+    //                         var move = l - y;
+    //
+    //                         if (h + move < 20) {
+    //
+    //                             return;
+    //
+    //                         } else {
+    //
+    //                             lLine.css({
+    //
+    //                                 'width': allW,
+    //
+    //                                 'top': event.clientY+sT-headerH,
+    //
+    //                                 'border-top':'1px dashed #000',
+    //
+    //                                 'height':1
+    //
+    //                             });
+    //
+    //                             var tempMove=h + move + 1,tempMove_1=h+move;
+    //
+    //                             that.table.find('tr').find('th').eq(index).css('height',tempMove);
+    //
+    //                             $('#leftTable').find('td').eq(index).css('height', tempMove_1);
+    //
+    //                             $(container).append(lLine);
+    //
+    //                         }
+    //
+    //                     });
+    //                 }
+    //
+    //
+    //
+    //                 $('body').mouseup(function () {
+    //
+    //                     $('body').off('mousemove');
+    //
+    //                     lLine.remove();
+    //
+    //
+    //                 });
+    //
+    //             });
+    //
+    //
+    //
+    //
+    //         }else{
+    //             $(this).css({
+    //                 cursor: 'default'
+    //             });
+    //         }
+    //     });
+    //
+    //
+    //
+    // });
 
-        // var event = window.event || arguments[0];
 
-        $(this).off('mousemove').on('mousemove',function(event){
+    $('#leftTable').off('mousemove').on('mousemove',function(){
 
-            var h = $(this).height(),y = event.clientY - exH;
+        var event = window.event || arguments[0];
 
-            if($(this).offset().top+h-exH<y+6) {
+        var h = $(event.target).height(),y = event.clientY - exH;
 
-                $(this).css({
-                    cursor: 'row-resize'
-                });
+        if($(event.target).offset().top+h-exH<y+6) {
 
-                $(this).off('mousedown').on('mousedown', function (event) {
+            $(event.target).css({
+                cursor: 'row-resize'
+            });
 
-                    var index = $(this).parent().index();
+            $(event.target).off('mousedown').on('mousedown', function (event) {
 
-                    var lLine = $('<div class="rline"></div>');
+                $(document).off('mousedown');
 
-                    var sT=Number($(that.container).scrollTop());
+                var index = $(this).parent().index();
 
-                    var h = $(this).height()+sT;
+                var lLine = $('<div class="rline"></div>');
 
-                    var y = event.clientY - exH+sT;
+                var sT=Number($(that.container).scrollTop());
 
+                var h = $(this).height()+sT;
 
-                    if($(this).offset().top+h-exH<y+10) {
-
-                        $('body').mousemove(function (event) {
-
-                            var allW = that.table.outerWidth();
-
-                            var l = event.clientY - exH;
-
-                            var move = l - y;
-
-                            if (h + move < 20) {
-
-                                return;
-
-                            } else {
-
-                                lLine.css({
-
-                                    'width': allW,
-
-                                    'top': event.clientY+sT-headerH,
-
-                                    'border-top':'1px dashed #000',
-
-                                    'height':1
-
-                                });
-
-                                var tempMove=h + move + 1,tempMove_1=h+move;
-
-                                that.table.find('tr').find('th').eq(index).css('height',tempMove);
-
-                                $('#leftTable').find('td').eq(index).css('height', tempMove_1);
-
-                                $(container).append(lLine);
-
-                            }
-
-                        });
-                    }
+                var y = event.clientY - exH+sT;
 
 
+                if($(this).offset().top+h-exH<y+10) {
 
-                    $('body').mouseup(function () {
+                    $('body').mousemove(function (event) {
 
-                        $('body').off('mousemove');
+                        var allW = that.table.outerWidth();
 
-                        lLine.remove();
+                        var l = event.clientY - exH;
 
+                        var move = l - y;
+
+                        if (h + move < 20) {
+
+                            return;
+
+                        } else {
+
+                            lLine.css({
+
+                                'width': allW,
+
+                                'top': event.clientY+sT-headerH,
+
+                                'border-top':'1px dashed #000',
+
+                                'height':1
+
+                            });
+
+                            var tempMove=h + move + 1,tempMove_1=h+move;
+
+                            that.table.find('tr').find('th').eq(index).css('height',tempMove);
+
+                            $('#leftTable').find('td').eq(index).css('height', tempMove_1);
+
+                            $(container).append(lLine);
+
+                        }
 
                     });
+                }
+
+
+
+                $('body').mouseup(function () {
+
+                    $('body').off('mousemove');
+
+                    lLine.remove();
+
+                    that.FrameSelect();
 
                 });
 
+            });
 
-
-
-            }else{
-                $(this).css({
-                    cursor: 'default'
-                });
-            }
-        });
-
-
-
+        }else{
+            $(event.target).css({
+                cursor:'default'
+            });
+        }
     });
-
 };
 
 //创建公式输入框
@@ -4469,13 +4608,7 @@ ITable.prototype.CreateMask = function (left, top, width, height, posX, posY) {
 
 ITable.prototype.rMenus = function () {
 
-    var that = this,
-
-       rMenus = this.CreateRMenus(),
-
-       winH = $(window).height() - $(this.footer).outerHeight(),
-
-       winW = $(window).width();
+    var that = this, rMenus = this.CreateRMenus(), winH = $(window).height() - this.footer.outerHeight(), winW = $(window).width();
 
     this.table.contextmenu(function () {
 
@@ -4649,13 +4782,7 @@ ITable.prototype.Paste = function (dataArr) {
 
     var $pasteDiv = $('<div class="menu-paste">粘贴</div>');
 
-    $pasteDiv.css({
 
-        'padding': '2px 10px',
-
-        'cursor': 'pointer'
-
-    });
 
     $pasteDiv.on('click', function () {
 
@@ -4695,13 +4822,6 @@ ITable.prototype._insert = function () {
 
     // var that = this;
 
-    $insertDiv.css({
-
-        'padding': '2px 10px',
-
-        'cursor': 'pointer'
-
-    });
 
     // $insertDiv.on('click', function () {
     //
@@ -4742,14 +4862,6 @@ ITable.prototype._insert = function () {
 ITable.prototype._delete = function () {
 
     var deleteDiv = $('<div class="menu-delete">删除</div>');
-
-    deleteDiv.css({
-
-        'padding': '2px 10px',
-
-        'cursor': 'pointer'
-
-    });
 
     return deleteDiv;
 
