@@ -1622,17 +1622,13 @@ ITable.prototype.CornerCopy=function(){
 
                 onCols = parseInt($(coords).attr('cols')) , onRows = parseInt($(coords).attr('rows')) ,
 
-                onCSpan = parseInt($(coords).attr('colspan'))  || 1,
-
-                onRSpan = parseInt($(coords).attr('rowspan'))  || 1,
+                onCSpan = parseInt($(coords).attr('colspan'))  || 1, onRSpan = parseInt($(coords).attr('rowspan'))  || 1,
 
                 oExpectX = onCols + onCSpan-1, oExpectY = onRows + onRSpan-1,
 
                 xMin = oExpectX,yMin = oExpectY,
 
-                sLeft = parseInt(this.scrollLeft),
-
-                sTop = parseInt(this.scrollTop),
+                sLeft = parseInt(this.scrollLeft), sTop = parseInt(this.scrollTop),
 
                 disHeight = parseInt($('.xOrder').outerHeight()) + parseInt($('.header').outerHeight()),
 
@@ -1647,27 +1643,18 @@ ITable.prototype.CornerCopy=function(){
             $(that.container).on('mousemove', function () {
                 var coords=$(that.moveLast);
 
-                var nCols = parseInt($(coords).attr('cols')) ;
+                var nCols = parseInt($(coords).attr('cols')) , nRows = parseInt($(coords).attr('rows')) ;
 
-                var nRows = parseInt($(coords).attr('rows')) ;
-
-                var nCSpan = parseInt($(coords).attr('colspan'))  || 1;
-
-                var nRSpan = parseInt($(coords).attr('rowspan'))  || 1;
+                var nCSpan = parseInt($(coords).attr('colspan'))  || 1, nRSpan = parseInt($(coords).attr('rowspan'))  || 1;
 
                 if(nCSpan>1||nRSpan>1){
                     that.HideReadBorder();
                     return;
                 }
 
-                var expectX = nCols + nCSpan-1;
+                var expectX = nCols + nCSpan-1, expectY = nRows + nRSpan-1;
 
-                var expectY = nRows + nRSpan-1;
-
-                var xMax=expectX,yMax=expectY;
-
-                var evt = window.event || arguments[0];
-                var _x,_y;
+                var xMax=expectX,yMax=expectY,evt = window.event || arguments[0],_x,_y;
 
                 _x = (evt.x || evt.clientX);
 
