@@ -17,6 +17,7 @@ function ITable(tContainer, tSettings, tabs,mergeArray) {
     this.tools=null;
     this.moveLast=null;
     this.table=null;
+    this.tableInput=null;
 
     this.mergeTds=mergeArray || [];
 }
@@ -328,7 +329,7 @@ ITable.prototype.TextArea=function(){
      var div=$('<div class="iTableInputHolder" id="iTableInputHolder"></div>'),textArea=$('<input type="text" class="iTableInput" id="iTableInput">');
      div.append(textArea);
      $(this.container).append(div);
-
+     this.tableInput=textArea;
 };
 
 ITable.prototype.SetTextArea=function(visible){
@@ -347,7 +348,7 @@ ITable.prototype.SetTextArea=function(visible){
             'top':y
         });
 
-        $('#iTableInput').css({
+        this.tableInput.css({
             'width':w,
             'height':h
         });
@@ -373,17 +374,17 @@ ITable.prototype.FillTextArea=function(eType,val){
     switch(eType)
     {
         case 'dblclick':
-            $('#iTableInput').val('');
+            this.tableInput.val('');
             $(document).off('keydown');
-            $('#iTableInput').focus().val(val);
-            $("#iTableInput").on('change',function(){
+            this.tableInput.focus().val(val);
+            this.tableInput.on('change',function(){
                 $('#ip_fx').val($(this).val());
-                that.IsExpress($('#iTableInput').val());
+                that.IsExpress(this.tableInput.val());
                 event.stopPropagation();
             });
-            $('#iTableInput').off('keyup').on('keyup',function(){
+            this.tableInput.off('keyup').on('keyup',function(){
                 if (event.keyCode === 13) {
-                    var content = $('#iTableInput').val();
+                    var content =this.tableInput.val();
                     var curClass=$('.picked').attr('class');
 
                     $('.picked').html(that.TypeToValue(curClass,content));
@@ -396,7 +397,7 @@ ITable.prototype.FillTextArea=function(eType,val){
                         var pValue=that.TypeFormula(type,exArr);
                         pNode.text(pValue);
                     }
-                    $('#iTableInput').blur();
+                    this.tableInput.blur();
                     that.FillTd();
                     that.FrameSelect();
                     that.KeyCursor();
@@ -405,7 +406,7 @@ ITable.prototype.FillTextArea=function(eType,val){
             });
             break;
         case 'keymove':
-            $('#iTableInput').focus();
+            this.tableInput.focus();
             break;
         default:
 
@@ -414,6 +415,7 @@ ITable.prototype.FillTextArea=function(eType,val){
 
 ITable.prototype.IsExpress=function(val){
     var textVal=val;
+    var that=this;
 
     if(textVal.match(/^\=/g)||textVal.match(/^\+/g)||textVal.match(/^\-/g)){
         //    /(\=|\+|\-|\*|\/)([a-z]|[A-Z])+([1-9]*)/g
@@ -422,31 +424,31 @@ ITable.prototype.IsExpress=function(val){
         var coordinates;
             this.table.find('td').off('click').on('click',{coordinate:coordinates},function(event){
 
-                $('#iTableInput').focus();
-                var typePosition=Number($('#iTableInput').iGetFieldPos());
+                that.tableInput.focus();
+                var typePosition=Number(that.tableInput.iGetFieldPos());
                 event.data.coordinate=IntToChr(Number($(this).attr('cols'))-2)+$(this).attr('rows');
-                if(typePosition===$('#iTableInput').val().length){
+                if(typePosition===that.tableInput.val().length){
 
-                    if($('#iTableInput').val().slice(-1)==='+'||$('#iTableInput').val().slice(-1)==='-'||$('#iTableInput').val().slice(-1)==='*'||$('#iTableInput').val().slice(-1)==='/'){
+                    if(that.tableInput.val().slice(-1)==='+'||that.tableInput.val().slice(-1)==='-'||that.tableInput.val().slice(-1)==='*'||that.tableInput.val().slice(-1)==='/'){
 
-                        $('#iTableInput').val($('#iTableInput').val()+event.data.coordinate);
+                        that.tableInput.val(that.tableInput.val()+event.data.coordinate);
 
                     }else{
 
-                        var lastLength=String(_.last($('#iTableInput').val().split(/\=|\+|\-|\*|\//g))).length;
-                        $('#iTableInput').iDelField(lastLength);
-                        $('#iTableInput').iAddField(event.data.coordinate);
+                        var lastLength=String(_.last(that.tableInput.val().split(/\=|\+|\-|\*|\//g))).length;
+                        that.tableInput.iDelField(lastLength);
+                        that.tableInput.iAddField(event.data.coordinate);
 
                     }
                 }else{
-                    if(($('#iTableInput').val()).charAt(typePosition+1).match(/\=|\+|\-|\*|\//g)){
+                    if((that.tableInput.val()).charAt(typePosition+1).match(/\=|\+|\-|\*|\//g)){
 
                     }
                     // var v=$('#iTableInput').val();
                     // v=v.replace(getSelectionText(),event.data.coordinate);
                   //  $('#iTableInput').val(v);
 
-                    $('#iTableInput').iAddField(event.data.coordinate);
+                    that.tableInput.iAddField(event.data.coordinate);
                 }
 
 
@@ -465,21 +467,7 @@ ITable.prototype.KeyCursor = function () {
 
     var that = this;
 
-    $(document).off('keydown').on('keydown', {
-
-        time: "0",
-
-        lastTd: null,
-
-        fixX: "",
-
-        fixY: "",
-
-        keyCode: "",
-
-        callZ: that
-
-    }, typing);
+    $(document).off('keydown').on('keydown', {time: "0", lastTd: null, fixX: "", fixY: "", keyCode: "", callZ: that}, typing);
 
 };
 
@@ -541,7 +529,7 @@ function typing(event) {
                 var curClass=$('.picked').attr('class');
                 var ex=$('.picked').attr('ex');
                 if(!ex){
-                    $('.picked').html(callZ.TypeToValue(curClass,$('#iTableInput').val()));
+                    $('.picked').html(callZ.TypeToValue(curClass,callZ.tableInput.val()));
                     var pNode=$($('.picked').attr('pnode'));
                     var pEx=pNode.attr('ex');
                     if(!!pEx){
@@ -550,9 +538,9 @@ function typing(event) {
                         var pValue=callZ.TypeFormula(type,pExArr);
                         pNode.text(pValue);
                     }
-                    $('#iTableInput').val(' ');
+                    callZ.tableInput.val(' ');
                 }else{
-                    $('.picked').html(callZ.TypeToValue(curClass,$('#iTableInput').val()));
+                    $('.picked').html(callZ.TypeToValue(curClass,callZ.tableInput.val()));
 
                     var exArr=ex.split('/');
 
@@ -560,7 +548,7 @@ function typing(event) {
                         $('#'+exArr[i]).removeAttr('pnode');
                     }
                     $('.picked').removeAttr('ex');
-                    $('#iTableInput').val(' ');
+                    callZ.tableInput.val(' ');
                 }
 
 
@@ -678,7 +666,7 @@ function typing(event) {
                 var curClass=$('.picked').attr('class');
                 var ex=$('.picked').attr('ex');
                 if(!ex){
-                    $('.picked').html(callZ.TypeToValue(curClass,$('#iTableInput').val()));
+                    $('.picked').html(callZ.TypeToValue(curClass,callZ.tableInput.val()));
                     var pNode=$($('.picked').attr('pnode'));
                     var pEx=pNode.attr('ex');
                     if(!!pEx){
@@ -687,9 +675,9 @@ function typing(event) {
                         var pValue=callZ.TypeFormula(type,pExArr);
                         pNode.text(pValue);
                     }
-                    $('#iTableInput').val(' ');
+                    callZ.tableInput.val(' ');
                 }else{
-                    $('.picked').html(callZ.TypeToValue(curClass,$('#iTableInput').val()));
+                    $('.picked').html(callZ.TypeToValue(curClass,callZ.tableInput.val()));
 
                     var exArr=ex.split('/');
 
@@ -698,7 +686,7 @@ function typing(event) {
                         $('#'+exArr[i]).removeAttr('pnode');
                     }
                     $('.picked').removeAttr('ex');
-                    $('#iTableInput').val(' ');
+                    callZ.tableInput.val(' ');
                 }
             }
 
@@ -815,7 +803,7 @@ function typing(event) {
                 var curClass=$('.picked').attr('class');
                 var ex=$('.picked').attr('ex');
                 if(!ex){
-                    $('.picked').html(callZ.TypeToValue(curClass,$('#iTableInput').val()));
+                    $('.picked').html(callZ.TypeToValue(curClass,callZ.tableInput.val()));
                     var pNode=$($('.picked').attr('pnode'));
                     var pEx=pNode.attr('ex');
                     if(!!pEx){
@@ -824,9 +812,9 @@ function typing(event) {
                         var pValue=callZ.TypeFormula(type,pExArr);
                         pNode.text(pValue);
                     }
-                    $('#iTableInput').val(' ');
+                    callZ.tableInput.val(' ');
                 }else{
-                    $('.picked').html(callZ.TypeToValue(curClass,$('#iTableInput').val()));
+                    $('.picked').html(callZ.TypeToValue(curClass,callZ.tableInput.val()));
 
                     var exArr=ex.split('/');
 
@@ -834,7 +822,7 @@ function typing(event) {
                         $('#'+exArr[i]).removeAttr('pnode');
                     }
                     $('.picked').removeAttr('ex');
-                    $('#iTableInput').val(' ');
+                    callZ.tableInput.val(' ');
                 }
             }
 
@@ -951,7 +939,7 @@ function typing(event) {
                 var curClass=$('.picked').attr('class');
                 var ex=$('.picked').attr('ex');
                 if(!ex){
-                    $('.picked').html(callZ.TypeToValue(curClass,$('#iTableInput').val()));
+                    $('.picked').html(callZ.TypeToValue(curClass,callZ.tableInput.val()));
                     var pNode=$($('.picked').attr('pnode'));
                     var pEx=pNode.attr('ex');
                     if(!!pEx){
@@ -960,9 +948,9 @@ function typing(event) {
                         var pValue=callZ.TypeFormula(type,pExArr);
                         pNode.text(pValue);
                     }
-                    $('#iTableInput').val(' ');
+                    callZ.tableInput.val(' ');
                 }else{
-                    $('.picked').html(callZ.TypeToValue(curClass,$('#iTableInput').val()));
+                    $('.picked').html(callZ.TypeToValue(curClass,callZ.tableInput.val()));
 
                     var exArr=ex.split('/');
 
@@ -970,7 +958,7 @@ function typing(event) {
                         $('#'+exArr[i]).removeAttr('pnode');
                     }
                     $('.picked').removeAttr('ex');
-                    $('#iTableInput').val(' ');
+                    callZ.tableInput.val(' ');
                 }
             }
 
@@ -1182,11 +1170,11 @@ ITable.prototype.TdClick=function(event){
 
     if($('#iTableInputHolder').css('display')==='block'){
 
-        $('.picked').text($('#iTableInput').val());
+        $('.picked').text(this.tableInput.val());
 
         $('#iTableInputHolder').hide();
 
-        $('#iTableInput').blur();
+        this.tableInput.blur();
     }
 
     $('.picked').removeClass('picked');
@@ -1211,7 +1199,7 @@ ITable.prototype.TdClick=function(event){
 
 
 ITable.prototype.TdDbClick=function(event){
-    var tdText = $(this).text(), eType='dblclick', ex=$(this).attr('ex');
+    var tdText = $(this).text(), eType='dblclick', ex=$(this).attr('ex'),that=this;
 
     event.data.target.SetTextArea(1);
     if(!!ex){
@@ -1221,12 +1209,12 @@ ITable.prototype.TdDbClick=function(event){
 
     }
 
-    $("#iTableInput").click(function () {
+   this.tableInput.click(function () {
         return false;
     });
 
     $('#iTable' + event.data.id).find('tr').find('td').not($(this)).click(function () {
-        $('#iTableInput').blur();
+        that.tableInput.blur();
     });
     stopPropagation();
 };

@@ -1,12 +1,12 @@
 /* 对齐  */
 	
 	.f_align {
-		width: 28px;
-		height: 28px;
+		width: 18px;
+		height: 18px;
 		display: inline-block;
 		text-align: center;
-		line-height: 28px;
-		background: url(../images/img/calign.png) no-repeat center;
+		height: 18px;
+		background: url(../images/img/menuIcons.png) no-repeat -112px top;
 	}
 	
 	.falign_left {
@@ -24,70 +24,70 @@
 	.ffalign_left {
 		width: 16px;
 		height: 16px;
-		background: url(../images/img/lalign.png) no-repeat;
+		background: url(../images/img/menuIcons.png) no-repeat -128px top;
 		display: block;
 	}
 	
 	.ffalign_right {
 		width: 16px;
 		height: 16px;
-		background: url(../images/img/ralign.png) no-repeat;
+		background: url(../images/img/menuIcons.png) no-repeat -142px top;
 		display: block;
 	}
 	
 	.ffalign_center {
 		width: 16px;
 		height: 16px;
-		background: url(../images/img/calign.png) no-repeat;
+	    background:url(../images/img/menuIcons.png) no-repeat -112px top;
 		display: block;
 	}
 
 /** 字体颜色 **/
 	
 	.d_fcolor {
-		width: 28px;
-		height: 28px;
+		width: 18px;
+		height: 18px;
 		display: inline-block;
 		text-align: center;
-		line-height: 28px;
-		background: url(../images/img/fcolor.png) no-repeat center;
+		height: 18px;
+		background: url(../images/img/menuIcons.png) no-repeat -47px top;
 	}
 	
 	.fbold {
-		width: 28px;
-		height: 24px;
+		width: 18px;
+		height: 18px;
 		display: inline-block;
 		text-align: center;
-		line-height: 24px;
-		background: url(../images/img/fbold.png) no-repeat center;
+		line-height: 18px;
+		background: url(../images/img/menuIcons.png) no-repeat left top;
 		cursor: pointer;
 	}
 	
 	.fitalic {
-		width: 28px;
-		height: 24px;
+		width: 18px;
+		height: 18px;
 		display: inline-block;
 		text-align: center;
-		line-height: 24px;
-		background: url(../images/img/fitalic.png) no-repeat center;
+		line-height: 18px;
+		background: url(../images/img/menuIcons.png) no-repeat -14px top;
 	}
 	
 	.foverline {
-		width: 28px;
-		height: 24px;
+		width: 18px;
+		height: 18px;
 		display: inline-block;
 		text-align: center;
-		line-height: 24px;
-		background: url(../images/img/overline.png) no-repeat center;
+		line-height: 18px;
+		background: url(../images/img/menuIcons.png) no-repeat -29px top;
 	}
 	
 	.fcolor {
-		width: 28px;
-		height: 28px;
+		width: 18px;
+		height: 18px;
 		display: inline-block;
 		text-align: center;
-		line-height: 28px;
-		background: url(../images/img/fcolor.png) no-repeat center;
+		line-height: 18px;
+		background: url(../images/img/menuIcons.png) no-repeat -39px top;
 	}
 	
 	.fborder {
@@ -275,12 +275,12 @@
 	/*bg*/
 	
 	.d_fill {
-		width: 28px;
-		height: 28px;
+		width: 18px;
+		height: 18px;
 		display: inline-block;
 		text-align: center;
-		line-height: 28px;
-		background: url(../images/img/ffillcolor.png) no-repeat center;
+		height: 18px;
+		background: url(../images/img/menuIcons.png) no-repeat -62px top;
 	}
 	
 	.ffill {

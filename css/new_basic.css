@@ -158,8 +158,8 @@
 		text-align: center;
 		font-size: 14px;
 		position: relative;
-		background: url(../images/img/arrow-down.png) no-repeat;
-		background-position: right center;
+		background: url(../images/img/arrow-down.png) no-repeat right center;
+
 		cursor: pointer;
 	}
    #express+ul li a{
@@ -220,16 +220,15 @@
 	#fontFamily,
 	#fontSize {
 		display: inline-block;
-		height: 24px;
-		line-height: 24px;
+		height: 18px;
+		line-height: 18px;
 		vertical-align: middle;
 		width: 84px;
 		border-radius: 0;
 		text-align: center;
 		font-size: 14px;
 		position: relative;
-		background: url(../images/img/arrow-down.png) no-repeat;
-		background-position: right center;
+		background: url(../images/img/arrow-down.png) no-repeat right 8px;
 		cursor: pointer;
 	}
 	
@@ -263,7 +262,7 @@
 	.addSheet {
 		width: 32px;
 		height: 32px;
-		background: url(../images/img/add.png);
+		background:url(../images/img/menuIcons.png) no-repeat -174px -17px;
 		cursor: pointer;
 		position: absolute;
 		top: 50%;
@@ -315,21 +314,21 @@
 	
 	
 	.mergeBtn {
-		width: 28px;
-		height: 28px;
+		width: 18px;
+		height: 18px;
 		display: inline-block;
 		text-align: center;
-		line-height: 28px;
-		background: url(../images/img/mergeTd.png) no-repeat center;
+		height: 18px;
+		background: url(../images/img/menuIcons.png) no-repeat -78px top;
 	}
 	
 	.splitBtn {
-		width: 28px;
-		height: 28px;
+		width: 18px;
+		height: 18px;
 		display: inline-block;
 		text-align: center;
-		line-height: 28px;
-		background: url(../images/img/splitTd.png) no-repeat center;
+		height: 18px;
+		background: url(../images/img/menuIcons.png) no-repeat -96px top;
 	}
 	
 	
@@ -494,16 +493,16 @@
 		background:#ffffff url(../images/img/toggle-r.png) no-repeat center;
 	}
    .insertRow{
-	   background: url(../images/img/inR.png) no-repeat center;
+	   background: url(../images/img/menuIcons.png) no-repeat -26px -16px;
    }
    .insertCol{
-	   background: url(../images/img/inC.png) no-repeat center;
+	   background: url(../images/img/menuIcons.png) no-repeat 0px -16px;
    }
    .delCol{
-	   background: url(../images/img/deC.png) no-repeat center;
+	   background: url(../images/img/menuIcons.png) no-repeat -47px  -16px;
    }
    .delRow{
-	   background: url(../images/img/deR.png) no-repeat center;
+	   background: url(../images/img/menuIcons.png) no-repeat -70px  -16px;
    }
    .charts{
 	   width: 28px;
