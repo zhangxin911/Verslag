@@ -610,11 +610,7 @@ function typing(event) {
 
             }
 
-            var nextX = event.data.fixX,
-
-                nextY = nowY + 1,
-
-                id='#'+nextY+'-'+nextX;
+            var nextX = event.data.fixX, nextY = nowY + 1, id='#'+nextY+'-'+nextX;
 
             if ($(id).length > 0) {
 
@@ -1081,9 +1077,7 @@ ITable.prototype.SetCss = function () {
 
     var thatContainer = this.container, viewWidth = $(window).width(), viewHeight = $(window).height(), tBody = this.table.parent(),
 
-        tLeft = $('.yOrder'), tHead = $('.xOrder'),
-
-        bTop = tHead.find('table tr:first td:first').outerHeight() + 1;
+        tLeft = $('.yOrder'), tHead = $('.xOrder'), bTop = tHead.find('table tr:first td:first').outerHeight() + 1;
 
     tLeft.css({
         'height': viewHeight-153
@@ -2678,9 +2672,7 @@ ITable.prototype.InsertCol = function () {
 
     sel_a.on('click', function () {
 
-        var sNode = $('.picked');
-
-        var xArr = [], yArr = [],xMax, xMin, yMax, yMin;
+        var sNode = $('.picked') , xArr = [], yArr = [] , xMax, xMin , yMax, yMin;
 
         if (sNode.length >= 2) {
 
@@ -2801,9 +2793,7 @@ ITable.prototype.InsertRow = function () {
 
     sel_a.on('click', function () {
 
-        var sNode = $('.picked');
-
-        var xArr = [], yArr = [],xMax, xMin, yMax, yMin;
+        var sNode = $('.picked'), xArr = [], yArr = [], xMax, xMin, yMax, yMin;
 
         if (sNode.length >= 2) {
 
@@ -2862,8 +2852,7 @@ ITable.prototype.InsertRow = function () {
 
         } else {
 
-            var yIndex = parseInt(sNode.attr('rows'));
-            var tr = $('<tr></tr>');
+            var yIndex = parseInt(sNode.attr('rows')),tr = $('<tr></tr>');
 
             for (var i = 0; i <= that.cellCount;) {
 
