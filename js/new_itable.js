@@ -18,6 +18,14 @@ function ITable(tContainer, tSettings, tabs,mergeArray) {
     this.moveLast=null;
     this.table=null;
     this.tableInput=null;
+    this.xBox={
+        xOrder:null,
+        xTable:null
+    };
+    this.yBox={
+        yOrder:null,
+        yTable:null
+    }
 
     this.mergeTds=mergeArray || [];
 }
@@ -76,20 +84,20 @@ ITable.prototype.CreateTr = function () {
 };
 
 ITable.prototype.CreateTd = function (className, tdValue) {
-
     var td = $("<td>" + tdValue + "</td>");
     td.addClass(className);
     return td;
-
 };
 
 ITable.prototype.CreateXAxis = function () {
 
-    var xAxis = $("<div class='xOrder'></div>"), xTable = $("<table class='titleTable' id='titleTable'></table>"), th = $("<th></th>"), tr = $("<tr></tr>"), col;
+    this.xBox.xOrder = $("<div class='xOrder'></div>"),this.xBox.xTable = $("<table class='titleTable' id='titleTable'></table>");
 
-    this.container.before(xAxis);
+    var th = $("<th></th>"), tr = $("<tr></tr>"), col;
 
-    xAxis.append(xTable);
+    this.container.before(this.xBox.xOrder);
+
+    this.xBox.xOrder.append(this.xBox.xTable);
 
     tr.append(th);
 
@@ -119,13 +127,13 @@ ITable.prototype.CreateXAxis = function () {
 
             if (i === 0) {
 
-                xTable.append(colG);
+                this.xBox.xTable.append(colG);
 
             }
 
         }
 
-        xTable.append(tr);
+        this.xBox.xTable.append(tr);
 
     }
 
@@ -133,11 +141,11 @@ ITable.prototype.CreateXAxis = function () {
 
 ITable.prototype.CreateYAxis = function () {
 
-    var yAxis = $("<div class='yOrder'></div>"), yTable = $("<table class='leftTable' id='leftTable'></table>");
+    this.yBox.yOrder = $("<div class='yOrder'></div>"), this.yBox.yTable = $("<table class='leftTable' id='leftTable'></table>");
 
-    this.container.before(yAxis);
+    this.container.before(this.yBox.yOrder);
 
-    yAxis.append(yTable);
+    this.yBox.yOrder.append(this.yBox.yTable);
 
     for (var i = 0; i < this.rowCount; i++) {
 
@@ -150,7 +158,7 @@ ITable.prototype.CreateYAxis = function () {
             tr.append(th);
         }
 
-        yTable.append(tr);
+        this.yBox.yTable.append(tr);
 
     }
 
@@ -158,34 +166,31 @@ ITable.prototype.CreateYAxis = function () {
 
 ITable.prototype.CreateTip = function () {
 
-    var content = $("<div class='greyBlock'></div>"), tLeft = $('.yOrder'), tHead = $('.xOrder'),
-
+    var content = $("<div class='greyBlock'></div>"), tLeft = this.yBox.yOrder, tHead = this.xBox.xOrder,
         bLeft = tLeft.find('table tr:first td:first').outerWidth(), bTop = tHead.find('table tr:first td:first').outerHeight();
 
     content.css({
         'width': bLeft,
         'height': bTop
     });
-
-
     $(this.container).append(content);
 
 };
 
 ITable.prototype.FrameSelect = function () {
 
-    var that=this,coords,wB1=$('#wBorder').find('div').eq(0), wB2= $('#wBorder').find('div').eq(1), wB3= $('#wBorder').find('div').eq(2), wB4=$('#wBorder').find('div').eq(3);
+    var that=this,coord,wB1=$('#wBorder').find('div').eq(0), wB2= $('#wBorder').find('div').eq(1), wB3= $('#wBorder').find('div').eq(2), wB4=$('#wBorder').find('div').eq(3);
 
     this.table.on('mouseover',function(){
         var event=event||arguments[0];
-        coords=$(event.target);
+        coord=$(event.target);
         that.moveLast=$(event.target);
     });
 
     $(document).off('mousedown').on('mousedown',function(){
         var event=event||arguments[0];
 
-        var onCols = parseInt($(coords).attr('cols')) , onRows = parseInt($(coords).attr('rows')) , sTop , sLeft , top , left;
+        var onCols = Number($(coord).attr('cols')) , onRows = Number($(coord).attr('rows')) , sTop , sLeft , top , left;
 
         $(document).off('mousemove').on('mousemove',function(){
 
@@ -252,8 +257,6 @@ ITable.prototype.FrameSelect = function () {
             }
 
 
-
-
             for(var i = startX; i <= endX ; i++) {
                 for(var j = startY; j <= endY; j++) {
                     tempId='#'+j+'-'+i;
@@ -277,7 +280,6 @@ ITable.prototype.FrameSelect = function () {
             sLeft=that.container.scrollLeft()-4;
 
              top=Number($('#'+startY+'-'+startX).offset().top)+sTop+1;
-           //  console.log(Number($('#'+startY+'-'+startX).offset().top),that.container.scrollTop());
 
             //top=Number(document.getElementById(startY+'-'+startX).offsetTop)+sTop;
              left=Number($('#'+startY+'-'+startX).offset().left)+sLeft+1;
@@ -486,13 +488,9 @@ function typing(event) {
         callZ.FillTextArea('keymove');
 
 
-        var nowX = parseInt($(sNode).attr('cols')),
+        var nowX = Number($(sNode).attr('cols')), nowY = Number($(sNode).attr('rows')),
 
-            nowY = parseInt($(sNode).attr('rows')),
-
-            colAdd = parseInt($(sNode).attr('colspan')) - 1 || 0,
-
-            rowAdd = parseInt($(sNode).attr('rowspan')) - 1 || 0;
+            colAdd = Number($(sNode).attr('colspan')) - 1 || 0, rowAdd = Number($(sNode).attr('rowspan')) - 1 || 0;
 
 
         event.data.time = Number(event.data.time) + 1;
@@ -503,9 +501,9 @@ function typing(event) {
 
             event.data.lastTd = sNode;
 
-            event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+            event.data.fixX = Number($(event.data.lastTd).attr('cols'));
 
-            event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+            event.data.fixY = Number($(event.data.lastTd).attr('rows'));
 
         }
 
@@ -546,9 +544,6 @@ function typing(event) {
                     callZ.tableInput.val(' ');
                 }
 
-
-
-
             }
 
 
@@ -564,9 +559,9 @@ function typing(event) {
 
                         event.data.lastTd = sNode;
 
-                        event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                        event.data.fixX = Number($(event.data.lastTd).attr('cols'));
 
-                        event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                        event.data.fixY = Number($(event.data.lastTd).attr('rows'));
 
                     }
 
@@ -582,9 +577,9 @@ function typing(event) {
 
                     event.data.lastTd = sNode;
 
-                    event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                    event.data.fixX = Number($(event.data.lastTd).attr('cols'));
 
-                    event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                    event.data.fixY = Number($(event.data.lastTd).attr('rows'));
 
                     break;
 
@@ -592,9 +587,9 @@ function typing(event) {
 
                     event.data.lastTd = sNode;
 
-                    event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                    event.data.fixX = Number($(event.data.lastTd).attr('cols'));
 
-                    event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                    event.data.fixY = Number($(event.data.lastTd).attr('rows'));
 
                     break;
 
@@ -602,9 +597,9 @@ function typing(event) {
 
                     event.data.lastTd = sNode;
 
-                    event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                    event.data.fixX = Number($(event.data.lastTd).attr('cols'));
 
-                    event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                    event.data.fixY = Number($(event.data.lastTd).attr('rows'));
 
                     break;
 
@@ -693,9 +688,9 @@ function typing(event) {
 
                         event.data.lastTd = sNode;
 
-                        event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                        event.data.fixX = Number($(event.data.lastTd).attr('cols'));
 
-                        event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                        event.data.fixY = Number($(event.data.lastTd).attr('rows'));
 
                     }
 
@@ -711,9 +706,9 @@ function typing(event) {
 
                     event.data.lastTd = sNode;
 
-                    event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                    event.data.fixX = Number($(event.data.lastTd).attr('cols'));
 
-                    event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                    event.data.fixY = Number($(event.data.lastTd).attr('rows'));
 
                     break;
 
@@ -721,9 +716,9 @@ function typing(event) {
 
                     event.data.lastTd = sNode;
 
-                    event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                    event.data.fixX = Number($(event.data.lastTd).attr('cols'));
 
-                    event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                    event.data.fixY = Number($(event.data.lastTd).attr('rows'));
 
                     break;
 
@@ -731,9 +726,9 @@ function typing(event) {
 
                     event.data.lastTd = sNode;
 
-                    event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                    event.data.fixX = Number($(event.data.lastTd).attr('cols'));
 
-                    event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                    event.data.fixY = Number($(event.data.lastTd).attr('rows'));
 
                     break;
 
@@ -741,9 +736,9 @@ function typing(event) {
 
                     event.data.lastTd = sNode;
 
-                    event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                    event.data.fixX = Number($(event.data.lastTd).attr('cols'));
 
-                    event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                    event.data.fixY = Number($(event.data.lastTd).attr('rows'));
 
                     break;
 
@@ -829,9 +824,9 @@ function typing(event) {
 
                         event.data.lastTd = sNode;
 
-                        event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                        event.data.fixX = Number($(event.data.lastTd).attr('cols'));
 
-                        event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                        event.data.fixY = Number($(event.data.lastTd).attr('rows'));
 
                     }
 
@@ -847,9 +842,9 @@ function typing(event) {
 
                     event.data.lastTd = sNode;
 
-                    event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                    event.data.fixX = Number($(event.data.lastTd).attr('cols'));
 
-                    event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                    event.data.fixY = Number($(event.data.lastTd).attr('rows'));
 
                     break;
 
@@ -857,9 +852,9 @@ function typing(event) {
 
                     event.data.lastTd = sNode;
 
-                    event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                    event.data.fixX = Number($(event.data.lastTd).attr('cols'));
 
-                    event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                    event.data.fixY = Number($(event.data.lastTd).attr('rows'));
 
                     break;
 
@@ -867,9 +862,9 @@ function typing(event) {
 
                     event.data.lastTd = sNode;
 
-                    event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                    event.data.fixX = Number($(event.data.lastTd).attr('cols'));
 
-                    event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                    event.data.fixY = Number($(event.data.lastTd).attr('rows'));
 
                     break;
 
@@ -877,15 +872,15 @@ function typing(event) {
 
                     event.data.lastTd = sNode;
 
-                    event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                    event.data.fixX = Number($(event.data.lastTd).attr('cols'));
 
-                    event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                    event.data.fixY = Number($(event.data.lastTd).attr('rows'));
 
                     break;
 
             }
 
-            var nextX = nowX-1, nextY = parseInt(event.data.fixY), id='#'+nextY+'-'+nextX;
+            var nextX = nowX-1, nextY = Number(event.data.fixY), id='#'+nextY+'-'+nextX;
 
             if ($(id).length > 0) {
 
@@ -966,9 +961,9 @@ function typing(event) {
 
                         event.data.lastTd = sNode;
 
-                        event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                        event.data.fixX = Number($(event.data.lastTd).attr('cols'));
 
-                        event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                        event.data.fixY = Number($(event.data.lastTd).attr('rows'));
 
                     }
 
@@ -984,9 +979,9 @@ function typing(event) {
 
                     event.data.lastTd = sNode;
 
-                    event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                    event.data.fixX = Number($(event.data.lastTd).attr('cols'));
 
-                    event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                    event.data.fixY = Number($(event.data.lastTd).attr('rows'));
 
                     break;
 
@@ -994,9 +989,9 @@ function typing(event) {
 
                     event.data.lastTd = sNode;
 
-                    event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                    event.data.fixX = Number($(event.data.lastTd).attr('cols'));
 
-                    event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                    event.data.fixY = Number($(event.data.lastTd).attr('rows'));
 
                     break;
 
@@ -1004,9 +999,9 @@ function typing(event) {
 
                     event.data.lastTd = sNode;
 
-                    event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                    event.data.fixX = Number($(event.data.lastTd).attr('cols'));
 
-                    event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                    event.data.fixY = Number($(event.data.lastTd).attr('rows'));
 
                     break;
 
@@ -1014,9 +1009,9 @@ function typing(event) {
 
                     event.data.lastTd = sNode;
 
-                    event.data.fixX = parseInt($(event.data.lastTd).attr('cols'));
+                    event.data.fixX = Number($(event.data.lastTd).attr('cols'));
 
-                    event.data.fixY = parseInt($(event.data.lastTd).attr('rows'));
+                    event.data.fixY = Number($(event.data.lastTd).attr('rows'));
 
                     break;
 
@@ -1076,14 +1071,13 @@ function typing(event) {
 ITable.prototype.SetCss = function () {
 
     var thatContainer = this.container, viewWidth = $(window).width(), viewHeight = $(window).height(), tBody = this.table.parent(),
+        bTop = this.xBox.xOrder.find('table tr:first td:first').outerHeight() + 1,that=this;
 
-        tLeft = $('.yOrder'), tHead = $('.xOrder'), bTop = tHead.find('table tr:first td:first').outerHeight() + 1;
-
-    tLeft.css({
+    this.yBox.yOrder.css({
         'height': viewHeight-153
     });
 
-    tHead.css({
+    this.xBox.xOrder.css({
         'width': viewWidth
     });
 
@@ -1113,7 +1107,7 @@ ITable.prototype.SetCss = function () {
 
         thatContainer.height(viewHeight - bTop - 113);
 
-        $('.yOrder').height(viewHeight - 153);
+        that.yBox.yOrder.height(viewHeight - 153);
 
     });
 
@@ -1122,14 +1116,14 @@ ITable.prototype.SetCss = function () {
 //滚动
 
 ITable.prototype.TableScroll = function () {
-
+    var that=this;
     this.container.on('scroll',function(){
 
         var scrollY = this.scrollTop, scrollX = this.scrollLeft;
 
-        $(".yOrder").find("table").css('margin-top', -scrollY);
+        that.yBox.yOrder.find("table").css('margin-top', -scrollY);
 
-        $(".xOrder").find("table").css('margin-left', -scrollX);
+        that.xBox.xOrder.find("table").css('margin-left', -scrollX);
 
     });
 
@@ -1601,15 +1595,15 @@ ITable.prototype.CornerCopy=function(){
 
                 tdWidth=parseInt($(coords).width()), tdHeight=parseInt($(coords).height()),
 
-                onCols = parseInt($(coords).attr('cols')) , onRows = parseInt($(coords).attr('rows')) ,
+                onCols = Number($(coords).attr('cols')) , onRows = Number($(coords).attr('rows')) ,
 
-                onCSpan = parseInt($(coords).attr('colspan'))  || 1, onRSpan = parseInt($(coords).attr('rowspan'))  || 1,
+                onCSpan = Number($(coords).attr('colspan'))  || 1, onRSpan = Number($(coords).attr('rowspan'))  || 1,
 
                 oExpectX = onCols + onCSpan-1, oExpectY = onRows + onRSpan-1,
 
                 xMin = oExpectX , yMin = oExpectY, sLeft = parseInt(this.scrollLeft), sTop = parseInt(this.scrollTop),
 
-                disHeight = parseInt($('.xOrder').outerHeight()) + parseInt($('.header').outerHeight()),
+                disHeight = parseInt(this.xBox.xOrder.outerHeight()) + parseInt($('.header').outerHeight()),
 
                 oX = ev.clientX + sLeft, oY = ev.clientY - disHeight + sTop;
 
@@ -1622,9 +1616,9 @@ ITable.prototype.CornerCopy=function(){
             $(that.container).on('mousemove', function () {
                 var coords=$(that.moveLast);
 
-                var nCols = parseInt($(coords).attr('cols')) , nRows = parseInt($(coords).attr('rows')) ;
+                var nCols = Number($(coords).attr('cols')) , nRows = Number($(coords).attr('rows')) ;
 
-                var nCSpan = parseInt($(coords).attr('colspan'))  || 1, nRSpan = parseInt($(coords).attr('rowspan'))  || 1;
+                var nCSpan = Number($(coords).attr('colspan'))  || 1, nRSpan = Number($(coords).attr('rowspan'))  || 1;
 
                 if(nCSpan>1||nRSpan>1){
                     that.HideReadBorder();
@@ -1752,7 +1746,7 @@ ITable.prototype.CornerCopy=function(){
 
 ITable.prototype.ChooseRow=function(){
     var that=this;
-    $('#leftTable').find('td').on('click',function(){
+    this.yBox.yTable.find('td').on('click',function(){
         var index=$(this).parent().index()+1;
        // var startYArr=[],endYArr=[];
         $('.picked').removeClass('picked');
@@ -1804,7 +1798,7 @@ ITable.prototype.ChooseRow=function(){
 
 ITable.prototype.ChooseCol=function(){
     var that=this;
-    $('#titleTable').find('td').on('click',function(){
+    this.xBox.xTable.find('td').on('click',function(){
         var index=Number($(this).index())+1;
        // var startXArr=[],endXArr=[];
         $('.picked').removeClass('picked');
@@ -1939,25 +1933,25 @@ ITable.prototype.LightCooR = function (obj) {
 
     this.GetTdStyle(obj);
 
-    $('#leftTable').find('tr').find('td').removeClass('lCoo');
+    this.yBox.yTable.find('tr').find('td').removeClass('lCoo');
 
-    $('#titleTable').find('tr').find('td').removeClass('lCoo');
+    this.yBox.yTable.find('tr').find('td').removeClass('lCoo');
 
     for (var t = 0 , len=target.length; t < len; t++) {
 
-        var cols = parseInt($(target).eq(t).attr('cols')) - 1, rows = parseInt($(target).eq(t).attr('rows')) - 1,
+        var cols = Number($(target).eq(t).attr('cols')) - 1, rows = Number($(target).eq(t).attr('rows')) - 1,
 
-            cSpan = parseInt($(target).eq(t).attr('colspan')) - 1 || 0, rSpan = parseInt($(target).eq(t).attr('rowspan')) - 1 || 0;
+            cSpan = Number($(target).eq(t).attr('colspan')) - 1 || 0, rSpan = Number($(target).eq(t).attr('rowspan')) - 1 || 0;
 
         for (var i = rows,iLen=rows+rSpan+1; i < iLen; i++) {
 
-            $('#leftTable').find('tr').eq(i).find('td').addClass('lCoo');
+            this.yBox.yTable.find('tr').eq(i).find('td').addClass('lCoo');
 
         }
 
         for (var j = cols,jLen=cols + cSpan + 1; j < jLen; j++) {
 
-            $('#titleTable').find('tr').find('td').eq(j - 1).addClass('lCoo');
+            this.yBox.yTable.find('tr').find('td').eq(j - 1).addClass('lCoo');
 
         }
 
@@ -1970,7 +1964,7 @@ ITable.prototype.ListenHeight=function(){
     var len=this.rowCount;
     for(var j=0;j<len;j++){
         var height=this.table.find('tr').eq(j).find('th').height()-1;
-        $('#leftTable').find('tr').eq(j).find('td').height(height);
+        this.yBox.yTable.find('tr').eq(j).find('td').height(height);
     }
 
 };
@@ -2678,9 +2672,9 @@ ITable.prototype.InsertCol = function () {
 
             for (var i = 0; i < sNode.length; i++) {
 
-                var cols = parseInt(sNode.eq(i).attr('cols')) , rows = parseInt(sNode.eq(i).attr('rows'));
+                var cols = Number(sNode.eq(i).attr('cols')) , rows = Number(sNode.eq(i).attr('rows'));
 
-                var cAdd = parseInt(sNode.eq(i).attr('colspan')) || 1 , rAdd = parseInt(sNode.eq(i).attr('rowspan')) || 1;
+                var cAdd = Number(sNode.eq(i).attr('colspan')) || 1 , rAdd = Number(sNode.eq(i).attr('rowspan')) || 1;
 
                 cols = cols + cAdd - 1;
 
@@ -2735,7 +2729,7 @@ ITable.prototype.InsertCol = function () {
 
         } else {
 
-            var xIndex = parseInt(sNode.attr('cols')) , col = $('<col style="width:100px">');
+            var xIndex = Number(sNode.attr('cols')) , col = $('<col style="width:100px">');
 
             for (var i = 1; i < that.rowCount + 1;) {
                 if ($('#' + i + '-' + xIndex).length > 0) {
@@ -2799,9 +2793,9 @@ ITable.prototype.InsertRow = function () {
 
             for (var i = 0; i < sNode.length; i++) {
 
-                var cols = parseInt(sNode.eq(i).attr('cols')),rows = parseInt(sNode.eq(i).attr('rows'));
+                var cols = Number(sNode.eq(i).attr('cols')),rows = Number(sNode.eq(i).attr('rows'));
 
-                var cAdd = parseInt(sNode.eq(i).attr('colspan')) || 1,rAdd = parseInt(sNode.eq(i).attr('rowspan')) || 1;
+                var cAdd = Number(sNode.eq(i).attr('colspan')) || 1,rAdd = Number(sNode.eq(i).attr('rowspan')) || 1;
 
                 cols = cols + cAdd - 1;
 
@@ -2852,7 +2846,7 @@ ITable.prototype.InsertRow = function () {
 
         } else {
 
-            var yIndex = parseInt(sNode.attr('rows')),tr = $('<tr></tr>');
+            var yIndex = Number(sNode.attr('rows')),tr = $('<tr></tr>');
 
             for (var i = 0; i <= that.cellCount;) {
 
@@ -2927,7 +2921,7 @@ ITable.prototype.DeleteCol = function () {
         } else {
 
 
-            var xIndex = parseInt(sNode.attr('cols'));
+            var xIndex = Number(sNode.attr('cols'));
 
             for (var i = 1; i < that.rowCount + 1;) {
                 if ($('#' + i + '-' + xIndex).length > 0) {
@@ -2995,7 +2989,7 @@ ITable.prototype.DeleteRow = function () {
 
         } else {
 
-            var yIndex = parseInt(sNode.attr('rows'));
+            var yIndex = Number(sNode.attr('rows'));
 
             for (var i = 1; i <= that.cellCount+1;) {
 
@@ -3138,7 +3132,7 @@ ITable.prototype.FxSum=function(){
        if($('.picked').length>1){
            var sum=0,rArr=[],cArr=[],pArr=[];
            $('.picked').each(function(){
-               var val=that.GetFillType($(this)),nowRow=parseInt($(this).attr('rows')),nowCol=parseInt($(this).attr('cols'));
+               var val=that.GetFillType($(this)),nowRow=Number($(this).attr('rows')),nowCol=Number($(this).attr('cols'));
                rArr.push(nowRow),cArr.push(nowCol);
                if(val===NaN){
                    val=0;
@@ -3186,7 +3180,7 @@ ITable.prototype.FxAvg=function(){
     if($('.picked').length>1){
         var sum=0,pL=$('.picked').length,avg=0,rArr=[],cArr=[],pArr=[];
         $('.picked').each(function(){
-            var val=that.GetFillType($(this)),nowRow=parseInt($(this).attr('rows')),nowCol=parseInt($(this).attr('cols'));
+            var val=that.GetFillType($(this)),nowRow=Number($(this).attr('rows')),nowCol=Number($(this).attr('cols'));
             rArr.push(nowRow),cArr.push(nowCol);
             if(val===NaN){
                 val=0;
@@ -3234,7 +3228,7 @@ ITable.prototype.FxCount=function(){
     if($('.picked').length>1){
         var count=0,rArr=[],cArr=[];
         $('.picked').each(function(){
-            var val=Number($(this).text()),nowRow=parseInt($(this).attr('rows')),nowCol=parseInt($(this).attr('cols'));
+            var val=Number($(this).text()),nowRow=Number($(this).attr('rows')),nowCol=Number($(this).attr('cols'));
             rArr.push(nowRow),cArr.push(nowCol);
             if(!isNaN(val)&&val!=0){
                 count++;
@@ -3266,7 +3260,7 @@ ITable.prototype.FxMax=function(){
     if($('.picked').length>1){
         var arr=[],rArr=[],cArr=[],pArr=[];
         $('.picked').each(function(){
-            var val=Number($(this).text()),nowRow=parseInt($(this).attr('rows')),nowCol=parseInt($(this).attr('cols'));
+            var val=Number($(this).text()),nowRow=Number($(this).attr('rows')),nowCol=Number($(this).attr('cols'));
             rArr.push(nowRow),cArr.push(nowCol);
             if(!isNaN(val)&&val!=0){
                 arr.push(val);
@@ -3313,7 +3307,7 @@ ITable.prototype.FxMin=function(){
     if($('.picked').length>1){
         var arr=[],rArr=[],cArr=[],pArr=[];
         $('.picked').each(function(){
-            var val=Number($(this).text()),nowRow=parseInt($(this).attr('rows')),nowCol=parseInt($(this).attr('cols'));
+            var val=Number($(this).text()),nowRow=Number($(this).attr('rows')),nowCol=Number($(this).attr('cols'));
             rArr.push(nowRow);
             cArr.push(nowCol);
 
@@ -3706,11 +3700,11 @@ ITable.prototype.AddSheet = function () {
 
         curId = curId.replace('sheet', '');
 
-        curId = parseInt(curId);
+        curId = Number(curId);
 
         $("#sheet" + curId).removeClass('sheetDefault');
 
-        var neId = parseInt(curId) + 1;
+        var neId = Number(curId) + 1;
 
         $('.sheetQueueDl').append(dd);
 
@@ -3737,7 +3731,7 @@ ITable.prototype.SheetWork = function () {
 
         var dId = $(this).attr('id').replace('sheet', '');
 
-        dId = parseInt(dId);
+        dId = Number(dId);
 
         that.CreateContent(dId);
 
@@ -3918,22 +3912,22 @@ ITable.prototype.UpdateLeft = function (index,type) {
 
         case 'add':
 
-            $('#leftTable').find('tr').eq(index).after('<tr><td></td></tr>');
+            this.yBox.yTable.find('tr').eq(index).after('<tr><td></td></tr>');
 
             for (var j = index,len=this.rowCount; j < len; j++) {
 
-                $('#leftTable').find('tr').eq(j).find('td').text(j+1);
+                this.yBox.yTable.find('tr').eq(j).find('td').text(j+1);
 
             }
             break;
 
         case 'delete':
 
-            $('#leftTable').find('tr').eq(index).remove();
+            this.yBox.yTable.find('tr').eq(index).remove();
 
             for (var j = 0,len=this.rowCount; j < len; j++) {
 
-                $('#leftTable').find('tr').eq(j).find('td').text(j+1);
+                this.yBox.yTable.find('tr').eq(j).find('td').text(j+1);
 
             }
 
@@ -3950,29 +3944,29 @@ ITable.prototype.UpdateLeft = function (index,type) {
 ITable.prototype.UpdateTop = function (index,type) {
     switch (type) {
         case 'add':
-            $('#titleTable').find('colgroup').find('col').eq(index).after('<col style="width:100px">');
+            this.xBox.xTable.find('colgroup').find('col').eq(index).after('<col style="width:100px">');
 
-            $('#titleTable').find('tbody').find('tr').find('td').eq(index).after('<td></td>');
+            this.xBox.xTable.find('tbody').find('tr').find('td').eq(index).after('<td></td>');
 
             var len=this.cellCount;
 
             for (var j = index; j <= len; j++) {
 
-                $('#titleTable').find('tbody').find('tr').find('td').eq(j).text(IntToChr(j));
+                this.xBox.xTable.find('tbody').find('tr').find('td').eq(j).text(IntToChr(j));
 
             }
             break;
 
         case 'delete':
-            $('#titleTable').find('colgroup').find('col').eq(index).remove();
+            this.xBox.xTable.find('colgroup').find('col').eq(index).remove();
 
-            $('#titleTable').find('tbody').find('tr').find('td').eq(index).remove();
+            this.xBox.xTable.find('tbody').find('tr').find('td').eq(index).remove();
 
             var len=this.cellCount;
 
             for (var j = 1; j <= len; j++) {
 
-                $('#titleTable').find('tbody').find('tr').find('td').eq(j).text(IntToChr(j));
+                this.xBox.xTable.find('tbody').find('tr').find('td').eq(j).text(IntToChr(j));
 
             }
             break;
@@ -3985,7 +3979,7 @@ ITable.prototype.UpdateTop = function (index,type) {
 
 ITable.prototype.LargeCol = function () {
 
-    var container = this.container,that = this, event = window.event || arguments[0], exW = $('.yOrder').outerWidth();
+    var container = this.container,that = this, event = window.event || arguments[0], exW =(this.xBox.xOrder).outerWidth();
 
     // $('#titleTable').find('td').each(function () {
     //
@@ -4074,7 +4068,7 @@ ITable.prototype.LargeCol = function () {
     // });
 
 
-    $('#titleTable').off('mousemove').on('mousemove',function(){
+    this.xBox.xTable.off('mousemove').on('mousemove',function(){
          var event = window.event || arguments[0];
 
          var w = $(event.target).width();
@@ -4130,7 +4124,7 @@ ITable.prototype.LargeCol = function () {
 
                             that.table.find('colgroup').find('col').eq(index).css('width', w + move);
 
-                            $('#titleTable').find('colgroup').find('col').eq(index).css('width', w + move);
+                            that.xBox.xTable.find('colgroup').find('col').eq(index).css('width', w + move);
 
                             $(container).append(lLine);
 
@@ -4163,7 +4157,7 @@ ITable.prototype.LargeCol = function () {
 
 ITable.prototype.LargeRow = function () {
 
-    var container = this.container, that = this , exH = $('.yOrder').outerHeight(), headerH=parseInt($(container).css('marginTop'));
+    var container = this.container, that = this , exH = this.yBox.yOrder.outerHeight(), headerH=parseInt($(container).css('marginTop'));
 
     // $('#leftTable').find('td').each(function () {
     //
@@ -4261,7 +4255,7 @@ ITable.prototype.LargeRow = function () {
     // });
 
 
-    $('#leftTable').off('mousemove').on('mousemove',function(){
+    this.yBox.yTable.off('mousemove').on('mousemove',function(){
 
         var event = window.event || arguments[0];
 
@@ -4320,7 +4314,7 @@ ITable.prototype.LargeRow = function () {
 
                             that.table.find('tr').find('th').eq(index).css('height',tempMove);
 
-                            $('#leftTable').find('td').eq(index).css('height', tempMove_1);
+                            that.yBox.yTable.find('td').eq(index).css('height', tempMove_1);
 
                             $(container).append(lLine);
 
