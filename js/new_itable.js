@@ -187,7 +187,7 @@ ITable.prototype.CreateYAxis = function () {
 ITable.prototype.CreateTip = function () {
 
     var content = $("<div class='greyBlock'></div>"),
-        bLeft =  this.yBox.yOrder.yTable.find('tr:first td:first').outerWidth(), bTop = this.xBox.xOrder.xTable.find('tr:first td:first').outerHeight();
+        bLeft =  this.yBox.yTable.find('tr:first td:first').outerWidth(), bTop = this.xBox.xTable.find('tr:first td:first').outerHeight();
 
     content.css({
         'width': bLeft,
@@ -300,11 +300,8 @@ ITable.prototype.FrameSelect = function () {
             sTop=that.container.scrollTop()-96;
             sLeft=that.container.scrollLeft()-4;
 
-             top=Number($('#'+startY+'-'+startX).offset().top)+sTop+1;
-             left=Number($('#'+startY+'-'+startX).offset().left)+sLeft+1;
-           // left=Number(document.getElementById(startY+'-'+startX).offsetLeft)+sLeft;
-           // $('#wBorder').hide();
-            //wB1.hide();wB2.hide();wB3.hide();wB4.hide();
+            top=Number($('#'+startY+'-'+startX).offset().top)+sTop+1;
+            left=Number($('#'+startY+'-'+startX).offset().left)+sLeft+1;
 
             that.frameBorder.blueBorder.blueBorderContainer.css({
                 'top': top,
@@ -372,7 +369,6 @@ ITable.prototype.SetTextArea=function(visible){
 
 ITable.prototype.HideTextArea=function(){
     this.tableInput.inputContainer.hide();
-
 };
 
 ITable.prototype.fillExTextArea=function(eType,val,ex){
@@ -455,10 +451,6 @@ ITable.prototype.IsExpress=function(val){
                     if((that.tableInput.input.val()).charAt(typePosition+1).match(/\=|\+|\-|\*|\//g)){
 
                     }
-                    // var v=$('#iTableInput').val();
-                    // v=v.replace(getSelectionText(),event.data.coordinate);
-                  //  $('#iTableInput').val(v);
-
                     that.tableInput.input.iAddField(event.data.coordinate);
                 }
 
@@ -1040,7 +1032,6 @@ function typing(event) {
 
             } else {
                 $('.picked').removeClass('picked');
-
                 for(var i=0,len=callZ.mergeTds.length;i<len;i++){
                     var mStartX=Number($(callZ.mergeTds[i]).attr('cols')),mEndX=mStartX+Number($(callZ.mergeTds[i]).attr('colspan'));
                     var mStartY=Number($(callZ.mergeTds[i]).attr('rows')),mEndY=mStartY+Number($(callZ.mergeTds[i]).attr('rowspan'));
@@ -1054,7 +1045,6 @@ function typing(event) {
             }
 
             event.data.keyCode = event.keyCode;
-
             callZ.LightCooR($('.picked'));
 
         }
@@ -1078,9 +1068,8 @@ function typing(event) {
 }
 
 ITable.prototype.SetCss = function () {
-
     var thatContainer = this.container, viewWidth = $(window).width(), viewHeight = $(window).height(), tBody = this.table.parent(),
-        bTop = this.xBox.xOrder.xTable.find('tr:first td:first').outerHeight() + 1,that=this;
+        bTop = this.xBox.xTable.find('tr:first td:first').outerHeight() + 1,that=this;
 
     this.yBox.yOrder.css({
         'height': viewHeight-153
@@ -1589,7 +1578,7 @@ ITable.prototype.CornerCopy=function(){
                 that.frameBorder.redBorder.redBorderContainer.show();
                 that.frameBorder.redBorder.redBorderContainer.css({
                     'top': top,
-                    'left': left,
+                    'left': left
                 });
 
                 wB1Style={ 'width': totalWidth, 'height': '2px', 'left': 0, 'top': 0 };
@@ -3005,7 +2994,8 @@ ITable.prototype.FxSum=function(){
            var sum=0,rArr=[],cArr=[],pArr=[];
            $('.picked').each(function(){
                var val=that.GetFillType($(this)),nowRow=Number($(this).attr('rows')),nowCol=Number($(this).attr('cols'));
-               rArr.push(nowRow),cArr.push(nowCol);
+               rArr.push(nowRow);
+               cArr.push(nowCol);
                if(val===NaN){
                    val=0;
                }else{
@@ -3053,7 +3043,8 @@ ITable.prototype.FxAvg=function(){
         var sum=0,pL=$('.picked').length,avg=0,rArr=[],cArr=[],pArr=[];
         $('.picked').each(function(){
             var val=that.GetFillType($(this)),nowRow=Number($(this).attr('rows')),nowCol=Number($(this).attr('cols'));
-            rArr.push(nowRow),cArr.push(nowCol);
+            rArr.push(nowRow);
+            cArr.push(nowCol);
             if(val===NaN){
                 val=0;
             }else{
@@ -3101,7 +3092,8 @@ ITable.prototype.FxCount=function(){
         var count=0,rArr=[],cArr=[];
         $('.picked').each(function(){
             var val=Number($(this).text()),nowRow=Number($(this).attr('rows')),nowCol=Number($(this).attr('cols'));
-            rArr.push(nowRow),cArr.push(nowCol);
+            rArr.push(nowRow);
+            cArr.push(nowCol);
             if(!isNaN(val)&&val!=0){
                 count++;
             }else{
@@ -3133,7 +3125,8 @@ ITable.prototype.FxMax=function(){
         var arr=[],rArr=[],cArr=[],pArr=[];
         $('.picked').each(function(){
             var val=Number($(this).text()),nowRow=Number($(this).attr('rows')),nowCol=Number($(this).attr('cols'));
-            rArr.push(nowRow),cArr.push(nowCol);
+            rArr.push(nowRow);
+            cArr.push(nowCol);
             if(!isNaN(val)&&val!=0){
                 arr.push(val);
             }else{
@@ -4709,7 +4702,7 @@ ITable.prototype.getValue = function (arr) {
     var value,text = Number($('#'+yCoo+'-'+xCoo).text());
 
 
-    if (typeof(text) != 'number') {
+    if (typeof(text) !== 'number') {
 
         value = 0;
 
