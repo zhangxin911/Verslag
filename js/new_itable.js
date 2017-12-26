@@ -38,8 +38,14 @@ function ITable(tContainer, tSettings, tabs,mergeArray) {
             leftDiv:null,
             blueBorderContainer:null
         },
+        redBorder:{
+           topDiv:null,
+           rightDiv:null,
+           bottomDiv:null,
+           leftDiv:null,
+           redBorderContainer:null
+        },
         corner:null
-
     };
     this.mergeTds=mergeArray || [];
 }
@@ -291,9 +297,6 @@ ITable.prototype.FrameSelect = function () {
 
             }
 
-            // sTop=Number(that.container.scrollTop)-96;
-            // sLeft=Number(that.container.scrollLeft)-4;
-
             sTop=that.container.scrollTop()-96;
             sLeft=that.container.scrollLeft()-4;
 
@@ -304,12 +307,8 @@ ITable.prototype.FrameSelect = function () {
             //wB1.hide();wB2.hide();wB3.hide();wB4.hide();
 
             that.frameBorder.blueBorder.blueBorderContainer.css({
-
                 'top': top,
-
                 'left': left,
-
-
             });
 
             wB1Style={ 'width': totalWidth, 'height': '2px', 'left': 0, 'top': 0 };
@@ -473,8 +472,6 @@ ITable.prototype.IsExpress=function(val){
     }
 };
 
-
-
 ITable.prototype.KeyCursor = function () {
 
     var that = this;
@@ -482,9 +479,6 @@ ITable.prototype.KeyCursor = function () {
     $(document).off('keydown').on('keydown', {time: "0", lastTd: null, fixX: "", fixY: "", keyCode: "", callZ: that}, typing);
 
 };
-
-
-
 
 function typing(event) {
 
@@ -1127,9 +1121,7 @@ ITable.prototype.SetCss = function () {
     });
 
 };
-
 //滚动
-
 ITable.prototype.TableScroll = function () {
     var that=this;
     this.container.on('scroll',function(){
@@ -1144,9 +1136,7 @@ ITable.prototype.TableScroll = function () {
 
 
 };
-
 //填写表格
-
 ITable.prototype.FillTd = function (tid) {
 
     var tid = tid || 1, that = this;
@@ -1160,7 +1150,6 @@ ITable.prototype.FillTd = function (tid) {
     });
 
 };
-
 
 ITable.prototype.TdClick=function(event){
 
@@ -1186,13 +1175,10 @@ ITable.prototype.TdClick=function(event){
         $('#disbox').text(IntToChr(xCoo) + String(yCoo + 1));
 
     }
-
-
     event.data.target.TdToFx($(this));
     event.data.target.LightCooR($(this));
     $('#ip_fx').blur();
 };
-
 
 ITable.prototype.TdDbClick=function(event){
     var tdText = $(this).text(), eType='dblclick', ex=$(this).attr('ex');
@@ -1215,10 +1201,8 @@ ITable.prototype.TdDbClick=function(event){
     stopPropagation();
 };
 
-
 ITable.prototype.BlueBorder=function(){
 
-   // var wBorder = $('<div class="wBorder" id="wBorder"></div>');
     this.frameBorder.blueBorder.blueBorderContainer=  $('<div class="wBorder" id="wBorder"></div>');
     this.frameBorder.blueBorder.blueBorderContainer.css({
         'top': 0,
@@ -1240,19 +1224,7 @@ ITable.prototype.BlueBorder=function(){
 
     });
     this.frameBorder.blueBorder.blueBorderContainer.append( this.frameBorder.blueBorder.topDiv);
-//left
 
-    this.frameBorder.blueBorder.leftDiv.css({
-
-        'width': '2px',
-
-        'position': 'absolute',
-
-        'background': 'rgb(82, 146, 247)'
-
-    });
-
-    this.frameBorder.blueBorder.blueBorderContainer.append( this.frameBorder.blueBorder.leftDiv);
   //right
 
     this.frameBorder.blueBorder.rightDiv.css({
@@ -1267,7 +1239,7 @@ ITable.prototype.BlueBorder=function(){
 
     this.frameBorder.blueBorder.blueBorderContainer.append( this.frameBorder.blueBorder.rightDiv);
 
-//bottom
+    //bottom
     this.frameBorder.blueBorder.bottomDiv.css({
 
         'height': '2px',
@@ -1277,14 +1249,30 @@ ITable.prototype.BlueBorder=function(){
         'background': 'rgb(82, 146, 247)'
 
     });
+    this.frameBorder.blueBorder.blueBorderContainer.append(this.frameBorder.blueBorder.bottomDiv);
+
+    //left
+
+    this.frameBorder.blueBorder.leftDiv.css({
+
+        'width': '2px',
+
+        'position': 'absolute',
+
+        'background': 'rgb(82, 146, 247)'
+
+    });
+
+    this.frameBorder.blueBorder.blueBorderContainer.append( this.frameBorder.blueBorder.leftDiv);
+
 
     this.frameBorder.corner = $('<div class="scorner" id="scorner"></div>');
 
     //红色
 
-    var wrBorder = $('<div class="wrBorder"></div>');
+    this.frameBorder.redBorder.redBorderContainer = $('<div class="wrBorder"></div>');
 
-    wrBorder.css({
+    this.frameBorder.redBorder.redBorderContainer.css({
 
         'top': 0,
 
@@ -1294,51 +1282,9 @@ ITable.prototype.BlueBorder=function(){
 
     });
 
-    var topRB = $('<div></div>');
+    this.frameBorder.redBorder.topDiv = $('<div></div>');
 
-    topRB.css({
-
-        'height': '2px',
-
-        'position': 'absolute',
-
-        'background': 'red'
-
-    });
-
-    wrBorder.append(topRB);
-
-    var leftRB = $('<div></div>');
-
-    leftRB.css({
-
-        'width': '2px',
-
-        'position': 'absolute',
-
-        'background': 'red'
-
-    });
-
-    wrBorder.append(leftRB);
-
-    var rightRB = $('<div></div>');
-
-    rightRB.css({
-
-        'width': '2px',
-
-        'position': 'absolute',
-
-        'background': 'red'
-
-    });
-
-    wrBorder.append(rightRB);
-
-    var bottomRB = $('<div></div>');
-
-    bottomRB.css({
+    this.frameBorder.redBorder.topDiv.css({
 
         'height': '2px',
 
@@ -1348,129 +1294,57 @@ ITable.prototype.BlueBorder=function(){
 
     });
 
-    wrBorder.append(bottomRB);
+    this.frameBorder.redBorder.redBorderContainer.append(this.frameBorder.redBorder.topDiv);
 
-    this.frameBorder.blueBorder.blueBorderContainer.append(this.frameBorder.blueBorder.bottomDiv);
+    this.frameBorder.redBorder.rightDiv= $('<div></div>');
+
+    this.frameBorder.redBorder.rightDiv.css({
+
+        'width': '2px',
+
+        'position': 'absolute',
+
+        'background': 'red'
+
+    });
+
+    this.frameBorder.redBorder.redBorderContainer.append(this.frameBorder.redBorder.rightDiv);
+
+    this.frameBorder.redBorder.bottomDiv = $('<div></div>');
+
+    this.frameBorder.redBorder.bottomDiv.css({
+
+        'height': '2px',
+
+        'position': 'absolute',
+
+        'background': 'red'
+
+    });
+
+    this.frameBorder.redBorder.redBorderContainer.append(this.frameBorder.redBorder.bottomDiv);
+
+    this.frameBorder.redBorder.leftDiv = $('<div></div>');
+
+    this.frameBorder.redBorder.leftDiv.css({
+
+        'width': '2px',
+
+        'position': 'absolute',
+
+        'background': 'red'
+
+    });
+    this.frameBorder.redBorder.redBorderContainer.append(this.frameBorder.redBorder.leftDiv);
 
     this.frameBorder.blueBorder.blueBorderContainer.append(this.frameBorder.corner);
 
     this.container.append( this.frameBorder.blueBorder.blueBorderContainer);
 
-    this.container.append(wrBorder);
+    this.container.append(this.frameBorder.redBorder.redBorderContainer);
 
 
 };
-
-
-ITable.prototype.SetRedBorder=function(obj){
-    if($(obj).length>0){
-        var topArr = [], leftArr = [],topMin, leftMin, totalWidth = 0, totalHeight = 0;
-
-        for (var i = 0; i < obj.length; i++) {
-
-            var top = Number(obj[i].offsetTop), left = Number(obj[i].offsetLeft), width = Number(obj[i].offsetWidth), height = Number(obj[i].offsetHeight);
-
-            if (top < _.min(topArr)) {
-
-                if ($('.wrBorder').length > 0) {
-
-                    $('.wrBorder').hide();
-
-                }
-
-            }
-
-            if (left < _.min(leftArr)) {
-
-                if ($('.wrBorder').length > 0) {
-
-                    $('.wrBorder').hide();
-
-                }
-
-            }
-
-            topArr.push(top);
-
-            leftArr.push(left);
-
-            topMin = _.min(topArr), leftMin = _.min(leftArr);
-
-            if (top === _.min(topArr)) {
-
-                totalWidth += width;
-
-            }
-
-            if (left === _.min(leftArr)) {
-
-                totalHeight += height;
-
-            }
-
-
-            $('.wrBorder').css({
-
-                'top': topMin,
-
-                'left': leftMin,
-
-                'display': 'block'
-            });
-
-            $('.wrBorder').find('div').eq(0).css({
-
-                'width': totalWidth,
-
-                'height': '2px',
-
-                'left': 0,
-
-                'top': 0
-
-            });
-
-            $('.wrBorder').find('div').eq(1).css({
-                'width': totalWidth,
-
-                'height': '2px',
-
-                'left': 0,
-
-                'top': totalHeight
-            });
-
-            $('.wrBorder').find('div').eq(2).css({
-
-                'width': '2px',
-
-                'height': totalHeight,
-
-                'left': 0,
-
-                'top': 0
-
-            });
-
-            $('.wrBorder').find('div').eq(3).css({
-                'width': '2px',
-
-                'height': totalHeight,
-
-                'left': totalWidth,
-
-                'top': 0
-
-            });
-
-        }
-
-
-    }else{
-
-    }
-};
-
 
 ITable.prototype.HideReadBorder=function(){
     $('.wrBorder').hide();
@@ -1489,9 +1363,9 @@ ITable.prototype.SetBlueBorder=function(obj){
 
                if (top < _.min(topArr)) {
 
-                   if ($('.wBorder').length > 0) {
+                   if (this.frameBorder.blueBorder.blueBorderContainer.length > 0) {
 
-                       $('.wBorder').hide();
+                       this.frameBorder.blueBorder.blueBorderContainer.hide();
 
                    }
 
@@ -1499,9 +1373,9 @@ ITable.prototype.SetBlueBorder=function(obj){
 
                if (left < _.min(leftArr)) {
 
-                   if ($('.wBorder').length > 0) {
+                   if (this.frameBorder.blueBorder.blueBorderContainer.length > 0) {
 
-                       $('.wBorder').hide();
+                       this.frameBorder.blueBorder.blueBorderContainer.hide();
 
                    }
 
@@ -1510,8 +1384,6 @@ ITable.prototype.SetBlueBorder=function(obj){
                topArr.push(top);
 
                leftArr.push(left);
-
-             //  var col = parseInt($(obj[i]).attr('cols')) + parseInt($(obj[i]).attr('colspan'));
 
                topMin = _.min(topArr), leftMin = _.min(leftArr);
 
@@ -1528,67 +1400,17 @@ ITable.prototype.SetBlueBorder=function(obj){
                }
 
 
-               $('.wBorder').css({
+               this.frameBorder.blueBorder.blueBorderContainer.css({'top': topMin, 'left': leftMin, 'display': 'block'});
 
-                   'top': topMin,
+               this.frameBorder.blueBorder.topDiv.css({'width': totalWidth, 'height': '2px', 'left': 0, 'top': 0});
 
-                   'left': leftMin,
+               this.frameBorder.blueBorder.rightDiv.css({'width': totalWidth, 'height': '2px', 'left': 0, 'top': totalHeight});
 
-                   'display': 'block'
-               });
+               this.frameBorder.blueBorder.bottomDiv.css({'width': '2px', 'height': totalHeight, 'left': totalWidth, 'top': 0});
 
-               $('.wBorder').find('div').eq(0).css({
+               this.frameBorder.blueBorder.leftDiv.css({'width': '2px', 'height': totalHeight, 'left': 0, 'top': 0});
 
-                   'width': totalWidth,
-
-                   'height': '2px',
-
-                   'left': 0,
-
-                   'top': 0
-
-               });
-
-               $('.wBorder').find('div').eq(1).css({
-                   'width': totalWidth,
-
-                   'height': '2px',
-
-                   'left': 0,
-
-                   'top': totalHeight
-               });
-
-               $('.wBorder').find('div').eq(2).css({
-
-                   'width': '2px',
-
-                   'height': totalHeight,
-
-                   'left': 0,
-
-                   'top': 0
-
-               });
-
-               $('.wBorder').find('div').eq(3).css({
-                   'width': '2px',
-
-                   'height': totalHeight,
-
-                   'left': totalWidth,
-
-                   'top': 0
-
-               });
-
-               $('.scorner').css({
-
-                   'top':  totalHeight - 2,
-
-                   'left': totalWidth - 2
-
-               });
+               this.frameBorder.corner.css({'top':  totalHeight - 2, 'left': totalWidth - 2});
 
            }
 
@@ -1600,150 +1422,182 @@ ITable.prototype.SetBlueBorder=function(obj){
 };
 
 ITable.prototype.CornerCopy=function(){
-    var that=this;
+    var that=this,coord,
+        wB1=this.frameBorder.redBorder.topDiv,
+        wB2=this.frameBorder.redBorder.rightDiv,
+        wB3=this.frameBorder.redBorder.bottomDiv,
+        wB4=this.frameBorder.redBorder.leftDiv;
 
-    $('.scorner').on('mouseenter',function(){
+    this.table.on('mouseover',function(){
+        var event=event||arguments[0];
+        coord=$(event.target);
+        that.moveLast=$(event.target);
+    });
+
+    this.frameBorder.corner.on('mouseenter',function(){
 
         $(this).css('cursor', 'crosshair');
 
         $(this).on('mousedown', function () {
-            $(that.container).off('mousedown');
+            $(document).off('mousedown');
 
-            var ev = window.event || arguments[0], coords=$('.picked'), copyVal=$(coords).html(),
+            var event=event||arguments[0];
 
-                tdWidth=parseInt($(coords).width()), tdHeight=parseInt($(coords).height()),
+            var onCols = Number($(coord).attr('cols')) , onRows = Number($(coord).attr('rows')) , sTop , sLeft , top , left,
+                copyVal=$(coord).html();
 
-                onCols = Number($(coords).attr('cols')) , onRows = Number($(coords).attr('rows')) ,
-
-                onCSpan = Number($(coords).attr('colspan'))  || 1, onRSpan = Number($(coords).attr('rowspan'))  || 1,
-
-                oExpectX = onCols + onCSpan-1, oExpectY = onRows + onRSpan-1,
-
-                xMin = oExpectX , yMin = oExpectY, sLeft = parseInt(this.scrollLeft), sTop = parseInt(this.scrollTop),
-
-                disHeight = parseInt(that.xBox.xOrder.outerHeight()) + parseInt(that.header.outerHeight()),
-
-                oX = ev.clientX + sLeft, oY = ev.clientY - disHeight + sTop;
-
-            if($(coords).length>1){
+            if($(coord).length>1){
                 that.HideReadBorder();
                 return;
             }
 
+            $(document).on('mousemove', function () {
+                 var coords=$(that.moveLast);
+                //
+                 var nCols = Number($(coords).attr('cols')) , nRows = Number($(coords).attr('rows')) ;
+                //
+                 var nCSpan = Number($(coords).attr('colspan'))  || 1, nRSpan = Number($(coords).attr('rowspan'))  || 1;
 
-            $(that.container).on('mousemove', function () {
-                var coords=$(that.moveLast);
+                var moveCS=isNaN(Number(that.moveLast.attr('colspan')))?1:Number(that.moveLast.attr('colspan')),
 
-                var nCols = Number($(coords).attr('cols')) , nRows = Number($(coords).attr('rows')) ;
+                    moveRS=isNaN(Number(that.moveLast.attr('rowspan')))?1:Number(that.moveLast.attr('rowspan')),
 
-                var nCSpan = Number($(coords).attr('colspan'))  || 1, nRSpan = Number($(coords).attr('rowspan'))  || 1;
+                    moveX=Number(that.moveLast.attr('cols'))+moveCS-1, moveY=Number(that.moveLast.attr('rows'))+moveRS-1,
 
-                if(nCSpan>1||nRSpan>1){
-                    that.HideReadBorder();
-                    return;
-                }
+                    startX,endX,startY,endY,totalWidth=0,totalHeight=0,tempId,
 
-                var expectX = nCols + nCSpan-1, expectY = nRows + nRSpan-1;
+                    wB1Style,wB2Style,wB3Style,wB4Style;
 
-                var xMax=expectX,yMax=expectY,evt = window.event || arguments[0] , _x , _y ;
+                if(onCols>nCols){
+                      if(onRows===nRows){
+                         // console.log('西');
+                          startX=moveX;
+                          endX=onCols;
+                          startY=onRows;
+                          endY=onRows;
+                      }
+                     if(onRows>nRows){
 
-                _x = (evt.x || evt.clientX);
-
-                _y = (evt.y || evt.clientY);
-
-                _x = _x + sLeft;
-
-                _y = _y + sTop - disHeight;
-
-
-                if(_x-oX>=0){
-
-                    if(_y<=oY&&_y>=oY-tdHeight){
-                         //E
-                        yMax=yMin;
-
-                    }
-
-                    if(_y<oY&&_y<oY-tdHeight){
-                        //E-N
-                        yMax=yMin;
-                    }
-
-                    if(_y>oY){
-                        //E-S
-                        yMax=yMin;
-                    }
-
+                        // console.log('西北');
+                         startX=onCols;
+                         endX=onCols;
+                         startY=nRows;
+                         endY=onRows;
+                     }
+                     if(onRows<nRows){
+                        // console.log('西南');
+                         startX=onCols;
+                         endX=onCols;
+                         startY=onRows;
+                         endY=nRows;
+                     }
                 }else{
-                    if(_y<=oY&&_y>=oY-tdHeight&&_x+tdWidth<oX){
-                        //W
-                        yMax=yMin;
+                    if(onRows===nRows){
+                        //console.log('东');
+                        startX=onCols;
+                        endX=moveX;
+                        startY=onRows;
+                        endY=onRows;
                     }
-                    if(_y<oY&&_y<oY-tdHeight&&_x+tdWidth<oX){
-                        //W-N
-                        yMax=yMin;
+                    if(onRows>nRows){
+                       // console.log('东北');
+                        startX=onCols;
+                        endX=moveX;
+                        startY=onRows;
+                        endY=onRows;
+                        if(onCols===nCols){
+                            // console.log('北');
+                            startX=onCols;
+                            endX=onCols;
+                            startY=nRows;
+                            endY=onRows;
+                        }
                     }
-                    if(_y>oY&&_x+tdWidth<oX){
-                        //W-S
-                        yMax=yMin;
+                    if(onRows<nRows){
+                        //console.log('东南');
+                        startX=onCols;
+                        endX=onCols;
+                        startY=onRows;
+                        endY=nRows;
+                        if(onCols===nCols){
+                            // console.log('南');
+                            startX=onCols;
+                            endX=onCols;
+                            startY=onRows;
+                            endY=nRows;
+                        }
                     }
-                    if(_y<oY&&_y<oY-tdHeight&&_x+tdWidth>oX){
-                        //N
-                        xMax=xMin;
+                }
+
+                $('.picked').removeClass('picked');
+
+                for(var m=0,len=that.mergeTds.length;m<len;m++){
+                    var mergeCS=isNaN(Number($(that.mergeTds[m]).attr('colspan')))?1:Number($(that.mergeTds[m]).attr('colspan')),
+                        mergeRS=isNaN(Number($(that.mergeTds[m]).attr('rowspan')))?1:Number($(that.mergeTds[m]).attr('rowspan')),
+                        mergeCol=Number($(that.mergeTds[m]).attr('cols')), mergeRow=Number($(that.mergeTds[m]).attr('rows')),
+                        mergeX=Number($(that.mergeTds[m]).attr('cols'))+mergeCS-1, mergeY=Number($(that.mergeTds[m]).attr('rows'))+mergeRS-1;
+
+                    if(startX>mergeX){
+                        //out 开始点在右边
+                    }else{
+                        //开始点在左边
+                        if(endX<mergeCol){
+                            //out 终止点在上边
+                        }else{
+                            if(startY>mergeY){
+                                //out  开始点在下面
+                            }else{
+                                if(endY<mergeY&&startY<mergeRow){
+                                    //out
+                                }else{
+                                       return true;
+                                }
+
+                            }
+
+                        }
+
                     }
-                    if(_y>oY&&_x+tdWidth>=oX){
-                        //S
-                        xMax=xMin;
-                    }
+
 
                 }
 
 
+                for(var i = startX; i <= endX ; i++) {
+                    for(var j = startY; j <= endY; j++) {
+                        tempId='#'+j+'-'+i;
+                        $(tempId).addClass('picked');
 
-                that.table.find('td').removeClass('picked');
-
-                if(xMin<=xMax&&yMin<=yMax){
-                    for(var i = xMin; i <= xMax ; i++) {
-                        for(var j = yMin; j <= yMax; j++) {
-                            var id='#'+j+'-'+i;
-                            $(id).addClass('picked');
-
+                        if(i===startX){
+                            totalHeight+=$('#'+j+'-'+startX).outerHeight();
                         }
-
-                    }
-                }else if(xMin<=xMax&&yMin>yMax){
-                    for(var i = xMin; i <= xMax ; i++) {
-                        for(var j = yMax; j <= yMin; j++) {
-                            var id='#'+j+'-'+i;
-                            $(id).addClass('picked');
-
-                        }
-
-                    }
-                }else if(xMin>xMax&&yMin<yMax){
-                    for(var i = xMax; i <= xMin ; i++) {
-                        for(var j = yMin; j <= yMax; j++) {
-                            var id='#'+j+'-'+i;
-
-                            $(id).addClass('picked');
-
-                        }
-
-                    }
-                }else{
-                    for(var i = xMax; i <= xMin ; i++) {
-                        for(var j = yMax; j <= yMin; j++) {
-                            var id='#'+j+'-'+i;
-
-                            $(id).addClass('picked');
-
+                        if(j===startY){
+                            totalWidth+=$('#'+startY+'-'+i).outerWidth();
                         }
 
                     }
 
                 }
-                that.SetRedBorder($('.picked'));
 
+                sTop=that.container.scrollTop()-96;
+                sLeft=that.container.scrollLeft()-4;
+
+                top=Number($('#'+startY+'-'+startX).offset().top)+sTop+1;
+                left=Number($('#'+startY+'-'+startX).offset().left)+sLeft+1;
+
+                that.frameBorder.redBorder.redBorderContainer.show();
+                that.frameBorder.redBorder.redBorderContainer.css({
+                    'top': top,
+                    'left': left,
+                });
+
+                wB1Style={ 'width': totalWidth, 'height': '2px', 'left': 0, 'top': 0 };
+                wB2Style={ 'width': totalWidth, 'height': '2px', 'left': 0, 'top': totalHeight };
+                wB3Style={ 'width': '2px', 'height': totalHeight, 'left': 0, 'top': 0 };
+                wB4Style={ 'width': '2px', 'height': totalHeight, 'left': totalWidth, 'top': 0 };
+                wB1.css(wB1Style); wB2.css(wB2Style); wB3.css(wB3Style); wB4.css(wB4Style);
+
+                that.frameBorder.blueBorder.blueBorderContainer.show();
 
 
             });
@@ -1751,8 +1605,8 @@ ITable.prototype.CornerCopy=function(){
                 that.HideReadBorder();
                 $('.picked').text(copyVal);
                 $(this).off('mouseup');
-                $(that.container).off('mousedown');
-                $(that.container).off('mousemove');
+                $(document).off('mousedown');
+                $(document).off('mousemove');
                 that.FrameSelect();
             });
 
