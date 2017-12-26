@@ -187,7 +187,7 @@ ITable.prototype.CreateYAxis = function () {
 ITable.prototype.CreateTip = function () {
 
     var content = $("<div class='greyBlock'></div>"),
-        bLeft =  this.yBox.yOrder.find('table tr:first td:first').outerWidth(), bTop = this.xBox.xOrder.find('table tr:first td:first').outerHeight();
+        bLeft =  this.yBox.yOrder.yTable.find('tr:first td:first').outerWidth(), bTop = this.xBox.xOrder.xTable.find('tr:first td:first').outerHeight();
 
     content.css({
         'width': bLeft,
@@ -1080,7 +1080,7 @@ function typing(event) {
 ITable.prototype.SetCss = function () {
 
     var thatContainer = this.container, viewWidth = $(window).width(), viewHeight = $(window).height(), tBody = this.table.parent(),
-        bTop = this.xBox.xOrder.find('table tr:first td:first').outerHeight() + 1,that=this;
+        bTop = this.xBox.xOrder.xTable.find('tr:first td:first').outerHeight() + 1,that=this;
 
     this.yBox.yOrder.css({
         'height': viewHeight-153
@@ -1128,9 +1128,10 @@ ITable.prototype.TableScroll = function () {
 
         var scrollY = this.scrollTop, scrollX = this.scrollLeft;
 
-        that.yBox.yOrder.find("table").css('margin-top', -scrollY);
+        that.yBox.yOrder.yTable.css('margin-top', -scrollY);
 
-        that.xBox.xOrder.find("table").css('margin-left', -scrollX);
+        that.xBox.xOrder.xTable.css('margin-left', -scrollX);
+
 
     });
 
