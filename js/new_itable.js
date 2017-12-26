@@ -1117,9 +1117,9 @@ ITable.prototype.TableScroll = function () {
 
         var scrollY = this.scrollTop, scrollX = this.scrollLeft;
 
-        that.yBox.yOrder.yTable.css('margin-top', -scrollY);
+        that.yBox.yTable.css('margin-top', -scrollY);
 
-        that.xBox.xOrder.xTable.css('margin-left', -scrollX);
+        that.xBox.xTable.css('margin-left', -scrollX);
 
 
     });
