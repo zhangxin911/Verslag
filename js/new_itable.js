@@ -351,15 +351,9 @@ ITable.prototype.SetTextArea=function(visible){
             this.tableInput.inputContainer.hide();
         }
 
-        this.tableInput.inputContainer.css({
-            'left':x,
-            'top':y
-        });
+        this.tableInput.inputContainer.css({'left':x, 'top':y});
 
-        this.tableInput.input.css({
-            'width':w,
-            'height':h
-        });
+        this.tableInput.input.css({'width':w,'height':h});
     }
 
 
@@ -1337,7 +1331,7 @@ ITable.prototype.BlueBorder=function(){
 };
 
 ITable.prototype.HideReadBorder=function(){
-    $('.wrBorder').hide();
+    this.frameBorder.redBorder.redBorderContainer.hide();
 };
 
 ITable.prototype.SetBlueBorder=function(obj){
