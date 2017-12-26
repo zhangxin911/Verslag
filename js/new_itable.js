@@ -17,7 +17,10 @@ function ITable(tContainer, tSettings, tabs,mergeArray) {
     this.tools=null;
     this.moveLast=null;
     this.table=null;
-    this.tableInput=null;
+    this.tableInput={
+        inputContainer:null,
+        input:null
+    };
     this.xBox={
         xOrder:null,
         xTable:null
@@ -25,8 +28,19 @@ function ITable(tContainer, tSettings, tabs,mergeArray) {
     this.yBox={
         yOrder:null,
         yTable:null
-    }
+    };
 
+    this.frameBorder={
+        blueBorder:{
+            topDiv:null,
+            rightDiv:null,
+            bottomDiv:null,
+            leftDiv:null,
+            blueBorderContainer:null
+        },
+        corner:null
+
+    };
     this.mergeTds=mergeArray || [];
 }
 
@@ -166,8 +180,8 @@ ITable.prototype.CreateYAxis = function () {
 
 ITable.prototype.CreateTip = function () {
 
-    var content = $("<div class='greyBlock'></div>"), tLeft = this.yBox.yOrder, tHead = this.xBox.xOrder,
-        bLeft = tLeft.find('table tr:first td:first').outerWidth(), bTop = tHead.find('table tr:first td:first').outerHeight();
+    var content = $("<div class='greyBlock'></div>"),
+        bLeft =  this.yBox.yOrder.find('table tr:first td:first').outerWidth(), bTop = this.xBox.xOrder.find('table tr:first td:first').outerHeight();
 
     content.css({
         'width': bLeft,
@@ -179,7 +193,11 @@ ITable.prototype.CreateTip = function () {
 
 ITable.prototype.FrameSelect = function () {
 
-    var that=this,coord,wB1=$('#wBorder').find('div').eq(0), wB2= $('#wBorder').find('div').eq(1), wB3= $('#wBorder').find('div').eq(2), wB4=$('#wBorder').find('div').eq(3);
+    var that=this,coord,
+    wB1=this.frameBorder.blueBorder.topDiv,
+    wB2=this.frameBorder.blueBorder.bottomDiv,
+    wB3=this.frameBorder.blueBorder.leftDiv,
+    wB4=this.frameBorder.blueBorder.rightDiv;
 
     this.table.on('mouseover',function(){
         var event=event||arguments[0];
@@ -280,14 +298,12 @@ ITable.prototype.FrameSelect = function () {
             sLeft=that.container.scrollLeft()-4;
 
              top=Number($('#'+startY+'-'+startX).offset().top)+sTop+1;
-
-            //top=Number(document.getElementById(startY+'-'+startX).offsetTop)+sTop;
              left=Number($('#'+startY+'-'+startX).offset().left)+sLeft+1;
            // left=Number(document.getElementById(startY+'-'+startX).offsetLeft)+sLeft;
            // $('#wBorder').hide();
             //wB1.hide();wB2.hide();wB3.hide();wB4.hide();
 
-            $('#wBorder').css({
+            that.frameBorder.blueBorder.blueBorderContainer.css({
 
                 'top': top,
 
@@ -302,16 +318,14 @@ ITable.prototype.FrameSelect = function () {
             wB4Style={ 'width': '2px', 'height': totalHeight, 'left': totalWidth, 'top': 0 };
             wB1.css(wB1Style); wB2.css(wB2Style); wB3.css(wB3Style); wB4.css(wB4Style);
 
-            $('#scorner').css({
+            that.frameBorder.corner.css({
 
                 'top':  totalHeight - 2,
 
                 'left': totalWidth - 2
 
             });
-            $('#wBorder').show();
-           // wB1.show();wB2.show();wB3.show();wB4.show();
-
+            that.frameBorder.blueBorder.blueBorderContainer.show();
         });
         $(document).on('mouseup',function(){
             $(this).off('mousemove');
@@ -323,10 +337,11 @@ ITable.prototype.FrameSelect = function () {
 
 
 ITable.prototype.TextArea=function(){
-     var div=$('<div class="iTableInputHolder" id="iTableInputHolder"></div>'),textArea=$('<input type="text" class="iTableInput" id="iTableInput">');
-     div.append(textArea);
-     $(this.container).append(div);
-     this.tableInput=textArea;
+     this.tableInput.inputContainer=$('<div class="iTableInputHolder" id="iTableInputHolder"></div>');
+     this.tableInput.input=$('<input type="text" class="iTableInput" id="iTableInput">');
+     this.tableInput.inputContainer.append(this.tableInput.input);
+     $(this.container).append(this.tableInput.inputContainer);
+
 };
 
 ITable.prototype.SetTextArea=function(visible){
@@ -335,17 +350,17 @@ ITable.prototype.SetTextArea=function(visible){
             y = $('.picked').offset().top+this.container.scrollTop()-parseInt($(this.container).css('margin-top'));
 
         if(visible===1){
-            $('#iTableInputHolder').show();
+            this.tableInput.inputContainer.show();
         }else{
-            $('#iTableInputHolder').hide();
+            this.tableInput.inputContainer.hide();
         }
 
-        $('#iTableInputHolder').css({
+        this.tableInput.inputContainer.css({
             'left':x,
             'top':y
         });
 
-        this.tableInput.css({
+        this.tableInput.input.css({
             'width':w,
             'height':h
         });
@@ -357,7 +372,7 @@ ITable.prototype.SetTextArea=function(visible){
 
 
 ITable.prototype.HideTextArea=function(){
-    $('#iTableInputHolder').hide();
+    this.tableInput.inputContainer.hide();
 
 };
 
@@ -371,15 +386,15 @@ ITable.prototype.FillTextArea=function(eType,val){
     switch(eType)
     {
         case 'dblclick':
-            this.tableInput.val('');
+            this.tableInput.input.val('');
             $(document).off('keydown');
-            this.tableInput.focus().val(val);
-            this.tableInput.on('change',function(){
+            this.tableInput.input.focus().val(val);
+            this.tableInput.input.on('change',function(){
                 $('#ip_fx').val($(this).val());
-                that.IsExpress(that.tableInput.val());
+                that.IsExpress(that.tableInput.input.val());
                 event.stopPropagation();
             });
-            this.tableInput.off('keyup').on('keyup',function(){
+            this.tableInput.input.off('keyup').on('keyup',function(){
                 if (event.keyCode === 13) {
                     var content =$(this).val();
                     var curClass=$('.picked').attr('class');
@@ -403,7 +418,7 @@ ITable.prototype.FillTextArea=function(eType,val){
             });
             break;
         case 'keymove':
-            this.tableInput.focus();
+            this.tableInput.input.focus();
             break;
         default:
 
@@ -421,31 +436,31 @@ ITable.prototype.IsExpress=function(val){
         var coordinates;
             this.table.find('td').off('click').on('click',{coordinate:coordinates},function(event){
 
-                that.tableInput.focus();
-                var typePosition=Number(that.tableInput.iGetFieldPos());
+                that.tableInput.input.focus();
+                var typePosition=Number(that.tableInput.input.iGetFieldPos());
                 event.data.coordinate=IntToChr(Number($(this).attr('cols'))-2)+$(this).attr('rows');
-                if(typePosition===that.tableInput.val().length){
+                if(typePosition===that.tableInput.input.val().length){
 
-                    if(that.tableInput.val().slice(-1)==='+'||that.tableInput.val().slice(-1)==='-'||that.tableInput.val().slice(-1)==='*'||that.tableInput.val().slice(-1)==='/'){
+                    if(that.tableInput.input.val().slice(-1)==='+'||that.tableInput.input.val().slice(-1)==='-'||that.tableInput.input.val().slice(-1)==='*'||that.tableInput.input.val().slice(-1)==='/'){
 
-                        that.tableInput.val(that.tableInput.val()+event.data.coordinate);
+                        that.tableInput.input.val(that.tableInput.input.val()+event.data.coordinate);
 
                     }else{
 
-                        var lastLength=String(_.last(that.tableInput.val().split(/\=|\+|\-|\*|\//g))).length;
-                        that.tableInput.iDelField(lastLength);
-                        that.tableInput.iAddField(event.data.coordinate);
+                        var lastLength=String(_.last(that.tableInput.input.val().split(/\=|\+|\-|\*|\//g))).length;
+                        that.tableInput.input.iDelField(lastLength);
+                        that.tableInput.input.iAddField(event.data.coordinate);
 
                     }
                 }else{
-                    if((that.tableInput.val()).charAt(typePosition+1).match(/\=|\+|\-|\*|\//g)){
+                    if((that.tableInput.input.val()).charAt(typePosition+1).match(/\=|\+|\-|\*|\//g)){
 
                     }
                     // var v=$('#iTableInput').val();
                     // v=v.replace(getSelectionText(),event.data.coordinate);
                   //  $('#iTableInput').val(v);
 
-                    that.tableInput.iAddField(event.data.coordinate);
+                    that.tableInput.input.iAddField(event.data.coordinate);
                 }
 
 
@@ -522,7 +537,7 @@ function typing(event) {
                 var curClass=$('.picked').attr('class');
                 var ex=$('.picked').attr('ex');
                 if(!ex){
-                    $('.picked').html(callZ.TypeToValue(curClass,callZ.tableInput.val()));
+                    $('.picked').html(callZ.TypeToValue(curClass,callZ.tableInput.input.val()));
                     var pNode=$($('.picked').attr('pnode'));
                     var pEx=pNode.attr('ex');
                     if(!!pEx){
@@ -531,9 +546,9 @@ function typing(event) {
                         var pValue=callZ.TypeFormula(type,pExArr);
                         pNode.text(pValue);
                     }
-                    callZ.tableInput.val(' ');
+                    callZ.tableInput.input.val(' ');
                 }else{
-                    $('.picked').html(callZ.TypeToValue(curClass,callZ.tableInput.val()));
+                    $('.picked').html(callZ.TypeToValue(curClass,callZ.tableInput.input.val()));
 
                     var exArr=ex.split('/');
 
@@ -541,7 +556,7 @@ function typing(event) {
                         $('#'+exArr[i]).removeAttr('pnode');
                     }
                     $('.picked').removeAttr('ex');
-                    callZ.tableInput.val(' ');
+                    callZ.tableInput.input.val(' ');
                 }
 
             }
@@ -621,8 +636,8 @@ function typing(event) {
                 $('.picked').removeClass('picked');
 
                 for(var i=0,len=callZ.mergeTds.length;i<len;i++){
-                     var mStartX=Number(callZ.mergeTds[i].attr('cols')),mEndX=mStartX+Number(callZ.mergeTds[i].attr('colspan'));
-                     var mStartY=Number(callZ.mergeTds[i].attr('rows')),mEndY=mStartY+Number(callZ.mergeTds[i].attr('rowspan'));
+                     var mStartX=Number($(callZ.mergeTds[i]).attr('cols')),mEndX=mStartX+Number($(callZ.mergeTds[i]).attr('colspan'));
+                     var mStartY=Number($(callZ.mergeTds[i]).attr('rows')),mEndY=mStartY+Number($(callZ.mergeTds[i]).attr('rowspan'));
                      if(mStartX<=nextX&&mEndX>nextX&&mStartY<=nextY&&mEndY>nextY){
                          $(callZ.mergeTds[i]).addClass('picked');
                          callZ.SetBlueBorder($('.picked'));
@@ -652,7 +667,7 @@ function typing(event) {
                 var curClass=$('.picked').attr('class');
                 var ex=$('.picked').attr('ex');
                 if(!ex){
-                    $('.picked').html(callZ.TypeToValue(curClass,callZ.tableInput.val()));
+                    $('.picked').html(callZ.TypeToValue(curClass,callZ.tableInput.input.val()));
                     var pNode=$($('.picked').attr('pnode'));
                     var pEx=pNode.attr('ex');
                     if(!!pEx){
@@ -661,9 +676,9 @@ function typing(event) {
                         var pValue=callZ.TypeFormula(type,pExArr);
                         pNode.text(pValue);
                     }
-                    callZ.tableInput.val(' ');
+                    callZ.tableInput.input.val(' ');
                 }else{
-                    $('.picked').html(callZ.TypeToValue(curClass,callZ.tableInput.val()));
+                    $('.picked').html(callZ.TypeToValue(curClass,callZ.tableInput.input.val()));
 
                     var exArr=ex.split('/');
 
@@ -672,7 +687,7 @@ function typing(event) {
                         $('#'+exArr[i]).removeAttr('pnode');
                     }
                     $('.picked').removeAttr('ex');
-                    callZ.tableInput.val(' ');
+                    callZ.tableInput.input.val(' ');
                 }
             }
 
@@ -760,8 +775,8 @@ function typing(event) {
                 $('.picked').removeClass('picked');
 
                 for(var i=0,len=callZ.mergeTds.length;i<len;i++){
-                    var mStartX=Number(callZ.mergeTds[i].attr('cols')),mEndX=mStartX+Number(callZ.mergeTds[i].attr('colspan'));
-                    var mStartY=Number(callZ.mergeTds[i].attr('rows')),mEndY=mStartY+Number(callZ.mergeTds[i].attr('rowspan'));
+                    var mStartX=Number($(callZ.mergeTds[i]).attr('cols')),mEndX=mStartX+Number($(callZ.mergeTds[i]).attr('colspan'));
+                    var mStartY=Number($(callZ.mergeTds[i]).attr('rows')),mEndY=mStartY+Number($(callZ.mergeTds[i]).attr('rowspan'));
                     if(mStartX<=nextX&&mEndX>nextX&&mStartY<=nextY&&mEndY>nextY){
                         $(callZ.mergeTds[i]).addClass('picked');
                         callZ.SetBlueBorder($('.picked'));
@@ -789,7 +804,7 @@ function typing(event) {
                 var curClass=$('.picked').attr('class');
                 var ex=$('.picked').attr('ex');
                 if(!ex){
-                    $('.picked').html(callZ.TypeToValue(curClass,callZ.tableInput.val()));
+                    $('.picked').html(callZ.TypeToValue(curClass,callZ.tableInput.input.val()));
                     var pNode=$($('.picked').attr('pnode'));
                     var pEx=pNode.attr('ex');
                     if(!!pEx){
@@ -798,9 +813,9 @@ function typing(event) {
                         var pValue=callZ.TypeFormula(type,pExArr);
                         pNode.text(pValue);
                     }
-                    callZ.tableInput.val(' ');
+                    callZ.tableInput.input.val(' ');
                 }else{
-                    $('.picked').html(callZ.TypeToValue(curClass,callZ.tableInput.val()));
+                    $('.picked').html(callZ.TypeToValue(curClass,callZ.tableInput.input.val()));
 
                     var exArr=ex.split('/');
 
@@ -808,7 +823,7 @@ function typing(event) {
                         $('#'+exArr[i]).removeAttr('pnode');
                     }
                     $('.picked').removeAttr('ex');
-                    callZ.tableInput.val(' ');
+                    callZ.tableInput.input.val(' ');
                 }
             }
 
@@ -897,8 +912,8 @@ function typing(event) {
                 $('.picked').removeClass('picked');
 
                 for(var i=0,len=callZ.mergeTds.length;i<len;i++){
-                    var mStartX=Number(callZ.mergeTds[i].attr('cols')),mEndX=mStartX+Number(callZ.mergeTds[i].attr('colspan'));
-                    var mStartY=Number(callZ.mergeTds[i].attr('rows')),mEndY=mStartY+Number(callZ.mergeTds[i].attr('rowspan'));
+                    var mStartX=Number($(callZ.mergeTds[i]).attr('cols')),mEndX=mStartX+Number($(callZ.mergeTds[i]).attr('colspan'));
+                    var mStartY=Number($(callZ.mergeTds[i]).attr('rows')),mEndY=mStartY+Number($(callZ.mergeTds[i]).attr('rowspan'));
                     if(mStartX<nextX&&mEndX>=nextX&&mStartY<nextY&&mEndY>=nextY){
                         $(callZ.mergeTds[i]).addClass('picked');
                         callZ.SetBlueBorder($('.picked'));
@@ -925,7 +940,7 @@ function typing(event) {
                 var curClass=$('.picked').attr('class');
                 var ex=$('.picked').attr('ex');
                 if(!ex){
-                    $('.picked').html(callZ.TypeToValue(curClass,callZ.tableInput.val()));
+                    $('.picked').html(callZ.TypeToValue(curClass,callZ.tableInput.input.val()));
                     var pNode=$($('.picked').attr('pnode'));
                     var pEx=pNode.attr('ex');
                     if(!!pEx){
@@ -934,9 +949,9 @@ function typing(event) {
                         var pValue=callZ.TypeFormula(type,pExArr);
                         pNode.text(pValue);
                     }
-                    callZ.tableInput.val(' ');
+                    callZ.tableInput.input.val(' ');
                 }else{
-                    $('.picked').html(callZ.TypeToValue(curClass,callZ.tableInput.val()));
+                    $('.picked').html(callZ.TypeToValue(curClass,callZ.tableInput.input.val()));
 
                     var exArr=ex.split('/');
 
@@ -944,7 +959,7 @@ function typing(event) {
                         $('#'+exArr[i]).removeAttr('pnode');
                     }
                     $('.picked').removeAttr('ex');
-                    callZ.tableInput.val(' ');
+                    callZ.tableInput.input.val(' ');
                 }
             }
 
@@ -1033,8 +1048,8 @@ function typing(event) {
                 $('.picked').removeClass('picked');
 
                 for(var i=0,len=callZ.mergeTds.length;i<len;i++){
-                    var mStartX=Number(callZ.mergeTds[i].attr('cols')),mEndX=mStartX+Number(callZ.mergeTds[i].attr('colspan'));
-                    var mStartY=Number(callZ.mergeTds[i].attr('rows')),mEndY=mStartY+Number(callZ.mergeTds[i].attr('rowspan'));
+                    var mStartX=Number($(callZ.mergeTds[i]).attr('cols')),mEndX=mStartX+Number($(callZ.mergeTds[i]).attr('colspan'));
+                    var mStartY=Number($(callZ.mergeTds[i]).attr('rows')),mEndY=mStartY+Number($(callZ.mergeTds[i]).attr('rowspan'));
                     if(mStartX<=nextX&&mEndX>nextX&&mStartY<=nextY&&mEndY>nextY){
                         $(callZ.mergeTds[i]).addClass('picked');
                         callZ.SetBlueBorder($('.picked'));
@@ -1066,7 +1081,7 @@ function typing(event) {
 
     }
 
-};
+}
 
 ITable.prototype.SetCss = function () {
 
@@ -1149,13 +1164,13 @@ ITable.prototype.FillTd = function (tid) {
 
 ITable.prototype.TdClick=function(event){
 
-    if($('#iTableInputHolder').css('display')==='block'){
+    if( event.data.target.tableInput.inputContainer.css('display')==='block'){
 
         $('.picked').text(event.data.target.tableInput.val());
 
-        $('#iTableInputHolder').hide();
+        this.tableInput.inputContainer.hide();
 
-        event.data.target.tableInput.blur();
+        event.data.target.tableInput.input.blur();
     }
 
     $('.picked').removeClass('picked');
@@ -1190,12 +1205,12 @@ ITable.prototype.TdDbClick=function(event){
     }
 
 
-    event.data.target.tableInput.click(function () {
+    event.data.target.tableInput.input.click(function () {
         return false;
     });
 
     $('#iTable' + event.data.id).find('tr').find('td').not($(this)).click(function () {
-        event.data.target.tableInput.blur();
+        event.data.target.tableInput.input.blur();
     });
     stopPropagation();
 };
@@ -1203,17 +1218,20 @@ ITable.prototype.TdDbClick=function(event){
 
 ITable.prototype.BlueBorder=function(){
 
-    var wBorder = $('<div class="wBorder" id="wBorder"></div>');
-
-    wBorder.css({
+   // var wBorder = $('<div class="wBorder" id="wBorder"></div>');
+    this.frameBorder.blueBorder.blueBorderContainer=  $('<div class="wBorder" id="wBorder"></div>');
+    this.frameBorder.blueBorder.blueBorderContainer.css({
         'top': 0,
         'left': 0
-
     });
 
-    var topB = $('<div></div>'),leftB = $('<div></div>'), rightB = $('<div></div>'),bottomB = $('<div></div>');
+    this.frameBorder.blueBorder.topDiv = $('<div></div>'); //top
+    this.frameBorder.blueBorder.rightDiv = $('<div></div>');//right
+    this.frameBorder.blueBorder.bottomDiv = $('<div></div>');//bottom
+    this.frameBorder.blueBorder.leftDiv=$('<div></div>');//left
+
    //top
-    topB.css({
+    this.frameBorder.blueBorder.topDiv.css({
         'height': '2px',
 
         'position': 'absolute',
@@ -1221,10 +1239,10 @@ ITable.prototype.BlueBorder=function(){
         'background': 'rgb(82, 146, 247)'
 
     });
-    wBorder.append(topB);
+    this.frameBorder.blueBorder.blueBorderContainer.append( this.frameBorder.blueBorder.topDiv);
 //left
 
-    leftB.css({
+    this.frameBorder.blueBorder.leftDiv.css({
 
         'width': '2px',
 
@@ -1234,10 +1252,10 @@ ITable.prototype.BlueBorder=function(){
 
     });
 
-    wBorder.append(leftB);
+    this.frameBorder.blueBorder.blueBorderContainer.append( this.frameBorder.blueBorder.leftDiv);
   //right
 
-    rightB.css({
+    this.frameBorder.blueBorder.rightDiv.css({
 
         'width': '2px',
 
@@ -1247,10 +1265,10 @@ ITable.prototype.BlueBorder=function(){
 
     });
 
-    wBorder.append(rightB);
+    this.frameBorder.blueBorder.blueBorderContainer.append( this.frameBorder.blueBorder.rightDiv);
 
 //bottom
-    bottomB.css({
+    this.frameBorder.blueBorder.bottomDiv.css({
 
         'height': '2px',
 
@@ -1260,7 +1278,7 @@ ITable.prototype.BlueBorder=function(){
 
     });
 
-    var corner = $('<div class="scorner" id="scorner"></div>');
+    this.frameBorder.corner = $('<div class="scorner" id="scorner"></div>');
 
     //红色
 
@@ -1332,11 +1350,11 @@ ITable.prototype.BlueBorder=function(){
 
     wrBorder.append(bottomRB);
 
-    wBorder.append(bottomB);
+    this.frameBorder.blueBorder.blueBorderContainer.append(this.frameBorder.blueBorder.bottomDiv);
 
-    wBorder.append(corner);
+    this.frameBorder.blueBorder.blueBorderContainer.append(this.frameBorder.corner);
 
-    this.container.append(wBorder);
+    this.container.append( this.frameBorder.blueBorder.blueBorderContainer);
 
     this.container.append(wrBorder);
 
@@ -1603,7 +1621,7 @@ ITable.prototype.CornerCopy=function(){
 
                 xMin = oExpectX , yMin = oExpectY, sLeft = parseInt(this.scrollLeft), sTop = parseInt(this.scrollTop),
 
-                disHeight = parseInt(this.xBox.xOrder.outerHeight()) + parseInt($('.header').outerHeight()),
+                disHeight = parseInt(that.xBox.xOrder.outerHeight()) + parseInt(that.header.outerHeight()),
 
                 oX = ev.clientX + sLeft, oY = ev.clientY - disHeight + sTop;
 
@@ -1935,7 +1953,7 @@ ITable.prototype.LightCooR = function (obj) {
 
     this.yBox.yTable.find('tr').find('td').removeClass('lCoo');
 
-    this.yBox.yTable.find('tr').find('td').removeClass('lCoo');
+    this.xBox.xTable.find('tr').find('td').removeClass('lCoo');
 
     for (var t = 0 , len=target.length; t < len; t++) {
 
@@ -1951,7 +1969,7 @@ ITable.prototype.LightCooR = function (obj) {
 
         for (var j = cols,jLen=cols + cSpan + 1; j < jLen; j++) {
 
-            this.yBox.yTable.find('tr').find('td').eq(j - 1).addClass('lCoo');
+            this.xBox.xTable.find('tr').find('td').eq(j - 1).addClass('lCoo');
 
         }
 
@@ -1961,10 +1979,10 @@ ITable.prototype.LightCooR = function (obj) {
 
 
 ITable.prototype.ListenHeight=function(){
-    var len=this.rowCount;
+    var len=this.rowCount,thHeight;
     for(var j=0;j<len;j++){
-        var height=this.table.find('tr').eq(j).find('th').height()-1;
-        this.yBox.yTable.find('tr').eq(j).find('td').height(height);
+        thHeight=this.table.find('tr').eq(j).find('th').height()-1;
+        this.yBox.yTable.find('tr').eq(j).find('td').height(thHeight);
     }
 
 };
@@ -2849,7 +2867,6 @@ ITable.prototype.InsertRow = function () {
             var yIndex = Number(sNode.attr('rows')),tr = $('<tr></tr>');
 
             for (var i = 0; i <= that.cellCount;) {
-
                  if(i===0){
                      var th = $('<th></th>');
                      tr.append(th);
@@ -3311,7 +3328,7 @@ ITable.prototype.FxMin=function(){
             rArr.push(nowRow);
             cArr.push(nowCol);
 
-            if(!isNaN(val)&&val!=0){
+            if(!isNaN(val)&&val!==0){
                 arr.push(val);
             }else{
                 return;
@@ -3585,7 +3602,7 @@ ITable.prototype.CreateSelection = function (id, menus) {
 
         selectHead.text(arr[0]);
 
-        selectLi = $('<li><a class="' + menus[index] + '">' + index + '</a></li>');
+        selectLi = '<li><a class="' + menus[index] + '">' + index + '</a></li>';
 
         selectUl.append(selectLi);
 
@@ -3902,7 +3919,6 @@ ITable.prototype.UpdateTableCol=function(){
 
     }
 }
-
 
 //y轴更新
 
