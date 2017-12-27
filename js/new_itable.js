@@ -14,7 +14,12 @@ function ITable(tContainer, tSettings, tabs,mergeArray) {
 
     this.header=null;
     this.footer=null;
-    this.tools=null;
+    this.toolContainer={
+        tools:null,
+        fontFamily:null,
+        fontSize:null,
+        fillType:null
+    };
     this.moveLast=null;
     this.table=null;
     this.tableInput={
@@ -111,7 +116,8 @@ ITable.prototype.CreateTd = function (className, tdValue) {
 
 ITable.prototype.CreateXAxis = function () {
 
-    this.xBox.xOrder = $("<div class='xOrder'></div>"),this.xBox.xTable = $("<table class='titleTable' id='titleTable'></table>");
+    this.xBox.xOrder = $("<div class='xOrder'></div>");
+    this.xBox.xTable = $("<table class='titleTable' id='titleTable'></table>");
 
     var th = $("<th></th>"), tr = $("<tr></tr>"), col;
 
@@ -161,7 +167,8 @@ ITable.prototype.CreateXAxis = function () {
 
 ITable.prototype.CreateYAxis = function () {
 
-    this.yBox.yOrder = $("<div class='yOrder'></div>"), this.yBox.yTable = $("<table class='leftTable' id='leftTable'></table>");
+    this.yBox.yOrder = $("<div class='yOrder'></div>");
+    this.yBox.yTable = $("<table class='leftTable' id='leftTable'></table>");
 
     this.container.before(this.yBox.yOrder);
 
@@ -1369,7 +1376,9 @@ ITable.prototype.SetBlueBorder=function(obj){
 
                leftArr.push(left);
 
-               topMin = _.min(topArr), leftMin = _.min(leftArr);
+               topMin = _.min(topArr);
+
+               leftMin = _.min(leftArr);
 
                if (top === _.min(topArr)) {
 
@@ -1711,22 +1720,24 @@ ITable.prototype.GetTdStyle=function(obj){
             if(!!classArr[i].match(/(((fsize_)[A-Za-z0-9_]+s*)+)/g)) {
                 switch (classArr[i]) {
                     case 'fsize_10':
-                        $('#fontSize').text('10');
+                        this.toolContainer.fontSize.text('10');
                         break;
                     case 'fsize_12':
-                        $('#fontSize').text('12');
+                        this.toolContainer.fontSize.text('12');
                         break;
                     case 'fsize_14':
-                        $('#fontSize').text('14');
+                        this.toolContainer.fontSize.text('14');
                         break;
                     case 'fsize_16':
-                        $('#fontSize').text('16');
+                        this.toolContainer.fontSize.text('16');
                         break;
                     case 'fsize_18':
-                        $('#fontSize').text('18');
+                        this.toolContainer.fontSize.text('18');
                         break;
                     case 'fsize_20':
-                        $('#fontSize').text('20');
+                        this.toolContainer.fontSize.text('20');
+                        break;
+                    default:
                         break;
 
                 }
@@ -1734,16 +1745,18 @@ ITable.prototype.GetTdStyle=function(obj){
             }else if(!!classArr[i].match(/(((font_)[A-Za-z0-9_]+s*)+)/g)) {
                 switch (classArr[i]) {
                     case 'font_Song':
-                        $('#fontFamily').text('宋体');
+                        this.toolContainer.fontFamily.text('宋体');
                         break;
                     case 'font_Black':
-                        $('#fontFamily').text('黑体');
+                        this.toolContainer.fontFamily.text('黑体');
                         break;
                     case 'font_Kai':
-                        $('#fontFamily').text('楷体');
+                        this.toolContainer.fontFamily.text('楷体');
                         break;
                     case 'font_Mirco':
-                        $('#fontFamily').text('微软雅黑');
+                        this.toolContainer.fontFamily.text('微软雅黑');
+                        break;
+                    default:
                         break;
 
                 }
@@ -1751,19 +1764,19 @@ ITable.prototype.GetTdStyle=function(obj){
             }else if(!!classArr[i].match(/(((ft)[A-Za-z0-9_]+\s*)+)/g)) {
                 switch (classArr[i]) {
                     case 'ftNormal':
-                        $('#fillType').text('常规');
+                        this.toolContainer.fillType.text('常规');
                         break;
                     case 'ftNumber':
-                        $('#fillType').text('数字');
+                        this.toolContainer.fillType.text('数字');
                         break;
                     case 'ftDate':
-                        $('#fillType').text('日期');
+                        this.toolContainer.fillType.text('日期');
                         break;
                     case 'ftAccount':
-                        $('#fillType').text('会计专用');
+                        this.toolContainer.fillType.text('会计专用');
                         break;
                     case 'ftPercent':
-                        $('#fillType').text('百分比');
+                        this.toolContainer.fillType.text('百分比');
                         break;
 
                 }
@@ -1771,9 +1784,9 @@ ITable.prototype.GetTdStyle=function(obj){
             }else if(!!classArr[i].match(/picked/g)){
                 return;
             }else{
-                $('#fontFamily').text('黑体');
-                $('#fontSize').text('10');
-                $('#fillType').text('常规');
+                this.toolContainer.fontFamily.text('黑体');
+                this.toolContainer.fontSize.text('10');
+                this.toolContainer.fillType.text('常规');
             }
 
         }
@@ -1855,9 +1868,9 @@ ITable.prototype.CreateHeader = function () {
 
     this.header = $('<div class="header"></div>');
 
-    this.tools = $('<div class="tools"></div>');
+    this.toolContainer.tools = $('<div class="tools"></div>');
 
-    this.header.append(this.tools);
+    this.header.append(this.toolContainer.tools);
 
     this.header.insertBefore(this.container);
 
@@ -1867,9 +1880,14 @@ ITable.prototype.CreateHeader = function () {
 
 ITable.prototype.FontFamily = function () {
 
-    var menu = this.CreateSelection('fontFamily', this.settings.fontFamily),sel_a = $(menu).find('ul li a') , className, curClass, selThem;
 
-    $(menu).find('#fontFamily').attr('defaultClass', sel_a.eq(0).attr('class'));
+    var menu= this.CreateSelection('fontFamily', this.settings.fontFamily);
+
+    this.toolContainer.fontFamily=menu.find('#fontFamily');
+
+    var sel_a = this.toolContainer.fontFamily.find('ul li a') , className, curClass, selThem;
+
+    this.toolContainer.fontFamily.attr('defaultClass', sel_a.eq(0).attr('class'));
 
     sel_a.on('click', function () {
 
@@ -1895,7 +1913,7 @@ ITable.prototype.FontFamily = function () {
 
         selThem = $('.picked');
 
-        $('.picked').removeAttr('class');
+        selThem.removeAttr('class');
 
         selThem.addClass(curClass);
 
@@ -1921,7 +1939,9 @@ ITable.prototype.FontSize = function () {
 
     var menu = this.CreateSelection('fontSize', this.settings.fontSize),sel_a = $(menu).find('ul li a'),className, curClass, selThem ,that=this;
 
-    $(menu).find('#fontFamily').attr('defaultClass', sel_a.eq(0).attr('class'));
+    this.toolContainer.fontSize=menu.find('#fontSize');
+
+    this.toolContainer.fontSize.attr('defaultClass', sel_a.eq(0).attr('class'));
 
     sel_a.on('click', function () {
 
@@ -1947,7 +1967,7 @@ ITable.prototype.FontSize = function () {
 
         selThem = $('.picked');
 
-        $('.picked').removeAttr('class');
+        selThem.removeAttr('class');
 
         selThem.addClass(curClass);
 
@@ -2037,7 +2057,7 @@ ITable.prototype.FontColor = function () {
 
         selThem = $('.picked');
 
-        $('.picked').removeAttr('class');
+        selThem.removeAttr('class');
 
         selThem.addClass(curClass);
 
@@ -2075,7 +2095,7 @@ ITable.prototype.BgColor = function () {
 
         selThem = $('.picked');
 
-        $('.picked').removeAttr('class');
+        selThem.removeAttr('class');
 
         selThem.addClass(curClass);
 
@@ -2115,7 +2135,7 @@ ITable.prototype.TextAlign = function () {
 
         selThem = $('.picked');
 
-        $('.picked').removeAttr('class');
+        selThem.removeAttr('class');
 
         selThem.addClass(curClass);
 
@@ -2155,6 +2175,7 @@ ITable.prototype.Express = function () {
 ITable.prototype.FillType = function(){
     var select = this.CreateSelection('fillType', this.settings.fillType), sel_a = $(select).find('ul li a'), that = this;
 
+    this.toolContainer.fillType=select.find('#fillType');
     sel_a.on('click', function () {
 
         var ways = $(this).attr('class').replace('ft_', '');
@@ -2235,7 +2256,7 @@ ITable.prototype.SetFillType=function(ways){
 };
 
 ITable.prototype.TypeToValue=function(type,value){
-         var objValue=value , value=Number(value) , newClasses=type.split(' ') , newClass , newValue;
+         var objValue=value , numValue=Number(value) , newClasses=type.split(' ') , newClass , newValue;
 
          for(var i=0,len=newClasses.length;i<len;i++){
              if(!!newClasses[i].match(/(((ft)[A-Za-z0-9_]+\s*)+)/g)){
@@ -2249,15 +2270,15 @@ ITable.prototype.TypeToValue=function(type,value){
                  return newValue;
 
             case 'ftNumber':
-                 newValue=value.toFixed(2);
+                 newValue=numValue.toFixed(2);
                  return newValue;
 
             case 'ftAccount':
-                 newValue= '¥'+ value.toFixed(2);
+                 newValue= '¥'+ numValue.toFixed(2);
                  return newValue;
 
             case  'ftPercent':
-                 newValue= (Math.round(Number(value) * 10000)/100).toFixed(2) + '%';
+                 newValue= (Math.round(Number(numValue) * 10000)/100).toFixed(2) + '%';
                  return newValue;
 
         }
@@ -2540,7 +2561,7 @@ ITable.prototype.InsertCol = function () {
 
                 yArr.push(rows);
 
-                xMax = _.max(xArr), xMin = _.min(xArr), yMax = _.max(yArr), yMin = _.min(yArr);
+                xMax = _.max(xArr); xMin = _.min(xArr); yMax = _.max(yArr); yMin = _.min(yArr);
             }
             //
             // for (var _y = 0; _y < that.rowCount + 1; _y++) {
@@ -2661,7 +2682,7 @@ ITable.prototype.InsertRow = function () {
 
                 yArr.push(rows);
 
-                xMax = _.max(xArr), xMin = _.min(xArr), yMax = _.max(yArr), yMin = _.min(yArr);
+                xMax = _.max(xArr); xMin = _.min(xArr); yMax = _.max(yArr); yMin = _.min(yArr);
 
             }
             //
@@ -3454,7 +3475,7 @@ ITable.prototype.CreateSelection = function (id, menus) {
 
     selectionBox.append(selectHead);
 
-    this.tools.append(selectionBox);
+    this.toolContainer.tools.append(selectionBox);
 
     selectUl.hide();
 
@@ -3485,7 +3506,7 @@ ITable.prototype.CreateSimpleMenu = function (className, text) {
 
     menus.append(simTool);
 
-    this.tools.append(menus);
+    this.toolContainer.tools.append(menus);
 
     return menus;
 
@@ -3531,7 +3552,7 @@ ITable.prototype.CreateCellMenu = function (dClass, className, menus) {
 
     selectionBox.append(selectHead);
 
-    this.tools.append(selectionBox);
+    this.toolContainer.tools.append(selectionBox);
 
     selectTb.hide();
 
@@ -3954,7 +3975,7 @@ ITable.prototype.LargeCol = function () {
 
                 if($(this).offset().left+w-exW<x+20){
 
-                    $('body').mousemove(function (event) {
+                    $('body').on('mousemove',function (event) {
 
                         var allH = that.table.outerHeight();
 
@@ -3990,7 +4011,7 @@ ITable.prototype.LargeCol = function () {
 
                     });
                 }
-                $('body').mouseup(function () {
+                $('body').on('mouseup',function () {
 
                     $('body').off('mousemove');
 
@@ -4142,7 +4163,7 @@ ITable.prototype.LargeRow = function () {
 
                 if($(this).offset().top+h-exH<y+10) {
 
-                    $('body').mousemove(function (event) {
+                    $('body').on('mousemove',function (event) {
 
                         var allW = that.table.outerWidth();
 
@@ -4183,7 +4204,7 @@ ITable.prototype.LargeRow = function () {
 
 
 
-                $('body').mouseup(function () {
+                $('body').on('mouseup',function () {
 
                     $('body').off('mousemove');
 
@@ -4215,153 +4236,153 @@ ITable.prototype.FillBlank = function () {
 
     this.header.append(fxBox);
 
-    this.FillWork();
+    //this.FillWork();
 
 };
 
-//输入操作
-
-ITable.prototype.FillWork = function () {
-
-    var ev = window.event || arguments[0];
-
-    var ifx = $('#ip_fx');
-
-    var pValue, nValue;
-
-    var pArr, nArr, cArr;
-
-    var endText;
-
-    var res, delRes;
-
-    var delText;
-
-    var reg, flReg;
-
-    var that = this;
-
-    var calText;
-
-    ifx.keyup(function (ev) {
-
-        pValue = ifx.val();
-
-        flReg = /^\=|\+|\-|\*|\/|\(|\)/;
-
-        reg = /^\=((((\(*([a-zA-Z]([1-9]\d*))\)*|([1-9]\d*))(\+|-|\/|\*))*(([1-9]\d*)|([a-zA-Z]([1-9]\d*))*\)*))|([a-zA-Z]([1-9]\d*)))/;
-
-        res = pValue.match(reg);
-
-        if ((!!res) && (!!res[0])) {
-
-            endText = res[0].toString();
-
-            pArr = endText.split(flReg);
-
-            for (var i = 0; i < pArr.length; i++) {
-
-                if (!!pArr[i]) {
-
-                    if (String(nValue).indexOf(pArr[i]) <= -1) {
-
-                        lightTd(pArr[i]);
-
-                        cLightTd(pArr[i].substr(0, pArr[i].length - 1));
-
-                    }
-
-                }
-
-            }
-
-        }
-
-        if ($('.picked').length > 1) {
-
-            return;
-
-        } else {
-
-            $('.picked').text(pValue);
-
-        }
-
-        //删除
-
-        // if ((ev.keyCode === 8)) {
-        //
-        //     delRes = nValue.match(/([a-zA-Z]([1-9]\d*))(((\-|\+|\*|\\){1}([a-zA-Z]{1})(([1-9]\d*){1})))*/);
-        //
-        //     if (!!nValue) {
-        //
-        //         dArr = nValue.split(flReg);
-        //
-        //         cArr = pValue.split(flReg);
-        //
-        //         delTmp = getUniqueSet(cArr, dArr);
-        //
-        //         if (!!delTmp[1]) {
-        //
-        //             cLightTd(delTmp[1]);
-        //
-        //         }
-        //
-        //     }
-        //
-        // }
-        //
-        // if ((ev.keyCode === 13)) {
-        //
-        //     this.blur();
-        //
-        //     var allValue = pValue;
-        //
-        //     calRes = allValue.match(reg);
-        //
-        //     if ((!!calRes) && (!!calRes[0])) {
-        //
-        //         fText = calRes[0].toString();
-        //
-        //         allArr = fText.split(flReg);
-        //
-        //         for (var i = 0; i < allArr.length; i++) {
-        //
-        //             if (!!allArr[i]) {
-        //
-        //                 var tmp = allArr[i];
-        //
-        //                 var tmpVal = String(that.getValue(allArr[i]));
-        //
-        //                 allValue = allValue.replace(tmp, tmpVal);
-        //
-        //             }
-        //
-        //         }
-        //
-        //         calText = allValue;
-        //
-        //         calText = calText.substring(1);
-        //
-        //         var result = dal2Rpn(calText);
-        //
-        //         $('.picked').text(result);
-        //
-        //         $('.mask').remove();
-        //
-        //     }
-        //
-        // }
-
-        ifx.onkeydown(function (ev) {
-
-            nValue = ifx.val();
-
-        });
-
-    });
-
-};
+// //输入操作
+//
+// ITable.prototype.FillWork = function () {
+//
+//     var ev = window.event || arguments[0];
+//
+//     var ifx = $('#ip_fx');
+//
+//     var pValue, nValue;
+//
+//     var pArr, nArr, cArr;
+//
+//     var endText;
+//
+//     var res, delRes;
+//
+//     var delText;
+//
+//     var reg, flReg;
+//
+//     var that = this;
+//
+//     var calText;
+//
+//     ifx.keyup(function (ev) {
+//
+//         pValue = ifx.val();
+//
+//         flReg = /^\=|\+|\-|\*|\/|\(|\)/;
+//
+//         reg = /^\=((((\(*([a-zA-Z]([1-9]\d*))\)*|([1-9]\d*))(\+|-|\/|\*))*(([1-9]\d*)|([a-zA-Z]([1-9]\d*))*\)*))|([a-zA-Z]([1-9]\d*)))/;
+//
+//         res = pValue.match(reg);
+//
+//         if ((!!res) && (!!res[0])) {
+//
+//             endText = res[0].toString();
+//
+//             pArr = endText.split(flReg);
+//
+//             for (var i = 0; i < pArr.length; i++) {
+//
+//                 if (!!pArr[i]) {
+//
+//                     if (String(nValue).indexOf(pArr[i]) <= -1) {
+//
+//                         lightTd(pArr[i]);
+//
+//                         cLightTd(pArr[i].substr(0, pArr[i].length - 1));
+//
+//                     }
+//
+//                 }
+//
+//             }
+//
+//         }
+//
+//         if ($('.picked').length > 1) {
+//
+//             return;
+//
+//         } else {
+//
+//             $('.picked').text(pValue);
+//
+//         }
+//
+//         //删除
+//
+//         // if ((ev.keyCode === 8)) {
+//         //
+//         //     delRes = nValue.match(/([a-zA-Z]([1-9]\d*))(((\-|\+|\*|\\){1}([a-zA-Z]{1})(([1-9]\d*){1})))*/);
+//         //
+//         //     if (!!nValue) {
+//         //
+//         //         dArr = nValue.split(flReg);
+//         //
+//         //         cArr = pValue.split(flReg);
+//         //
+//         //         delTmp = getUniqueSet(cArr, dArr);
+//         //
+//         //         if (!!delTmp[1]) {
+//         //
+//         //             cLightTd(delTmp[1]);
+//         //
+//         //         }
+//         //
+//         //     }
+//         //
+//         // }
+//         //
+//         // if ((ev.keyCode === 13)) {
+//         //
+//         //     this.blur();
+//         //
+//         //     var allValue = pValue;
+//         //
+//         //     calRes = allValue.match(reg);
+//         //
+//         //     if ((!!calRes) && (!!calRes[0])) {
+//         //
+//         //         fText = calRes[0].toString();
+//         //
+//         //         allArr = fText.split(flReg);
+//         //
+//         //         for (var i = 0; i < allArr.length; i++) {
+//         //
+//         //             if (!!allArr[i]) {
+//         //
+//         //                 var tmp = allArr[i];
+//         //
+//         //                 var tmpVal = String(that.getValue(allArr[i]));
+//         //
+//         //                 allValue = allValue.replace(tmp, tmpVal);
+//         //
+//         //             }
+//         //
+//         //         }
+//         //
+//         //         calText = allValue;
+//         //
+//         //         calText = calText.substring(1);
+//         //
+//         //         var result = dal2Rpn(calText);
+//         //
+//         //         $('.picked').text(result);
+//         //
+//         //         $('.mask').remove();
+//         //
+//         //     }
+//         //
+//         // }
+//
+//         ifx.onkeydown(function (ev) {
+//
+//             nValue = ifx.val();
+//
+//         });
+//
+//     });
+//
+// };
 
 //高亮蒙版
 
@@ -4683,36 +4704,36 @@ ITable.prototype.TdToFx = function (obj) {
 
 
 
-ITable.prototype.getValue = function (arr) {
-
-    arr = arr.toString();
-
-    var xCoo = arr.replace(/[a-zA-Z]*/, ' '), yCoo = arr.replace(/[1-9]\d*/, ' ');
-
-    yCoo = yCoo.charCodeAt(0) - 96;
-
-    xCoo--, yCoo--;
-
-    var value,text = Number($('#'+yCoo+'-'+xCoo).text());
-
-
-    if (typeof(text) !== 'number') {
-
-        value = 0;
-
-    } else {
-
-        (!!text) ? value = Number(text) : value = 0;
-
-    }
-
-    return value;
-
-};
+// ITable.prototype.getValue = function (arr) {
+//
+//     arr = arr.toString();
+//
+//     var xCoo = arr.replace(/[a-zA-Z]*/, ' '), yCoo = arr.replace(/[1-9]\d*/, ' ');
+//
+//     yCoo = yCoo.charCodeAt(0) - 96;
+//
+//     xCoo--;yCoo--;
+//
+//     var value,text = Number($('#'+yCoo+'-'+xCoo).text());
+//
+//
+//     if (typeof(text) !== 'number') {
+//
+//         value = 0;
+//
+//     } else {
+//
+//         (!!text) ? value = Number(text) : value = 0;
+//
+//     }
+//
+//     return value;
+//
+// };
 
 ITable.prototype.freezeBtn=function(){
    var btn=this.CreateSimpleMenu('fbold');
-   this.tools.append(btn);
+   this.toolContainer.tools.append(btn);
    btn.on('click',{callZ:this},this.freezeTds);
 };
 
@@ -4829,69 +4850,69 @@ function getRandomColor() {
 
 }
 
-//取消高亮
-
-function cLightTd(tmp) {
-
-    var posY = tmp.match(/^[a-zA-Z]{1}/gi),posX = tmp.match(/\+?[1-9][0-9]*$/g);
-
-    posY = posY.toString();
-
-    posY = posY.toLocaleLowerCase().charCodeAt(0) - 96;
-
-    if (posY === null || posX === null || posY.length === 0 || String(posX).length === 0) {
-
-        return;
-
-    }
-
-    posY--;
-
-    posX = posX.toString() - 1;
-
-    $('[mpos="' + posX + '-' + posY + '"]').remove();
-
-}
-
-//字符串取异
-
-function getUniqueSet(setA, setB) {
-
-    var temp = {};
-
-    for (var i = 0, len = setA.length; i < len; i++) {
-
-        temp[setA[i]] = 0;
-
-    }
-
-    for (var j = 0, len = setB.length; j < len; j++) {
-
-        if (typeof temp[setB[j]] === 'undefined') {
-
-            temp[setB[j]] = 0;
-
-        } else {
-
-            temp[setB[j]]++;
-
-        }
-
-    }
-
-    //output
-
-    var ret = [];
-
-    for (var item in temp) {
-
-        !temp[item] && ret.push(item);
-
-    }
-
-    return ret;
-
-}
+// //取消高亮
+//
+// function cLightTd(tmp) {
+//
+//     var posY = tmp.match(/^[a-zA-Z]{1}/gi),posX = tmp.match(/\+?[1-9][0-9]*$/g);
+//
+//     posY = posY.toString();
+//
+//     posY = posY.toLocaleLowerCase().charCodeAt(0) - 96;
+//
+//     if (posY === null || posX === null || posY.length === 0 || String(posX).length === 0) {
+//
+//         return;
+//
+//     }
+//
+//     posY--;
+//
+//     posX = posX.toString() - 1;
+//
+//     $('[mpos="' + posX + '-' + posY + '"]').remove();
+//
+// }
+//
+// //字符串取异
+//
+// function getUniqueSet(setA, setB) {
+//
+//     var temp = {};
+//
+//     for (var i = 0, len = setA.length; i < len; i++) {
+//
+//         temp[setA[i]] = 0;
+//
+//     }
+//
+//     for (var j = 0, len = setB.length; j < len; j++) {
+//
+//         if (typeof temp[setB[j]] === 'undefined') {
+//
+//             temp[setB[j]] = 0;
+//
+//         } else {
+//
+//             temp[setB[j]]++;
+//
+//         }
+//
+//     }
+//
+//     //output
+//
+//     var ret = [];
+//
+//     for (var item in temp) {
+//
+//         !temp[item] && ret.push(item);
+//
+//     }
+//
+//     return ret;
+//
+// }
 
 //取消冒泡
 
