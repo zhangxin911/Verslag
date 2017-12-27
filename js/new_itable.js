@@ -58,6 +58,8 @@ function ITable(tContainer, tSettings, tabs,mergeArray) {
         corner:null
     };
     this.mergeTds=mergeArray || [];
+
+    this.selectedArr=[];
 }
 
 ITable.prototype.CreateContent = function (tid) {
@@ -109,14 +111,12 @@ ITable.prototype.CreateContent = function (tid) {
 };
 
 ITable.prototype.CreateTr = function () {
-    var tr = $("<tr></tr>");
-    return tr;
+    return $("<tr></tr>");
 };
 
 ITable.prototype.CreateTd = function (className, tdValue) {
-    var td = $("<td>" + tdValue + "</td>");
-    td.addClass(className);
-    return td;
+    return $("<td class="+className+">" + tdValue + "</td>");
+
 };
 
 ITable.prototype.CreateXAxis = function () {
@@ -236,7 +236,7 @@ ITable.prototype.FrameSelect = function () {
 
                 moveX=Number(that.moveLast.attr('cols'))+moveCS-1, moveY=Number(that.moveLast.attr('rows'))+moveRS-1,
 
-                startX,endX,startY,endY,totalWidth=0,totalHeight=0,tempId,
+                startX,endX,startY,endY,totalWidth=0,totalHeight=0,tempId,startId,
 
                 wB1Style,wB2Style,wB3Style,wB4Style;
 
@@ -255,7 +255,7 @@ ITable.prototype.FrameSelect = function () {
                 startY=Number(that.moveLast.attr('rows'));
                 endY=onRows;
             }
-
+            that.selectedArr.length=0;
             $('.picked').removeClass('picked');
 
             for(var m=0,len=that.mergeTds.length;m<len;m++){
@@ -282,13 +282,10 @@ ITable.prototype.FrameSelect = function () {
                               endX<mergeX?endX=mergeX:endX=endX;
                               endY<mergeY?endY=mergeY:endY=endY;
                               }
-
                         }
-
                     }
 
                 }
-
 
             }
 
@@ -296,15 +293,14 @@ ITable.prototype.FrameSelect = function () {
             for(var i = startX; i <= endX ; i++) {
                 for(var j = startY; j <= endY; j++) {
                     tempId='#'+j+'-'+i;
-                            $(tempId).addClass('picked');
-
+                    $(tempId).addClass('picked');
+                    that.selectedArr.push(document.getElementById(j+'-'+i));
                             if(i===startX){
                                 totalHeight+=$('#'+j+'-'+startX).outerHeight();
                             }
                             if(j===startY){
                                 totalWidth+=$('#'+startY+'-'+i).outerWidth();
                             }
-
                 }
 
             }
@@ -312,8 +308,11 @@ ITable.prototype.FrameSelect = function () {
             sTop=that.container.scrollTop()-96;
             sLeft=that.container.scrollLeft()-4;
 
-            top=Number($('#'+startY+'-'+startX).offset().top)+sTop+1;
-            left=Number($('#'+startY+'-'+startX).offset().left)+sLeft+1;
+            console.log(that.selectedArr);
+
+            startId='#'+startY+'-'+startX;
+            top=Number($(startId).offset().top)+sTop+1;
+            left=Number($(startId).offset().left)+sLeft+1;
 
             that.frameBorder.blueBorder.blueBorderContainer.css({
                 'top': top,
@@ -1685,8 +1684,7 @@ ITable.prototype.ChooseCol=function(){
 
         }
 
-        var top=Number($(this).offset().top)-70;
-        var left=Number($(this).offset().left)+Number(that.container.scrollLeft())-4;
+        var top=Number($(this).offset().top)-70,left=Number($(this).offset().left)+Number(that.container.scrollLeft())-4;
 
         that.frameBorder.blueBorder.blueBorderContainer.css({
             'top': top,
@@ -1877,6 +1875,7 @@ ITable.prototype.CreateHeader = function () {
 
 ITable.prototype.FontFamily = function () {
 
+  //  var that=this;
 
     var menu= this.CreateSelection('fontFamily', this.settings.fontFamily);
 
@@ -1891,6 +1890,10 @@ ITable.prototype.FontFamily = function () {
         className = $(this).attr('class');
 
         $('.picked').addClass(className);
+
+        // that.selectedArr.map(function(element){
+        //     console.log(element);
+        // });
 
         var reg = new RegExp("(((font_)[A-Za-z0-9_]+\s*)+)", "g");
 
@@ -1934,7 +1937,9 @@ ITable.prototype.FontFamily = function () {
 
 ITable.prototype.FontSize = function () {
 
-    var menu = this.CreateSelection('fontSize', this.settings.fontSize),sel_a = $(menu).find('ul li a'),className, curClass, selThem ,that=this;
+    var menu = this.CreateSelection('fontSize', this.settings.fontSize),
+
+        sel_a = menu.find('ul li a'),className, curClass, selThem ,that=this;
 
     this.toolContainer.fontSize=menu.find('#fontSize');
 
@@ -3764,11 +3769,11 @@ ITable.prototype.SetIndex = function () {
 
             cellStrArray.push(cellStr);
 
-            cell.setAttribute('rows', i+1);
+            cell.setAttribute("rows", i + 1);
 
-            cell.setAttribute('cols', col + 1);
+            cell.setAttribute("cols" , col + 1);
 
-            cell.setAttribute('id',i+1+'-'+(col+1));
+            cell.setAttribute("id",(i+1)+'-'+(col+1));
 
         }
 
