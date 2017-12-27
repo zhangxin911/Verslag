@@ -20,6 +20,11 @@ function ITable(tContainer, tSettings, tabs,mergeArray) {
         fontSize:null,
         fillType:null
     };
+    this.fillContainer={
+        fillBlank:null,
+        disBox:null,
+    }
+
     this.moveLast=null;
     this.table=null;
     this.tableInput={
@@ -312,7 +317,7 @@ ITable.prototype.FrameSelect = function () {
 
             that.frameBorder.blueBorder.blueBorderContainer.css({
                 'top': top,
-                'left': left,
+                'left': left
             });
 
             wB1Style={ 'width': totalWidth, 'height': '2px', 'left': 0, 'top': 0 };
@@ -430,7 +435,7 @@ ITable.prototype.IsExpress=function(val){
         this.table.find('td').off('dblclick');
         $(this.container).off('mousedown');
         var coordinates;
-            this.table.find('td').off('click').on('click',{coordinate:coordinates},function(event){
+        this.table.find('td').off('click').on('click',{coordinate:coordinates},function(event){
 
                 that.tableInput.input.focus();
                 var typePosition=Number(that.tableInput.input.iGetFieldPos());
@@ -1056,7 +1061,7 @@ function typing(event) {
 
             var xCoo = Number($('.picked').attr('cols')) - 1, yCoo = Number($('.picked').attr('rows')) - 1;
 
-            $('#disbox').text(IntToChr(xCoo) + String(yCoo + 1));
+            callZ.fillContainer.disBox.text(IntToChr(xCoo) + String(yCoo + 1));
 
         }
 
@@ -1161,11 +1166,11 @@ ITable.prototype.TdClick=function(event){
 
     var xCoo = Number($(this).attr('cols')) - 1, yCoo = Number($(this).attr('rows')) - 1;
 
-    if ($('#disbox').length > 0) {
 
-        $('#disbox').text(IntToChr(xCoo) + String(yCoo + 1));
 
-    }
+    event.data.target.fillContainer.disBox.text(IntToChr(xCoo) + String(yCoo + 1));
+
+
     event.data.target.TdToFx($(this));
     event.data.target.LightCooR($(this));
     $('#ip_fx').blur();
@@ -3003,7 +3008,7 @@ ITable.prototype.FxSum=function(){
                var val=that.GetFillType($(this)),nowRow=Number($(this).attr('rows')),nowCol=Number($(this).attr('cols'));
                rArr.push(nowRow);
                cArr.push(nowCol);
-               if(val===NaN){
+               if(isNaN(val)){
                    val=0;
                }else{
                    sum+=val;
@@ -3052,7 +3057,7 @@ ITable.prototype.FxAvg=function(){
             var val=that.GetFillType($(this)),nowRow=Number($(this).attr('rows')),nowCol=Number($(this).attr('cols'));
             rArr.push(nowRow);
             cArr.push(nowCol);
-            if(val===NaN){
+            if(isNaN(val)){
                 val=0;
             }else{
                 sum+=val;
@@ -3101,7 +3106,7 @@ ITable.prototype.FxCount=function(){
             var val=Number($(this).text()),nowRow=Number($(this).attr('rows')),nowCol=Number($(this).attr('cols'));
             rArr.push(nowRow);
             cArr.push(nowCol);
-            if(!isNaN(val)&&val!=0){
+            if(!isNaN(val)&&val!==0){
                 count++;
             }else{
                return;
@@ -3134,7 +3139,7 @@ ITable.prototype.FxMax=function(){
             var val=Number($(this).text()),nowRow=Number($(this).attr('rows')),nowCol=Number($(this).attr('cols'));
             rArr.push(nowRow);
             cArr.push(nowCol);
-            if(!isNaN(val)&&val!=0){
+            if(!isNaN(val)&&val!==0){
                 arr.push(val);
             }else{
                 return;
@@ -3451,15 +3456,18 @@ ITable.prototype.CreateSelection = function (id, menus) {
 
     var selectionBox = $('<div class="toolBox"></div>'), selectHead = $('<div id="' + id + '"></div>'), selectUl = $('<ul></ul>'), selectLi, arr = [];
 
-    for (var index in menus) {
+    for (var menu in menus) {
 
-        arr.push(index);
+        if(menus.hasOwnProperty(menu)){
+            arr.push(menu);
 
-        selectHead.text(arr[0]);
+            selectHead.text(arr[0]);
 
-        selectLi = '<li><a class="' + menus[index] + '">' + index + '</a></li>';
+            selectLi = '<li><a class="' + menus[menu] + '">' + menu + '</a></li>';
 
-        selectUl.append(selectLi);
+            selectUl.append(selectLi);
+        }
+
 
     }
 
@@ -3512,11 +3520,14 @@ ITable.prototype.CreateCellMenu = function (dClass, className, menus) {
 
         selectTr = $('<tr></tr>'), selectTd , arr1 = [], arr2 = [];
 
-    for (var index in menus) {
+    for (var menu in menus) {
 
-        arr1.push(menus[index].tdclass);
+        if(menus.hasOwnProperty(menu)){
 
-        arr2.push(menus[index].fclass);
+            arr1.push(menus[menu].tdclass);
+
+            arr2.push(menus[menu].fclass);
+        }
 
     }
 
@@ -4037,9 +4048,10 @@ ITable.prototype.LargeRow = function () {
 
 ITable.prototype.FillBlank = function () {
 
-    var fxBox = $('<div class="fx"></div>'), fxInput = $('<input type="text" id="ip_fx">'), dis = $('<span class="disbox" id="disbox"></span>');
+    var fxBox = $('<div class="fx"></div>'), fxInput = $('<input type="text" id="ip_fx">');
+    this.fillContainer.disBox = $('<span class="disbox" id="disbox"></span>');
 
-    fxBox.append(dis);
+    fxBox.append(this.fillContainer.disBox);
 
     fxBox.append(fxInput);
 
@@ -4623,33 +4635,33 @@ ITable.prototype.freezeTds=function(event){
 };
 
 
-//高亮单元格
-
-function lightTd(tmp) {
-
-    var posY = tmp.match(/^[a-zA-Z]{1}/gi),posX = tmp.match(/\+?[1-9][0-9]*$/g);
-
-    posY = posY.toString();
-
-    posY = posY.toLocaleLowerCase().charCodeAt(0) - 96;
-
-    posY--;
-
-    posX = posX.toString() - 1;
-
-    if (posY === null || posX === null || posY.length === 0 || String(posY).length === 0) {
-
-        return;
-
-    }
-
-    var lTd = $('td[cols=' + (posX + 1) + '][rows=' + (posY + 1) + ']');
-
-    var width = lTd[0].offsetWidth, height = lTd[0].offsetHeight, left = lTd[0].offsetLeft, top = lTd[0].offsetTop;
-
-    t.CreateMask(left, top, width, height, posX, posY);
-
-}
+// //高亮单元格
+//
+// function lightTd(tmp) {
+//
+//     var posY = tmp.match(/^[a-zA-Z]{1}/gi),posX = tmp.match(/\+?[1-9][0-9]*$/g);
+//
+//     posY = posY.toString();
+//
+//     posY = posY.toLocaleLowerCase().charCodeAt(0) - 96;
+//
+//     posY--;
+//
+//     posX = posX.toString() - 1;
+//
+//     if (posY === null || posX === null || posY.length === 0 || String(posY).length === 0) {
+//
+//         return;
+//
+//     }
+//
+//     var lTd = $('td[cols=' + (posX + 1) + '][rows=' + (posY + 1) + ']');
+//
+//     var width = lTd[0].offsetWidth, height = lTd[0].offsetHeight, left = lTd[0].offsetLeft, top = lTd[0].offsetTop;
+//
+//     t.CreateMask(left, top, width, height, posX, posY);
+//
+// }
 
 //随机颜色
 
