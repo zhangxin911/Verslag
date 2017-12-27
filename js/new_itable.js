@@ -1673,7 +1673,7 @@ ITable.prototype.ChooseCol=function(){
             }else{
 
                 $(id).addClass('picked');
-                totalWidth=$(id).outerWidth()
+                totalWidth=$(id).outerWidth();
                 totalHeight+=$(id).outerHeight();
 
             }
@@ -3859,7 +3859,7 @@ ITable.prototype.LargeCol = function () {
 
          var x = event.clientX - exW;
 
-        if($(event.target).offset().left+w-exW<x+20){
+        if($(event.target).offset().left+w-exW<x+10){
             $(event.target).css({
                 cursor:'col-resize'
             });
@@ -3878,7 +3878,7 @@ ITable.prototype.LargeCol = function () {
 
                 var x = event.clientX - exW+sL;
 
-                if($(this).offset().left+w-exW<x+20){
+                if($(this).offset().left+w-exW<x+10){
 
                     $('body').on('mousemove',function (event) {
 
