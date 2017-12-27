@@ -1611,50 +1611,44 @@ ITable.prototype.CornerCopy=function(){
 
 ITable.prototype.ChooseRow=function(){
     var that=this;
+    var wB1=this.frameBorder.blueBorder.topDiv,
+        wB2=this.frameBorder.blueBorder.bottomDiv,
+        wB3=this.frameBorder.blueBorder.leftDiv,
+        wB4=this.frameBorder.blueBorder.rightDiv;
     this.yBox.yTable.find('td').on('click',function(){
         var index=$(this).parent().index()+1;
-       // var startYArr=[],endYArr=[];
+        var totalHeight=0,totalWidth=0;
         $('.picked').removeClass('picked');
 
-        if(that.mergeTds.length>=1){
-
-            // for(var j=0;j<that.mergeTds.length;j++){
-            //
-            //     var tdStartRow=Number($(that.mergeTds[j]).attr('rows'));
-            //     var tdEndRow=Number($(that.mergeTds[j]).attr('rows'))+Number($(that.mergeTds[j]).attr('rowspan'));
-            //
-            //
-            //     if(tdStartRow<=index&&tdEndRow>=index){
-            //         startYArr.push(tdStartRow);
-            //         endYArr.push(tdEndRow);
-            //     }
-            //
-            // }
-            // var minY=_.min(startYArr),maxY=_.max(endYArr);
-            // for(var n=minY;n<maxY;n++){
-            //     for(var m=0;m<that.cellCount;m++){
-            //         var id='#'+n+'-'+m;
-            //         $(id).addClass('picked');
-            //     }
-            //
-            // }
-
-        }else{
-            // for(var i=0;i<that.cellCount;i++){
-            //     var id='#'+index+'-'+i;
-            //     $(id).addClass('picked');
-            //
-            // }
-        }
-        for(var i=0,len=that.cellCount;i<=len;i++){
+        for(var i=2,len=that.cellCount+1;i<=len;i++){
             var id='#'+index+'-'+i;
             if(Number($(id).attr('rowspan'))>=2&&Number($(id).attr('colspan'))>=2){
-
+                totalWidth+=$(id).outerWidth();
             }else{
+                totalHeight=$(id).outerHeight();
+                totalWidth+=$(id).outerWidth();
                 $(id).addClass('picked');
             }
 
         }
+
+        var top=Number($(this).offset().top)+Number(that.container.scrollTop())-94;
+        var left=Number($(this).offset().left+64);
+
+        that.frameBorder.blueBorder.blueBorderContainer.css({
+            'top': top,
+            'left': left,
+            'display':'block'
+        });
+        that.frameBorder.corner.css({
+            'top': top,
+            'left': totalWidth - 2
+        });
+        var wB1Style={ 'width': totalWidth, 'height': '2px', 'left': 0, 'top': 0 };
+        var wB2Style={ 'width': totalWidth, 'height': '2px', 'left': 0, 'top': totalHeight };
+        var wB3Style={ 'width': '2px', 'height': totalHeight, 'left': 0, 'top': 0 };
+        var wB4Style={ 'width': '2px', 'height': totalHeight, 'left': totalWidth, 'top': 0 };
+        wB1.css(wB1Style); wB2.css(wB2Style); wB3.css(wB3Style); wB4.css(wB4Style);
 
         that.LightCooR($('.picked'));
 
@@ -1663,49 +1657,47 @@ ITable.prototype.ChooseRow=function(){
 
 ITable.prototype.ChooseCol=function(){
     var that=this;
+    var wB1=this.frameBorder.blueBorder.topDiv,
+        wB2=this.frameBorder.blueBorder.bottomDiv,
+        wB3=this.frameBorder.blueBorder.leftDiv,
+        wB4=this.frameBorder.blueBorder.rightDiv;
     this.xBox.xTable.find('td').on('click',function(){
         var index=Number($(this).index())+1;
-       // var startXArr=[],endXArr=[];
+        var totalHeight=0,totalWidth=0;
         $('.picked').removeClass('picked');
 
-        if(that.mergeTds.length>=1){
-
-            // for(var j=0;j<that.mergeTds.length;j++){
-            //
-            //     var tdStartCol=Number($(that.mergeTds[j]).attr('cols'));
-            //     var tdEndCol=Number($(that.mergeTds[j]).attr('cols'))+Number($(that.mergeTds[j]).attr('colspan'));
-            //
-            //     if(tdStartCol<=index&&tdEndCol>=index){
-            //         startXArr.push(tdStartCol);
-            //         endXArr.push(tdEndCol);
-            //     }
-            //
-            // }
-            // var minX=_.min(startXArr),maxX=_.max(endXArr);
-            //
-            // for(var m=0;m<that.rowCount;m++){
-            //     for(var n=minX;n<maxX;n++){
-            //         var id='#'+m+'-'+n;
-            //
-            //         $(id).addClass('picked');
-            //     }
-            //
-            // }
-        }else{
-            // for(var l=0;l<that.rowCount;l++){
-            //     var id='#'+l+'-'+index;
-            //     $(id).addClass('picked');
-            // }
-        }
         for(var l=0,len=that.rowCount;l<=len;l++){
             var id='#'+l+'-'+index;
             if(Number($(id).attr('rowspan'))>=2&&Number($(id).attr('colspan'))>=2){
-
+                  totalHeight+=$(id).outerHeight;
             }else{
+
                 $(id).addClass('picked');
+                totalWidth=$(id).outerWidth()
+                totalHeight+=$(id).outerHeight();
+
             }
 
         }
+
+        var top=Number($(this).offset().top)-70;
+        var left=Number($(this).offset().left)+Number(that.container.scrollLeft())-4;
+
+        that.frameBorder.blueBorder.blueBorderContainer.css({
+            'top': top,
+            'left': left,
+            'display':'block'
+        });
+        that.frameBorder.corner.css({
+            'top': top,
+            'left': totalWidth - 2
+        });
+        var wB1Style={ 'width': totalWidth, 'height': '2px', 'left': 0, 'top': 0 };
+        var wB2Style={ 'width': totalWidth, 'height': '2px', 'left': 0, 'top': totalHeight };
+        var wB3Style={ 'width': '2px', 'height': totalHeight, 'left': 0, 'top': 0 };
+        var wB4Style={ 'width': '2px', 'height': totalHeight, 'left': totalWidth, 'top': 0 };
+        wB1.css(wB1Style); wB2.css(wB2Style); wB3.css(wB3Style); wB4.css(wB4Style);
+
         that.LightCooR($('.picked'));
 
     });
@@ -3860,93 +3852,6 @@ ITable.prototype.LargeCol = function () {
 
     var container = this.container,that = this, event = window.event || arguments[0], exW =(this.xBox.xOrder).outerWidth();
 
-    // $('#titleTable').find('td').each(function () {
-    //
-    //     $(this).off('mousemove').on('mousemove',function(event){
-    //
-    //         var w = $(this).width();
-    //
-    //         var x = event.clientX - exW;
-    //
-    //         if($(this).offset().left+w-exW<x+20){
-    //             $(this).css({
-    //                 cursor:'col-resize'
-    //             });
-    //
-    //             $(this).off('mousedown').on('mousedown', function (event) {
-    //
-    //                 var index = $(this).index();
-    //
-    //                 var lLine = $('<div class="lline"></div>');
-    //
-    //                 var sL=Number($(that.container).scrollLeft());
-    //
-    //                 var w = $(this).width()+sL;
-    //
-    //                 var x = event.clientX - exW+sL;
-    //
-    //                 if($(this).offset().left+w-exW<x+20){
-    //
-    //                     $('body').mousemove(function (event) {
-    //
-    //                         var allH = that.table.outerHeight();
-    //
-    //                         var l = event.clientX - exW;
-    //
-    //                         var move = l - x;
-    //
-    //                         if (w + move < 20) {
-    //
-    //                             return;
-    //
-    //                         } else {
-    //
-    //                             lLine.css({
-    //
-    //                                 'height': allH,
-    //
-    //                                 'left': event.clientX+sL,
-    //
-    //                                 'width':'1px',
-    //
-    //                                 'border-left':'1px dashed #000'
-    //
-    //                             });
-    //
-    //                             that.table.find('colgroup').find('col').eq(index).css('width', w + move);
-    //
-    //                             $('#titleTable').find('colgroup').find('col').eq(index).css('width', w + move);
-    //
-    //                             $(container).append(lLine);
-    //
-    //                         }
-    //
-    //                     });
-    //                 }
-    //                 $('body').mouseup(function () {
-    //
-    //                     $('body').off('mousemove');
-    //
-    //                     lLine.remove();
-    //
-    //                 });
-    //
-    //             });
-    //
-    //         }else{
-    //             $(this).css({
-    //                 cursor:'default'
-    //             })
-    //         }
-    //
-    //     });
-    //
-    //
-    //
-    //
-    // });
-
-
     this.xBox.xTable.off('mousemove').on('mousemove',function(){
          var event = window.event || arguments[0];
 
@@ -4037,102 +3942,6 @@ ITable.prototype.LargeCol = function () {
 ITable.prototype.LargeRow = function () {
 
     var container = this.container, that = this , exH = this.yBox.yOrder.outerHeight(), headerH=parseInt($(container).css('marginTop'));
-
-    // $('#leftTable').find('td').each(function () {
-    //
-    //     // var event = window.event || arguments[0];
-    //
-    //     $(this).off('mousemove').on('mousemove',function(event){
-    //
-    //         var h = $(this).height(),y = event.clientY - exH;
-    //
-    //         if($(this).offset().top+h-exH<y+6) {
-    //
-    //             $(this).css({
-    //                 cursor: 'row-resize'
-    //             });
-    //
-    //             $(this).off('mousedown').on('mousedown', function (event) {
-    //
-    //                 var index = $(this).parent().index();
-    //
-    //                 var lLine = $('<div class="rline"></div>');
-    //
-    //                 var sT=Number($(that.container).scrollTop());
-    //
-    //                 var h = $(this).height()+sT;
-    //
-    //                 var y = event.clientY - exH+sT;
-    //
-    //
-    //                 if($(this).offset().top+h-exH<y+10) {
-    //
-    //                     $('body').mousemove(function (event) {
-    //
-    //                         var allW = that.table.outerWidth();
-    //
-    //                         var l = event.clientY - exH;
-    //
-    //                         var move = l - y;
-    //
-    //                         if (h + move < 20) {
-    //
-    //                             return;
-    //
-    //                         } else {
-    //
-    //                             lLine.css({
-    //
-    //                                 'width': allW,
-    //
-    //                                 'top': event.clientY+sT-headerH,
-    //
-    //                                 'border-top':'1px dashed #000',
-    //
-    //                                 'height':1
-    //
-    //                             });
-    //
-    //                             var tempMove=h + move + 1,tempMove_1=h+move;
-    //
-    //                             that.table.find('tr').find('th').eq(index).css('height',tempMove);
-    //
-    //                             $('#leftTable').find('td').eq(index).css('height', tempMove_1);
-    //
-    //                             $(container).append(lLine);
-    //
-    //                         }
-    //
-    //                     });
-    //                 }
-    //
-    //
-    //
-    //                 $('body').mouseup(function () {
-    //
-    //                     $('body').off('mousemove');
-    //
-    //                     lLine.remove();
-    //
-    //
-    //                 });
-    //
-    //             });
-    //
-    //
-    //
-    //
-    //         }else{
-    //             $(this).css({
-    //                 cursor: 'default'
-    //             });
-    //         }
-    //     });
-    //
-    //
-    //
-    // });
-
 
     this.yBox.yTable.off('mousemove').on('mousemove',function(){
 
