@@ -22,8 +22,8 @@ function ITable(tContainer, tSettings, tabs,mergeArray) {
     };
     this.fillContainer={
         fillBlank:null,
-        disBox:null,
-    }
+        disBox:null
+    };
 
     this.moveLast=null;
     this.table=null;
@@ -2204,7 +2204,7 @@ ITable.prototype.GetFillType=function(obj){
 
         }else if($(obj).hasClass('ftDate')){
 
-            return;
+            return ;
 
         }else if($(obj).hasClass('ftAccount')){
 
@@ -2219,7 +2219,7 @@ ITable.prototype.GetFillType=function(obj){
             return  newValue;
 
         }else if($(obj).hasClass('ftText')){
-            return;
+            return ;
         }else{
             newValue=Number($(obj).text());
             return newValue;
