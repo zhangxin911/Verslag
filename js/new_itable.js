@@ -2494,7 +2494,8 @@ ITable.prototype.FtPercent=function(){
 
                 selThem.addClass(curClass);
 
-                var newVal=(Math.round(Number($(this).text()) * 10000)/100).toFixed(2) + '%'
+                var newVal=(Math.round(Number($(this).text()) * 10000)/100).toFixed(2) + '%';
+
                 $(this).text(newVal);
 
             }
@@ -3834,13 +3835,14 @@ ITable.prototype.UpdateLeft = function (index,type) {
 //x轴更新
 
 ITable.prototype.UpdateTop = function (index,type) {
+    var len;
     switch (type) {
         case 'add':
             this.xBox.xTable.find('colgroup').find('col').eq(index).after('<col style="width:100px">');
 
             this.xBox.xTable.find('tbody').find('tr').find('td').eq(index).after('<td></td>');
 
-            var len=this.cellCount;
+            len=this.cellCount;
 
             for (var j = index; j <= len; j++) {
 
@@ -3854,7 +3856,7 @@ ITable.prototype.UpdateTop = function (index,type) {
 
             this.xBox.xTable.find('tbody').find('tr').find('td').eq(index).remove();
 
-            var len=this.cellCount;
+            len=this.cellCount;
 
             for (var j = 1; j <= len; j++) {
 
