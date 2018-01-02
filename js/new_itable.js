@@ -72,13 +72,15 @@ ITable.prototype.CreateContent = function (tid) {
 
     myContainer.append(this.table);
 
+    var tr,th,colG,col,td;
+
     for (var i = 0; i < this.rowCount; i++) {
 
-        var tr = this.CreateTr(),th = $('<th></th>'),colG = $('<colgroup></colgroup>'),col;
+        tr = this.CreateTr(),th = $('<th></th>'),colG = $('<colgroup></colgroup>');
 
         for (var j = 0; j <= this.cellCount; j++) {
 
-            var td = this.CreateTd('ftNormal fsize_14 font_Black','');
+            td = this.CreateTd('ftNormal fsize_14 font_Black','');
 
             if (j === 0) {
 
@@ -421,7 +423,7 @@ ITable.prototype.FillTextArea=function(eType,val){
             this.tableInput.input.focus();
             break;
         default:
-
+            break;
     }
 };
 
@@ -608,6 +610,7 @@ function typing(event) {
                     event.data.fixY = Number($(event.data.lastTd).attr('rows'));
 
                     break;
+
 
             }
 
@@ -1101,10 +1104,11 @@ ITable.prototype.SetCss = function () {
     });
 
 
+    var viewWidth,viewHeight;
 
     $(window).resize(function () {
 
-        var viewWidth = $(window).width(), viewHeight = $(window).height();
+        viewWidth = $(window).width(), viewHeight = $(window).height();
 
         thatContainer.width(viewWidth - 4);
 
@@ -1117,10 +1121,12 @@ ITable.prototype.SetCss = function () {
 };
 //滚动
 ITable.prototype.TableScroll = function () {
-    var that=this;
+
+    var that=this,scrollY=0,scrollX=0;
+
     this.container.on('scroll',function(){
 
-        var scrollY = this.scrollTop, scrollX = this.scrollLeft;
+        scrollY = Number(this.scrollTop), scrollX = Number(this.scrollLeft);
 
         that.yBox.yTable.css('margin-top', -scrollY);
 
@@ -1161,14 +1167,11 @@ ITable.prototype.TdClick=function(event){
 
     $(this).addClass('picked');
 
-     event.data.target.SetBlueBorder($(this));
+    event.data.target.SetBlueBorder($(this));
 
     var xCoo = Number($(this).attr('cols')) - 1, yCoo = Number($(this).attr('rows')) - 1;
 
-
-
     event.data.target.fillContainer.disBox.text(IntToChr(xCoo) + String(yCoo + 1));
-
 
     event.data.target.TdToFx($(this));
     event.data.target.LightCooR($(this));
@@ -1579,8 +1582,10 @@ ITable.prototype.CornerCopy=function(){
                 sTop=that.container.scrollTop()-96;
                 sLeft=that.container.scrollLeft()-4;
 
-                top=Number($('#'+startY+'-'+startX).offset().top)+sTop+1;
-                left=Number($('#'+startY+'-'+startX).offset().left)+sLeft+1;
+                var startId='#'+startY+'-'+startX;
+
+                top=Number($(startId).offset().top)+sTop+1;
+                left=Number($(startId).offset().left)+sLeft+1;
 
                 that.frameBorder.redBorder.redBorderContainer.show();
                 that.frameBorder.redBorder.redBorderContainer.css({
@@ -2545,11 +2550,11 @@ ITable.prototype.InsertCol = function () {
 
     sel_a.on('click', function () {
 
-        var sNode = $('.picked') , xArr = [], yArr = [] , xMax, xMin , yMax, yMin;
+        var sNode = $('.picked') , xArr = [], yArr = [] , xMax, xMin , yMax, yMin,sLength=sNode.length;
 
-        if (sNode.length >= 2) {
+        if (sLength >= 2) {
 
-            for (var i = 0; i < sNode.length; i++) {
+            for (var i = 0; i < sLength; i++) {
 
                 var cols = Number(sNode.eq(i).attr('cols')) , rows = Number(sNode.eq(i).attr('rows'));
 
@@ -3789,7 +3794,7 @@ ITable.prototype.UpdateTableCol=function(){
         this.table.find('col').eq(j).attr('id','t'+j);
 
     }
-}
+};
 
 //y轴更新
 
@@ -3819,10 +3824,10 @@ ITable.prototype.UpdateLeft = function (index,type) {
             }
 
             break;
+        default:
+            break;
+
     }
-
-
-
     this.LargeRow();
 };
 
@@ -3857,8 +3862,9 @@ ITable.prototype.UpdateTop = function (index,type) {
 
             }
             break;
+        default:
+            break;
     }
-
     this.LargeCol();
 };
 
