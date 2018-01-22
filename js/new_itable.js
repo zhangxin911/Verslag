@@ -76,7 +76,9 @@ ITable.prototype.CreateContent = function (tid) {
 
     for (var i = 0; i < this.rowCount; i++) {
 
-        tr = this.CreateTr(),th = $('<th></th>'),colG = $('<colgroup></colgroup>');
+        tr = this.CreateTr();
+        th = $('<th></th>');
+        colG = $('<colgroup></colgroup>');
 
         for (var j = 0; j <= this.cellCount; j++) {
 
@@ -226,7 +228,7 @@ ITable.prototype.FrameSelect = function () {
     });
 
     $(document).off('mousedown').on('mousedown',function(){
-        var event=event||arguments[0];
+       // var event=event||arguments[0];
 
         var onCols = Number($(coord).attr('cols')) , onRows = Number($(coord).attr('rows')) , sTop , sLeft , top , left;
 
@@ -398,13 +400,11 @@ ITable.prototype.FillTextArea=function(eType,val){
             });
             this.tableInput.input.off('keyup').on('keyup',function(){
                 if (event.keyCode === 13) {
-                    var content =$(this).val();
-                    var curClass=$('.picked').attr('class');
+                    var content =$(this).val(),curClass=$('.picked').attr('class');
 
                     $('.picked').html(that.TypeToValue(curClass,content));
 
-                    var pNode=$($('.picked').attr('pnode'));
-                    var ex=pNode.attr('ex');
+                    var pNode=$($('.picked').attr('pnode')),ex=pNode.attr('ex');
                     if(!!ex){
                         var exArr=ex.split('/');
                         var type=exArr[0];
@@ -1108,7 +1108,9 @@ ITable.prototype.SetCss = function () {
 
     $(window).resize(function () {
 
-        viewWidth = $(window).width(), viewHeight = $(window).height();
+        viewWidth = $(window).width();
+
+        viewHeight = $(window).height();
 
         thatContainer.width(viewWidth - 4);
 
@@ -1126,7 +1128,9 @@ ITable.prototype.TableScroll = function () {
 
     this.container.on('scroll',function(){
 
-        scrollY = Number(this.scrollTop), scrollX = Number(this.scrollLeft);
+        scrollY = Number(this.scrollTop);
+
+        scrollX = Number(this.scrollLeft);
 
         that.yBox.yTable.css('margin-top', -scrollY);
 
@@ -1441,7 +1445,7 @@ ITable.prototype.CornerCopy=function(){
         $(this).on('mousedown', function () {
             $(document).off('mousedown');
 
-            var event=event||arguments[0];
+            // var event=event||arguments[0];
 
             var onCols = Number($(coord).attr('cols')) , onRows = Number($(coord).attr('rows')) , sTop , sLeft , top , left,
                 copyVal=$(coord).html();
@@ -4635,7 +4639,7 @@ ITable.prototype.freezeTds=function(event){
                 'height':$(event.data.callZ.container).css('height')
              });
 
-             $('#fColBox td').css({
+             $('#fColBox').find('td').css({
                 'height':'20px'
              });
 
@@ -4793,7 +4797,7 @@ function containsArray(array, obj) {
 
             return i;
 
-            break;
+          //  break;
 
         }
 
