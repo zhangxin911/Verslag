@@ -66,6 +66,11 @@ function ITable(tContainer, tSettings, tabs,mergeArray) {
         mouseEnter:'mouseenter',
         dblClick:'dblclick'
     };
+    this.keyString={
+        keyUp:'keyup',
+        keyDown:'keydown'
+    }
+
     this.mergeTds=mergeArray || [];
 
     this.selectedArr=[];
@@ -400,14 +405,14 @@ ITable.prototype.FillTextArea=function(eType,val){
     {
         case 'dblclick':
             this.tableInput.input.val('');
-            $(document).off('keydown');
+            $(document).off(that.keyString.keyDown);
             this.tableInput.input.focus().val(val);
             this.tableInput.input.on('change',function(){
                 $('#ip_fx').val($(this).val());
                 that.IsExpress(that.tableInput.input.val());
                 event.stopPropagation();
             });
-            this.tableInput.input.off('keyup').on('keyup',function(){
+            this.tableInput.input.off(that.keyString.keyUp).on(that.keyString.keyUp,function(){
                 if (event.keyCode === 13) {
                     var content =$(this).val(),curClass=$('.picked').attr('class');
 
@@ -442,7 +447,7 @@ ITable.prototype.IsExpress=function(val){
 
     if(textVal.match(/^\=/g)||textVal.match(/^\+/g)||textVal.match(/^\-/g)){
         //    /(\=|\+|\-|\*|\/)([a-z]|[A-Z])+([1-9]*)/g
-        this.table.find('td').off('dblclick');
+        this.table.find('td').off(that.mouseString.dblClick);
         $(this.container).off(that.mouseString.mouseDown);
         // var coordinates;
         this.table.find('td').off('click').on('click',{coordinate:null},function(event){
@@ -484,7 +489,7 @@ ITable.prototype.KeyCursor = function () {
 
     var that = this;
 
-    $(document).off('keydown').on('keydown', {time: "0", lastTd: null, fixX: "", fixY: "", keyCode: "", callZ: that}, typing);
+    $(document).off(that.keyString.keyDown).on(that.keyString.keyDown, {time: "0", lastTd: null, fixX: "", fixY: "", keyCode: "", callZ: that}, typing);
 
 };
 
@@ -1157,7 +1162,7 @@ ITable.prototype.FillTd = function (tid) {
 
     this.table.find('td').each(function () {
 
-       $(this).off('dblclick').on('dblclick',{target:that,id:tid},that.TdDbClick);
+       $(this).off(that.mouseString.dblClick).on(that.mouseString.dblClick,{target:that,id:tid},that.TdDbClick);
 
        $(this).off('click').on('click',{target:that},that.TdClick);
 
@@ -3651,7 +3656,7 @@ ITable.prototype.SheetWork = function () {
 
     });
 
-    $('.sheet').on('dblclick', function () {
+    $('.sheet').on(that.mouseString.dblClick, function () {
 
         var that = $(this), ev = event || window.event , tdWidth = that.width() , tdHeight = that.height() , tdText = that.text();
 
@@ -3685,7 +3690,7 @@ ITable.prototype.SheetWork = function () {
 
         });
 
-        $(".stInput").keyup(function (ev) {
+        $(".stInput").on(that.keyString.keyUp,function (ev) {
 
             if (ev.keyCode === 13) {
 
@@ -3966,9 +3971,7 @@ ITable.prototype.LargeCol = function () {
             });
 
         }else{
-            $(event.target).css({
-                cursor:'default'
-            });
+            $(event.target).css({ cursor:'default' });
         }
 
     });
@@ -3989,9 +3992,7 @@ ITable.prototype.LargeRow = function () {
 
         if($(event.target).offset().top+h-exH<y+6) {
 
-            $(event.target).css({
-                cursor: 'row-resize'
-            });
+            $(event.target).css({ cursor: 'row-resize' });
 
             $(event.target).off(that.mouseString.mouseDown).on(that.mouseString.mouseDown, function (event) {
 
@@ -4626,10 +4627,10 @@ ITable.prototype.freezeTds=function(event){
 
 
                      }else{
-                         tr.append($('.dataTable').find(id).clone());
-                         $('#fColBox').find('colgroup').append($('.dataTable').find('colgroup').find('col').eq(i).clone());
+                         tr.append($('#dataTable').find(id).clone());
+                         $('#fColBox').find('colgroup').append($('#dataTable').find('colgroup').find('col').eq(i).clone());
                          if(i>1){
-                             fColTotalWidth+=parseInt($('.dataTable').find('colgroup').find('col').eq(i).width());
+                             fColTotalWidth+=parseInt($('#dataTable').find('colgroup').find('col').eq(i).width());
                          }
 
                      }
