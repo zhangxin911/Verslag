@@ -57,6 +57,15 @@ function ITable(tContainer, tSettings, tabs,mergeArray) {
         },
         corner:null
     };
+
+    this.mouseString={
+        mouseMove:'mousemove',
+        mouseDown:'mousedown',
+        mouseOver:'mouseover',
+        mouseUp:'mouseup',
+        mouseEnter:'mouseenter',
+        dblClick:'dblclick'
+    };
     this.mergeTds=mergeArray || [];
 
     this.selectedArr=[];
@@ -221,18 +230,18 @@ ITable.prototype.FrameSelect = function () {
     wB3=this.frameBorder.blueBorder.leftDiv,
     wB4=this.frameBorder.blueBorder.rightDiv;
 
-    this.table.on('mouseover',function(){
+    this.table.on(this.mouseString.mouseOver,function(){
         var event=event||arguments[0];
         coord=$(event.target);
         that.moveLast=$(event.target);
     });
 
-    $(document).off('mousedown').on('mousedown',function(){
+    $(document).off(this.mouseString.mouseDown).on(this.mouseString.mouseDown,function(){
        // var event=event||arguments[0];
 
         var onCols = Number($(coord).attr('cols')) , onRows = Number($(coord).attr('rows')) , sTop , sLeft , top , left;
 
-        $(document).off('mousemove').on('mousemove',function(){
+        $(document).off(that.mouseString.mouseMove).on(that.mouseString.mouseMove,function(){
 
             var moveCS=isNaN(Number(that.moveLast.attr('colspan')))?1:Number(that.moveLast.attr('colspan')),
 
@@ -338,8 +347,8 @@ ITable.prototype.FrameSelect = function () {
             });
             that.frameBorder.blueBorder.blueBorderContainer.show();
         });
-        $(document).on('mouseup',function(){
-            $(this).off('mousemove');
+        $(document).on(that.mouseString.mouseUp,function(){
+            $(this).off(that.mouseString.mouseMove);
         });
 
     });
@@ -434,9 +443,9 @@ ITable.prototype.IsExpress=function(val){
     if(textVal.match(/^\=/g)||textVal.match(/^\+/g)||textVal.match(/^\-/g)){
         //    /(\=|\+|\-|\*|\/)([a-z]|[A-Z])+([1-9]*)/g
         this.table.find('td').off('dblclick');
-        $(this.container).off('mousedown');
-        var coordinates;
-        this.table.find('td').off('click').on('click',{coordinate:coordinates},function(event){
+        $(this.container).off(that.mouseString.mouseDown);
+        // var coordinates;
+        this.table.find('td').off('click').on('click',{coordinate:null},function(event){
 
                 that.tableInput.input.focus();
                 var typePosition=Number(that.tableInput.input.iGetFieldPos());
@@ -1116,7 +1125,7 @@ ITable.prototype.SetCss = function () {
 
         thatContainer.height(viewHeight - bTop - 113);
 
-        that.yBox.yOrder.height(viewHeight - 153);
+        that.yBox.yOrder.height(viewHeight - bTop);
 
     });
 
@@ -1432,18 +1441,18 @@ ITable.prototype.CornerCopy=function(){
         wB3=this.frameBorder.redBorder.bottomDiv,
         wB4=this.frameBorder.redBorder.leftDiv;
 
-    this.table.on('mouseover',function(){
+    this.table.on(that.mouseString.mouseOver,function(){
         var event=event||arguments[0];
         coord=$(event.target);
         that.moveLast=$(event.target);
     });
 
-    this.frameBorder.corner.on('mouseenter',function(){
+    this.frameBorder.corner.on(that.mouseString.mouseEnter,function(){
 
         $(this).css('cursor', 'crosshair');
 
-        $(this).on('mousedown', function () {
-            $(document).off('mousedown');
+        $(this).on(that.mouseString.mouseDown, function () {
+            $(document).off(that.mouseString.mouseDown);
 
             // var event=event||arguments[0];
 
@@ -1455,7 +1464,7 @@ ITable.prototype.CornerCopy=function(){
                 return;
             }
 
-            $(document).on('mousemove', function () {
+            $(document).on(that.mouseString.mouseMove, function () {
                  var coords=$(that.moveLast);
                 //
                  var nCols = Number($(coords).attr('cols')) , nRows = Number($(coords).attr('rows')) ;
@@ -1607,12 +1616,12 @@ ITable.prototype.CornerCopy=function(){
 
 
             });
-            $(document).off('mouseup').on('mouseup',function(){
+            $(document).off(that.mouseString.mouseUp).on(that.mouseString.mouseUp,function(){
                 that.HideReadBorder();
                 $('.picked').text(copyVal);
-                $(this).off('mouseup');
-                $(document).off('mousedown');
-                $(document).off('mousemove');
+                $(this).off(that.mouseString.mouseUp);
+                $(document).off(that.mouseString.mouseDown);
+                $(document).off(that.mouseString.mouseMove);
                 that.FrameSelect();
             });
 
@@ -2312,12 +2321,12 @@ ITable.prototype.FtNormal=function(){
 
                   curClass = $(this).attr('class');
 
-                  if (!!curClass) {
+                  if (!curClass) {
+                      return;
+                  } else {
 
                       curClass = curClass.replace(reg, className);
 
-                  } else {
-                      return;
                   }
 
                   curClass = _.uniq(curClass.split(' ')).join(' ');
@@ -2347,7 +2356,8 @@ ITable.prototype.FtNumber=function(){
         $('.picked').each(function(){
             var className, curClass,selThem;
 
-            if(!$(this).hasClass('ftNumber')){
+            if ($(this).hasClass('ftNumber')) {
+            } else {
                 className = 'ftNumber';
 
                 $(this).addClass(className);
@@ -2356,12 +2366,12 @@ ITable.prototype.FtNumber=function(){
 
                 curClass = $(this).attr('class');
 
-                if (!!curClass) {
+                if (!curClass) {
+                    return;
+                } else {
 
                     curClass = curClass.replace(reg, className);
 
-                } else {
-                    return;
                 }
 
                 curClass = _.uniq(curClass.split(' ')).join(' ');
@@ -2370,9 +2380,9 @@ ITable.prototype.FtNumber=function(){
 
                 $(this).removeAttr('class');
 
-                var oldVal=selThem.text();
+                var oldVal = selThem.text();
 
-                var newVal=that.TypeToValue(curClass,oldVal);
+                var newVal = that.TypeToValue(curClass, oldVal);
 
                 selThem.text(newVal);
 
@@ -2399,10 +2409,10 @@ ITable.prototype.FtDate=function(){
 
                 curClass = $(this).attr('class');
 
-                if (!!curClass) {
-                    curClass = curClass.replace(reg, className);
-                } else {
+                if (!curClass) {
                     return;
+                } else {
+                    curClass = curClass.replace(reg, className);
                 }
 
                 curClass = _.uniq(curClass.split(' ')).join(' ');
@@ -2439,13 +2449,13 @@ ITable.prototype.FtAccount=function(){
 
                 curClass = $(this).attr('class');
 
-                if (!!curClass) {
+                if (!curClass) {
 
-                    curClass = curClass.replace(reg, className);
+                    return;
 
                 } else {
 
-                    return;
+                    curClass = curClass.replace(reg, className);
 
                 }
 
@@ -3880,7 +3890,7 @@ ITable.prototype.LargeCol = function () {
 
     var container = this.container,that = this, event = window.event || arguments[0], exW =(this.xBox.xOrder).outerWidth();
 
-    this.xBox.xTable.off('mousemove').on('mousemove',function(){
+    this.xBox.xTable.off(that.mouseString.mouseMove).on(that.mouseString.mouseMove,function(){
          var event = window.event || arguments[0];
 
          var w = $(event.target).width();
@@ -3892,9 +3902,9 @@ ITable.prototype.LargeCol = function () {
                 cursor:'col-resize'
             });
 
-            $(event.target).off('mousedown').on('mousedown', function (event) {
+            $(event.target).off(that.mouseString.mouseDown).on(that.mouseString.mouseDown, function (event) {
 
-                $(document).off('mousedown');
+                $(document).off(that.mouseString.mouseDown);
 
                 var index = $(this).index();
 
@@ -3908,7 +3918,7 @@ ITable.prototype.LargeCol = function () {
 
                 if($(this).offset().left+w-exW<x+10){
 
-                    $('body').on('mousemove',function (event) {
+                    $('body').on(that.mouseString.mouseMove,function (event) {
 
                         var allH = that.table.outerHeight();
 
@@ -3944,9 +3954,9 @@ ITable.prototype.LargeCol = function () {
 
                     });
                 }
-                $('body').on('mouseup',function () {
+                $('body').on(that.mouseString.mouseUp,function () {
 
-                    $('body').off('mousemove');
+                    $('body').off(that.mouseString.mouseMove);
 
                     lLine.remove();
 
@@ -3971,7 +3981,7 @@ ITable.prototype.LargeRow = function () {
 
     var container = this.container, that = this , exH = this.yBox.yOrder.outerHeight(), headerH=parseInt($(container).css('marginTop'));
 
-    this.yBox.yTable.off('mousemove').on('mousemove',function(){
+    this.yBox.yTable.off(that.mouseString.mouseMove).on(that.mouseString.mouseMove,function(){
 
         var event = window.event || arguments[0];
 
@@ -3983,9 +3993,9 @@ ITable.prototype.LargeRow = function () {
                 cursor: 'row-resize'
             });
 
-            $(event.target).off('mousedown').on('mousedown', function (event) {
+            $(event.target).off(that.mouseString.mouseDown).on(that.mouseString.mouseDown, function (event) {
 
-                $(document).off('mousedown');
+                $(document).off(that.mouseString.mouseDown);
 
                 var index = $(this).parent().index();
 
@@ -4000,7 +4010,7 @@ ITable.prototype.LargeRow = function () {
 
                 if($(this).offset().top+h-exH<y+10) {
 
-                    $('body').on('mousemove',function (event) {
+                    $('body').on(that.mouseString.mouseMove,function (event) {
 
                         var allW = that.table.outerWidth();
 
@@ -4041,9 +4051,9 @@ ITable.prototype.LargeRow = function () {
 
 
 
-                $('body').on('mouseup',function () {
+                $('body').on(that.mouseString.mouseUp,function () {
 
-                    $('body').off('mousemove');
+                    $('body').off(that.mouseString.mouseMove);
 
                     lLine.remove();
 
