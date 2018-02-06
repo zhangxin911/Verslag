@@ -1,6 +1,6 @@
 "use strict" //严格模式
 
-function ITable(tContainer, tSettings, tabs,mergeArray) {
+function ITable(tContainer, tSettings, tabs,mergeArray,callbacks) {
 
     this.rowCount = Number(tSettings.rowCount);
 
@@ -11,7 +11,7 @@ function ITable(tContainer, tSettings, tabs,mergeArray) {
     this.settings = tSettings;
 
     this.tabs = tabs;
-
+    this.callbacks=callbacks;
     this.header=null;
     this.footer=null;
     this.toolContainer={
@@ -69,7 +69,7 @@ function ITable(tContainer, tSettings, tabs,mergeArray) {
     this.keyString={
         keyUp:'keyup',
         keyDown:'keydown'
-    }
+    };
 
     this.mergeTds=mergeArray || [];
 
@@ -4354,40 +4354,43 @@ ITable.prototype.CreateRMenus = function () {
 ITable.prototype.Cut = function (dataArr) {
 
     var $cutDiv = $('<div class="menu-cut">剪切</div>');
+    var that=this;
+    // $cutDiv.on('click', function () {
+    //
+    //     var tdLength = $('.picked').length;
+    //
+    //     $(this).parent().hide();
+    //
+    //     if (tdLength <= 1) {
+    //
+    //         dataArr.length = 0;
+    //
+    //         var td = $('.picked').eq(0);
+    //
+    //         dataArr.push($(td).text());
+    //
+    //         $(td).text('');
+    //
+    //     } else {
+    //
+    //         dataArr.length = 0;
+    //
+    //         for (var i = 0; i < tdLength; i++) {
+    //
+    //             var tds = $('.picked').eq(i);
+    //
+    //             dataArr.push($(tds));
+    //
+    //             $(tds).text('');
+    //
+    //         }
+    //
+    //     }
+    //
+    // });
+    var name='a',id=2;
 
-    $cutDiv.on('click', function () {
-
-        var tdLength = $('.picked').length;
-
-        $(this).parent().hide();
-
-        if (tdLength <= 1) {
-
-            dataArr.length = 0;
-
-            var td = $('.picked').eq(0);
-
-            dataArr.push($(td).text());
-
-            $(td).text('');
-
-        } else {
-
-            dataArr.length = 0;
-
-            for (var i = 0; i < tdLength; i++) {
-
-                var tds = $('.picked').eq(i);
-
-                dataArr.push($(tds));
-
-                $(tds).text('');
-
-            }
-
-        }
-
-    });
+    $cutDiv.on('click',{name:name,id:id},that.callbacks.cut);
 
     return $cutDiv;
 
@@ -5148,17 +5151,17 @@ var settings = {
     },
     fillType: {
 
-        '常规': 'ft_normal',
+        'normal': 'ft_normal',
 
-        '数字': 'ft_number',
+        'number': 'ft_number',
 
-        '日期': 'ft_date',
+        'date': 'ft_date',
 
-        '会计专用': 'ft_account',
+        'account': 'ft_account',
 
-        '百分比': 'ft_percent',
+        'percent': 'ft_percent',
 
-        '文本': 'ft_text'
+        'text': 'ft_text'
 
     }
 
@@ -5191,8 +5194,14 @@ var tabs = {
     textAlign: true,
 
 };
+var callbacks={
+    cut:_cut
+};
 
-var t = new ITable(box, settings, tabs);
+function _cut(event){
+    console.log(event.data.name,event.data.id);
+}
+var t = new ITable(box, settings,tabs,[],callbacks);
 
 t.Init();
 
