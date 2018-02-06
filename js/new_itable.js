@@ -326,7 +326,6 @@ ITable.prototype.FrameSelect = function () {
             sTop=that.container.scrollTop()-96;
             sLeft=that.container.scrollLeft()-4;
 
-            console.log(that.selectedArr);
 
             startId='#'+startY+'-'+startX;
             top=Number($(startId).offset().top)+sTop+1;
@@ -497,7 +496,7 @@ function typing(event) {
 
     var sNode = $('.picked'), callZ = event.data.callZ;
 
-    if ($('.picked').length === 1) {
+    if (sNode.length === 1) {
 
         if (event.keyCode === 8 || event.keyCode === 18 || event.keyCode === 16 || event.keyCode === 9) {
 
@@ -1174,9 +1173,9 @@ ITable.prototype.TdClick=function(event){
 
     if( event.data.target.tableInput.inputContainer.css('display')==='block'){
 
-        $('.picked').text(event.data.target.tableInput.val());
+        $('.picked').text(event.data.target.tableInput.input.val());
 
-        this.tableInput.inputContainer.hide();
+        event.data.target.tableInput.inputContainer.hide();
 
         event.data.target.tableInput.input.blur();
     }
@@ -3004,8 +3003,8 @@ ITable.prototype.TypeMin=function(data){
     return _.min(arr);
 };
 
-//点击触发公式
-
+//点0.·
+// 3.+/54击触发公式
 ITable.prototype.Formula = function (ways) {
 
     switch (ways){
@@ -3036,8 +3035,7 @@ ITable.prototype.FxSum=function(){
            var sum=0,rArr=[],cArr=[],pArr=[];
            $('.picked').each(function(){
                var val=that.GetFillType($(this)),nowRow=Number($(this).attr('rows')),nowCol=Number($(this).attr('cols'));
-               rArr.push(nowRow);
-               cArr.push(nowCol);
+               rArr.push(nowRow);cArr.push(nowCol);
                if(isNaN(val)){
                    val=0;
                }else{
@@ -3085,8 +3083,7 @@ ITable.prototype.FxAvg=function(){
         var sum=0,pL=$('.picked').length,avg=0,rArr=[],cArr=[],pArr=[];
         $('.picked').each(function(){
             var val=that.GetFillType($(this)),nowRow=Number($(this).attr('rows')),nowCol=Number($(this).attr('cols'));
-            rArr.push(nowRow);
-            cArr.push(nowCol);
+            rArr.push(nowRow);cArr.push(nowCol);
             if(isNaN(val)){
                 val=0;
             }else{
@@ -3134,8 +3131,7 @@ ITable.prototype.FxCount=function(){
         var count=0,rArr=[],cArr=[];
         $('.picked').each(function(){
             var val=Number($(this).text()),nowRow=Number($(this).attr('rows')),nowCol=Number($(this).attr('cols'));
-            rArr.push(nowRow);
-            cArr.push(nowCol);
+            rArr.push(nowRow);cArr.push(nowCol);
             if(!isNaN(val)&&val!==0){
                 count++;
             }else{
@@ -3167,8 +3163,7 @@ ITable.prototype.FxMax=function(){
         var arr=[],rArr=[],cArr=[],pArr=[];
         $('.picked').each(function(){
             var val=Number($(this).text()),nowRow=Number($(this).attr('rows')),nowCol=Number($(this).attr('cols'));
-            rArr.push(nowRow);
-            cArr.push(nowCol);
+            rArr.push(nowRow);cArr.push(nowCol);
             if(!isNaN(val)&&val!==0){
                 arr.push(val);
             }else{
@@ -3176,7 +3171,7 @@ ITable.prototype.FxMax=function(){
             }
             pArr.push($(this).attr('id'));
         });
-        var maxValue=_.max(arr);
+        var maxValue=_.max(arr),id;
         if(_.uniq(rArr).length>1){
 
         }else{
@@ -3215,9 +3210,7 @@ ITable.prototype.FxMin=function(){
         var arr=[],rArr=[],cArr=[],pArr=[];
         $('.picked').each(function(){
             var val=Number($(this).text()),nowRow=Number($(this).attr('rows')),nowCol=Number($(this).attr('cols'));
-            rArr.push(nowRow);
-            cArr.push(nowCol);
-
+            rArr.push(nowRow);cArr.push(nowCol);
             if(!isNaN(val)&&val!==0){
                 arr.push(val);
             }else{
@@ -3456,15 +3449,17 @@ ITable.prototype.SplitTd = function () {
 
                     arr = $(); // 准备待插单元格
 
-                    for (var i = 0; i < colSpan; i++)
-
+                    for (var i = 0; i < colSpan; i++){
                         arr = arr.add($td.clone());
+                    }
 
-                    if (cIdx > 0 && $("th,td", this).eq(cIdx - 1).length > 0) $("th,td", this).eq(cIdx - 1).after(arr);
 
-                    else if ($("th,td", this).eq(cIdx).length > 0) $("th,td", this).eq(cIdx).before(arr);
 
-                    else $(this).prepend(arr);
+                    if (cIdx > 0 && $("th,td", this).eq(cIdx - 1).length > 0) {$("th,td", this).eq(cIdx - 1).after(arr);}
+
+                    else if ($("th,td", this).eq(cIdx).length > 0){$("th,td", this).eq(cIdx).before(arr);}
+
+                    else {$(this).prepend(arr);}
 
                 }
 
@@ -3794,7 +3789,7 @@ ITable.prototype.SetIndex = function () {
 
             cellStrArray.push(cellStr);
 
-            cell.setAttribute("rows", i + 1);
+            cell.setAttribute("rows",i+1);
 
             cell.setAttribute("cols" , col + 1);
 
