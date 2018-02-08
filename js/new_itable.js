@@ -1157,11 +1157,11 @@ ITable.prototype.TableScroll = function () {
 //填写表格
 ITable.prototype.FillTd = function (tid) {
 
-    var tid = tid || 1, that = this;
+    var tId = tid || 1, that = this;
 
     this.table.find('td').each(function () {
 
-       $(this).off(that.mouseString.dblClick).on(that.mouseString.dblClick,{target:that,id:tid},that.TdDbClick);
+       $(this).off(that.mouseString.dblClick).on(that.mouseString.dblClick,{target:that,id:tId},that.TdDbClick);
 
        $(this).off('click').on('click',{target:that},that.TdClick);
 
@@ -4229,34 +4229,34 @@ ITable.prototype.FillBlank = function () {
 // };
 
 //高亮蒙版
-
-ITable.prototype.CreateMask = function (left, top, width, height, posX, posY) {
-
-    var mask = $('<div class="mask"></div>'), color = getRandomColor();
-
-    mask.css({
-
-        'width': width - 2,
-
-        'height': height - 2,
-
-        'left': left,
-
-        'top': top,
-
-        'position': 'absolute',
-
-        'border': '1px solid' + color,
-
-        'z-index': '99'
-
-    });
-
-    mask.attr('mpos', posX + '-' + posY);
-
-    this.container.append(mask);
-
-};
+//
+// ITable.prototype.CreateMask = function (left, top, width, height, posX, posY) {
+//
+//     var mask = $('<div class="mask"></div>'), color = getRandomColor();
+//
+//     mask.css({
+//
+//         'width': width - 2,
+//
+//         'height': height - 2,
+//
+//         'left': left,
+//
+//         'top': top,
+//
+//         'position': 'absolute',
+//
+//         'border': '1px solid' + color,
+//
+//         'z-index': '99'
+//
+//     });
+//
+//     mask.attr('mpos', posX + '-' + posY);
+//
+//     this.container.append(mask);
+//
+// };
 
 ITable.prototype.rMenus = function () {
 
