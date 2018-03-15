@@ -3080,7 +3080,7 @@ ITable.prototype.FxSum=function(){
 ITable.prototype.FxAvg=function(){
     var that=this;
     if($('.picked').length>1){
-        var sum=0,pL=$('.picked').length,avg=0,rArr=[],cArr=[],pArr=[];
+        var sum=0,pL=$('.picked').length,avg,rArr=[],cArr=[],pArr=[];
         $('.picked').each(function(){
             var val=that.GetFillType($(this)),nowRow=Number($(this).attr('rows')),nowCol=Number($(this).attr('cols'));
             rArr.push(nowRow);cArr.push(nowCol);
@@ -3171,7 +3171,7 @@ ITable.prototype.FxMax=function(){
             }
             pArr.push($(this).attr('id'));
         });
-        var maxValue=_.max(arr),id;
+        var maxValue=_.max(arr);
         if(_.uniq(rArr).length>1){
 
         }else{
@@ -4444,9 +4444,7 @@ ITable.prototype.Paste = function (dataArr) {
         var tdLength = $('.picked').length;
 
         if (tdLength <= 1) {
-
             $('.picked').text(dataArr[0]);
-
         } else {
 
             for (var i = 0; i < tdLength; i++) {
